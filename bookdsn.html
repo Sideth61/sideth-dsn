@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090d16">
+<title>📚 DSN Learning Hub X</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+
+:root{
+    --accent:#38bdf8;
+    --accent2:#8b5cf6;
+    --bg:#050812;
+    --card:rgba(15,23,42,.88);
+    --text:#fff;
+    --muted:#94a3b8;
+    --border:rgba(56,189,248,.28);
+    --glow:rgba(56,189,248,.25);
+}
+
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    padding:20px 15px 110px;
+    min-height:100vh;
+    font-family:'Kantumruy Pro',sans-serif;
+    color:var(--text);
+    background:
+        radial-gradient(circle at 10% 10%,rgba(56,189,248,.15),transparent 35%),
+        radial-gradient(circle at 90% 90%,rgba(139,92,246,.15),transparent 35%),
+        linear-gradient(135deg,#050812,#111827,#1e1b4b);
+    background-attachment:fixed;
+    overflow-x:hidden;
+}
+
+#fx{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:0;
+}
+
+.container{
+    width:100%;
+    max-width:650px;
+    margin:auto;
+    position:relative;
+    z-index:2;
+}
+
+/* HEADER */
+.hero{
+    text-align:center;
+    padding:25px 15px;
+    margin-bottom:18px;
+}
+
+.logo{
+    font-size:48px;
+    filter:drop-shadow(0 0 18px var(--accent));
+    animation:pulse 2s infinite;
+}
+
+h1{
+    margin:8px 0;
+    font-size:25px;
+    color:var(--accent);
+    text-shadow:0 0 15px var(--glow);
+}
+
+.subtitle{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.author{
+    color:#67e8f9;
+    font-size:12px;
+    margin-top:8px;
+}
+
+/* CARD */
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:16px;
+    box-shadow:0 15px 45px rgba(0,0,0,.45);
+}
+
+.card-title{
+    color:var(--accent);
+    font-size:16px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:10px;
+    margin-bottom:15px;
+}
+
+/* SYSTEM */
+.system{
+    background:#020617;
+    border:1px solid #22c55e55;
+    border-radius:14px;
+    padding:15px;
+    font-family:monospace;
+    color:#22c55e;
+    box-shadow:inset 0 0 25px rgba(34,197,94,.08);
+}
+
+.system-line{
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    margin:5px 0;
+}
+
+.online{
+    color:#22c55e;
+}
+
+/* SCANNER */
+.scanner{
+    text-align:center;
+    background:#000;
+    border:1px solid #22c55e;
+    border-radius:14px;
+    padding:18px 10px;
+    margin-top:12px;
+    overflow:hidden;
+}
+
+#scannerText{
+    color:#22c55e;
+    font-family:monospace;
+    font-weight:bold;
+    font-size:13px;
+}
+
+.scan-line{
+    height:2px;
+    width:100%;
+    background:#22c55e;
+    box-shadow:0 0 15px #22c55e;
+    animation:scan 1.5s linear infinite;
+}
+
+/* PROGRESS */
+.progress-info{
+    display:flex;
+    justify-content:space-between;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.progress{
+    height:9px;
+    background:#020617;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid #1e293b;
+    margin-top:7px;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    box-shadow:0 0 12px var(--accent);
+    transition:width .5s;
+}
+
+/* SEARCH */
+.search{
+    width:100%;
+    padding:12px 14px;
+    border-radius:12px;
+    border:1px solid #334155;
+    background:#020617;
+    color:#fff;
+    outline:none;
+    font-family:inherit;
+}
+
+.search:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 12px var(--glow);
+}
+
+/* CHAPTER */
+.chapter{
+    background:rgba(2,6,23,.7);
+    border:1px solid #334155;
+    border-radius:13px;
+    padding:13px;
+    margin:8px 0;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.chapter:hover{
+    border-color:var(--accent);
+    transform:translateX(4px);
+}
+
+.chapter.done{
+    border-color:#22c55e;
+    background:rgba(34,197,94,.08);
+}
+
+.chapter-top{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.chapter-icon{
+    font-size:24px;
+}
+
+.chapter-name{
+    font-size:13px;
+    font-weight:bold;
+}
+
+.chapter-desc{
+    font-size:10px;
+    color:var(--muted);
+    margin-top:3px;
+}
+
+.done-badge{
+    margin-left:auto;
+    font-size:10px;
+    color:#22c55e;
+}
+
+/* BUTTON */
+.btn{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:12px;
+    background:linear-gradient(135deg,#2563eb,#38bdf8);
+    color:#fff;
+    font-family:inherit;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+    margin-top:8px;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+    filter:brightness(1.15);
+}
+
+.btn-purple{
+    background:linear-gradient(135deg,#7c3aed,#a78bfa);
+}
+
+.btn-green{
+    background:linear-gradient(135deg,#059669,#34d399);
+}
+
+.btn-red{
+    background:linear-gradient(135deg,#dc2626,#f43f5e);
+}
+
+/* LINKS */
+.link-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+}
+
+.link-btn{
+    padding:13px 10px;
+    background:#1e293b;
+    border:1px solid #334155;
+    color:#fff;
+    border-radius:12px;
+    text-decoration:none;
+    text-align:center;
+    font-size:11px;
+    transition:.3s;
+}
+
+.link-btn:hover{
+    border-color:var(--accent);
+    transform:translateY(-2px);
+}
+
+/* FOOTER */
+.clock{
+    text-align:center;
+    color:#64748b;
+    font-family:monospace;
+    font-size:11px;
+    margin:20px;
+}
+
+/* DOCK */
+.dock{
+    position:fixed;
+    bottom:18px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:99;
+    display:flex;
+    gap:8px;
+    padding:9px 13px;
+    border-radius:30px;
+    background:rgba(15,23,42,.9);
+    border:1px solid var(--border);
+    backdrop-filter:blur(18px);
+    box-shadow:0 10px 35px #000;
+}
+
+.dock a{
+    width:42px;
+    height:42px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    font-size:20px;
+    border-radius:50%;
+    transition:.3s;
+}
+
+.dock a:hover{
+    background:var(--glow);
+    transform:translateY(-5px);
+}
+
+/* TOAST */
+.toast{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translate(-50%,-100px);
+    z-index:999;
+    background:#020617;
+    border:1px solid var(--accent);
+    color:#fff;
+    padding:12px 18px;
+    border-radius:12px;
+    font-size:12px;
+    transition:.4s;
+    box-shadow:0 0 25px var(--glow);
+}
+
+.toast.show{
+    transform:translate(-50%,0);
+}
+
+/* ANIMATION */
+@keyframes pulse{
+    50%{transform:scale(1.08)}
+}
+
+@keyframes scan{
+    0%{transform:translateY(-15px);opacity:.2}
+    50%{opacity:1}
+    100%{transform:translateY(15px);opacity:.2}
+}
+
+@media(max-width:480px){
+    h1{font-size:21px}
+    .link-grid{grid-template-columns:1fr 1fr}
+    .card{padding:16px}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fx"></canvas>
+
+<div class="toast" id="toast"></div>
+
+<div class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="logo">📚</div>
+        <h1>DSN Learning Hub X</h1>
+        <div class="subtitle">
+            Book • IT • Game • Web • Media • Knowledge
+        </div>
+        <div class="author">
+            ⚡ Powered by Deth DSN OS
+        </div>
+    </section>
+
+    <!-- SYSTEM STATUS -->
+    <div class="card">
+
+        <div class="card-title">
+            🧠 DSN Learning System
+        </div>
+
+        <div class="system">
+            <div class="system-line">
+                <span>CORE STATUS</span>
+                <span class="online">● ONLINE</span>
+            </div>
+
+            <div class="system-line">
+                <span>LEARNING ENGINE</span>
+                <span class="online">ACTIVE</span>
+            </div>
+
+            <div class="system-line">
+                <span>KNOWLEDGE BASE</span>
+                <span>DSN-X</span>
+            </div>
+
+            <div class="system-line">
+                <span>SYSTEM TIME</span>
+                <span id="systemTime">--:--:--</span>
+            </div>
+        </div>
+
+        <div class="scanner">
+            <div id="scannerText">DSN OS LEARNING CORE READY...</div>
+            <div class="scan-line"></div>
+        </div>
+
+        <button class="btn btn-green" onclick="startScanner()">
+            ⚡ ស្កេនថាមពលប្រព័ន្ធ
+        </button>
+
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="card">
+
+        <div class="card-title">
+            🎯 Learning Progress
+        </div>
+
+        <div class="progress-info">
+            <span>ការសិក្សារបស់អ្នក</span>
+            <span id="progressText">0%</span>
+        </div>
+
+        <div class="progress">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <button class="btn btn-purple" onclick="showProgress()">
+            📊 ពិនិត្យ Progress
+        </button>
+
+    </div>
+
+    <!-- SEARCH -->
+    <div class="card">
+
+        <div class="card-title">
+            🔎 ស្វែងរកមេរៀន
+        </div>
+
+        <input
+            id="searchInput"
+            class="search"
+            type="search"
+            placeholder="ស្វែងរក Chapter / IT / Game..."
+            oninput="searchLessons()"
+        >
+
+    </div>
+
+    <!-- BOOK -->
+    <div class="card">
+
+        <div class="card-title">
+            📖 មហាសេដ្ឋីគំរិះ និងមេរៀនជីវិត
+        </div>
+
+        <div class="chapter" data-search="ជំពូកទី ១ បុរសអ្នកមាន">
+
+            <div class="chapter-top">
+                <div class="chapter-icon">💰</div>
+
+                <div>
+                    <div class="chapter-name">
+                        ជំពូកទី ១៖ បុរសអ្នកមាន
+                    </div>
+
+                    <div class="chapter-desc">
+                        មនុស្សម្នាក់អាចមានទ្រព្យ ប៉ុន្តែមិនមានឱកាសបានប្រើប្រាស់វា។
+                    </div>
+                </div>
+
+                <div class="done-badge" id="done1"></div>
+            </div>
+
+            <button class="btn" onclick="completeChapter(1,event)">
+                📚 សម្គាល់ថាបានអាន
+            </button>
+
+        </div>
+
+
+        <div class="chapter" data-search="ជំពូកទី ២ កូនប្រុសពៅ">
+
+            <div class="chapter-top">
+                <div class="chapter-icon">👦</div>
+
+                <div>
+                    <div class="chapter-name">
+                        ជំពូកទី ២៖ កូនប្រុសពៅ
+                    </div>
+
+                    <div class="chapter-desc">
+                        រឿងរ៉ាវនៃការខកចិត្ត ការតស៊ូ និងការរៀនពីជីវិត។
+                    </div>
+                </div>
+
+                <div class="done-badge" id="done2"></div>
+            </div>
+
+            <button class="btn" onclick="completeChapter(2,event)">
+                📚 សម្គាល់ថាបានអាន
+            </button>
+
+        </div>
+
+
+        <div class="chapter" data-search="ជំពូកទី ៣ មេរៀនជីវិត">
+
+            <div class="chapter-top">
+                <div class="chapter-icon">🧠</div>
+
+                <div>
+                    <div class="chapter-name">
+                        ជំពូកទី ៣៖ មេរៀនជីវិត
+                    </div>
+
+                    <div class="chapter-desc">
+                        ការភ្ញាក់រលឹក និងការយល់ពីតម្លៃពិតនៃជីវិត។
+                    </div>
+                </div>
+
+                <div class="done-badge" id="done3"></div>
+            </div>
+
+            <button class="btn" onclick="completeChapter(3,event)">
+                📚 សម្គាល់ថាបានអាន
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- IT -->
+    <div class="card">
+
+        <div class="card-title">
+            💻 IT Learning Center
+        </div>
+
+        <div class="link-grid">
+
+            <a
+                href="https://drive.google.com/file/d/1ZP0qANdMf92eMLN_Jblwz2r2pJw0JZ03/view"
+                target="_blank"
+                class="link-btn"
+            >
+                📄 PDF Book
+            </a>
+
+            <a
+                href="https://drive.google.com/drive/folders/10rsr8yMmHySYfzTwnePyHTQwFcOUcvsI"
+                target="_blank"
+                class="link-btn"
+            >
+                📂 IT Files
+            </a>
+
+            <a href="game.html" class="link-btn">
+                🎮 Game Hub
+            </a>
+
+            <a href="browser.html" class="link-btn">
+                🌐 Mini Browser
+            </a>
+
+            <a href="library.html" class="link-btn">
+                📚 DSN Library
+            </a>
+
+            <a href="explorer.html" class="link-btn">
+                📁 File Explorer
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- SECRET -->
+    <div class="card">
+
+        <div class="card-title">
+            🤫 DSN Secret Terminal
+        </div>
+
+        <div class="system">
+            <span id="secretText">
+                > ACCESS LEVEL: USER
+            </span>
+        </div>
+
+        <button class="btn btn-purple" onclick="showRandomSecret()">
+            🔓 បើក Secret
+        </button>
+
+    </div>
+
+    <!-- RESET -->
+    <div class="card">
+
+        <div class="card-title">
+            ⚙️ Learning Data
+        </div>
+
+        <button class="btn btn-red" onclick="resetProgress()">
+            🗑️ Reset Learning Progress
+        </button>
+
+    </div>
+
+    <div class="clock">
+        DSN OS • Learning Hub X • <span id="year"></span>
+    </div>
+
+</div>
+
+
+<!-- DOCK -->
+<nav class="dock">
+
+    <a href="index.html" title="Home">🏠</a>
+
+    <a href="profile.html" title="Profile">👤</a>
+
+    <a href="appstore.html" title="App Store">🛒</a>
+
+    <a href="library.html" title="Library">📚</a>
+
+    <a href="setting.html" title="Settings">⚙️</a>
+
+</nav>
+
+
+<script>
+
+/* =========================
+   TOAST
+========================= */
+
+function toast(message){
+
+    const el=document.getElementById("toast");
+
+    el.textContent=message;
+    el.classList.add("show");
+
+    setTimeout(()=>{
+        el.classList.remove("show");
+    },2500);
+}
+
+
+/* =========================
+   SCANNER
+========================= */
+
+function startScanner(){
+
+    const text=document.getElementById("scannerText");
+
+    const steps=[
+        "INITIALIZING DSN CORE...",
+        "CHECKING KNOWLEDGE DATABASE...",
+        "SCANNING LEARNING MODULES...",
+        "ANALYZING SYSTEM ENERGY...",
+        "ENERGY LEVEL: 99.9% 🔋",
+        "LEARNING CORE: ONLINE ✅"
+    ];
+
+    text.textContent=steps[0];
+
+    steps.forEach((step,index)=>{
+
+        setTimeout(()=>{
+            text.textContent=step;
+        },index*700);
+
+    });
+
+    toast("⚡ DSN Learning System Scan Started!");
+}
+
+
+/* =========================
+   CHAPTER PROGRESS
+========================= */
+
+let completed=JSON.parse(
+    localStorage.getItem("dsn_learning_completed") || "[]"
+);
+
+function completeChapter(id,event){
+
+    event.stopPropagation();
+
+    if(!completed.includes(id)){
+        completed.push(id);
+    }
+
+    localStorage.setItem(
+        "dsn_learning_completed",
+        JSON.stringify(completed)
+    );
+
+    updateProgress();
+
+    document.getElementById("done"+id).textContent="✓ DONE";
+
+    toast("📚 Chapter បានសម្គាល់ថាបានអាន!");
+}
+
+
+function updateProgress(){
+
+    const total=3;
+
+    const percent=Math.round(
+        completed.length/total*100
+    );
+
+    document.getElementById("progressBar")
+        .style.width=percent+"%";
+
+    document.getElementById("progressText")
+        .textContent=percent+"%";
+
+    completed.forEach(id=>{
+
+        const chapter=document.querySelector(
+            `.chapter[data-search*="ជំពូកទី ${id}"]`
+        );
+
+        if(chapter){
+            chapter.classList.add("done");
+        }
+
+        const badge=document.getElementById("done"+id);
+
+        if(badge){
+            badge.textContent="✓ DONE";
+        }
+
+    });
+}
+
+
+/* =========================
+   PROGRESS MESSAGE
+========================= */
+
+function showProgress(){
+
+    const percent=Math.round(
+        completed.length/3*100
+    );
+
+    if(percent===100){
+
+        toast("🏆 អស្ចារ្យ! Sideth បានបញ្ចប់ Learning Hub!");
+        return;
+
+    }
+
+    toast("📊 Learning Progress: "+percent+"%");
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function searchLessons(){
+
+    const query=
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+    document.querySelectorAll(".chapter")
+        .forEach(chapter=>{
+
+            const text=
+                chapter.dataset.search.toLowerCase();
+
+            chapter.style.display=
+                text.includes(query)
+                ?"block"
+                :"none";
+
+        });
+
+}
+
+
+/* =========================
+   SECRET
+========================= */
+
+function showRandomSecret(){
+
+    const secrets=[
+
+        "🔓 ROOT ACCESS GRANTED — DSN MASTER DETECTED!",
+
+        "⚡ Sideth គឺជាអ្នកកាន់កាប់ DSN Learning Core!",
+
+        "🧠 Knowledge + IT + Creativity = DSN POWER!",
+
+        "🚀 បងរៀន IT ថ្ងៃនេះ ដើម្បីបង្កើតអ្វីអស្ចារ្យថ្ងៃស្អែក!",
+
+        "😝 SECRET: កុំឲ្យ SreyNea💛🌺 ដឹងថា បងចុច Secret រាល់ថ្ងៃ 😂❤️️"
+
+    ];
+
+    const secret=
+        secrets[Math.floor(Math.random()*secrets.length)];
+
+    document.getElementById("secretText")
+        .textContent="> "+secret;
+
+    toast("🤫 Secret Protocol Activated!");
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetProgress(){
+
+    if(confirm(
+        "តើអ្នកពិតជាចង់ Reset Learning Progress មែនទេ?"
+    )){
+
+        localStorage.removeItem(
+            "dsn_learning_completed"
+        );
+
+        completed=[];
+
+        document.querySelectorAll(".chapter")
+            .forEach(c=>c.classList.remove("done"));
+
+        document.querySelectorAll(".done-badge")
+            .forEach(b=>b.textContent="");
+
+        updateProgress();
+
+        toast("🗑️ Learning Progress បាន Reset!");
+    }
+}
+
+
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock(){
+
+    const now=new Date();
+
+    document.getElementById("systemTime")
+        .textContent=
+        now.toLocaleTimeString();
+
+    document.getElementById("year")
+        .textContent=
+        now.getFullYear();
+
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+
+/* =========================
+   PARTICLES
+========================= */
+
+const canvas=document.getElementById("fx");
+const ctx=canvas.getContext("2d");
+
+let particles=[];
+
+function resize(){
+
+    canvas.width=innerWidth;
+    canvas.height=innerHeight;
+
+}
+
+window.addEventListener("resize",resize);
+resize();
+
+for(let i=0;i<55;i++){
+
+    particles.push({
+
+        x:Math.random()*innerWidth,
+        y:Math.random()*innerHeight,
+
+        size:Math.random()*2+0.5,
+
+        speed:Math.random()*.35+.1,
+
+        opacity:Math.random()*.5+.1
+
+    });
+
+}
+
+function animate(){
+
+    ctx.clearRect(
+        0,0,
+        canvas.width,
+        canvas.height
+    );
+
+    particles.forEach(p=>{
+
+        ctx.beginPath();
+
+        ctx.fillStyle=
+            `rgba(56,189,248,${p.opacity})`;
+
+        ctx.arc(
+            p.x,
+            p.y,
+            p.size,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+        p.y-=p.speed;
+
+        if(p.y<0){
+
+            p.y=canvas.height;
+            p.x=Math.random()*canvas.width;
+
+        }
+
+    });
+
+    requestAnimationFrame(animate);
+
+}
+
+animate();
+
+
+/* =========================
+   INIT
+========================= */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    ()=>{
+        updateProgress();
+    }
+);
+
+</script>
+
+</body>

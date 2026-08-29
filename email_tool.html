@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#02040a">
+<meta name="description" content="DSN Obsidian V7 Omega Email Generator & Secure Vault">
+<title>DSN Obsidian V7 - Omega Ultimate Email Generator & Vault Core</title>
+<link rel="icon" type="image/png" href="app3.png">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+
+:root{
+    --primary-color:#10b981;
+    --primary-glow:rgba(16,185,129,.35);
+    --bg-color:#02040a;
+    --card-bg:rgba(8,12,24,.94);
+    --border-color:rgba(16,185,129,.30);
+    --danger:#ef4444;
+}
+body.theme-purple{
+    --primary-color:#a855f7;
+    --primary-glow:rgba(168,85,247,.35);
+    --border-color:rgba(168,85,247,.30);
+}
+body.theme-amber{
+    --primary-color:#f59e0b;
+    --primary-glow:rgba(245,158,11,.35);
+    --border-color:rgba(245,158,11,.30);
+}
+*{box-sizing:border-box}
+body{
+    font-family:'Kantumruy Pro',sans-serif;
+    background:var(--bg-color);color:#f8fafc;margin:0;padding:20px;
+    padding-bottom:120px;display:flex;flex-direction:column;align-items:center;
+    min-height:100vh;overflow-x:hidden;position:relative;transition:background .5s;
+}
+#matrixCanvas{
+    position:fixed;inset:0;width:100%;height:100%;pointer-events:none;
+    z-index:0;opacity:.12;
+}
+.container{
+    width:100%;max-width:620px;display:flex;flex-direction:column;gap:18px;
+    z-index:5;
+}
+.card{
+    background:var(--card-bg);backdrop-filter:blur(30px);
+    -webkit-backdrop-filter:blur(30px);padding:24px;border-radius:24px;
+    border:1px solid var(--border-color);
+    box-shadow:0 30px 60px rgba(0,0,0,.95),0 0 35px var(--primary-glow);
+}
+.header-title{
+    color:var(--primary-color);font-size:1.1em;font-weight:700;margin-bottom:16px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:10px;
+    text-shadow:0 0 12px var(--primary-glow);
+}
+.theme-switcher{display:flex;gap:7px}
+.theme-dot{
+    width:15px;height:15px;border-radius:50%;cursor:pointer;border:1px solid #fff;
+    transition:.2s;
+}
+.theme-dot:hover{transform:scale(1.2)}
+label{
+    font-size:.85em;color:#94a3b8;font-weight:600;display:block;margin-top:12px
+}
+.input-field,select,textarea,.search-box{
+    width:100%;padding:12px 15px;margin-top:6px;margin-bottom:10px;
+    background:rgba(3,7,18,.95);border:1px solid rgba(255,255,255,.15);
+    color:#fff;border-radius:12px;outline:none;
+    font-family:'Kantumruy Pro',sans-serif;transition:.3s;
+}
+.input-field:focus,select:focus,textarea:focus,.search-box:focus{
+    border-color:var(--primary-color);box-shadow:0 0 18px var(--primary-glow)
+}
+select option{background:#02040a;color:#fff}
+.preset-group{display:flex;gap:8px;margin-bottom:14px}
+.btn-preset{
+    flex:1;padding:8px;background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.15);color:var(--primary-color);
+    border-radius:8px;cursor:pointer;font-size:.8em;font-weight:bold;
+    font-family:'Kantumruy Pro',sans-serif;transition:.2s
+}
+.btn-preset:hover{background:var(--primary-glow);color:#fff}
+.btn-gen{
+    width:100%;padding:15px;background:linear-gradient(135deg,var(--primary-color),#3b82f6);
+    color:#02040a;border:none;border-radius:14px;cursor:pointer;font-weight:bold;
+    font-family:'Kantumruy Pro',sans-serif;transition:.3s;
+    box-shadow:0 0 25px var(--primary-glow);font-size:1em;margin-top:12px
+}
+.btn-gen:hover{filter:brightness(1.15);transform:translateY(-2px)}
+.btn-gen:active{transform:translateY(0)}
+.vault-meta{display:flex;align-items:center;gap:8px}
+.lock-badge{
+    font-size:.72em;padding:4px 8px;border-radius:7px;
+    background:rgba(16,185,129,.12);color:var(--primary-color);
+    border:1px solid var(--border-color)
+}
+.vault-controls{display:none;gap:8px;margin-bottom:12px}
+.search-box{display:none;margin-bottom:10px}
+.output-container{
+    margin-top:12px;max-height:360px;overflow-y:auto;display:none;
+    flex-direction:column;gap:8px;padding-right:2px
+}
+.account-card{
+    background:rgba(3,7,18,.95);border:1px solid rgba(255,255,255,.1);
+    padding:11px 12px;border-radius:12px;display:flex;align-items:center;
+    justify-content:space-between;gap:10px;font-family:monospace;font-size:.8em;
+    transition:.2s
+}
+.account-card:hover{border-color:var(--primary-color)}
+.account-left{display:flex;align-items:flex-start;gap:10px;min-width:0}
+.account-left input{margin-top:4px;accent-color:var(--primary-color)}
+.account-info{color:#34d399;min-width:0;overflow-wrap:anywhere}
+.pass-line{color:#cbd5e1;margin-top:3px}
+.pass-value{color:#f8fafc}
+.status-badge{
+    font-size:.7em;padding:2px 6px;border-radius:4px;
+    background:rgba(16,185,129,.2);color:#34d399;
+    border:1px solid rgba(16,185,129,.4);margin-left:5px
+}
+.btn-group-card{display:flex;gap:5px;flex-shrink:0}
+.btn-mini{
+    background:var(--primary-color);color:#02040a;border:none;padding:6px 9px;
+    border-radius:6px;font-weight:bold;cursor:pointer;
+    font-family:'Kantumruy Pro',sans-serif;font-size:.75em;transition:.2s
+}
+.btn-mini:hover{filter:brightness(1.2)}
+.btn-mini-del{background:rgba(239,68,68,.2);color:#ef4444;border:1px solid rgba(239,68,68,.3)}
+.btn-mini-del:hover{background:#ef4444;color:#fff}
+.btn-mini-eye{background:rgba(56,189,248,.15);color:#38bdf8;border:1px solid rgba(56,189,248,.3)}
+.action-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px
+}
+.btn-action{
+    width:100%;padding:12px;border:none;border-radius:10px;cursor:pointer;
+    font-weight:bold;font-family:'Kantumruy Pro',sans-serif;transition:.3s;font-size:.85em
+}
+.btn-action:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-copy{background:#10b981;color:white}
+.btn-download{background:#38bdf8;color:#02040a}
+.btn-json{background:#8b5cf6;color:white}
+.btn-csv{background:#f59e0b;color:#02040a}
+.btn-login{background:#ea4335;color:white;grid-column:span 2}
+.btn-clear{background:rgba(239,68,68,.2);color:#ef4444;border:1px solid rgba(239,68,68,.4);grid-column:span 2}
+.empty-state,.no-results{
+    color:#94a3b8;text-align:center;padding:18px;border:1px dashed rgba(255,255,255,.12);
+    border-radius:12px
+}
+.no-results{color:#ef4444}
+.stats{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px
+}
+.stat{
+    text-align:center;padding:8px;border-radius:10px;background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08)
+}
+.stat b{display:block;color:var(--primary-color);font-size:1.05em}
+.stat span{font-size:.68em;color:#94a3b8}
+#toast{
+    position:fixed;top:20px;right:20px;max-width:calc(100vw - 40px);
+    background:rgba(8,12,24,.95);border:1px solid var(--primary-color);color:#fff;
+    padding:12px 20px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.8),0 0 20px var(--primary-glow);
+    font-size:.9em;z-index:10000;display:none;align-items:center;gap:10px;
+    backdrop-filter:blur(10px);animation:slideIn .3s ease
+}
+@keyframes slideIn{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.dsn-dock{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:var(--card-bg);backdrop-filter:blur(20px);
+    border:1px solid var(--border-color);padding:8px 20px;border-radius:35px;
+    display:flex;gap:15px;box-shadow:0 10px 30px rgba(0,0,0,.9),0 0 25px var(--primary-glow);
+    z-index:999;max-width:calc(100vw - 20px);overflow-x:auto
+}
+.dock-item{
+    font-size:20px;text-decoration:none;padding:8px;border-radius:50%;display:flex;transition:.3s
+}
+.dock-item:hover{background:var(--primary-glow);transform:translateY(-5px)}
+.unlock-overlay{
+    position:fixed;inset:0;background:rgba(2,4,10,.82);backdrop-filter:blur(12px);
+    z-index:9000;display:none;align-items:center;justify-content:center;padding:20px
+}
+.unlock-box{
+    width:min(420px,100%);background:var(--card-bg);border:1px solid var(--border-color);
+    border-radius:22px;padding:25px;box-shadow:0 25px 80px #000,0 0 35px var(--primary-glow);
+    text-align:center
+}
+.unlock-box h2{color:var(--primary-color);margin-top:0}
+.small-note{font-size:.72em;color:#64748b;line-height:1.5;margin-top:8px}
+@media(max-width:520px){
+    body{padding:12px;padding-bottom:105px}
+    .card{padding:18px;border-radius:20px}
+    .header-title{font-size:1em}
+    .account-card{align-items:flex-start}
+    .btn-group-card{flex-direction:column}
+    .dsn-dock{gap:8px;padding:7px 12px}
+    .dock-item{font-size:18px}
+}
+</style>
+</head>
+
+<body class="theme-green">
+<canvas id="matrixCanvas"></canvas>
+<div id="toast">✅ <span id="toastMsg">Notification message</span></div>
+
+<div class="unlock-overlay" id="unlockOverlay">
+    <div class="unlock-box">
+        <h2>🔒 DSN Secure Vault</h2>
+        <p>Vault ត្រូវបានចាក់សោដោយស្វ័យប្រវត្តិ។</p>
+        <input id="unlockPin" class="input-field" type="password" inputmode="numeric" maxlength="8" placeholder="បញ្ចូល PIN">
+        <button class="btn-gen" onclick="unlockVault()">🔓 ដោះសោ Vault</button>
+        <div class="small-note">PIN លំនាំដើមសម្រាប់ local demo: <b>1234</b>។ អ្នកអាចប្ដូរវានៅក្នុង Settings ខាងក្រោម។</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card">
+        <div class="header-title">
+            <span>🛡️ Obsidian V7 Omega Core</span>
+            <div class="theme-switcher">
+                <div class="theme-dot" style="background:#10b981" onclick="setTheme('green')" title="Emerald Green"></div>
+                <div class="theme-dot" style="background:#a855f7" onclick="setTheme('purple')" title="Cyber Purple"></div>
+                <div class="theme-dot" style="background:#f59e0b" onclick="setTheme('amber')" title="Solar Amber"></div>
+            </div>
+        </div>
+
+        <label>ពាក្យគន្លឹះដំបូង (Prefix):</label>
+        <input type="text" id="prefix" class="input-field" maxlength="40" placeholder="ឧ. dsn.omega">
+
+        <label>ជ្រើសរើស Domain:</label>
+        <select id="domainSelect" class="input-field">
+            <option value="@gmail.com">@gmail.com (Google Official)</option>
+            <option value="@dsn-os.net">@dsn-os.net (DSN Obsidian Cloud)</option>
+            <option value="@cyber-mail.org">@cyber-mail.org (Secure Anonymous)</option>
+        </select>
+
+        <label>កម្រិតសុវត្ថិភាព Password:</label>
+        <select id="passMode" class="input-field">
+            <option value="complex">អក្សរធំ+តូច+លេខ+សញ្ញា (Obsidian Secure)</option>
+            <option value="simple">អក្សរ+លេខធម្មតា (Standard)</option>
+            <option value="pin">លេខសុទ្ធ 6 ខ្ទង់ (PIN Code)</option>
+        </select>
+
+        <label>ចំនួនដែលចង់បង្កើត (Quantity):</label>
+        <input type="number" id="qty" class="input-field" value="10" min="1" max="5000">
+
+        <div class="preset-group">
+            <button class="btn-preset" onclick="setQty(10)">10</button>
+            <button class="btn-preset" onclick="setQty(50)">50</button>
+            <button class="btn-preset" onclick="setQty(100)">100</button>
+            <button class="btn-preset" onclick="setQty(500)">500</button>
+            <button class="btn-preset" onclick="setQty(1000)">1K</button>
+        </div>
+
+        <button class="btn-gen" onclick="playQuantumSound(); generateEmailsObsidian()">⚡ ចុចបង្កើតគណនី (Omega Generate)</button>
+        <div class="small-note">ℹ️ Generator នេះបង្កើតតែ credential records ក្នុង browser ប៉ុណ្ណោះ។ វាមិនបង្កើត Gmail account ពិតដោយស្វ័យប្រវត្តិទេ។</div>
+    </div>
+
+    <div class="card">
+        <div class="header-title">
+            <div class="vault-meta">
+                <span>🔐 ប្រអប់រក្សាទុកទិន្នន័យ (Secure Vault)</span>
+                <span class="lock-badge" id="lockBadge">🔓 UNLOCKED</span>
+            </div>
+            <span id="accountCountBadge" style="font-size:.8em;color:var(--primary-color)">0 គណនី</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat"><b id="totalStat">0</b><span>សរុប</span></div>
+            <div class="stat"><b id="selectedStat">0</b><span>បានជ្រើស</span></div>
+            <div class="stat"><b id="domainStat">—</b><span>Domain</span></div>
+        </div>
+
+        <div class="vault-controls" id="vaultControls">
+            <button class="btn-preset" onclick="selectAllAccounts()">☑️ ជ្រើសរើសទាំងអស់</button>
+            <button class="btn-preset" style="color:#ef4444" onclick="deleteSelectedAccounts()">🗑️ លុបដែលបានធីក</button>
+        </div>
+
+        <input type="text" id="searchFilter" class="search-box" placeholder="🔍 ស្វែងរកអ៊ីមែល ឬ Password..." oninput="filterOutput()">
+
+        <div id="outputContainer" class="output-container"></div>
+
+        <div id="actionButtons" class="action-grid">
+            <button class="btn-action btn-copy" onclick="playBeep(); copyAllOutput()">📋 Copy ទាំងអស់</button>
+            <button class="btn-action btn-download" onclick="playBeep(); downloadTxtFile()">📥 Download .TXT</button>
+            <button class="btn-action btn-json" onclick="playBeep(); downloadJsonFile()">📦 Export .JSON</button>
+            <button class="btn-action btn-csv" onclick="playBeep(); downloadCsvFile()">📊 Export .CSV</button>
+            <button class="btn-action btn-login" onclick="playBeep(); window.open('https://accounts.google.com/signin','_blank','noopener,noreferrer')">🌐 ចូលទៅកាន់ Gmail Login</button>
+            <button class="btn-action btn-clear" onclick="playBeep(); clearOutputStorage()">🗑️ លុបទិន្នន័យទាំងអស់</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="header-title"><span>⚙️ Omega Vault Settings</span></div>
+        <label>PIN ដោះសោ Vault:</label>
+        <input id="newPin" class="input-field" type="password" inputmode="numeric" maxlength="8" placeholder="PIN ថ្មី 4–8 ខ្ទង់">
+        <button class="btn-action btn-json" onclick="changeVaultPin()">🔑 ប្ដូរ PIN</button>
+        <div class="small-note">PIN នេះត្រូវបានរក្សាទុកក្នុង localStorage របស់ browser។ វាមិនមែនជា server-side authentication ទេ។</div>
+    </div>
+</div>
+
+<div class="dsn-dock">
+    <a href="index.html" class="dock-item" title="ទំព័រដើម">🏠</a>
+    <a href="library.html" class="dock-item" title="Library">📚</a>
+    <a href="explorer.html" class="dock-item" title="File Explorer">📁</a>
+    <a href="browser.html" class="dock-item" title="Cyber Browser">🌐</a>
+    <a href="game.html" class="dock-item" title="ហ្គេម">🎮</a>
+    <a href="setting.html" class="dock-item" title="ការកំណត់">⚙️</a>
+</div>
+
+<script>
+'use strict';
+
+const STORAGE_KEY = 'dsn_omega_accounts_v7';
+const LEGACY_KEY = 'dsn_omega_accounts';
+const THEME_KEY = 'dsn_omega_theme';
+const PIN_KEY = 'dsn_omega_vault_pin_v7';
+const DEFAULT_PIN = '1234';
+
+let accountList = [];
+let isVaultLocked = false;
+let idleTimer = null;
+let passwordVisible = {};
+
+function secureRandomInt(max){
+    if(max <= 0) return 0;
+    if(window.crypto && crypto.getRandomValues){
+        const arr = new Uint32Array(1);
+        const limit = Math.floor(0x100000000 / max) * max;
+        let n;
+        do{
+            crypto.getRandomValues(arr);
+            n = arr[0];
+        }while(n >= limit);
+        return n % max;
+    }
+    return Math.floor(Math.random() * max);
+}
+
+function randomChars(length, chars){
+    let out = '';
+    for(let i=0;i<length;i++) out += chars.charAt(secureRandomInt(chars.length));
+    return out;
+}
+
+function generateSecurePassword(mode){
+    if(mode === 'pin') return String(secureRandomInt(900000) + 100000);
+    if(mode === 'simple'){
+        return randomChars(12,'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+    }
+    const upper='ABCDEFGHIJKLMNOPQRSTUVWXYZ', lower='abcdefghijklmnopqrstuvwxyz',
+          nums='0123456789', symbols='!@#$%^&*_-+=';
+    const base = [
+        upper.charAt(secureRandomInt(upper.length)),
+        lower.charAt(secureRandomInt(lower.length)),
+        nums.charAt(secureRandomInt(nums.length)),
+        symbols.charAt(secureRandomInt(symbols.length))
+    ];
+    return base.concat(randomChars(12,upper+lower+nums+symbols).split('')).sort(()=>secureRandomInt(3)-1).join('');
+}
+
+function showToast(message){
+    const toast=document.getElementById('toast');
+    document.getElementById('toastMsg').textContent=message;
+    toast.style.display='flex';
+    clearTimeout(showToast.timer);
+    showToast.timer=setTimeout(()=>toast.style.display='none',2600);
+}
+
+function playBeep(){
+    try{
+        const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+        const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+        osc.type='sine'; osc.frequency.value=750; gain.gain.value=.02;
+        gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.08);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime+.08);
+    }catch(e){}
+}
+
+function playQuantumSound(){
+    try{
+        const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+        const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+        osc.type='triangle'; osc.frequency.value=500;
+        osc.frequency.exponentialRampToValueAtTime(1000,audioCtx.currentTime+.2);
+        gain.gain.value=.04;
+        gain.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.2);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime+.2);
+    }catch(e){}
+}
+
+function setTheme(themeName){
+    document.body.className='theme-'+themeName;
+    localStorage.setItem(THEME_KEY,themeName);
+    playBeep();
+    showToast('🎨 បានប្ដូរ Theme រួចរាល់!');
+}
+
+function setQty(val){
+    document.getElementById('qty').value=val;
+    playBeep();
+}
+
+function getPin(){
+    return localStorage.getItem(PIN_KEY) || DEFAULT_PIN;
+}
+
+function resetIdleTimer(){
+    if(isVaultLocked) return;
+    clearTimeout(idleTimer);
+    idleTimer=setTimeout(lockVault,120000);
+}
+
+function lockVault(){
+    isVaultLocked=true;
+    document.getElementById('lockBadge').textContent='🔒 LOCKED';
+    document.getElementById('unlockOverlay').style.display='flex';
+    document.getElementById('outputContainer').style.display='none';
+    document.getElementById('actionButtons').style.display='none';
+    document.getElementById('vaultControls').style.display='none';
+    document.getElementById('searchFilter').style.display='none';
+    showToast('🔒 Secure Vault បានចាក់សោដោយស្វ័យប្រវត្តិ!');
+}
+
+function unlockVault(){
+    const pin=document.getElementById('unlockPin').value;
+    if(pin !== getPin()){
+        showToast('❌ PIN មិនត្រឹមត្រូវ!');
+        document.getElementById('unlockPin').value='';
+        return;
+    }
+    isVaultLocked=false;
+    document.getElementById('unlockPin').value='';
+    document.getElementById('unlockOverlay').style.display='none';
+    document.getElementById('lockBadge').textContent='🔓 UNLOCKED';
+    renderAccounts(getFilteredData());
+    resetIdleTimer();
+    showToast('🔓 Vault បានដោះសោរួចរាល់!');
+}
+
+function changeVaultPin(){
+    const pin=document.getElementById('newPin').value.trim();
+    if(!/^\d{4,8}$/.test(pin)){
+        showToast('⚠️ PIN ត្រូវមានលេខ 4–8 ខ្ទង់!');
+        return;
+    }
+    localStorage.setItem(PIN_KEY,pin);
+    document.getElementById('newPin').value='';
+    playBeep();
+    showToast('🔑 PIN ថ្មីត្រូវបានរក្សាទុក!');
+}
+
+function loadSavedAccounts(){
+    let saved=localStorage.getItem(STORAGE_KEY);
+    if(!saved){
+        const legacy=localStorage.getItem(LEGACY_KEY);
+        if(legacy){
+            try{
+                const old=JSON.parse(legacy);
+                accountList=Array.isArray(old)?old:[];
+                saveAccounts();
+            }catch(e){accountList=[]}
+        }
+    }else{
+        try{
+            const parsed=JSON.parse(saved);
+            accountList=Array.isArray(parsed)?parsed:[];
+        }catch(e){accountList=[]}
+    }
+    accountList=accountList.map((a,i)=>({
+        id:a.id ?? Date.now()+i,
+        email:String(a.email||''),
+        pass:String(a.pass||''),
+        status:String(a.status||'Active'),
+        selected:Boolean(a.selected)
+    }));
+    renderAccounts(accountList);
+}
+
+function saveAccounts(){
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(accountList));
+}
+
+function normalizePrefix(value){
+    return value.replace(/\s+/g,'').replace(/[^a-zA-Z0-9._-]/g,'').slice(0,40) || 'dsn.omega';
+}
+
+function generateUniqueEmail(prefix,domain,used){
+    let email;
+    do{
+        const randomNum=String(secureRandomInt(90000)+10000);
+        email=`${prefix}${randomNum}${domain}`;
+    }while(used.has(email));
+    used.add(email);
+    return email;
+}
+
+function generateEmailsObsidian(){
+    if(isVaultLocked){
+        document.getElementById('unlockOverlay').style.display='flex';
+        return;
+    }
+    const prefix=normalizePrefix(document.getElementById('prefix').value.trim());
+    const domain=document.getElementById('domainSelect').value;
+    const passMode=document.getElementById('passMode').value;
+    let qty=parseInt(document.getElementById('qty').value,10)||10;
+    qty=Math.max(1,Math.min(5000,qty));
+    document.getElementById('qty').value=qty;
+
+    const used=new Set(accountList.map(a=>a.email));
+    const newBatch=[];
+    for(let i=0;i<qty;i++){
+        newBatch.push({
+            id:Date.now()+i+secureRandomInt(999),
+            email:generateUniqueEmail(prefix,domain,used),
+            pass:generateSecurePassword(passMode),
+            status:'Active',
+            selected:false
+        });
+    }
+    accountList=newBatch.concat(accountList);
+    saveAccounts();
+    renderAccounts(accountList);
+    resetIdleTimer();
+    showToast(`⚡ បានបង្កើត credential records ${qty} ដោយជោគជ័យ!`);
+}
+
+function getFilteredData(){
+    const q=document.getElementById('searchFilter').value.trim().toLowerCase();
+    if(!q) return accountList;
+    return accountList.filter(a=>a.email.toLowerCase().includes(q)||a.pass.toLowerCase().includes(q));
+}
+
+function escapeHTML(value){
+    return String(value).replace(/[&<>"']/g,ch=>({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[ch]));
+}
+
+function renderAccounts(data){
+    const container=document.getElementById('outputContainer');
+    const badge=document.getElementById('accountCountBadge');
+    badge.textContent=`${accountList.length} គណនី`;
+    document.getElementById('totalStat').textContent=accountList.length;
+    document.getElementById('selectedStat').textContent=accountList.filter(a=>a.selected).length;
+    document.getElementById('domainStat').textContent=accountList.length ? getDomainSummary() : '—';
+
+    if(isVaultLocked || accountList.length===0){
+        container.style.display='none';
+        document.getElementById('actionButtons').style.display='none';
+        document.getElementById('vaultControls').style.display='none';
+        document.getElementById('searchFilter').style.display='none';
+        if(!isVaultLocked && accountList.length===0){
+            container.innerHTML='<div class="empty-state">📭 Vault ទទេ — បង្កើត credential records ដំបូងសិន។</div>';
+        }
+        return;
+    }
+
+    document.getElementById('actionButtons').style.display='grid';
+    document.getElementById('vaultControls').style.display='flex';
+    document.getElementById('searchFilter').style.display='block';
+    container.style.display='flex';
+    container.innerHTML='';
+
+    if(data.length===0){
+        container.innerHTML='<div class="no-results">❌ រកមិនឃើញទិន្នន័យទេ។</div>';
+        return;
+    }
+
+    data.forEach((acc,index)=>{
+        const card=document.createElement('div');
+        card.className='account-card';
+
+        const left=document.createElement('div');
+        left.className='account-left';
+
+        const check=document.createElement('input');
+        check.type='checkbox';
+        check.checked=!!acc.selected;
+        check.addEventListener('change',()=>toggleSelect(acc.id));
+
+        const info=document.createElement('div');
+        info.className='account-info';
+
+        const emailLine=document.createElement('div');
+        emailLine.innerHTML=`<b>[${index+1}]</b> ${escapeHTML(acc.email)}`;
+
+        const passLine=document.createElement('div');
+        passLine.className='pass-line';
+        const visible=!!passwordVisible[acc.id];
+        passLine.innerHTML=`Pass: <span class="pass-value">${visible?escapeHTML(acc.pass):'••••••••••••••••'}</span>
+            <span class="status-badge">${escapeHTML(acc.status)}</span>`;
+
+        info.appendChild(emailLine);
+        info.appendChild(passLine);
+        left.appendChild(check);
+        left.appendChild(info);
+
+        const actions=document.createElement('div');
+        actions.className='btn-group-card';
+
+        const eye=document.createElement('button');
+        eye.className='btn-mini btn-mini-eye';
+        eye.textContent=visible?'Hide':'View';
+        eye.onclick=()=>togglePassword(acc.id);
+
+        const copy=document.createElement('button');
+        copy.className='btn-mini';
+        copy.textContent='Copy';
+        copy.onclick=()=>copySingle(acc.email,acc.pass);
+
+        const del=document.createElement('button');
+        del.className='btn-mini btn-mini-del';
+        del.textContent='លុប';
+        del.onclick=()=>deleteSingle(acc.id);
+
+        actions.append(eye,copy,del);
+        card.append(left,actions);
+        container.appendChild(card);
+    });
+}
+
+function togglePassword(id){
+    passwordVisible[id]=!passwordVisible[id];
+    renderAccounts(getFilteredData());
+}
+
+function toggleSelect(id){
+    const acc=accountList.find(a=>a.id===id);
+    if(acc) acc.selected=!acc.selected;
+    saveAccounts();
+    document.getElementById('selectedStat').textContent=accountList.filter(a=>a.selected).length;
+}
+
+function selectAllAccounts(){
+    if(!accountList.length)return;
+    const allSelected=accountList.every(a=>a.selected);
+    accountList.forEach(a=>a.selected=!allSelected);
+    saveAccounts();
+    renderAccounts(getFilteredData());
+    playBeep();
+    showToast(allSelected?'☐ បានដោះធីកទាំងអស់!':'☑️ បានជ្រើសរើសទាំងអស់!');
+}
+
+function deleteSelectedAccounts(){
+    const count=accountList.filter(a=>a.selected).length;
+    if(count===0){showToast('⚠️ សូមជ្រើសរើសគណនីសិន!');return}
+    if(confirm(`⚠️ លុប ${count} គណនីដែលបានជ្រើសរើស?`)){
+        accountList=accountList.filter(a=>!a.selected);
+        saveAccounts();renderAccounts(getFilteredData());playBeep();
+        showToast(`🗑️ បានលុប ${count} គណនី!`);
+    }
+}
+
+function deleteSingle(id){
+    const acc=accountList.find(a=>a.id===id);
+    if(!acc)return;
+    if(confirm(`🗑️ លុប ${acc.email} ចេញពី Vault?`)){
+        accountList=accountList.filter(a=>a.id!==id);
+        delete passwordVisible[id];
+        saveAccounts();renderAccounts(getFilteredData());playBeep();
+        showToast('🗑️ បានលុបគណនីចេញពី Vault!');
+    }
+}
+
+function filterOutput(){
+    if(isVaultLocked)return;
+    renderAccounts(getFilteredData());
+}
+
+function copyText(text){
+    if(navigator.clipboard && window.isSecureContext){
+        return navigator.clipboard.writeText(text);
+    }
+    return new Promise((resolve,reject)=>{
+        const ta=document.createElement('textarea');
+        ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();
+        try{document.execCommand('copy');resolve()}catch(e){reject(e)}
+        ta.remove();
+    });
+}
+
+function copySingle(email,pass){
+    copyText(`Email: ${email}\nPass: ${pass}`)
+    .then(()=>showToast(`📋 បាន Copy: ${email}`))
+    .catch(()=>showToast('❌ Copy មិនបានទេ!'));
+}
+
+function copyAllOutput(){
+    if(!accountList.length){showToast('⚠️ Vault ទទេ!');return}
+    let text='=== DSN OBSIDIAN V7 OMEGA VAULT ===\n';
+    text+=`Generated/Exported: ${new Date().toLocaleString()}\n\n`;
+    accountList.forEach((a,i)=>text+=`[${i+1}] Email: ${a.email} | Pass: ${a.pass} | Status: ${a.status}\n`);
+    copyText(text).then(()=>showToast('📋 បាន Copy ទិន្នន័យទាំងអស់!'))
+        .catch(()=>showToast('❌ Copy មិនបានទេ!'));
+}
+
+function downloadBlob(content,type,filename){
+    const blob=new Blob([content],{type});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),500);
+}
+
+function downloadTxtFile(){
+    if(!accountList.length){showToast('⚠️ Vault ទទេ!');return}
+    let text='=== DSN OBSIDIAN V7 OMEGA EMAIL REPORT ===\n';
+    text+=`Generated Date: ${new Date().toLocaleString()}\n`;
+    text+='-----------------------------------------\n\n';
+    accountList.forEach((a,i)=>{
+        text+=`[${i+1}] Email: ${a.email}\n    Pass: ${a.pass}\n    Status: ${a.status}\n-----------------------------------------\n`;
+    });
+    downloadBlob(text,'text/plain;charset=utf-8',`DSN_Omega_V7_${Date.now()}.txt`);
+    showToast('📥 បានទាញយក .TXT រួចរាល់!');
+}
+
+function downloadJsonFile(){
+    if(!accountList.length){showToast('⚠️ Vault ទទេ!');return}
+    const payload={
+        app:'DSN Obsidian V7 Omega',
+        exportedAt:new Date().toISOString(),
+        count:accountList.length,
+        accounts:accountList
+    };
+    downloadBlob(JSON.stringify(payload,null,2),'application/json;charset=utf-8',`DSN_Omega_V7_${Date.now()}.json`);
+    showToast('📦 បាន Export .JSON រួចរាល់!');
+}
+
+function csvEscape(value){
+    return `"${String(value).replace(/"/g,'""')}"`;
+}
+
+function downloadCsvFile(){
+    if(!accountList.length){showToast('⚠️ Vault ទទេ!');return}
+    let csv='No,Email,Password,Status\n';
+    accountList.forEach((a,i)=>{
+        csv+=`${i+1},${csvEscape(a.email)},${csvEscape(a.pass)},${csvEscape(a.status)}\n`;
+    });
+    downloadBlob('\uFEFF'+csv,'text/csv;charset=utf-8',`DSN_Omega_V7_${Date.now()}.csv`);
+    showToast('📊 បាន Export .CSV រួចរាល់!');
+}
+
+function getDomainSummary(){
+    const domains={};
+    accountList.forEach(a=>{
+        const d=a.email.includes('@')?'@'+a.email.split('@').pop():'Other';
+        domains[d]=(domains[d]||0)+1;
+    });
+    const top=Object.entries(domains).sort((a,b)=>b[1]-a[1])[0];
+    return top ? (top[1]===accountList.length?top[0]:'Mixed') : '—';
+}
+
+function clearOutputStorage(){
+    if(!accountList.length){showToast('ℹ️ Vault គ្មានទិន្នន័យ!');return}
+    if(confirm('⚠️ តើបងពិតជាចង់លុបទិន្នន័យទាំងអស់ចេញពី Vault មែនទេ?')){
+        accountList=[];
+        localStorage.removeItem(STORAGE_KEY);
+        renderAccounts([]);
+        showToast('🗑️ បានលុបទិន្នន័យទាំងអស់!');
+    }
+}
+
+/* Matrix Rain */
+const canvas=document.getElementById('matrixCanvas');
+const ctx=canvas.getContext('2d');
+const alphabet='ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const fontSize=16;
+let rainDrops=[];
+
+function resizeCanvas(){
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.floor(window.innerWidth*dpr);
+    canvas.height=Math.floor(window.innerHeight*dpr);
+    canvas.style.width=window.innerWidth+'px';
+    canvas.style.height=window.innerHeight+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const columns=Math.floor(window.innerWidth/fontSize);
+    rainDrops=Array.from({length:columns},()=>secureRandomInt(Math.max(1,Math.floor(window.innerHeight/fontSize))));
+}
+window.addEventListener('resize',resizeCanvas);
+
+function renderMatrixRain(){
+    ctx.fillStyle='rgba(2,4,10,.08)';
+    ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
+    ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--primary-color')||'#10b981';
+    ctx.font=fontSize+'px monospace';
+    for(let i=0;i<rainDrops.length;i++){
+        const text=alphabet.charAt(secureRandomInt(alphabet.length));
+        ctx.fillText(text,i*fontSize,rainDrops[i]*fontSize);
+        if(rainDrops[i]*fontSize>window.innerHeight && Math.random()>.975) rainDrops[i]=0;
+        rainDrops[i]++;
+    }
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+    const savedTheme=localStorage.getItem(THEME_KEY)||'green';
+    document.body.className='theme-'+savedTheme;
+    resizeCanvas();
+    loadSavedAccounts();
+    resetIdleTimer();
+});
+
+['click','mousemove','touchstart','keydown','scroll'].forEach(evt=>{
+    document.addEventListener(evt,resetIdleTimer,{passive:true});
+});
+
+document.getElementById('unlockPin').addEventListener('keydown',e=>{
+    if(e.key==='Enter')unlockVault();
+});
+
+setInterval(renderMatrixRain,30);
+</script>
+</body>
+</html>
+'''
+
+path = Path("/mnt/data/email_tool.html")
+path.write_text(html, encoding="utf-8")
+print(f"Created: {path}")
+print(f"Size: {path.stat().st_size:,} bytes")
+

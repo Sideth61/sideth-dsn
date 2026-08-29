@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#090d16">
+    <meta name="description" content="DSN OS App Store v2.0 - Deth DSN">
+
+    <title>🛒 DSN App Store v2.0 - Deth DSN</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 110px;
+            color: #fff;
+
+            background:
+                radial-gradient(circle at 20% 10%, rgba(56,189,248,.12), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(139,92,246,.14), transparent 30%),
+                linear-gradient(135deg, #090d16 0%, #111827 50%, #1e1b4b 100%);
+
+            background-attachment: fixed;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 620px;
+            margin: auto;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .logo {
+            width: 74px;
+            height: 74px;
+            margin: 0 auto 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 36px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(135deg,
+                    rgba(56,189,248,.25),
+                    rgba(139,92,246,.25)
+                );
+
+            border: 1px solid rgba(56,189,248,.4);
+
+            box-shadow:
+                0 0 35px rgba(56,189,248,.18),
+                inset 0 0 20px rgba(255,255,255,.04);
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #38bdf8;
+            font-size: 25px;
+            font-weight: 700;
+
+            text-shadow:
+                0 0 18px rgba(56,189,248,.35);
+        }
+
+        .version {
+            display: inline-block;
+            margin-top: 7px;
+            padding: 4px 10px;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            color: #bae6fd;
+
+            border: 1px solid rgba(56,189,248,.3);
+            border-radius: 20px;
+
+            background: rgba(56,189,248,.08);
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 9px;
+        }
+
+        /* =========================
+           SEARCH
+        ========================= */
+
+        .search-box {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .search-box span {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 13px 15px 13px 44px;
+
+            color: #fff;
+            background: rgba(15,23,42,.8);
+
+            border: 1px solid #334155;
+            border-radius: 14px;
+
+            outline: none;
+            font-size: 13px;
+
+            transition: .25s;
+        }
+
+        #searchInput:focus {
+            border-color: #38bdf8;
+
+            box-shadow:
+                0 0 0 3px rgba(56,189,248,.08),
+                0 0 18px rgba(56,189,248,.12);
+        }
+
+        /* =========================
+           CATEGORY
+        ========================= */
+
+        .categories {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 2px 1px 10px;
+
+            scrollbar-width: none;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-btn {
+            flex-shrink: 0;
+
+            padding: 8px 13px;
+
+            border: 1px solid #334155;
+            border-radius: 20px;
+
+            color: #cbd5e1;
+            background: rgba(17,24,39,.7);
+
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+
+            transition: .25s;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            color: #fff;
+            border-color: #38bdf8;
+            background: rgba(56,189,248,.15);
+
+            box-shadow:
+                0 0 15px rgba(56,189,248,.08);
+        }
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .store-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin: 5px 0 12px;
+
+            color: #64748b;
+            font-size: 11px;
+        }
+
+        .online {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            color: #34d399;
+        }
+
+        .online-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+            background: #34d399;
+
+            box-shadow: 0 0 10px #34d399;
+
+            animation: pulse 1.7s infinite;
+        }
+
+        @keyframes pulse {
+            50% {
+                opacity: .35;
+                transform: scale(.7);
+            }
+        }
+
+        /* =========================
+           APP CARD
+        ========================= */
+
+        .app-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .app-card {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            padding: 15px;
+
+            background: rgba(17,24,39,.82);
+
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+
+            border: 1px solid rgba(56,189,248,.2);
+            border-radius: 18px;
+
+            box-shadow:
+                0 14px 35px rgba(0,0,0,.35);
+
+            transition: .28s;
+        }
+
+        .app-card:hover {
+            transform: translateY(-3px);
+
+            border-color: rgba(56,189,248,.55);
+
+            box-shadow:
+                0 18px 40px rgba(0,0,0,.45),
+                0 0 22px rgba(56,189,248,.07);
+        }
+
+        .app-card.hidden {
+            display: none;
+        }
+
+        .app-icon {
+            width: 56px;
+            height: 56px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            font-size: 28px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(56,189,248,.13),
+                    rgba(139,92,246,.13)
+                );
+
+            border: 1px solid rgba(56,189,248,.22);
+
+            box-shadow:
+                inset 0 0 18px rgba(255,255,255,.03);
+        }
+
+        .app-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .app-name {
+            margin: 0 0 3px;
+
+            color: #f8fafc;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .app-desc {
+            margin: 0 0 5px;
+
+            color: #94a3b8;
+            font-size: 10.5px;
+
+            line-height: 1.4;
+        }
+
+        .app-meta {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 2px 7px;
+
+            border-radius: 8px;
+
+            color: #7dd3fc;
+            background: rgba(56,189,248,.08);
+
+            font-size: 9px;
+        }
+
+        .tag.green {
+            color: #6ee7b7;
+            background: rgba(16,185,129,.08);
+        }
+
+        .tag.purple {
+            color: #c4b5fd;
+            background: rgba(139,92,246,.08);
+        }
+
+        .app-actions {
+            flex-shrink: 0;
+
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .btn {
+            border: none;
+            border-radius: 10px;
+
+            padding: 8px 12px;
+
+            color: #fff;
+
+            font-size: 10.5px;
+            font-weight: 700;
+
+            cursor: pointer;
+            text-decoration: none;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            white-space: nowrap;
+
+            transition: .25s;
+        }
+
+        .btn-install {
+            background:
+                linear-gradient(135deg,#2563eb,#38bdf8);
+
+            box-shadow:
+                0 4px 13px rgba(37,99,235,.25);
+        }
+
+        .btn-install:hover {
+            transform: scale(1.05);
+            filter: brightness(1.12);
+        }
+
+        .btn-open {
+            background:
+                linear-gradient(135deg,#059669,#34d399);
+
+            box-shadow:
+                0 4px 13px rgba(5,150,105,.2);
+        }
+
+        .btn-info {
+            color: #cbd5e1;
+            background: #1e293b;
+            border: 1px solid #334155;
+        }
+
+        .btn-info:hover {
+            border-color: #38bdf8;
+        }
+
+        .installed {
+            cursor: default;
+
+            color: #6ee7b7;
+
+            background:
+                rgba(5,150,105,.13);
+
+            border: 1px solid rgba(52,211,153,.25);
+        }
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty {
+            display: none;
+
+            text-align: center;
+
+            padding: 35px 20px;
+
+            color: #64748b;
+        }
+
+        .empty-icon {
+            font-size: 35px;
+            margin-bottom: 8px;
+        }
+
+        /* =========================
+           INFO CARD
+        ========================= */
+
+        .info-card {
+            margin-top: 16px;
+            padding: 15px;
+
+            text-align: center;
+
+            background: rgba(17,24,39,.65);
+
+            border: 1px solid rgba(56,189,248,.15);
+            border-radius: 16px;
+        }
+
+        .info-card strong {
+            color: #38bdf8;
+            font-size: 12px;
+        }
+
+        .info-card p {
+            color: #64748b;
+            font-size: 10px;
+            line-height: 1.6;
+            margin: 7px 0 0;
+        }
+
+        /* =========================
+           DOCK
+        ========================= */
+
+        .dsn-dock {
+            position: fixed;
+
+            left: 50%;
+            bottom: 18px;
+
+            transform: translateX(-50%);
+
+            display: flex;
+            gap: 8px;
+
+            padding: 9px 13px;
+
+            background: rgba(17,24,39,.88);
+
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+
+            border: 1px solid rgba(56,189,248,.28);
+
+            border-radius: 28px;
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,.65),
+                0 0 20px rgba(56,189,248,.08);
+
+            z-index: 999;
+        }
+
+        .dock-item {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            text-decoration: none;
+
+            font-size: 20px;
+
+            transition: .25s;
+        }
+
+        .dock-item:hover,
+        .dock-item.active {
+            background: rgba(56,189,248,.15);
+            transform: translateY(-5px) scale(1.08);
+        }
+
+        /* =========================
+           TOAST
+        ========================= */
+
+        #toast {
+            position: fixed;
+
+            left: 50%;
+            bottom: 88px;
+
+            transform: translateX(-50%) translateY(20px);
+
+            width: max-content;
+            max-width: 90%;
+
+            padding: 11px 17px;
+
+            color: #fff;
+
+            background: rgba(15,23,42,.95);
+
+            border: 1px solid rgba(56,189,248,.3);
+
+            border-radius: 13px;
+
+            box-shadow: 0 10px 30px rgba(0,0,0,.45);
+
+            font-size: 11px;
+
+            opacity: 0;
+            pointer-events: none;
+
+            transition: .3s;
+
+            z-index: 2000;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            body {
+                padding: 15px;
+                padding-bottom: 105px;
+            }
+
+            .app-card {
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .app-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+            }
+
+            .app-name {
+                font-size: 13px;
+            }
+
+            .app-desc {
+                font-size: 9.5px;
+            }
+
+            .btn {
+                padding: 7px 9px;
+                font-size: 9.5px;
+            }
+
+            .dsn-dock {
+                gap: 3px;
+                padding: 8px 10px;
+            }
+
+            .dock-item {
+                width: 38px;
+                height: 38px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="logo">🛒</div>
+
+        <h1>DSN App Store</h1>
+
+        <div class="version">
+            DSN OS • VERSION 2.0
+        </div>
+
+        <div class="subtitle">
+            🧩 កម្មវិធី និង Game Hub របស់ Deth DSN
+        </div>
+    </header>
+
+
+    <!-- SEARCH -->
+    <div class="search-box">
+        <span>🔍</span>
+
+        <input
+            type="search"
+            id="searchInput"
+            placeholder="ស្វែងរក App ឬ Game..."
+            autocomplete="off"
+        >
+    </div>
+
+
+    <!-- CATEGORY -->
+    <div class="categories">
+
+        <button
+            class="category-btn active"
+            data-category="all"
+        >
+            ✨ ទាំងអស់
+        </button>
+
+        <button
+            class="category-btn"
+            data-category="media"
+        >
+            🎵 Media
+        </button>
+
+        <button
+            class="category-btn"
+            data-category="game"
+        >
+            🎮 Games
+        </button>
+
+        <button
+            class="category-btn"
+            data-category="tool"
+        >
+            🛠️ Tools
+        </button>
+
+        <button
+            class="category-btn"
+            data-category="browser"
+        >
+            🌐 Browser
+        </button>
+
+    </div>
+
+
+    <!-- STATUS -->
+    <div class="store-status">
+
+        <span id="appCount">
+            9 Apps
+        </span>
+
+        <span class="online">
+            <span class="online-dot"></span>
+            DSN Store Online
+        </span>
+
+    </div>
+
+
+    <!-- APP LIST -->
+    <div class="app-list" id="appList">
+
+
+        <!-- MUSIC -->
+        <div
+            class="app-card"
+            data-category="media"
+            data-name="DSN Music Player"
+        >
+
+            <div class="app-icon">🎵</div>
+
+            <div class="app-info">
+
+                <h3 class="app-name">
+                    DSN Music Player
+                </h3>
+
+                <p class="app-desc">
+                    ស្ដាប់ចម្រៀង និង Audio ក្នុង DSN OS
+                </p>
+
+                <div class="app-meta">
+                    <span class="tag">Media</span>
+                    <span class="tag green">v2.0</span>
+                </div>
+
+            </div>
+
+            <div class="app-actions">
+
+                <a
+                    href="musicdsn.html"
+                    class="btn btn-open"
+                >
+                    បើក
+                </a>
+
+                <button
+                    class="btn btn-install"
+                    id="btn-music"
+                    onclick="installApp('DSN Music Player','btn-music')"
+                >
+                    Install
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- GTA -->
+        <div
+            class="app-card"
+            data-category="game"
+            data-name="Grand Theft Auto GTA"
+        >
+
+            <div class="app-icon">🚗</div>
+
+            <div class="app-info">
+
+                <h3 class="app-name">
+                    Grand Theft Auto
+                </h3>
+
+                <p class="app-desc">
+                    Open World Action Game
+                </p>
+
+                <div class="app-meta">
+                    <span class="tag purple">Game</span>
+                    <span class="tag">Open World</span>
+                </div>
+
+            </div>
+
+            <div class="app-actions">
+
+                <a
+                    href="gta.html"
+                    class="btn btn-open"
+                >
+                    ចូលលេង
+                </a>
+
+                <button
+                    class="btn btn-info"
+                    onclick="showInfo('Grand Theft Auto','Open World Action Game')"
+                >
+                    Info
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOMB RAIDER -->
+        <div
+            class="app-card"
+            data-category="game"
+            data-name="Tomb Raider Feral"
+        >
+
+            <div class="app-icon">🏹</div>
+
+            <div class="app-info">
+
+                <h3 class="app-name">
+                    Tomb Raider
+                </h3>
+
+                <p class="app-desc">
+                    Action Adventure Survival
+                </p>
+
+                <div class="app-meta">
+                    <span class="tag purple">Game</span>
+                    <span class="tag">Feral</span>
+                </div>
+
+            </div>
+
+            <div class="app-actions">
+
+                <a
+                    href="https://play.google.com/store/apps/details?id=com.feralinteractive.tombraider_android&hl=en"
+                    target="_blank"
+                    class="btn btn-install"
+                >
+                    Android
+                </a>
+
+                <a
+                    href="https://apps.apple.com/kh/app/tomb-raider/id6742988247"
+                    target="_blank"
+                    class="btn btn-open"
+                >
+                    iOS
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- HITMAN -->
+        <div
+            class="app-card"
+            data-category="game"
+            data-name="Hitman Absolution"
+        >
+
+            <div class="app-icon">👔</div>
+
+            <div class="app-info">
+
+                <h3 class="app-name">
+                    Hitman: Absolution
+                </h3>
+
+                <p class="app-desc">
+                    Stealth Action Assassin
+                </p>
+
+                <div class="app-meta">
+                    <span class="tag purple">Game</span>
+                    <span class="tag">Action</span>
+                </div>
+
+            </div>
+
+            <div class="app-actions">
+
+                <a
+                    href="https://play.google.com/store/apps/details?id=com.feralinteractive.hitmanabsolution_android"
+                    target="_blank"
+                    class="btn btn-install"
+                >
+                    Android
+                </a>
+
+                <a
+                    href="https://apps.apple.com/kh/app/hitman-absolution/id6737513240"
+                    target="_blank"
+                    class="btn btn-open"
+                >
+                    iOS
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- GTA SA -->
+        <div
+            class="app-card"
+            data-category="game"
+            data-name="GTA San Andreas Definitive Edition"
+        >
+
+            <div class="app-icon">🔥</div>
+
+            <div class="app-info">
+
+                <h3 class="app-name">
+                    GTA: San Andreas - DE
+                </h3>
+
+                <p class="app-desc">
+                    Definitive Edition Open World
+                </p>
+
+                <div class="app-meta">
+                    <span class="tag purple">Game</span>
+                    <span class="tag">Rockstar</span>
+                </div>
+
+            </div>
+
+            <div class="app-actions">
+
+                <a
+                    href="https://play.google.com/store/apps/details?id=com.rockstargames.gtasa.de&hl=en"
+                    target="_blank"
+                    class="btn btn-install"
+                >
+                    Play Store
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- COD -->
+        <div
+            class="app-card"
+            data-category="game"
+            data-name="Call of Duty"
+        >
+
+            <div class="app-icon">🔫</div>
+
+            <div class="app-info">
+
+                <h3 class="app-name">
+                    Call of Duty
+                </h3>
+
+                <p class="app-desc">
+                    Multiplayer Shooter
+                </p>
+
+                <div class="app-meta">
+                    <span class="tag purple">Game</span>
+                    <span class="tag">Shooter</span>
+                </div>
+
+            </div>
+
+            <div class="app-actions">
+
+                <a
+                    href="call_of_duty.html"
+                    class="btn btn-open"
+                >
+                    ចូលលេង
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- CLOUD -->
+        <div
+            class="app-card"
+            data-category="tool"
+            data-name="DSN Cloud Explorer"
+        >
+
+            <div class="app-icon">📁</div>
+
+            <div class="app-info">
+
+                <h3 class="app-name">
+                    DSN Cloud Explorer
+                </h3>
+
+                <p class="app-desc">
+                    គ្រប់គ្រង Folder និង Local Storage
+                </p>
+
+                <div class="app-meta">
+                    <span class="tag">Tool</span>
+                    <span class="tag green">DSN OS</span>
+                </div>
+
+            </div>
+
+            <div class="app-actions">
+
+                <a
+                    href="explorer.html"
+                    class="btn btn-open"
+                >
+                    បើក
+                </a>
+
+                <button
+                    class="btn btn-install"
+                    id="btn-cloud"
+                    onclick="installApp('DSN Cloud Explorer','btn-cloud')"
+                >
+                    Install
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- BROWSER -->
+        <div
+            class="app-card"
+            data-category="browser"
+            data-name="B Sideth Mini Browser"
+        >
+
+            <div class="app-icon">🌐</div>
+
+            <div class="app-info">
+
+                <h3 class="app-name">
+                    B Sideth Mini Browser
+                </h3>
+
+                <p class="app-desc">
+                    Mini Web Browser សម្រាប់ DSN OS
+                </p>
+
+                <div class="app-meta">
+                    <span class="tag">Browser</span>
+                    <span class="tag green">v2.0</span>
+                </div>
+
+            </div>
+
+            <div class="app-actions">
+
+                <a
+                    href="browser.html"
+                    class="btn btn-open"
+                >
+                    បើក
+                </a>
+
+                <button
+                    class="btn btn-install"
+                    id="btn-browser"
+                    onclick="installApp('B Sideth Mini Browser','btn-browser')"
+                >
+                    Install
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- LIBRARY -->
+        <div
+            class="app-card"
+            data-category="tool"
+            data-name="DSN Learning Library IT"
+        >
+
+            <div class="app-icon">📚</div>
+
+            <div class="app-info">
+
+                <h3 class="app-name">
+                    DSN Learning Library
+                </h3>
+
+                <p class="app-desc">
+                    សៀវភៅ IT, Website, Game និង Media
+                </p>
+
+                <div class="app-meta">
+                    <span class="tag">Learning</span>
+                    <span class="tag green">DSN</span>
+                </div>
+
+            </div>
+
+            <div class="app-actions">
+
+                <a
+                    href="library.html"
+                    class="btn btn-open"
+                >
+                    បើក
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- EMPTY -->
+    <div class="empty" id="emptyState">
+
+        <div class="empty-icon">
+            🔎
+        </div>
+
+        <div>
+            រកមិនឃើញ App ទេ 😬
+        </div>
+
+    </div>
+
+
+    <!-- STORE INFO -->
+    <div class="info-card">
+
+        <strong>
+            💙 DSN OS App Store v2.0
+        </strong>
+
+        <p>
+            ប្រព័ន្ធ App Store ផ្ទាល់ខ្លួនរបស់ DSN OS។
+            App ដែល Install នឹងត្រូវបានរក្សាទុកជា Local State
+            ដើម្បីឱ្យប្រព័ន្ធចងចាំស្ថានភាពរបស់វា។
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+
+<!-- FLOATING DOCK -->
+<nav class="dsn-dock">
+
+    <a
+        href="index.html"
+        class="dock-item"
+        title="ទំព័រដើម"
+    >
+        🏠
+    </a>
+
+    <a
+        href="profile.html"
+        class="dock-item"
+        title="ប្រវត្តិរូប"
+    >
+        👤
+    </a>
+
+    <a
+        href="appstore.html"
+        class="dock-item active"
+        title="App Store"
+    >
+        🛒
+    </a>
+
+    <a
+        href="library.html"
+        class="dock-item"
+        title="Library DSN"
+    >
+        📚
+    </a>
+
+    <a
+        href="setting.html"
+        class="dock-item"
+        title="ការកំណត់"
+    >
+        ⚙️
+    </a>
+
+</nav>
+
+
+<script>
+
+    /* =========================================
+       DSN APP STORE v2.0
+    ========================================= */
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const appCards =
+        document.querySelectorAll(".app-card");
+
+    const categoryButtons =
+        document.querySelectorAll(".category-btn");
+
+    const emptyState =
+        document.getElementById("emptyState");
+
+    const appCount =
+        document.getElementById("appCount");
+
+    let currentCategory = "all";
+
+
+    /* =========================================
+       SEARCH + CATEGORY
+    ========================================= */
+
+    function filterApps() {
+
+        const query =
+            searchInput.value
+                .toLowerCase()
+                .trim();
+
+        let visible = 0;
+
+        appCards.forEach(card => {
+
+            const name =
+                card.dataset.name.toLowerCase();
+
+            const category =
+                card.dataset.category;
+
+            const matchesSearch =
+                name.includes(query);
+
+            const matchesCategory =
+                currentCategory === "all" ||
+                category === currentCategory;
+
+            if (
+                matchesSearch &&
+                matchesCategory
+            ) {
+
+                card.classList.remove("hidden");
+                visible++;
+
+            } else {
+
+                card.classList.add("hidden");
+
+            }
+
+        });
+
+        appCount.textContent =
+            visible + " Apps";
+
+        emptyState.style.display =
+            visible === 0 ? "block" : "none";
+    }
+
+
+    searchInput.addEventListener(
+        "input",
+        filterApps
+    );
+
+
+    categoryButtons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                categoryButtons.forEach(btn =>
+                    btn.classList.remove("active")
+                );
+
+                button.classList.add("active");
+
+                currentCategory =
+                    button.dataset.category;
+
+                filterApps();
+
+            }
+        );
+
+    });
+
+
+    /* =========================================
+       INSTALL SYSTEM
+    ========================================= */
+
+    const installedApps = [
+        "DSN Music Player",
+        "DSN Cloud Explorer",
+        "B Sideth Mini Browser"
+    ];
+
+
+    function getButtonId(appName) {
+
+        if (
+            appName === "DSN Music Player"
+        ) {
+            return "btn-music";
+        }
+
+        if (
+            appName === "DSN Cloud Explorer"
+        ) {
+            return "btn-cloud";
+        }
+
+        if (
+            appName === "B Sideth Mini Browser"
+        ) {
+            return "btn-browser";
+        }
+
+        return null;
+    }
+
+
+    function updateInstalledApps() {
+
+        installedApps.forEach(appName => {
+
+            const saved =
+                localStorage.getItem(
+                    "dsn_installed_" + appName
+                );
+
+            if (saved === "true") {
+
+                const buttonId =
+                    getButtonId(appName);
+
+                const button =
+                    document.getElementById(buttonId);
+
+                if (button) {
+
+                    button.textContent =
+                        "✓ Installed";
+
+                    button.classList.remove(
+                        "btn-install"
+                    );
+
+                    button.classList.add(
+                        "installed"
+                    );
+
+                    button.disabled = true;
+
+                }
+
+            }
+
+        });
+
+    }
+
+
+    function installApp(
+        appName,
+        buttonId
+    ) {
+
+        const button =
+            document.getElementById(buttonId);
+
+        if (!button) return;
+
+
+        localStorage.setItem(
+            "dsn_installed_" + appName,
+            "true"
+        );
+
+
+        button.textContent =
+            "✓ Installed";
+
+        button.classList.remove(
+            "btn-install"
+        );
+
+        button.classList.add(
+            "installed"
+        );
+
+        button.disabled = true;
+
+
+        showToast(
+            "✅ " +
+            appName +
+            " បានដំឡើងក្នុង DSN OS រួចរាល់!"
+        );
+
+    }
+
+
+    /* =========================================
+       APP INFO
+    ========================================= */
+
+    function showInfo(
+        name,
+        description
+    ) {
+
+        showToast(
+            "📱 " +
+            name +
+            " — " +
+            description
+        );
+
+    }
+
+
+    /* =========================================
+       TOAST
+    ========================================= */
+
+    let toastTimer;
+
+    function showToast(message) {
+
+        const toast =
+            document.getElementById("toast");
+
+        toast.textContent =
+            message;
+
+        toast.classList.add("show");
+
+        clearTimeout(toastTimer);
+
+        toastTimer =
+            setTimeout(() => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            }, 3000);
+
+    }
+
+
+    /* =========================================
+       START
+    ========================================= */
+
+    window.addEventListener(
+        "DOMContentLoaded",
+        () => {
+
+            updateInstalledApps();
+
+            filterApps();
+
+        }
+    );
+
+</script>
+
+</body>

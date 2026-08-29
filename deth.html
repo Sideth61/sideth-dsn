@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deth - DSN Supreme God-Tier Cyber OS</title>
+<!-- Open Graph / Social Share Meta Tags -->
+<meta property="og:title" content="Deth - DSN Supreme God-Tier Cyber OS">
+<meta property="og:description" content="ប្រព័ន្ធគ្រប់គ្រងសកលកម្រិតកំពូលរបស់ Nita និង San Sideth (Deth DSN)!">
+<meta property="og:image" content="dsn_os.jpeg">
+<meta property="og:url" content="https://sideth61.github.io/-sideth-site-/deth.html">
+<meta property="og:type" content="website">
+<!-- Custom Favicon -->
+<link rel="icon" type="image/jpeg" href="dsn_os.jpeg">
+<!-- Google Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* {
+box-sizing: border-box;
+}
+html {
+scroll-behavior: smooth;
+}
+body.theme-dark {
+background-color: #030712;
+color: #f8fafc;
+}
+body.theme-cyber {
+background-color: #0f051d;
+color: #ff77ff;
+}
+body.theme-ocean {
+background-color: #020f18;
+color: #38bdf8;
+}
+body.theme-matrix {
+background-color: #000;
+color: #00ff66;
+}
+body {
+font-family: 'Kantumruy Pro', sans-serif;
+background-color: #030712;
+background-image:
+radial-gradient(
+circle at 15% 15%,
+rgba(255, 105, 180, 0.1) 0%,
+transparent 45%
+),
+radial-gradient(
+circle at 85% 85%,
+rgba(56, 189, 248, 0.1) 0%,
+transparent 45%
+),
+linear-gradient(to bottom, #030712, #000);
+background-attachment: fixed;
+background-size: cover;
+color: #f8fafc;
+text-align: center;
+padding: 85px 12px 130px 12px;
+margin: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+min-height: 100vh;
+position: relative;
+overflow-x: hidden;
+}
+/* =========================
+Logo
+========================= */
+.logo-container {
+position: fixed;
+top: 15px;
+left: 15px;
+z-index: 1000;
+background: linear-gradient(
+135deg,
+#ff69b4,
+#38bdf8
+);
+padding: 3px;
+border-radius: 50%;
+box-shadow: 0 0 25px rgba(255, 105, 180, 0.7);
+display: flex;
+align-items: center;
+justify-content: center;
+width: 50px;
+height: 50px;
+text-decoration: none;
+animation: pulseGlow 2s infinite;
+}
+.logo-container span {
+font-size: 26px;
+display: block;
+}
+/* =========================
+Matrix Background
+========================= */
+#matrixCanvas {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: 1;
+opacity: 0.25;
+}
+/* =========================
+Main Container
+========================= */
+.container {
+width: 100%;
+max-width: 560px;
+display: flex;
+flex-direction: column;
+gap: 20px;
+z-index: 10;
+}
+/* =========================
+Cards
+========================= */
+.card {
+background: rgba(10, 15, 30, 0.82);
+backdrop-filter: blur(22px);
+-webkit-backdrop-filter: blur(22px);
+padding: 24px 20px;
+border-radius: 24px;
+border: 1px solid rgba(255, 105, 180, 0.3);
+box-shadow:
+0 20px 50px rgba(0, 0, 0, 0.8),
+inset 0 0 20px rgba(255, 105, 180, 0.05);
+text-align: left;
+transition:
+all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card:hover {
+border-color: rgba(255, 105, 180, 0.8);
+box-shadow:
+0 25px 65px rgba(0, 0, 0, 0.9),
+0 0 30px rgba(255, 105, 180, 0.3);
+transform: translateY(-3px);
+}
+.header-card {
+text-align: center;
+}
+/* =========================
+Avatar
+========================= */
+.avatar-container {
+width: 110px;
+height: 110px;
+margin: 0 auto 15px auto;
+border-radius: 50%;
+background: linear-gradient(
+135deg,
+#ff69b4,
+#38bdf8,
+#00ff66
+);
+padding: 3.5px;
+box-shadow: 0 0 35px rgba(255, 105, 180, 0.6);
+animation: floatAvatar 4s ease-in-out infinite;
+}
+.avatar {
+width: 100%;
+height: 100%;
+border-radius: 50%;
+object-fit: cover;
+display: block;
+background: #000;
+}
+h1 {
+color: #ff69b4;
+font-size: 24px;
+margin: 10px 0 5px 0;
+font-weight: 700;
+text-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+}
+.title-sub {
+color: #38bdf8;
+font-size: 13.5px;
+font-weight: 600;
+margin-bottom: 15px;
+}
+p {
+color: #94a3b8;
+font-size: 13.5px;
+line-height: 1.7;
+background: rgba(5, 10, 20, 0.6);
+padding: 12px 16px;
+border-radius: 12px;
+border-left: 3px solid #ff69b4;
+margin: 0 0 10px 0;
+}
+.badge {
+display: inline-block;
+background: linear-gradient(
+135deg,
+#701a75,
+#a21caf
+);
+color: #fbcfe8;
+padding: 6px 18px;
+border-radius: 30px;
+font-size: 12px;
+margin-bottom: 15px;
+box-shadow: 0 0 20px rgba(162, 28, 175, 0.6);
+font-weight: bold;
+border: 1px solid #e879f9;
+}
+.section-title {
+color: #ff69b4;
+font-size: 15px;
+margin: 0 0 12px 0;
+display: flex;
+align-items: center;
+gap: 8px;
+border-bottom: 1px solid rgba(255, 105, 180, 0.25);
+padding-bottom: 8px;
+font-weight: bold;
+}
+/* =========================
+Buttons
+========================= */
+.btn {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+background: #2563eb;
+color: #fff;
+padding: 13px;
+margin: 10px 0;
+text-decoration: none;
+border-radius: 14px;
+font-weight: 600;
+font-family: 'Kantumruy Pro', sans-serif;
+transition: 0.3s;
+border: none;
+}
+.btn:hover {
+filter: brightness(1.2);
+transform: translateY(-3px);
+box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+}
+.btn-telegram {
+background: #0088cc;
+}
+.btn-facebook {
+background: #1877f2;
+}
+/* =========================
+Terminal & Syndicate
+========================= */
+.syndicate-card {
+background:
+linear-gradient(
+135deg,
+rgba(25, 5, 20, 0.92),
+rgba(3, 10, 25, 0.95)
+) !important;
+border: 2px solid #ff69b4 !important;
+box-shadow:
+0 0 35px rgba(255, 105, 180, 0.35) !important;
+}
+.global-box {
+background: #000;
+padding: 12px;
+border-radius: 10px;
+border: 1px dashed #ff69b4;
+text-align: center;
+margin-bottom: 12px;
+}
+#global-status {
+color: #ff69b4;
+font-family: 'Courier New', monospace;
+font-size: 0.85em;
+font-weight: bold;
+}
+.terminal-box {
+background: #000;
+border: 1px solid #ff69b4;
+border-radius: 10px;
+padding: 12px;
+font-family: 'Courier New', monospace;
+color: #ff69b4;
+font-size: 12px;
+margin-top: 10px;
+}
+.terminal-output {
+height: 80px;
+overflow-y: auto;
+margin-bottom: 8px;
+border-bottom: 1px dashed #33001a;
+padding-bottom: 5px;
+}
+.terminal-input-row {
+display: flex;
+gap: 6px;
+}
+.terminal-input {
+background: #0a0307;
+border: 1px solid #ff69b4;
+color: #ff69b4;
+padding: 6px 10px;
+border-radius: 6px;
+font-family: 'Courier New', monospace;
+font-size: 12px;
+flex: 1;
+outline: none;
+}
+.terminal-btn {
+background: #ff69b4;
+color: #000;
+border: none;
+padding: 6px 14px;
+border-radius: 6px;
+font-weight: bold;
+cursor: pointer;
+}
+/* =========================
+Search & App Grid
+========================= */
+.app-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 12px;
+text-align: center;
+}
+.app-icon-box {
+background: rgba(15, 23, 42, 0.7);
+border: 1px solid rgba(255, 105, 180, 0.25);
+padding: 12px 8px;
+border-radius: 14px;
+text-decoration: none;
+color: #f8fafc;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 6px;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+font-size: 11px;
+font-weight: 600;
+}
+.app-icon-box span {
+font-size: 24px;
+transition: transform 0.3s;
+}
+.app-icon-box:hover {
+border-color: #ff69b4;
+background: rgba(255, 105, 180, 0.2);
+transform: translateY(-6px);
+box-shadow: 0 12px 30px rgba(255, 105, 180, 0.4);
+color: #ff69b4;
+}
+.app-icon-box:hover span {
+transform: scale(1.25) rotate(6deg);
+}
+/* =========================
+Settings & UI Elements
+========================= */
+.setting-btn {
+position: fixed;
+top: 15px;
+right: 20px;
+z-index: 1000;
+background: rgba(10, 15, 30, 0.85);
+border: 1px solid rgba(255, 105, 180, 0.5);
+color: #ff69b4;
+width: 45px;
+height: 45px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 20px;
+cursor: pointer;
+box-shadow: 0 4px 20px rgba(255, 105, 180, 0.4);
+transition: 0.3s;
+}
+.setting-btn:hover {
+background: #ff69b4;
+color: #000;
+transform: scale(1.1) rotate(90deg);
+box-shadow: 0 0 30px rgba(255, 105, 180, 0.9);
+}
+.modal-overlay {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0, 0, 0, 0.8);
+backdrop-filter: blur(8px);
+z-index: 9999;
+justify-content: center;
+align-items: center;
+}
+.modal-card {
+background: #090d16;
+border: 2px solid #ff69b4;
+padding: 25px;
+border-radius: 20px;
+width: 90%;
+max-width: 350px;
+text-align: left;
+color: #fff;
+box-shadow: 0 0 45px rgba(255, 105, 180, 0.4);
+}
+.modal-card h3 {
+color: #ff69b4;
+margin-top: 0;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 16px;
+}
+.close-modal {
+background: none;
+border: none;
+color: #f43f5e;
+font-size: 20px;
+cursor: pointer;
+}
+.setting-group {
+margin: 15px 0;
+}
+.setting-group label {
+display: block;
+color: #94a3b8;
+font-size: 13px;
+margin-bottom: 8px;
+}
+.options-row {
+display: flex;
+gap: 8px;
+flex-wrap: wrap;
+}
+.theme-box {
+flex: 1;
+padding: 8px;
+border-radius: 8px;
+text-align: center;
+cursor: pointer;
+font-size: 11px;
+font-weight: bold;
+border: 1px solid #1e293b;
+background: #0f172a;
+color: #fff;
+transition: 0.2s;
+}
+.theme-box:hover {
+border-color: #ff69b4;
+background: rgba(255, 105, 180, 0.2);
+}
+.setting-action-btn {
+width: 100%;
+padding: 10px;
+background: #ff69b4;
+color: #000;
+border: none;
+border-radius: 8px;
+font-weight: bold;
+cursor: pointer;
+font-family: 'Kantumruy Pro', sans-serif;
+transition: 0.2s;
+}
+/* =========================
+Dock
+========================= */
+.dsn-dock {
+position: fixed;
+bottom: 20px;
+left: 50%;
+transform: translateX(-50%);
+background: rgba(10, 15, 30, 0.9);
+backdrop-filter: blur(25px);
+border: 1px solid rgba(255, 105, 180, 0.4);
+padding: 10px 22px;
+border-radius: 35px;
+display: flex;
+gap: 15px;
+z-index: 999;
+box-shadow:
+0 15px 35px rgba(0, 0, 0, 0.9),
+0 0 25px rgba(255, 105, 180, 0.25);
+}
+.dock-item {
+font-size: 22px;
+text-decoration: none;
+padding: 8px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: 0.3s;
+}
+.dock-item:hover {
+background: rgba(255, 105, 180, 0.3);
+transform: translateY(-8px) scale(1.15);
+text-shadow: 0 0 12px #ff69b4;
+}
+/* =========================
+Toast
+========================= */
+#dsnToast {
+position: fixed;
+top: 20px;
+left: 50%;
+transform: translateX(-50%) translateY(-100px);
+background: rgba(5, 10, 20, 0.95);
+border: 1px solid #ff69b4;
+color: #fff;
+padding: 12px 22px;
+border-radius: 30px;
+box-shadow: 0 10px 35px rgba(255, 105, 180, 0.6);
+z-index: 99999;
+display: flex;
+align-items: center;
+gap: 12px;
+font-size: 13px;
+font-weight: 600;
+transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+width: max-content;
+max-width: calc(100% - 30px);
+}
+#dsnToast.show {
+transform: translateX(-50%) translateY(0);
+}
+#dsnToast span {
+font-size: 18px;
+}
+@keyframes floatAvatar {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-7px); }
+}
+@keyframes pulseGlow {
+0%, 100% { box-shadow: 0 0 20px rgba(255, 105, 180, 0.5); }
+50% { box-shadow: 0 0 35px rgba(255, 105, 180, 0.9); }
+}
+@media (max-width: 480px) {
+body { padding-left: 8px; padding-right: 8px; }
+.container { gap: 15px; }
+.card { padding: 20px 15px; border-radius: 20px; }
+.app-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.dsn-dock { bottom: 12px; padding: 8px 14px; gap: 8px; }
+.dock-item { font-size: 19px; padding: 6px; }
+.setting-btn { right: 12px; }
+.logo-container { left: 12px; }
+}
+</style>
+</head>
+<body class="theme-cyber">
+<!-- Matrix Background -->
+<canvas id="matrixCanvas"></canvas>
+<!-- Welcome Toast -->
+<div id="dsnToast">
+<span>🌸</span>
+<div>
+សូមស្វាគមន៍មកកាន់ប្រព័ន្ធ Deth OS & DSN Hub!
+</div>
+</div>
+<!-- Hub Link -->
+<a
+href="index.html"
+class="logo-container"
+title="Home DSN OS"
+>
+<span>🏠</span>
+</a>
+<!-- Quick Settings Button -->
+<button
+class="setting-btn"
+onclick="toggleSetting(true)"
+title="Quick Settings"
+aria-label="Open Quick Settings"
+>
+⚙️
+</button>
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingModal">
+<div class="modal-card">
+<h3>
+<span>⚙️ Deth Cyber Settings</span>
+<button class="close-modal" onclick="toggleSetting(false)" aria-label="Close Settings">✕</button>
+</h3>
+<div class="setting-group">
+<label>🎨 រចនាបទពណ៌ (Theme):</label>
+<div class="options-row">
+<div class="theme-box" style="color: #38bdf8;" onclick="setTheme('theme-dark')">Dark</div>
+<div class="theme-box" style="color: #ff77ff;" onclick="setTheme('theme-cyber')">Cyber</div>
+<div class="theme-box" style="color: #38bdf8;" onclick="setTheme('theme-ocean')">Ocean</div>
+<div class="theme-box" style="color: #00ff66;" onclick="setTheme('theme-matrix')">Matrix</div>
+</div>
+</div>
+<div class="setting-group">
+<label>🎵 សំឡេងផ្ទៃខាងក្រោយ (BGM):</label>
+<audio id="bgm" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+<button class="setting-action-btn" onclick="toggleBgm()" id="bgmBtn">▶️ ចុចបើកតន្ត្រី</button>
+</div>
+</div>
+</div>
+<!-- Main Container -->
+<div class="container">
+<!-- =========================
+Profile Card for Deth
+========================= -->
+<div class="card header-card">
+<div class="avatar-container">
+<img src="dsn_os.jpeg" alt="Deth Profile" class="avatar">
+</div>
+<div class="badge">
+🌸 Deth x San Sideth (DSN Ecosystem) ✨
+</div>
+<h1>
+Hello, Welcome to Deth's Portal
+</h1>
+<div class="title-sub">
+💜 Dedicated Cyber Space & Connected Node 💻
+</div>
+<p>
+ទំព័រពិសេសនេះត្រូវបានតភ្ជាប់យ៉ាងរលូនជាមួយប្រព័ន្ធ God-Tier DSN OS របស់ San Sideth។ រាល់ទិន្នន័យ និងកម្មវិធីទាំងអស់ត្រូវបានធ្វើសមកាលកម្មរួចរាល់! 🚀
+</p>
+</div>
+<!-- =========================
+Syndicate Link Box
+========================= -->
+<div class="card syndicate-card">
+<div class="section-title" style="color: #ff69b4; border-color: rgba(255,105,180,0.4);">
+🌸 DETH SECURE NODE - TERMINAL
+</div>
+<div class="global-box">
+<p id="global-status">
+DETH NODE LINK: ACTIVE [SECURE & ENCRYPTED]
+</p>
+</div>
+<div style="display: flex; gap: 10px; margin-bottom: 10px;">
+<button class="btn" style="flex:1; background: #701a75; font-size: 12px; margin:0; border:1px solid #e879f9;" onclick="verifyDethNode()">
+✨ ផ្ទៀងផ្ទាត់ប្រព័ន្ធ Deth
+</button>
+<button class="btn" style="flex:1; background: #991b1b; font-size: 12px; margin:0; border:1px solid #f87171;" onclick="dethAlert()">
+⚠️ សារសុវត្ថិភាព
+</button>
+</div>
+<!-- Terminal -->
+<div class="terminal-box">
+<div class="terminal-output" id="terminalOutput">
+Deth OS v1.0 [Secure Channel Ready]
+
+> Connected directly to Home & DSN Core.
+</div>
+<div class="terminal-input-row">
+<input type="text" id="terminalInput" class="terminal-input" placeholder="វាយពាក្យបញ្ជា (ឧ. hello, dsn, clear)..." onkeypress="handleTerminalKey(event)" autocomplete="off">
+<button class="terminal-btn" onclick="executeTerminalCommand()">Send</button>
+</div>
+</div>
+</div>
+<!-- =========================
+App Launcher Bridge
+========================= -->
+<div class="card">
+<div class="section-title">
+📂 Deth & DSN Bridge Launcher
+</div>
+<p style="text-align: center; border-left: none; margin-bottom: 10px; font-size: 13px;">
+រុករកទៅកាន់ទំព័រមេ និងកម្មវិធីផ្សេងៗ៖
+</p>
+<div class="app-grid">
+<a href="index.html" class="app-icon-box">
+<span>🏠</span>
+Home OS
+</a>
+<a href="appstore.html" class="app-icon-box">
+<span>🛒</span>
+App Store
+</a>
+<a href="musicdsn.html" class="app-icon-box">
+<span>🎧</span>
+DSN Music
+</a>
+<a href="library.html" class="app-icon-box">
+<span>📚</span>
+Library
+</a>
+<a href="dsn_bank.html" class="app-icon-box" data-name="dsn bank ธนาคาร">
+<span>💳</span>
+DSN Bank
+</a>
+<a href="setting.html" class="app-icon-box">
+<span>⚙️</span>
+Settings
+</a>
+</div>
+</div>
+<!-- =========================
+Contact & Social
+========================= -->
+<div class="card">
+<div class="section-title">
+📞 ទំនាក់ទំនងប្រព័ន្ធ
+</div>
+<a href="https://t.me/sidet99" target="_blank" rel="noopener noreferrer" class="btn btn-telegram">
+✈️ Telegram (Admin Link)
+</a>
+<a href="https://www.facebook.com/deth61" target="_blank" rel="noopener noreferrer" class="btn btn-facebook">
+📘 Facebook Page (DSN)
+</a>
+</div>
+</div>
+<!-- =========================
+Floating Dock
+========================= -->
+<div class="dsn-dock">
+<a href="index.html" class="dock-item" title="ទំព័រដើម">🏠</a>
+<a href="deth.html" class="dock-item" title="Deth Portal" style="color: #ff69b4;">🌸</a>
+<a href="appstore.html" class="dock-item" title="App Store">🛒</a>
+<a href="library.html" class="dock-item" title="Library">📚</a>
+<a href="setting.html" class="dock-item" title="ការកំណត់">⚙️</a>
+</div>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+const savedTheme = localStorage.getItem('dsn_theme') || 'theme-cyber';
+document.body.className = savedTheme;
+setTimeout(() => {
+const toast = document.getElementById('dsnToast');
+if (toast) {
+toast.classList.add('show');
+setTimeout(() => { toast.classList.remove('show'); }, 4000);
+}
+}, 1000);
+});
+function verifyDethNode() {
+const status = document.getElementById('global-status');
+status.innerText = "VERIFYING DETH SECURE NODE...";
+setTimeout(() => {
+status.innerText = "STATUS: 100% SECURE & CONNECTED TO DSN CORE! ✨";
+}, 1500);
+}
+function dethAlert() {
+alert("🌸 Deth's secure bridge is fully synchronized with San Sideth's DSN Supreme System! 💻✨");
+}
+function handleTerminalKey(e) {
+if (e.key === 'Enter') { executeTerminalCommand(); }
+}
+function executeTerminalCommand() {
+const input = document.getElementById('terminalInput');
+const output = document.getElementById('terminalOutput');
+const cmd = input.value.trim().toLowerCase();
+if (!cmd) return;
+output.innerHTML += `<br>&gt; ${escapeHtml(input.value)}`;
+if (cmd === 'help') {
+output.innerHTML += `<br>Available commands: [hello, dsn, home, clear, status]`;
+} else if (cmd === 'hello' || cmd === 'hi') {
+output.innerHTML += `<br>Hello from Deth's portal! Everything is running smoothly.`;
+} else if (cmd === 'dsn') {
+output.innerHTML += `<br>DSN God-Tier OS connected successfully.`;
+} else if (cmd === 'home') {
+output.innerHTML += `<br>Redirecting to home...`;
+window.location.href = 'index.html';
+} else if (cmd === 'clear') {
+output.innerHTML = `Deth OS v1.0 [Terminal Cleared]`;
+} else if (cmd === 'status') {
+output.innerHTML += `<br>All bridge protocols active and secure.`;
+} else {
+output.innerHTML += `<br>Unknown command: '${escapeHtml(cmd)}'. Type 'help' for options.`;
+}
+input.value = '';
+output.scrollTop = output.scrollHeight;
+}
+function escapeHtml(value) {
+const div = document.createElement('div');
+div.textContent = value;
+return div.innerHTML;
+}
+function setTheme(themeName) {
+document.body.className = themeName;
+localStorage.setItem('dsn_theme', themeName);
+}
+function toggleSetting(show) {
+document.getElementById('settingModal').style.display = show ? 'flex' : 'none';
+}
+document.getElementById('settingModal').addEventListener('click', function(event) {
+if (event.target === this) { toggleSetting(false); }
+});
+const bgm = document.getElementById('bgm');
+const bgmBtn = document.getElementById('bgmBtn');
+function toggleBgm() {
+if (bgm.paused) {
+bgm.play().then(() => {
+bgmBtn.innerText = "⏸️ បិទតន្ត្រី";
+}).catch(() => {
+alert("សូមចុចលើអេក្រង់ម្ដងទៀត ដើម្បីអនុញ្ញាតឱ្យចាក់សំឡេង!");
+});
+} else {
+bgm.pause();
+bgmBtn.innerText = "▶️ ចុចបើកតន្ត្រី";
+}
+}
+/* Matrix Canvas */
+const canvas = document.getElementById('matrixCanvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas() {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+const katakana = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ';
+const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const alphabet = katakana + latin;
+const fontSize = 16;
+let columns = Math.floor(canvas.width / fontSize);
+let rainDrops = [];
+function initializeRain() {
+columns = Math.floor(canvas.width / fontSize);
+rainDrops = [];
+for (let x = 0; x < columns; x++) {
+rainDrops[x] = 1;
+}
+}
+initializeRain();
+window.addEventListener('resize', initializeRain);
+function renderMatrixRain() {
+ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.fillStyle = '#ff69b4';
+ctx.font = fontSize + 'px monospace';
+for (let i = 0; i < rainDrops.length; i++) {
+const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+rainDrops[i] = 0;
+}
+rainDrops[i]++;
+}
+}
+setInterval(renderMatrixRain, 30);
+</script>
+</body>
+</html>

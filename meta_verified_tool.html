@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSN Meta Verified & Creator Portal - Obsidian V25</title>
+    <link rel="icon" type="image/png" href="app3.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+        
+        :root {
+            --primary-color: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --bg-color: #090d16;
+            --card-bg: rgba(17, 24, 39, 0.94);
+            --border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        body.theme-purple {
+            --primary-color: #a855f7;
+            --primary-glow: rgba(168, 85, 247, 0.35);
+            --border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        body.theme-amber {
+            --primary-color: #f59e0b;
+            --primary-glow: rgba(245, 158, 11, 0.35);
+            --border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        body.theme-emerald {
+            --primary-color: #10b981;
+            --primary-glow: rgba(16, 185, 129, 0.35);
+            --border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        body { 
+            font-family: 'Kantumruy Pro', sans-serif; 
+            background: var(--bg-color); 
+            color: #fff; 
+            padding: 20px; 
+            text-align: center; 
+            margin: 0; 
+            padding-bottom: 120px;
+            transition: background 0.5s;
+            user-select: none;
+        }
+
+        #matrixCanvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; opacity: 0.1;
+        }
+
+        .box { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 24px; 
+            border-radius: 20px; 
+            max-width: 620px; 
+            margin: 15px auto; 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 20px var(--primary-glow); 
+            text-align: left; 
+            position: relative;
+            z-index: 2;
+        }
+
+        h2 { color: var(--primary-color); text-align: center; margin-top: 0; text-shadow: 0 0 10px var(--primary-glow); font-size: 20px; }
+        p, li { color: #94a3b8; font-size: 13.5px; line-height: 1.6; }
+        
+        .checklist-item { 
+            background: rgba(30, 41, 59, 0.7); 
+            padding: 12px 15px; 
+            border-radius: 12px; 
+            margin: 10px 0; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            cursor: pointer; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+        }
+        .checklist-item:hover { border-color: var(--primary-color); transform: translateY(-2px); }
+        .checklist-item input { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary-color); }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            height: 14px;
+            margin: 12px 0;
+            border: 1px solid var(--border-color);
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), #2563eb);
+            width: 0%;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .badge-pro { 
+            background: linear-gradient(135deg, #2563eb, var(--primary-color)); 
+            color: white; 
+            padding: 6px 14px; 
+            border-radius: 10px; 
+            font-size: 12px; 
+            font-weight: bold; 
+            display: inline-block; 
+            margin-bottom: 12px; 
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .btn-action { 
+            display: block; 
+            text-align: center; 
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6); 
+            color: #02040a; 
+            padding: 12px; 
+            margin-top: 15px; 
+            text-decoration: none; 
+            border-radius: 12px; 
+            font-weight: 700;
+            box-shadow: 0 0 15px var(--primary-glow);
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-family: 'Kantumruy Pro', sans-serif;
+            font-size: 14px;
+        }
+        .btn-action:hover { filter: brightness(1.2); transform: translateY(-2px); }
+
+        .btn-back { 
+            display: block; 
+            text-align: center; 
+            background: rgba(255, 255, 255, 0.05); 
+            color: var(--primary-color); 
+            border: 1px solid var(--border-color);
+            padding: 12px; 
+            margin-top: 10px; 
+            text-decoration: none; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            transition: 0.3s;
+        }
+        .btn-back:hover { background: var(--primary-glow); color: #fff; }
+
+        .theme-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .theme-dot {
+            width: 16px; height: 16px; border-radius: 50%; cursor: pointer; border: 2px solid #fff;
+            transition: 0.2s;
+        }
+        .theme-dot:hover { transform: scale(1.2); }
+
+        .bio-box, .script-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px dashed var(--border-color);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-top: 10px;
+            text-align: left;
+            word-break: break-word;
+        }
+
+        .select-style {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            width: 100%;
+            font-family: 'Kantumruy Pro', sans-serif;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+
+        #diagnosticBox {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--primary-color);
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+        }
+
+        /* ID Upload Simulator */
+        .id-upload-area {
+            border: 2px dashed var(--border-color);
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            background: rgba(30, 41, 59, 0.4);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .id-upload-area:hover { border-color: var(--primary-color); background: rgba(30, 41, 59, 0.7); }
+
+        /* Embedded Retro Arcade Game Styles */
+        .arcade-container {
+            background: rgba(5, 8, 20, 0.95);
+            border: 2px solid var(--primary-color);
+            border-radius: 16px;
+            padding: 15px;
+            margin-top: 15px;
+            box-shadow: 0 0 20px var(--primary-glow);
+            text-align: center;
+        }
+        .arcade-hud {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        #gameCanvas {
+            background: #02040a;
+            display: block;
+            margin: 0 auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Floating Dock */
+        .dsn-dock {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--card-bg); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 30px;
+            display: flex; gap: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 15px var(--primary-glow); z-index: 999;
+        }
+        .dock-item { font-size: 20px; text-decoration: none; padding: 8px; border-radius: 50%; display: flex; transition: 0.3s; }
+        .dock-item:hover { background: var(--primary-glow); transform: translateY(-5px); }
+
+        /* Toast Popup */
+        #toast {
+            position: fixed; top: 20px; right: 20px; background: rgba(17, 24, 39, 0.95);
+            border: 1px solid var(--primary-color); color: #fff; padding: 10px 18px; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px var(--primary-glow); font-size: 0.85em;
+            z-index: 10000; display: none; align-items: center; gap: 8px; backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="theme-sky">
+
+    <canvas id="matrixCanvas"></canvas>
+    <div id="toast">✅ <span id="toastMsg">សកម្មភាពបានជោគជ័យ!</span></div>
+
+    <div class="box" style="text-align: center;">
+        <div class="theme-switcher">
+            <div class="theme-dot" style="background:#38bdf8;" onclick="setTheme('sky')" title="Cyber Sky"></div>
+            <div class="theme-dot" style="background:#a855f7;" onclick="setTheme('purple')" title="Cyber Purple"></div>
+            <div class="theme-dot" style="background:#f59e0b;" onclick="setTheme('amber')" title="Solar Amber"></div>
+            <div class="theme-dot" style="background:#10b981;" onclick="setTheme('emerald')" title="Emerald Green"></div>
+        </div>
+        <div class="badge-pro">🛡️ DSN Verified Strategy Hub V25 💙</div>
+        <h2>មគ្គុទ្ទេសក៍ស្នើសុំគ្រីសខៀវ Facebook (Meta Verified)</h2>
+        
+        <p style="margin-bottom: 5px;">កម្រិតនៃការត្រៀមខ្លួនរបស់អ្នក:</p>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p style="font-size: 12px; color: var(--primary-color); margin-top: 0;" id="progressText">0% រួចរាល់</p>
+        
+        <button class="btn-action" style="background: rgba(255,255,255,0.05); border:1px solid var(--border-color); color:var(--primary-color); margin-top:10px;" onclick="runSecurityScan()">🔍 ពិនិត្យភាពស័ក្តិសមគណនី (AI Scan)</button>
+        
+        <div id="diagnosticBox">
+            <p style="color: var(--primary-color); margin: 0; font-weight: 700;" id="scanResultText">⏳ កំពុងវិភាគគណនី...</p>
+        </div>
+    </div>
+
+    <div class="box">
+        <p style="color: var(--primary-color); font-weight: bold; margin-top:0;">📋 លក្ខខណ្ឌ និងជំហានត្រៀមខ្លួន (Readiness Checklist):</p>
+        
+        <div class="checklist-item" onclick="toggleCheck('c1')">
+            <input type="checkbox" id="c1" onchange="updateProgress()">
+            <label for="c1"><b>ឈ្មោះ និងរូបភាពពិត (Real Identity):</b> ឈ្មោះនៅលើ Facebook ត្រូវដូចគ្នាបេះបិទនឹងអត្តសញ្ញាណប័ណ្ណ ឬលិខិតឆ្លងដែនផ្លូវការ។</label>
+        </div>
+
+        <div class="checklist-item" onclick="toggleCheck('c2')">
+            <input type="checkbox" id="c2" onchange="updateProgress()">
+            <label for="c2"><b>សកម្មភាពគណនី (Profile Activity):</b> មានការផុសវីដេអូ ឬរូបភាពជាប្រចាំ (សកម្មភាពการងារ និង Content មានប្រយោជន៍)។</label>
+        </div>
+
+        <div class="checklist-item" onclick="toggleCheck('c3')">
+            <input type="checkbox" id="c3" onchange="updateProgress()">
+            <label for="c3"><b>រៀបចំអត្តសញ្ញាណប័ណ្ណ (Government ID):</b> ត្រៀមអត្តសញ្ញាណប័ណ្ណសញ្ชาติខ្មែរ ឬលិខិតឆ្លងដែនដែលច្បាស់ល្អសម្រាប់ការផ្ទៀងផ្ទាត់។</label>
+        </div>
+
+        <div class="checklist-item" onclick="toggleCheck('c4')">
+            <input type="checkbox" id="c4" onchange="updateProgress()">
+            <label for="c4"><b>ការបង់ប្រាក់ផ្លូវការ (Subscription):</b> ត្រៀមប័ណ្ណធនាគារ (Visa/Mastercard) សម្រាប់បង់ថ្លៃសេវា Meta Verified ប្រចាំខែ។</label>
+        </div>
+    </div>
+
+    <!-- Interactive ID Card Simulator -->
+    <div class="box">
+        <p style="color: var(--primary-color); font-weight: bold; margin-top:0;">🪪 ប្រព័ន្ធจำลองការពិនិត្យអត្តសញ្ញាណប័ណ្ណ (ID Scanner Simulator):</p>
+        <div class="id-upload-area" onclick="simulateIDUpload()">
+            <p style="margin: 0; color: #fff; font-weight: 600;" id="idStatusLabel">📂 ចុចទីនេះដើម្បីជ្រើសរើសរូបថតអត្តសញ្ញាណប័ណ្ណ / លិខិតឆ្លងដែន</p>
+            <p style="margin: 5px 0 0 0; font-size: 11px; color: #94a3b8;">(ទម្រង់គាំទ្រ: JPG, PNG • ត្រូវច្បាស់ល្អ មិនμπំផុត)</p>
+        </div>
+    </div>
+
+    <!-- Interactive PR Bio & Hashtag Generator -->
+    <div class="box">
+        <p style="color: var(--primary-color); font-weight: bold; margin-top:0;">✨ ម៉ាស៊ីនបង្កើត PR Bio & Hashtag ស្វ័យប្រវត្តិ:</p>
+        <label style="font-size: 12px; color: #94a3b8;">ជ្រើសរើសប្រភេទស្ទីលគណនីរបស់អ្នក:</label>
+        <select class="select-style" id="bioStyleSelect" onchange="generateBio()">
+            <option value="military">🛡️ ស្តាយមន្ត្រីយោធា / សន្តិសុខជាតិ</option>
+            <option value="creator">🎬 ស្តាយ Content Creator / វីដេអូអប់រំ</option>
+            <option value="public">🌟 ស្តាយបុគ្គលល្បី / Public Figure</option>
+        </select>
+        
+        <div class="bio-box" id="generatedBioText">🛡️ Official Creator & Public Figure | Verified Security & Media Content Developer | DSN OS Community Member 💙 #MetaVerified #DSN #Official</div>
+        <button class="btn-action" style="margin-top: 10px; padding: 8px;" onclick="copyBio()">📋 ចម្លង Bio នេះភ្លាម</button>
+    </div>
+
+    <!-- AI Reel Script Generator -->
+    <div class="box">
+        <p style="color: var(--primary-color); font-weight: bold; margin-top:0;">🎬 AI Reels Script & Content Strategy Generator:</p>
+        <label style="font-size: 12px; color: #94a3b8;">ជ្រើសរើសប្រធានបទវីដេអូ:</label>
+        <select class="select-style" id="scriptTopicSelect" onchange="generateScript()">
+            <option value="verified">💙 ហេតុផលដែលត្រូវដាក់ស្នើសុំ Meta Verified ផ្លូវការ</option>
+            <option value="security">🛡️ ការពារគណនីហ្វេសប៊ុកពីការលួច (Security Tips)</option>
+            <option value="growth">🚀 វិធីសាស្ត្រពង្រីក Reach វីដេអូ Reels ឱ្យឆាប់ល្បី</option>
+        </select>
+        <div class="script-box" id="generatedScriptText">⏳ កំពុងបង្កើតស្គ្រីបវីដេអូ...</div>
+        <button class="btn-action" style="margin-top: 10px; padding: 8px;" onclick="copyScript()">📋 ចម្លងស្គ្រីបវីដេអូនេះ</button>
+    </div>
+
+    <!-- Embedded Free Retro Arcade Game -->
+    <div class="box">
+        <p style="color: var(--primary-color); font-weight: bold; margin-top:0;">🕹️ ហ្គេមកម្សាន្តពេលទំនេរ (Cyber Raccoon Runner V2):</p>
+        <div class="arcade-container">
+            <div class="arcade-hud">
+                <span>🏆 ពិន្ទុ: <span id="currentScore">0</span></span>
+                <span>⭐ កំណត់ត្រា: <span id="highScore">0</span></span>
+            </div>
+            <canvas id="gameCanvas" width="480" height="180"></canvas>
+            <button class="btn-action" style="margin-top: 10px; padding: 8px;" onclick="startArcadeGame()">▶️ ចាប់ផ្តើមលេង / លេងម្តងទៀត</button>
+        </div>
+    </div>
+
+    <div class="box">
+        <button class="btn-action" onclick="openMetaPortal()">🚀 ចូលទៅកាន់ Meta Verified Hub ផ្លូវការ</button>
+
+        <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; margin-top: 15px;">
+            <p style="color: var(--primary-color); margin: 0; font-size: 13px;">💡 <b>ចំណាំពី DSN OS:</b> គ្មាន Tool ណាមួយអាច Hack យកគ្រីសខៀវដោយឥតគិតថ្លៃបានឡើយ។ ការប្រើប្រាស់ Meta Verified ផ្លូវការ គឺជាមធ្យោបាយសុវត្ថិភាព និងស្របច្បាប់បំផុត!</p>
+        </div>
+
+        <a href="index.html" class="btn-back">🏠 ត្រឡប់ទៅ DSN OS វិញ</a>
+    </div>
+
+    <!-- Floating Dock -->
+    <div class="dsn-dock">
+        <a href="index.html" class="dock-item" title="ទំព័រដើម">🏠</a>
+        <a href="facebook.html" class="dock-item" title="ហ្វេសប៊ុក">📘</a>
+        <a href="money_tool.html" class="dock-item" title="Money Tool">💰</a>
+        <a href="setting.html" class="dock-item" title="ការកំណត់">⚙️</a>
+    </div>
+
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = message;
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 2500);
+        }
+
+        function playBeep(freq = 800, duration = 0.08) {
+            try {
+                let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function setTheme(themeName) {
+            playBeep();
+            document.body.className = `theme-${themeName}`;
+            localStorage.setItem('dsn_meta_theme', themeName);
+            showToast("បានប្ដូរ Theme រួចរាល់!");
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('dsn_meta_theme') || 'sky';
+            document.body.className = `theme-${savedTheme}`;
+            document.getElementById('highScore').innerText = localStorage.getItem('dsn_meta_highscore') || '0';
+            
+            for(let i=1; i<=4; i++) {
+                const val = localStorage.getItem(`dsn_meta_c${i}`) === 'true';
+                document.getElementById(`c${i}`).checked = val;
+            }
+            updateProgress();
+            generateBio();
+            generateScript();
+        });
+
+        function toggleCheck(id) {
+            playBeep(600);
+            const cb = document.getElementById(id);
+            cb.checked = !cb.checked;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let checkedCount = 0;
+            for(let i=1; i<=4; i++) {
+                const cb = document.getElementById(`c${i}`);
+                localStorage.setItem(`dsn_meta_c${i}`, cb.checked);
+                if(cb.checked) checkedCount++;
+            }
+            const percent = (checkedCount / 4) * 100;
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressText').innerText = percent + '% រួចរាល់ (បាន ' + checkedCount + '/4 ជំហាន)';
+        }
+
+        function runSecurityScan() {
+            playBeep(1000, 0.1);
+            const diagBox = document.getElementById('diagnosticBox');
+            const resultText = document.getElementById('scanResultText');
+            diagBox.style.display = 'block';
+            resultText.innerText = "⏳ កំពុងភ្ជាប់ទៅកាន់ Meta Security API...";
+            
+            setTimeout(() => {
+                playBeep(1200, 0.15);
+                let checkedCount = 0;
+                for(let i=1; i<=4; i++) { if(document.getElementById(`c${i}`).checked) checkedCount++; }
+                if(checkedCount === 4) {
+                    resultText.innerHTML = "✅ <b>លទ្ធផល: គណនីមានសិទ្ធិពេញលេញ (Ready for Verification)!</b> អាចដាក់ពាក្យស្នើសុំបានភ្លាមៗ។";
+                } else {
+                    resultText.innerHTML = "⚠️ <b>លទ្ធផល: ត្រូវការបំពេញបន្ថែម!</b> សូមធីកត្រួតពិនិត្យលក្ខខណ្ឌខាងលើឱ្យបានครบ 4 ជំហានមុនដាក់ពាក្យ។";
+                }
+            }, 1200);
+        }
+
+        function simulateIDUpload() {
+            playBeep(850, 0.1);
+            const label = document.getElementById('idStatusLabel');
+            label.innerText = "⏳ កំពុងពិនិត្យភាពច្បាស់ និងទំហំអត្តសញ្ញាណប័ណ្ណ...";
+            setTimeout(() => {
+                playBeep(1100, 0.15);
+                label.innerHTML = "✅ <b>អត្តសញ្ញាណប័ណ្ណត្រឹមត្រូវ (ID Verified Successfully!)</b> ត្រៀមរួចរាល់សម្រាប់ការផ្ទៀងផ្ទាត់។";
+                showToast("🪪 អត្តសញ្ញាណប័ណ្ណឆ្លងកាត់ការពិនិត្យ AI!");
+            }, 1200);
+        }
+
+        function generateBio() {
+            const style = document.getElementById('bioStyleSelect').value;
+            let bioContent = "";
+            if(style === 'military') {
+                bioContent = "🛡️ Official Military & Security Officer Profile | Public Service & National Defense Contributor | Verified Account 💙 #MetaVerified #Military #Cambodia";
+            } else if(style === 'creator') {
+                bioContent = "🎬 Professional Content Creator & Video Editor | Tech Tutorials & Digital Media Specialist | DSN OS Community 💙 #MetaVerified #ContentCreator #DSN";
+            } else {
+                bioContent = "🌟 Official Public Figure & Media Profile | Verified Security & Community Leader | Official Profile 💙 #MetaVerified #PublicFigure #Official";
+            }
+            document.getElementById('generatedBioText').innerText = bioContent;
+        }
+
+        function copyBio() {
+            playBeep(900);
+            const bioText = document.getElementById('generatedBioText').innerText;
+            navigator.clipboard.writeText(bioText).then(() => {
+                showToast("📋 បានចម្លង PR Bio & Hashtag រួចរាល់!");
+            });
+        }
+
+        function generateScript() {
+            const topic = document.getElementById('scriptTopicSelect').value;
+            let scriptText = "";
+            if(topic === 'verified') {
+                scriptText = "🎬 [Hook]: តើអ្នកដឹងទេថាហេតុអ្វីបានជាគណនីធំៗត្រូវមានគ្រីសខៀវ?\n\n📍 [Body]: ការប្រើប្រាស់ Meta Verified ជួយការពារគណនីរបស់អ្នកពីការក្លែងបន្លំ បង្កើនការទុកចិត្តពីអ្នកតាមដាន និងទទួលបានជំនួយផ្ទាល់ពី Meta Support!\n\n✨ [Call to Action]: ចុចលីងខាងក្រោមដើម្បីស្វែងយល់ពីរបៀបរៀបចំខ្លួនឱ្យបានត្រឹមត្រូវ!";
+            } else if(topic === 'security') {
+                scriptText = "🛡️ [Hook]: ប្រយ័ត្នហ្វេសប៊ុករបស់អ្នកត្រូវគេ Hack បើមិនទាន់បើកចំណុចនេះទេ!\n\n📍 [Body]: ត្រូវបើក Two-Factor Authentication (2FA) និងប្រើប្រាស់អ៊ីសូឡង់សុវត្ថិភាពខ្ពស់ រួមទាំងការផ្ទៀងផ្ទាត់អត្តសញ្ញាណឱ្យបានត្រឹមត្រូវ។\n\n✨ [Call to Action]: ស៊ែរវីដេអូនេះដើម្បីការពារមិត្តភក្តិរបស់អ្នកទាំងអស់គ្នា!";
+            } else {
+                scriptText = "🚀 [Hook]: ចង់ឱ្យវីដេអូ Reels របស់អ្នកឡើង Reach ខ្លាំងទេ?\n\n📍 [Body]: ការផុសជាប្រចាំ ការប្រើប្រាស់ Hashtag ត្រឹមត្រូវ និងការកែសម្រួលវីដេអូឱ្យមានគុណភាពខ្ពស់ គឺជាគន្លឹះសំខាន់បំផុតរបស់ Creator អាជីព។\n\n✨ [Call to Action]: តាមដានទំព័រនេះសម្រាប់គន្លឹះល្អៗប្រចាំថ្ងៃ!";
+            }
+            document.getElementById('generatedScriptText').innerText = scriptText;
+        }
+
+        function copyScript() {
+            playBeep(950);
+            const scriptContent = document.getElementById('generatedScriptText').innerText;
+            navigator.clipboard.writeText(scriptContent).then(() => {
+                showToast("📋 បានចម្លងស្គ្រីបវីដេអូជោគជ័យ!");
+            });
+        }
+
+        function openMetaPortal() {
+            playBeep(950);
+            showToast("កំពុងបញ្ជូនទៅកាន់ Meta Verified Center...");
+            setTimeout(() => {
+                window.open('https://www.facebook.com/meta_verified', '_blank');
+            }, 1000);
+        }
+
+        // --- RETRO ARCADE GAME ENGINE ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let isGameRunning = false;
+        let score = 0;
+        let raccoon = { x: 30, y: 130, width: 25, height: 25, vy: 0, gravity: 0.5, jumpPower: -8, grounded: true };
+        let obstacles = [];
+        let gameSpeed = 3.5;
+        let frameCount = 0;
+
+        function startArcadeGame() {
+            playBeep(900, 0.1);
+            raccoon.y = 130;
+            raccoon.vy = 0;
+            raccoon.grounded = true;
+            obstacles = [];
+            score = 0;
+            gameSpeed = 3.5;
+            frameCount = 0;
+            isGameRunning = true;
+            loopGame();
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if ((e.code === 'Space' || e.code === 'ArrowUp') && isGameRunning && raccoon.grounded) {
+                raccoon.vy = raccoon.jumpPower;
+                raccoon.grounded = false;
+                playBeep(500, 0.08);
+            }
+        });
+
+        canvas.addEventListener('click', () => {
+            if (isGameRunning && raccoon.grounded) {
+                raccoon.vy = raccoon.jumpPower;
+                raccoon.grounded = false;
+                playBeep(500, 0.08);
+            }
+        });
+
+        function loopGame() {
+            if (!isGameRunning) return;
+
+            ctx.fillStyle = '#02040a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Ground Line
+            ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--primary-color') || '#38bdf8';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, 155);
+            ctx.lineTo(canvas.width, 155);
+            ctx.stroke();
+
+            // Physics
+            raccoon.vy += raccoon.gravity;
+            raccoon.y += raccoon.vy;
+            if (raccoon.y >= 130) {
+                raccoon.y = 130;
+                raccoon.vy = 0;
+                raccoon.grounded = true;
+            }
+
+            // Draw Raccoon
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--primary-color') || '#38bdf8';
+            ctx.fillRect(raccoon.x, raccoon.y, raccoon.width, raccoon.height);
+            ctx.fillStyle = '#fff';
+            ctx.font = '14px sans-serif';
+            ctx.fillText('🦝', raccoon.x + 3, raccoon.y + 18);
+
+            // Obstacles
+            if (frameCount % 110 === 0) {
+                obstacles.push({ x: canvas.width, y: 132, width: 22, height: 22 });
+            }
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].x -= gameSpeed;
+                ctx.fillStyle = '#ef4444';
+                ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
+                ctx.fillStyle = '#fff';
+                ctx.fillText('💙', obstacles[i].x + 2, obstacles[i].y + 16);
+
+                // Collision
+                if (
+                    raccoon.x < obstacles[i].x + obstacles[i].width &&
+                    raccoon.x + raccoon.width > obstacles[i].x &&
+                    raccoon.y < obstacles[i].y + obstacles[i].height &&
+                    raccoon.y + raccoon.height > obstacles[i].y
+                ) {
+                    isGameRunning = false;
+                    playBeep(200, 0.3);
+                    let hs = parseInt(localStorage.getItem('dsn_meta_highscore') || '0');
+                    if (score > hs) {
+                        localStorage.setItem('dsn_meta_highscore', score);
+                        document.getElementById('highScore').innerText = score;
+                    }
+                    showToast("💥 ល្បែងបានបញ្ចប់! ពិន្ទុរបស់អ្នក: " + score);
+                    return;
+                }
+
+                if (obstacles[i].x < -30) {
+                    obstacles.splice(i, 1);
+                    score += 10;
+                    document.getElementById('currentScore').innerText = score;
+                    if(score % 50 === 0) gameSpeed += 0.4;
+                }
+            }
+
+            frameCount++;
+            requestAnimationFrame(loopGame);
+        }
+
+        // Matrix Rain Background
+        const matrixCanvas = document.getElementById('matrixCanvas');
+        const mCtx = matrixCanvas.getContext('2d');
+        function resizeCanvas() { matrixCanvas.width = window.innerWidth; matrixCanvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ';
+        const fontSize = 16;
+        const columns = Math.floor(matrixCanvas.width / fontSize);
+        const rainDrops = [];
+        for (let x = 0; x < columns; x++) { rainDrops[x] = 1; }
+
+        function renderMatrixRain() {
+            mCtx.fillStyle = 'rgba(9, 13, 22, 0.08)';
+            mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+            mCtx.fillStyle = getComputedStyle(document.body).getPropertyValue('--primary-color') || '#38bdf8';
+            mCtx.font = fontSize + 'px monospace';
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                mCtx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) { rainDrops[i] = 0; }
+                rainDrops[i]++;
+            }
+        }
+        setInterval(renderMatrixRain, 35);
+    </script>
+</body>
+</html>

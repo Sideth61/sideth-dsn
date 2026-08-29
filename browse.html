@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DSN Apex Cyber Browser v4.0 🌐</title>
+
+<meta name="theme-color" content="#030712">
+<meta property="og:title" content="DSN Apex Cyber Browser v4.0">
+<meta property="og:description" content="DSN Apex Cyber Browser - Deth DSN">
+<meta property="og:image" content="app3.png">
+
+<link rel="icon" type="image/png" href="app3.png">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: 'Kantumruy Pro', sans-serif;
+    background: #030712;
+    color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* =========================
+   MATRIX BACKGROUND
+========================= */
+
+#matrixCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: .13;
+}
+
+/* =========================
+   TABS
+========================= */
+
+.tab-bar {
+    height: 43px;
+    background: rgba(5,10,20,.96);
+    backdrop-filter: blur(18px);
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    padding: 7px 10px 0;
+    border-bottom: 1px solid rgba(0,255,102,.3);
+    z-index: 20;
+    overflow-x: auto;
+}
+
+.browser-tab {
+    min-width: 130px;
+    max-width: 230px;
+    background: rgba(10,15,30,.8);
+    border: 1px solid rgba(0,255,102,.18);
+    border-bottom: none;
+    color: #94a3b8;
+    padding: 7px 10px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.browser-tab span:nth-child(2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.browser-tab.active {
+    background: rgba(0,255,102,.14);
+    border-color: #00ff66;
+    color: #00ff66;
+    box-shadow: 0 -3px 15px rgba(0,255,102,.18);
+}
+
+.tab-close {
+    margin-left: auto;
+    padding: 2px 5px;
+    border-radius: 50%;
+}
+
+.tab-close:hover {
+    background: rgba(255,60,60,.5);
+    color: white;
+}
+
+.new-tab-btn {
+    border: 0;
+    background: transparent;
+    color: #00ff66;
+    font-size: 20px;
+    padding: 5px 12px;
+    cursor: pointer;
+}
+
+.new-tab-btn:hover {
+    background: rgba(0,255,102,.15);
+    border-radius: 8px;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.browser-toolbar {
+    min-height: 61px;
+    background: rgba(10,15,30,.94);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 13px;
+    border-bottom: 1px solid rgba(0,255,102,.35);
+    box-shadow: 0 8px 30px rgba(0,0,0,.65);
+    z-index: 20;
+}
+
+.nav-btn {
+    width: 37px;
+    height: 37px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(0,255,102,.35);
+    background: rgba(0,255,102,.10);
+    color: #00ff66;
+    cursor: pointer;
+    font-size: 15px;
+    transition: .25s;
+}
+
+.nav-btn:hover {
+    background: #00ff66;
+    color: #000;
+    transform: scale(1.08);
+    box-shadow: 0 0 18px rgba(0,255,102,.6);
+}
+
+.url-bar-container {
+    flex: 1;
+    min-width: 0;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 5px 3px 15px;
+    background: rgba(3,7,18,.95);
+    border: 1px solid rgba(0,255,102,.35);
+    border-radius: 24px;
+}
+
+.url-bar-container:focus-within {
+    border-color: #00ff66;
+    box-shadow: 0 0 18px rgba(0,255,102,.25);
+}
+
+.url-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: white;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.go-btn {
+    border: 0;
+    background: #00ff66;
+    color: #000;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 8px 17px;
+    cursor: pointer;
+}
+
+.go-btn:hover {
+    background: #38bdf8;
+}
+
+/* =========================
+   BOOKMARKS
+========================= */
+
+.bookmark-bar {
+    min-height: 34px;
+    background: rgba(3,7,18,.95);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    z-index: 20;
+    overflow-x: auto;
+}
+
+.bookmark-item {
+    flex-shrink: 0;
+    background: rgba(255,255,255,.04);
+    color: #cbd5e1;
+    border: 1px solid rgba(255,255,255,.08);
+    padding: 4px 10px;
+    border-radius: 7px;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.bookmark-item:hover {
+    color: #00ff66;
+    border-color: #00ff66;
+    background: rgba(0,255,102,.12);
+}
+
+/* =========================
+   VIEWPORT
+========================= */
+
+.browser-viewport {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    background: #000;
+    z-index: 5;
+}
+
+#browserFrame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: white;
+    display: none;
+}
+
+/* =========================
+   HOME
+========================= */
+
+.welcome-page {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 25px;
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(10,25,40,.96),
+            rgba(3,7,18,.99)
+        );
+    z-index: 10;
+}
+
+.avatar-glow {
+    width: 88px;
+    height: 88px;
+    padding: 3px;
+    border-radius: 50%;
+    background: linear-gradient(
+        135deg,
+        #00ff66,
+        #38bdf8,
+        #f43f5e
+    );
+    box-shadow: 0 0 35px rgba(0,255,102,.55);
+    animation: float 3s ease-in-out infinite;
+}
+
+.avatar-glow img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.welcome-page h1 {
+    color: #00ff66;
+    font-size: clamp(1.4rem,4vw,2rem);
+    margin: 15px 0 5px;
+    text-shadow: 0 0 20px rgba(0,255,102,.5);
+}
+
+.welcome-page p {
+    color: #94a3b8;
+    max-width: 650px;
+    font-size: 13px;
+    margin: 0 0 20px;
+}
+
+.quick-links {
+    max-width: 800px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.quick-btn {
+    border: 1px solid rgba(0,255,102,.35);
+    background: rgba(10,15,30,.8);
+    color: #f8fafc;
+    padding: 9px 13px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 11px;
+    transition: .25s;
+}
+
+.quick-btn:hover {
+    color: #00ff66;
+    border-color: #00ff66;
+    background: rgba(0,255,102,.12);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   HISTORY
+========================= */
+
+.history-section {
+    width: min(100%, 560px);
+    margin-top: 20px;
+    background: rgba(5,10,20,.75);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 13px;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.history-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #38bdf8;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.clear-history {
+    color: #00ff66;
+    cursor: pointer;
+}
+
+.history-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.history-list li {
+    padding: 6px 2px;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    color: #cbd5e1;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.history-list li:hover {
+    color: #00ff66;
+}
+
+/* =========================
+   DEVTOOLS
+========================= */
+
+.dev-tools-panel {
+    width: 350px;
+    max-width: 45%;
+    height: 100%;
+    background: rgba(2,6,23,.98);
+    border-left: 1px solid rgba(0,255,102,.3);
+    display: none;
+    flex-direction: column;
+    z-index: 15;
+}
+
+.dev-header {
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    color: #38bdf8;
+    font-family: monospace;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.dev-body {
+    padding: 12px;
+    color: #00ff66;
+    font-family: monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    overflow-y: auto;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.browser-status-bar {
+    min-height: 25px;
+    background: rgba(2,6,23,.97);
+    border-top: 1px solid rgba(255,255,255,.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 12px;
+    color: #64748b;
+    font-size: 9px;
+    z-index: 20;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes float {
+    0%,100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-7px);
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px) {
+
+    .browser-toolbar {
+        gap: 5px;
+        padding: 7px;
+    }
+
+    .nav-btn {
+        width: 33px;
+        height: 33px;
+        font-size: 13px;
+    }
+
+    .url-bar-container {
+        height: 35px;
+        padding-left: 10px;
+    }
+
+    .url-input {
+        font-size: 11px;
+    }
+
+    .go-btn {
+        padding: 7px 12px;
+        font-size: 11px;
+    }
+
+    .browser-tab {
+        min-width: 105px;
+        font-size: 10px;
+    }
+
+    .dev-tools-panel {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .welcome-page {
+        justify-content: flex-start;
+        padding-top: 35px;
+    }
+
+    .welcome-page p {
+        font-size: 11px;
+    }
+
+    .browser-status-bar {
+        font-size: 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrixCanvas"></canvas>
+
+<!-- =========================
+     TAB BAR
+========================= -->
+
+<div class="tab-bar" id="tabBarContainer"></div>
+
+<!-- =========================
+     TOOLBAR
+========================= -->
+
+<div class="browser-toolbar">
+
+    <button class="nav-btn"
+            onclick="playBeep();goHome()"
+            title="Home">
+        🏠
+    </button>
+
+    <button class="nav-btn"
+            onclick="playBeep();browserBack()"
+            title="Back">
+        ◀️
+    </button>
+
+    <button class="nav-btn"
+            onclick="playBeep();browserForward()"
+            title="Forward">
+        ▶️
+    </button>
+
+    <button class="nav-btn"
+            onclick="playBeep();reloadPage()"
+            title="Reload">
+        🔄
+    </button>
+
+    <div class="url-bar-container">
+
+        <input
+            id="urlInput"
+            class="url-input"
+            type="text"
+            placeholder="បញ្ចូល Website / URL..."
+            onkeypress="checkEnter(event)"
+        >
+
+        <button class="go-btn"
+                onclick="playBeep();loadUrl()">
+            Go
+        </button>
+
+    </div>
+
+    <button class="nav-btn"
+            onclick="playBeep();openInNewTab()"
+            title="External Tab">
+        ↗️
+    </button>
+
+    <button class="nav-btn"
+            onclick="playBeep();toggleDevTools()"
+            title="DevTools">
+        🛠️
+    </button>
+
+    <button class="nav-btn"
+            onclick="playBeep();toggleMatrixRain()"
+            title="Matrix">
+        🟢
+    </button>
+
+    <button class="nav-btn"
+            onclick="playBeep();toggleFullscreen()"
+            title="Fullscreen">
+        ⛶
+    </button>
+
+</div>
+
+<!-- =========================
+     BOOKMARKS
+========================= -->
+
+<div class="bookmark-bar">
+
+    <span style="font-size:10px;color:#64748b;">
+        ⭐
+    </span>
+
+    <div class="bookmark-item"
+         onclick="openPreset('index.html')">
+        👑 Home
+    </div>
+
+    <div class="bookmark-item"
+         onclick="openPreset('library.html')">
+        📚 Library
+    </div>
+
+    <div class="bookmark-item"
+         onclick="openPreset('appstore.html')">
+        🛒 App Store
+    </div>
+
+    <div class="bookmark-item"
+         onclick="openPreset('musicdsn.html')">
+        🎧 Music
+    </div>
+
+    <div class="bookmark-item"
+         onclick="openPreset('setting.html')">
+        ⚙️ Settings
+    </div>
+
+    <div class="bookmark-item"
+         onclick="openPreset('https://www.google.com')">
+        🔍 Google
+    </div>
+
+    <div class="bookmark-item"
+         onclick="openPreset('https://www.youtube.com')">
+        ▶️ YouTube
+    </div>
+
+</div>
+
+<!-- =========================
+     VIEWPORT
+========================= -->
+
+<div class="browser-viewport">
+
+    <!-- HOME -->
+
+    <div class="welcome-page" id="homePage">
+
+        <div class="avatar-glow">
+            <img src="app3.png" alt="DSN">
+        </div>
+
+        <h1>
+            🌐 DSN Apex Cyber Browser
+        </h1>
+
+        <p>
+            Version 4.0 • Secure Web Navigation System
+            <br>
+            Powered by Deth DSN ⚡
+        </p>
+
+        <div class="quick-links">
+
+            <button class="quick-btn"
+                    onclick="openPreset('index.html')">
+                👑 DSN Home
+            </button>
+
+            <button class="quick-btn"
+                    onclick="openPreset('library.html')">
+                📚 Library
+            </button>
+
+            <button class="quick-btn"
+                    onclick="openPreset('appstore.html')">
+                🛒 App Store
+            </button>
+
+            <button class="quick-btn"
+                    onclick="openPreset('musicdsn.html')">
+                🎧 Music Hub
+            </button>
+
+            <button class="quick-btn"
+                    onclick="openPreset('https://www.google.com')">
+                🔍 Google
+            </button>
+
+            <button class="quick-btn"
+                    onclick="openPreset('https://www.youtube.com')">
+                ▶️ YouTube
+            </button>
+
+            <button class="quick-btn"
+                    onclick="openPreset('setting.html')">
+                ⚙️ Settings
+            </button>
+
+        </div>
+
+        <div class="history-section">
+
+            <div class="history-title">
+
+                <span>
+                    🕒 Recent History
+                </span>
+
+                <span class="clear-history"
+                      onclick="clearHistory()">
+                    សម្អាត
+                </span>
+
+            </div>
+
+            <ul
+                class="history-list"
+                id="historyListContainer">
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- IFRAME -->
+
+    <iframe
+        id="browserFrame"
+        sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts"
+        referrerpolicy="strict-origin-when-cross-origin">
+    </iframe>
+
+    <!-- DEVTOOLS -->
+
+    <div
+        class="dev-tools-panel"
+        id="devToolsPanel">
+
+        <div class="dev-header">
+
+            <span>
+                🛠️ DSN Cyber Inspector
+            </span>
+
+            <span
+                style="cursor:pointer;color:#ff4444"
+                onclick="toggleDevTools()">
+                ✕
+            </span>
+
+        </div>
+
+        <div
+            class="dev-body"
+            id="devBodyContent">
+
+            &gt; DSN Apex Browser v4.0<br>
+            &gt; System initialized...<br>
+            &gt; Secure Environment: ACTIVE<br>
+            &gt; Matrix Engine: READY<br>
+            &gt; Tab Engine: READY<br>
+            &gt; History Engine: READY<br>
+            &gt; Commander: San Sideth<br>
+            &gt; Status: Monitoring...
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     STATUS BAR
+========================= -->
+
+<div class="browser-status-bar">
+
+    <span id="statusText">
+        🟢 DSN Apex v4.0 • Secure & Ready
+    </span>
+
+    <span id="liveClockAndPing">
+        Ping: -- | 00:00:00
+    </span>
+
+</div>
+
+<script>
+
+/* =====================================
+   AUDIO BEEP
+===================================== */
+
+let audioContext = null;
+
+function playBeep() {
+
+    try {
+
+        if (!audioContext) {
+            audioContext =
+                new (window.AudioContext ||
+                     window.webkitAudioContext)();
+        }
+
+        const osc =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+        osc.type = 'sine';
+
+        osc.frequency.setValueAtTime(
+            587.33,
+            audioContext.currentTime
+        );
+
+        gain.gain.setValueAtTime(
+            0.025,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audioContext.currentTime + .09
+        );
+
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc.start();
+
+        osc.stop(
+            audioContext.currentTime + .09
+        );
+
+    } catch(e) {}
+
+}
+
+
+/* =====================================
+   ELEMENTS
+===================================== */
+
+const urlInput =
+    document.getElementById('urlInput');
+
+const browserFrame =
+    document.getElementById('browserFrame');
+
+const homePage =
+    document.getElementById('homePage');
+
+const statusText =
+    document.getElementById('statusText');
+
+const devToolsPanel =
+    document.getElementById('devToolsPanel');
+
+const historyContainer =
+    document.getElementById('historyListContainer');
+
+
+/* =====================================
+   TAB SYSTEM
+===================================== */
+
+let tabs = [
+    {
+        url: '',
+        title: 'Homepage'
+    }
+];
+
+let activeTabIndex = 0;
+
+
+/* =====================================
+   HISTORY STORAGE
+===================================== */
+
+let historyData =
+    JSON.parse(
+        localStorage.getItem('dsn_browser_history') || '[]'
+    );
+
+
+/* =====================================
+   NORMALIZE URL
+===================================== */
+
+function normalizeUrl(value) {
+
+    let url = value.trim();
+
+    if (!url) return '';
+
+    if (
+        url.startsWith('http://') ||
+        url.startsWith('https://') ||
+        url.startsWith('file://')
+    ) {
+        return url;
+    }
+
+    /*
+       Local DSN HTML pages
+    */
+
+    if (
+        url.endsWith('.html') ||
+        url.startsWith('./') ||
+        url.startsWith('../')
+    ) {
+        return url;
+    }
+
+    /*
+       Search engine fallback
+    */
+
+    if (
+        url.includes(' ') ||
+        !url.includes('.')
+    ) {
+
+        return 'https://www.google.com/search?q=' +
+            encodeURIComponent(url);
+
+    }
+
+    return 'https://' + url;
+}
+
+
+/* =====================================
+   LOAD URL
+===================================== */
+
+function loadUrl() {
+
+    let raw =
+        urlInput.value.trim();
+
+    if (!raw) return;
+
+    const url =
+        normalizeUrl(raw);
+
+    urlInput.value = url;
+
+    tabs[activeTabIndex].url = url;
+
+    let title = url
+        .replace(/^https?:\/\//,'')
+        .split('/')[0];
+
+    if (!title) {
+        title = 'DSN Page';
+    }
+
+    tabs[activeTabIndex].title = title;
+
+    homePage.style.display = 'none';
+
+    browserFrame.style.display = 'block';
+
+    browserFrame.src = url;
+
+    statusText.innerText =
+        '🌐 Loading: ' + url;
+
+    addHistory(url);
+
+    renderTabs();
+
+}
+
+
+/* =====================================
+   PRESET
+===================================== */
+
+function openPreset(url) {
+
+    urlInput.value = url;
+
+    loadUrl();
+
+}
+
+
+/* =====================================
+   ENTER
+===================================== */
+
+function checkEnter(event) {
+
+    if (event.key === 'Enter') {
+
+        playBeep();
+
+        loadUrl();
+
+    }
+
+}
+
+
+/* =====================================
+   HOME
+===================================== */
+
+function goHome() {
+
+    homePage.style.display = 'flex';
+
+    browserFrame.style.display = 'none';
+
+    browserFrame.src = '';
+
+    urlInput.value = '';
+
+    tabs[activeTabIndex].url = '';
+
+    tabs[activeTabIndex].title = 'Homepage';
+
+    statusText.innerText =
+        '🟢 DSN Apex v4.0 • Secure & Ready';
+
+    renderTabs();
+
+}
+
+
+/* =====================================
+   RELOAD
+===================================== */
+
+function reloadPage() {
+
+    if (
+        tabs[activeTabIndex].url
+    ) {
+
+        browserFrame.src =
+            tabs[activeTabIndex].url;
+
+        statusText.innerText =
+            '🔄 Reloaded: ' +
+            tabs[activeTabIndex].url;
+
+    } else {
+
+        goHome();
+
+    }
+
+}
+
+
+/* =====================================
+   BACK / FORWARD
+===================================== */
+
+function browserBack() {
+
+    try {
+
+        browserFrame.contentWindow.history.back();
+
+    } catch(e) {
+
+        window.history.back();
+
+    }
+
+}
+
+
+function browserForward() {
+
+    try {
+
+        browserFrame.contentWindow.history.forward();
+
+    } catch(e) {
+
+        window.history.forward();
+
+    }
+
+}
+
+
+/* =====================================
+   NEW TAB
+===================================== */
+
+function addNewTab() {
+
+    tabs.push({
+        url: '',
+        title: 'New Tab'
+    });
+
+    activeTabIndex =
+        tabs.length - 1;
+
+    goHome();
+
+    renderTabs();
+
+}
+
+
+/* =====================================
+   CLOSE TAB
+===================================== */
+
+function closeTab(event,index) {
+
+    event.stopPropagation();
+
+    if (tabs.length === 1) {
+
+        goHome();
+
+        return;
+
+    }
+
+    tabs.splice(index,1);
+
+    if (
+        activeTabIndex >= tabs.length
+    ) {
+
+        activeTabIndex =
+            tabs.length - 1;
+
+    }
+
+    switchTab(activeTabIndex);
+
+}
+
+
+/* =====================================
+   SWITCH TAB
+===================================== */
+
+function switchTab(index) {
+
+    activeTabIndex = index;
+
+    const tab =
+        tabs[index];
+
+    if (tab.url) {
+
+        urlInput.value =
+            tab.url;
+
+        homePage.style.display =
+            'none';
+
+        browserFrame.style.display =
+            'block';
+
+        browserFrame.src =
+            tab.url;
+
+        statusText.innerText =
+            '🌐 Active: ' +
+            tab.url;
+
+    } else {
+
+        goHome();
+
+    }
+
+    renderTabs();
+
+}
+
+
+/* =====================================
+   RENDER TABS
+===================================== */
+
+function renderTabs() {
+
+    const container =
+        document.getElementById(
+            'tabBarContainer'
+        );
+
+    let html = '';
+
+    tabs.forEach((tab,index) => {
+
+        const active =
+            index === activeTabIndex
+                ? 'active'
+                : '';
+
+        html += `
+            <div
+                class="browser-tab ${active}"
+                onclick="switchTab(${index})">
+
+                <span>🌐</span>
+
+                <span>
+                    ${escapeHtml(tab.title)}
+                </span>
+
+                <span
+                    class="tab-close"
+                    onclick="closeTab(event,${index})">
+                    ✕
+                </span>
+
+            </div>
+        `;
+
+    });
+
+    html += `
+        <button
+            class="new-tab-btn"
+            onclick="addNewTab()">
+            ＋
+        </button>
+    `;
+
+    container.innerHTML =
+        html;
+
+}
+
+
+/* =====================================
+   HISTORY
+===================================== */
+
+function addHistory(url) {
+
+    historyData =
+        historyData.filter(
+            item => item !== url
+        );
+
+    historyData.unshift(url);
+
+    historyData =
+        historyData.slice(0,20);
+
+    localStorage.setItem(
+        'dsn_browser_history',
+        JSON.stringify(historyData)
+    );
+
+    renderHistory();
+
+}
+
+
+function renderHistory() {
+
+    if (!historyData.length) {
+
+        historyContainer.innerHTML = `
+            <li style="
+                color:#64748b;
+                text-align:center;
+                padding:10px;">
+                គ្មានប្រវត្តិរុករកថ្មីៗទេ...
+            </li>
+        `;
+
+        return;
+
+    }
+
+    historyContainer.innerHTML =
+        historyData.map(
+            (url,index) => `
+                <li
+                    onclick="openPreset('${escapeJs(url)}')">
+
+                    <span>
+                        🔗 ${escapeHtml(url)}
+                    </span>
+
+                    <span>➜</span>
+
+                </li>
+            `
+        ).join('');
+
+}
+
+
+function clearHistory() {
+
+    historyData = [];
+
+    localStorage.removeItem(
+        'dsn_browser_history'
+    );
+
+    renderHistory();
+
+    statusText.innerText =
+        '🧹 History cleared';
+
+}
+
+
+/* =====================================
+   EXTERNAL TAB
+===================================== */
+
+function openInNewTab() {
+
+    const url =
+        tabs[activeTabIndex].url;
+
+    if (!url) {
+
+        alert(
+            '⚠️ សូមបើក Website មួយជាមុនសិន!'
+        );
+
+        return;
+
+    }
+
+    window.open(
+        url,
+        '_blank',
+        'noopener,noreferrer'
+    );
+
+}
+
+
+/* =====================================
+   DEVTOOLS
+===================================== */
+
+function toggleDevTools() {
+
+    if (
+        devToolsPanel.style.display ===
+        'flex'
+    ) {
+
+        devToolsPanel.style.display =
+            'none';
+
+        return;
+
+    }
+
+    devToolsPanel.style.display =
+        'flex';
+
+    const dev =
+        document.getElementById(
+            'devBodyContent'
+        );
+
+    dev.innerHTML += `
+        <br>
+        &gt; Active Tab:
+        ${escapeHtml(
+            tabs[activeTabIndex].title
+        )}
+        <br>
+        &gt; URL:
+        ${escapeHtml(
+            tabs[activeTabIndex].url ||
+            'Homepage'
+        )}
+        <br>
+        &gt; Viewport:
+        ${window.innerWidth}x${window.innerHeight}
+        <br>
+        &gt; Online:
+        ${navigator.onLine ? 'YES' : 'NO'}
+        <br>
+        &gt; Memory:
+        ${navigator.deviceMemory || 'N/A'}
+    `;
+
+}
+
+
+/* =====================================
+   FULLSCREEN
+===================================== */
+
+function toggleFullscreen() {
+
+    if (!document.fullscreenElement) {
+
+        document.documentElement
+            .requestFullscreen()
+            .catch(() => {});
+
+    } else {
+
+        document.exitFullscreen();
+
+    }
+
+}
+
+
+/* =====================================
+   MATRIX RAIN
+===================================== */
+
+let matrixActive =
+    localStorage.getItem(
+        'dsn_matrix'
+    ) !== 'false';
+
+const canvas =
+    document.getElementById(
+        'matrixCanvas'
+    );
+
+const ctx =
+    canvas.getContext('2d');
+
+let fontSize = 16;
+
+let rainDrops = [];
+
+function resizeCanvas() {
+
+    canvas.width =
+        window.innerWidth;
+
+    canvas.height =
+        window.innerHeight;
+
+    const columns =
+        Math.floor(
+            canvas.width / fontSize
+        );
+
+    rainDrops =
+        Array(columns).fill(1);
+
+}
+
+window.addEventListener(
+    'resize',
+    resizeCanvas
+);
+
+resizeCanvas();
+
+
+const katakana =
+    'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ';
+
+const latin =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+const alphabet =
+    katakana + latin;
+
+
+function renderMatrixRain() {
+
+    if (!matrixActive) return;
+
+    ctx.fillStyle =
+        'rgba(3,7,18,.08)';
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.fillStyle =
+        '#00ff66';
+
+    ctx.font =
+        fontSize + 'px monospace';
+
+    for (
+        let i = 0;
+        i < rainDrops.length;
+        i++
+    ) {
+
+        const text =
+            alphabet.charAt(
+                Math.floor(
+                    Math.random() *
+                    alphabet.length
+                )
+            );
+
+        ctx.fillText(
+            text,
+            i * fontSize,
+            rainDrops[i] * fontSize
+        );
+
+        if (
+            rainDrops[i] *
+            fontSize >
+            canvas.height &&
+            Math.random() > .975
+        ) {
+
+            rainDrops[i] = 0;
+
+        }
+
+        rainDrops[i]++;
+
+    }
+
+}
+
+
+setInterval(
+    renderMatrixRain,
+    35
+);
+
+
+function toggleMatrixRain() {
+
+    matrixActive =
+        !matrixActive;
+
+    localStorage.setItem(
+        'dsn_matrix',
+        matrixActive
+    );
+
+    canvas.style.display =
+        matrixActive
+            ? 'block'
+            : 'none';
+
+    statusText.innerText =
+        matrixActive
+            ? '🟢 Matrix Rain: ON'
+            : '⚫ Matrix Rain: OFF';
+
+}
+
+
+/* =====================================
+   CLOCK
+===================================== */
+
+setInterval(() => {
+
+    const now =
+        new Date();
+
+    const time =
+        now.toTimeString()
+            .split(' ')[0];
+
+    const ping =
+        Math.floor(
+            Math.random() * 18
+        ) + 8;
+
+    document.getElementById(
+        'liveClockAndPing'
+    ).innerText =
+        `Ping: ${ping}ms | ${time}`;
+
+},1000);
+
+
+/* =====================================
+   SECURITY HELPERS
+===================================== */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#039;');
+
+}
+
+
+function escapeJs(value) {
+
+    return String(value)
+        .replace(/\\/g,'\\\\')
+        .replace(/'/g,"\\'")
+        .replace(/\n/g,'\\n')
+        .replace(/\r/g,'\\r');
+
+}
+
+
+/* =====================================
+   INITIALIZE
+===================================== */
+
+renderTabs();
+
+renderHistory();
+
+if (!matrixActive) {
+
+    canvas.style.display =
+        'none';
+
+}
+
+window.addEventListener(
+    'online',
+    () => {
+
+        statusText.innerText =
+            '🟢 Internet Connected';
+
+    }
+);
+
+window.addEventListener(
+    'offline',
+    () => {
+
+        statusText.innerText =
+            '🔴 Offline Mode';
+
+    }
+);
+
+</script>
+
+</body>

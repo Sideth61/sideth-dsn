@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>DSN Ultimate Social & Booster Hub V2.0</title>
+
+<meta name="theme-color" content="#090d16">
+<meta name="description" content="DSN Ultimate Social & Booster Hub V2.0 - Social Analytics & Simulation Center">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 25px 12px 125px;
+    font-family: 'Kantumruy Pro', sans-serif;
+    color: #fff;
+    text-align: center;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(56,189,248,.14), transparent 28%),
+        radial-gradient(circle at 90% 20%, rgba(99,102,241,.15), transparent 30%),
+        linear-gradient(135deg, #060a12 0%, #111827 45%, #1e1b4b 100%);
+    background-attachment: fixed;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+    width: 100%;
+    max-width: 620px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    padding: 26px 20px;
+    border-radius: 28px;
+    background: rgba(15,23,42,.78);
+    border: 1px solid rgba(56,189,248,.28);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.55),
+        inset 0 1px rgba(255,255,255,.05);
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(56,189,248,.12);
+    filter: blur(30px);
+    top: -100px;
+    right: -70px;
+}
+
+.logo {
+    font-size: 42px;
+    margin-bottom: 3px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #38bdf8;
+}
+
+.subtitle {
+    margin-top: 7px;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.version {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 12px;
+    padding: 5px 12px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #bae6fd;
+    background: rgba(14,165,233,.12);
+    border: 1px solid rgba(56,189,248,.25);
+}
+
+/* =========================
+   STATUS BAR
+========================= */
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+    padding: 10px 13px;
+    border-radius: 14px;
+    background: rgba(2,6,23,.45);
+    border: 1px solid rgba(148,163,184,.12);
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 12px rgba(34,197,94,.8);
+}
+
+.status-dot.processing {
+    background: #f59e0b;
+    box-shadow: 0 0 12px rgba(245,158,11,.8);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    50% {
+        opacity: .35;
+        transform: scale(.75);
+    }
+}
+
+/* =========================
+   CARD
+========================= */
+
+.card {
+    padding: 22px 18px;
+    text-align: left;
+    border-radius: 25px;
+    background: rgba(15,23,42,.82);
+    border: 1px solid rgba(56,189,248,.22);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 18px 50px rgba(0,0,0,.48);
+}
+
+.card:hover {
+    border-color: rgba(56,189,248,.42);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(56,189,248,.17);
+    color: #38bdf8;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* =========================
+   PLATFORM TABS
+========================= */
+
+.platform-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.platform-btn {
+    border: 1px solid rgba(148,163,184,.16);
+    background: rgba(30,41,59,.65);
+    color: #94a3b8;
+    padding: 11px 6px;
+    border-radius: 13px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.platform-btn:hover {
+    transform: translateY(-2px);
+}
+
+.platform-btn.active {
+    color: #fff;
+    border-color: #38bdf8;
+    background: rgba(14,165,233,.16);
+    box-shadow: 0 0 18px rgba(56,189,248,.13);
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.input-field,
+select.input-field {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #334155;
+    border-radius: 13px;
+    outline: none;
+    color: #fff;
+    background: rgba(30,41,59,.82);
+    font-family: inherit;
+    font-size: 14px;
+    transition: .25s;
+}
+
+.input-field::placeholder {
+    color: #64748b;
+}
+
+.input-field:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 13px rgba(56,189,248,.2);
+}
+
+select option {
+    background: #0f172a;
+    color: #fff;
+}
+
+/* =========================
+   QUICK ACTIONS
+========================= */
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    margin-top: -2px;
+}
+
+.small-btn {
+    border: 1px solid rgba(148,163,184,.17);
+    border-radius: 12px;
+    padding: 10px;
+    color: #cbd5e1;
+    background: rgba(30,41,59,.6);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.small-btn:hover {
+    border-color: rgba(56,189,248,.45);
+    color: #38bdf8;
+}
+
+/* =========================
+   MAIN BUTTON
+========================= */
+
+.btn {
+    width: 100%;
+    margin-top: 16px;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    border: none;
+    border-radius: 15px;
+    color: #fff;
+    background: linear-gradient(135deg,#2563eb,#38bdf8);
+    box-shadow: 0 7px 22px rgba(37,99,235,.32);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+}
+
+.btn:active {
+    transform: scale(.98);
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: .65;
+    transform: none;
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-wrap {
+    display: none;
+    margin-top: 16px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.progress-track {
+    width: 100%;
+    height: 9px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #0f172a;
+    border: 1px solid rgba(148,163,184,.12);
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(90deg,#2563eb,#38bdf8);
+    transition: width .3s;
+}
+
+/* =========================
+   RESULT
+========================= */
+
+.result-box {
+    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 16px;
+    background: rgba(2,6,23,.75);
+    border: 1px solid rgba(34,197,94,.3);
+    color: #bae6fd;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.result-header {
+    color: #4ade80;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.result-row {
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(148,163,184,.08);
+}
+
+.result-row:last-child {
+    border-bottom: none;
+}
+
+.result-label {
+    color: #64748b;
+}
+
+.result-value {
+    color: #e2e8f0;
+    word-break: break-all;
+}
+
+/* =========================
+   INFO NOTICE
+========================= */
+
+.notice {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 13px;
+    color: #fbbf24;
+    background: rgba(245,158,11,.07);
+    border: 1px solid rgba(245,158,11,.18);
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+/* =========================
+   HISTORY
+========================= */
+
+.history-card {
+    padding: 20px 18px;
+    text-align: left;
+    border-radius: 25px;
+    background: rgba(15,23,42,.82);
+    border: 1px solid rgba(56,189,248,.18);
+    box-shadow: 0 18px 45px rgba(0,0,0,.4);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.history-title {
+    color: #38bdf8;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.clear-btn {
+    border: none;
+    background: transparent;
+    color: #64748b;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.clear-btn:hover {
+    color: #f87171;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 14px;
+}
+
+.history-item {
+    padding: 11px;
+    border-radius: 13px;
+    background: rgba(30,41,59,.55);
+    border: 1px solid rgba(148,163,184,.1);
+}
+
+.history-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.history-platform {
+    color: #e2e8f0;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.history-time {
+    color: #64748b;
+    font-size: 9px;
+}
+
+.history-service {
+    margin-top: 4px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.history-empty {
+    padding: 15px;
+    text-align: center;
+    color: #64748b;
+    font-size: 12px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+    position: fixed;
+    z-index: 2000;
+    left: 50%;
+    bottom: 90px;
+    transform: translate(-50%,20px);
+    width: calc(100% - 35px);
+    max-width: 430px;
+    padding: 12px 15px;
+    border-radius: 14px;
+    background: rgba(15,23,42,.95);
+    border: 1px solid rgba(56,189,248,.3);
+    box-shadow: 0 15px 40px rgba(0,0,0,.55);
+    color: #e2e8f0;
+    font-size: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: .3s;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%,0);
+}
+
+/* =========================
+   DOCK
+========================= */
+
+.dsn-dock {
+    position: fixed;
+    z-index: 999;
+    left: 50%;
+    bottom: 17px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 13px;
+    border: 1px solid rgba(56,189,248,.27);
+    border-radius: 30px;
+    background: rgba(15,23,42,.88);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    box-shadow: 0 12px 35px rgba(0,0,0,.65);
+}
+
+.dock-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 19px;
+    transition: .25s;
+}
+
+.dock-item:hover {
+    background: rgba(56,189,248,.15);
+    transform: translateY(-5px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 420px) {
+
+    body {
+        padding-top: 15px;
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+
+    .hero {
+        padding: 22px 15px;
+    }
+
+    h1 {
+        font-size: 19px;
+    }
+
+    .card,
+    .history-card {
+        padding: 19px 14px;
+    }
+
+    .dsn-dock {
+        gap: 5px;
+        padding: 8px 9px;
+    }
+
+    .dock-item {
+        width: 37px;
+        height: 37px;
+        font-size: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+
+        <div class="logo">🚀</div>
+
+        <h1>DSN Ultimate Social & Booster Hub</h1>
+
+        <div class="subtitle">
+            ប្រព័ន្ធគ្រប់គ្រង និងពិសោធន៍ Social Media
+            សម្រាប់ Facebook • YouTube • TikTok
+        </div>
+
+        <div class="version">
+            ⚡ DSN OS HUB • V2.0
+        </div>
+
+        <div class="status-bar">
+
+            <div class="status">
+                <span id="statusDot" class="status-dot"></span>
+                <span id="statusText">System Online</span>
+            </div>
+
+            <div id="clock">--:--:--</div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN TOOL -->
+    <div class="card">
+
+        <div class="section-title">
+            📊 Social Analytics & Simulation
+        </div>
+
+
+        <!-- PLATFORM -->
+        <div class="platform-tabs">
+
+            <button
+                class="platform-btn active"
+                data-platform="Facebook"
+                onclick="selectPlatform('Facebook')">
+                📘 Facebook
+            </button>
+
+            <button
+                class="platform-btn"
+                data-platform="YouTube"
+                onclick="selectPlatform('YouTube')">
+                ▶️ YouTube
+            </button>
+
+            <button
+                class="platform-btn"
+                data-platform="TikTok"
+                onclick="selectPlatform('TikTok')">
+                🎵 TikTok
+            </button>
+
+        </div>
+
+
+        <!-- URL -->
+        <div class="input-group">
+
+            <label>
+                🔗 តំណភ្ជាប់ Social Media:
+            </label>
+
+            <input
+                type="url"
+                id="socialUrl"
+                class="input-field"
+                placeholder="https://www.facebook.com/..."
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <!-- SERVICE -->
+        <div class="input-group">
+
+            <label>
+                ⚙️ ជ្រើសរើសសេវាកម្ម:
+            </label>
+
+            <select
+                id="socialService"
+                class="input-field">
+            </select>
+
+        </div>
+
+
+        <!-- AMOUNT -->
+        <div class="input-group">
+
+            <label>
+                🔢 ចំនួនចង់បាន:
+            </label>
+
+            <input
+                type="number"
+                id="socialAmount"
+                class="input-field"
+                value="100000"
+                min="100"
+                max="1000000"
+            >
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+        <div class="quick-actions">
+
+            <button
+                class="small-btn"
+                onclick="copyUrl()">
+                📋 Copy URL
+            </button>
+
+            <button
+                class="small-btn"
+                onclick="openUrl()">
+                🔗 Open Link
+            </button>
+
+        </div>
+
+
+        <!-- RUN -->
+        <button
+            id="runBtn"
+            class="btn"
+            onclick="runSocialTool()">
+
+            🚀 ដំណើរការ Simulation
+
+        </button>
+
+
+        <!-- PROGRESS -->
+        <div
+            id="progressWrap"
+            class="progress-wrap">
+
+            <div class="progress-info">
+
+                <span id="progressText">
+                    Initializing...
+                </span>
+
+                <span id="progressPercent">
+                    0%
+                </span>
+
+            </div>
+
+            <div class="progress-track">
+
+                <div
+                    id="progressBar"
+                    class="progress-bar">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULT -->
+        <div
+            id="resultBox"
+            class="result-box">
+
+            <div class="result-header">
+                ✅ Simulation Completed
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">
+                    🌐 Platform:
+                </span>
+                <span
+                    id="resPlatform"
+                    class="result-value">
+                    -
+                </span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">
+                    🎯 Service:
+                </span>
+                <span
+                    id="resService"
+                    class="result-value">
+                    -
+                </span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">
+                    🔢 Amount:
+                </span>
+                <span
+                    id="resAmount"
+                    class="result-value">
+                    -
+                </span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">
+                    🔗 URL:
+                </span>
+                <span
+                    id="resLink"
+                    class="result-value">
+                    -
+                </span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">
+                    🕒 Time:
+                </span>
+                <span
+                    id="resTime"
+                    class="result-value">
+                    -
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="notice">
+            🛡️ <b>DSN Demo Mode:</b>
+            Tool នេះជាប្រព័ន្ធ Simulation សម្រាប់ UI/Testing ប៉ុណ្ណោះ។
+            វាមិនបញ្ជូន Likes, Followers, Views ឬ Engagement ពិតទៅកាន់
+            Social Media ដោយគ្មាន API/Backend ទេ។
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY -->
+    <div class="history-card">
+
+        <div class="history-header">
+
+            <div class="history-title">
+                🕘 Activity History
+            </div>
+
+            <button
+                class="clear-btn"
+                onclick="clearHistory()">
+                🗑️ Clear
+            </button>
+
+        </div>
+
+        <div
+            id="historyList"
+            class="history-list">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+<div
+    id="toast"
+    class="toast">
+</div>
+
+
+<!-- FLOATING DOCK -->
+<div class="dsn-dock">
+
+    <a
+        href="index.html"
+        class="dock-item"
+        title="ទំព័រដើម">
+        🏠
+    </a>
+
+    <a
+        href="library.html"
+        class="dock-item"
+        title="Library">
+        📚
+    </a>
+
+    <a
+        href="explorer.html"
+        class="dock-item"
+        title="File Explorer">
+        📁
+    </a>
+
+    <a
+        href="game.html"
+        class="dock-item"
+        title="ហ្គេម">
+        🎮
+    </a>
+
+    <a
+        href="setting.html"
+        class="dock-item"
+        title="ការកំណត់">
+        ⚙️
+    </a>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   DSN ULTIMATE SOCIAL & BOOSTER HUB
+   VERSION 2.0
+===================================================== */
+
+const serviceData = {
+
+    Facebook: [
+        "👍 Facebook Post / Page Likes",
+        "👤 Facebook Followers",
+        "👁️ Facebook Page Views",
+        "📈 Facebook Followers Views",
+        "💬 Facebook Post Comments",
+        "📊 Facebook Page Analytics"
+    ],
+
+    YouTube: [
+        "▶️ YouTube Video Views",
+        "👍 YouTube Likes",
+        "👤 YouTube Subscribers",
+        "💬 YouTube Comments",
+        "⏱️ YouTube Watch Time",
+        "📊 YouTube Analytics"
+    ],
+
+    TikTok: [
+        "🎵 TikTok Video Views",
+        "❤️ TikTok Likes",
+        "👤 TikTok Followers",
+        "💬 TikTok Comments",
+        "🔄 TikTok Shares",
+        "📊 TikTok Analytics"
+    ]
+
+};
+
+
+let currentPlatform = "Facebook";
+let isProcessing = false;
+
+
+/* =====================================================
+   PLATFORM SELECTOR
+===================================================== */
+
+function selectPlatform(platform) {
+
+    if (isProcessing) {
+        showToast("⏳ សូមរង់ចាំ Simulation ចាស់បញ្ចប់សិន!");
+        return;
+    }
+
+    currentPlatform = platform;
+
+    document
+        .querySelectorAll(".platform-btn")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.platform === platform
+            );
+
+        });
+
+
+    updateServices();
+
+    const urlInput =
+        document.getElementById("socialUrl");
+
+    const placeholders = {
+
+        Facebook:
+            "https://www.facebook.com/...",
+
+        YouTube:
+            "https://www.youtube.com/watch?v=...",
+
+        TikTok:
+            "https://www.tiktok.com/@user/video/..."
+
+    };
+
+    urlInput.placeholder =
+        placeholders[platform];
+
+}
+
+
+/* =====================================================
+   SERVICE LIST
+===================================================== */
+
+function updateServices() {
+
+    const select =
+        document.getElementById("socialService");
+
+    select.innerHTML = "";
+
+    serviceData[currentPlatform]
+        .forEach((service, index) => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = service;
+            option.textContent = service;
+
+            if (index === 0) {
+                option.selected = true;
+            }
+
+            select.appendChild(option);
+
+        });
+
+}
+
+
+/* =====================================================
+   URL VALIDATION
+===================================================== */
+
+function validateUrl(url) {
+
+    try {
+
+        const parsed =
+            new URL(url);
+
+        return (
+            parsed.protocol === "http:" ||
+            parsed.protocol === "https:"
+        );
+
+    } catch (error) {
+
+        return false;
+
+    }
+
+}
+
+
+/* =====================================================
+   RUN TOOL
+===================================================== */
+
+function runSocialTool() {
+
+    if (isProcessing) {
+        return;
+    }
+
+
+    const url =
+        document
+            .getElementById("socialUrl")
+            .value
+            .trim();
+
+    const service =
+        document
+            .getElementById("socialService")
+            .value;
+
+    const amount =
+        Number(
+            document
+                .getElementById("socialAmount")
+                .value
+        );
+
+
+    /* URL CHECK */
+
+    if (!url) {
+
+        showToast(
+            "⚠️ សូមបញ្ចូល Social Media URL ជាមុនសិន!"
+        );
+
+        document
+            .getElementById("socialUrl")
+            .focus();
+
+        return;
+    }
+
+
+    if (!validateUrl(url)) {
+
+        showToast(
+            "⚠️ URL មិនត្រឹមត្រូវទេ!"
+        );
+
+        return;
+    }
+
+
+    /* AMOUNT CHECK */
+
+    if (
+        !Number.isFinite(amount) ||
+        amount < 100 ||
+        amount > 1000000
+    ) {
+
+        showToast(
+            "⚠️ Amount ត្រូវនៅចន្លោះ 100 - 1,000,000!"
+        );
+
+        return;
+    }
+
+
+    startSimulation(
+        url,
+        service,
+        amount
+    );
+
+}
+
+
+/* =====================================================
+   SIMULATION ENGINE
+===================================================== */
+
+function startSimulation(
+    url,
+    service,
+    amount
+) {
+
+    isProcessing = true;
+
+    const runBtn =
+        document.getElementById("runBtn");
+
+    const progressWrap =
+        document.getElementById("progressWrap");
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+    const progressText =
+        document.getElementById("progressText");
+
+    const progressPercent =
+        document.getElementById("progressPercent");
+
+    const resultBox =
+        document.getElementById("resultBox");
+
+    const statusDot =
+        document.getElementById("statusDot");
+
+    const statusText =
+        document.getElementById("statusText");
+
+
+    runBtn.disabled = true;
+
+    runBtn.innerHTML =
+        "⏳ Processing...";
+
+
+    resultBox.style.display =
+        "none";
+
+    progressWrap.style.display =
+        "block";
+
+
+    statusDot.classList.add(
+        "processing"
+    );
+
+    statusText.textContent =
+        "Simulation Processing";
+
+
+    let progress = 0;
+
+
+    const messages = [
+        "🔍 Checking URL...",
+        "⚙️ Preparing service...",
+        "📡 Initializing DSN Engine...",
+        "📊 Processing simulation...",
+        "🧪 Testing response...",
+        "✅ Finalizing..."
+    ];
+
+
+    const timer =
+        setInterval(() => {
+
+            progress +=
+                Math.floor(
+                    Math.random() * 13
+                ) + 5;
+
+
+            if (progress > 100) {
+                progress = 100;
+            }
+
+
+            progressBar.style.width =
+                progress + "%";
+
+
+            progressPercent.textContent =
+                progress + "%";
+
+
+            const messageIndex =
+                Math.min(
+                    Math.floor(
+                        progress / 18
+                    ),
+                    messages.length - 1
+                );
+
+
+            progressText.textContent =
+                messages[messageIndex];
+
+
+            if (progress >= 100) {
+
+                clearInterval(timer);
+
+                setTimeout(() => {
+
+                    completeSimulation(
+                        url,
+                        service,
+                        amount
+                    );
+
+                }, 350);
+
+            }
+
+        }, 320);
+
+}
+
+
+/* =====================================================
+   COMPLETE
+===================================================== */
+
+function completeSimulation(
+    url,
+    service,
+    amount
+) {
+
+    isProcessing = false;
+
+
+    const runBtn =
+        document.getElementById("runBtn");
+
+    const progressWrap =
+        document.getElementById("progressWrap");
+
+    const resultBox =
+        document.getElementById("resultBox");
+
+    const statusDot =
+        document.getElementById("statusDot");
+
+    const statusText =
+        document.getElementById("statusText");
+
+
+    const now =
+        new Date();
+
+
+    const time =
+        now.toLocaleString(
+            "km-KH",
+            {
+                dateStyle: "short",
+                timeStyle: "medium"
+            }
+        );
+
+
+    document.getElementById(
+        "resPlatform"
+    ).textContent =
+        currentPlatform;
+
+
+    document.getElementById(
+        "resService"
+    ).textContent =
+        service;
+
+
+    document.getElementById(
+        "resAmount"
+    ).textContent =
+        amount.toLocaleString();
+
+
+    document.getElementById(
+        "resLink"
+    ).textContent =
+        url;
+
+
+    document.getElementById(
+        "resTime"
+    ).textContent =
+        time;
+
+
+    resultBox.style.display =
+        "block";
+
+
+    runBtn.disabled = false;
+
+    runBtn.innerHTML =
+        "🚀 ដំណើរការ Simulation";
+
+
+    progressWrap.style.display =
+        "none";
+
+
+    statusDot.classList.remove(
+        "processing"
+    );
+
+    statusText.textContent =
+        "System Online";
+
+
+    saveHistory(
+        currentPlatform,
+        service,
+        amount,
+        url,
+        time
+    );
+
+
+    showToast(
+        "✅ DSN Simulation បានបញ្ចប់ដោយជោគជ័យ!"
+    );
+
+}
+
+
+/* =====================================================
+   COPY URL
+===================================================== */
+
+async function copyUrl() {
+
+    const input =
+        document.getElementById(
+            "socialUrl"
+        );
+
+    const url =
+        input.value.trim();
+
+
+    if (!url) {
+
+        showToast(
+            "⚠️ មិនទាន់មាន URL សម្រាប់ Copy ទេ!"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            url
+        );
+
+        showToast(
+            "📋 URL បាន Copy ទៅ Clipboard ហើយ!"
+        );
+
+    } catch (error) {
+
+        input.select();
+
+        document.execCommand("copy");
+
+        showToast(
+            "📋 URL បាន Copy ហើយ!"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   OPEN URL
+===================================================== */
+
+function openUrl() {
+
+    const url =
+        document
+            .getElementById("socialUrl")
+            .value
+            .trim();
+
+
+    if (!url) {
+
+        showToast(
+            "⚠️ សូមបញ្ចូល URL ជាមុនសិន!"
+        );
+
+        return;
+    }
+
+
+    if (!validateUrl(url)) {
+
+        showToast(
+            "⚠️ URL មិនត្រឹមត្រូវទេ!"
+        );
+
+        return;
+    }
+
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+function getHistory() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "dsnSocialHistory"
+            )
+        ) || [];
+
+    } catch (error) {
+
+        return [];
+
+    }
+
+}
+
+
+function saveHistory(
+    platform,
+    service,
+    amount,
+    url,
+    time
+) {
+
+    const history =
+        getHistory();
+
+
+    history.unshift({
+
+        platform,
+        service,
+        amount,
+        url,
+        time
+
+    });
+
+
+    const limitedHistory =
+        history.slice(0, 15);
+
+
+    localStorage.setItem(
+        "dsnSocialHistory",
+        JSON.stringify(
+            limitedHistory
+        )
+    );
+
+
+    renderHistory();
+
+}
+
+
+function renderHistory() {
+
+    const list =
+        document.getElementById(
+            "historyList"
+        );
+
+
+    const history =
+        getHistory();
+
+
+    if (!history.length) {
+
+        list.innerHTML = `
+            <div class="history-empty">
+                📭 មិនទាន់មាន Activity History ទេ
+            </div>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML =
+        history.map(
+            item => `
+
+                <div class="history-item">
+
+                    <div class="history-top">
+
+                        <div class="history-platform">
+                            ${escapeHtml(item.platform)}
+                        </div>
+
+                        <div class="history-time">
+                            ${escapeHtml(item.time)}
+                        </div>
+
+                    </div>
+
+                    <div class="history-service">
+                        🎯 ${escapeHtml(item.service)}
+                        • 🔢 ${Number(item.amount).toLocaleString()}
+                    </div>
+
+                </div>
+
+            `
+        ).join("");
+
+}
+
+
+function clearHistory() {
+
+    const history =
+        getHistory();
+
+
+    if (!history.length) {
+
+        showToast(
+            "📭 History មិនទាន់មានទេ!"
+        );
+
+        return;
+    }
+
+
+    const confirmClear =
+        confirm(
+            "🗑️ តើអ្នកពិតជាចង់លុប Activity History ទាំងអស់មែនទេ?"
+        );
+
+
+    if (!confirmClear) {
+        return;
+    }
+
+
+    localStorage.removeItem(
+        "dsnSocialHistory"
+    );
+
+
+    renderHistory();
+
+    showToast(
+        "🗑️ History ត្រូវបានលុបហើយ!"
+    );
+
+}
+
+
+/* =====================================================
+   SECURITY / HTML ESCAPE
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        }, 2600);
+
+}
+
+
+/* =====================================================
+   CLOCK
+===================================================== */
+
+function updateClock() {
+
+    const clock =
+        document.getElementById(
+            "clock"
+        );
+
+
+    const now =
+        new Date();
+
+
+    clock.textContent =
+        now.toLocaleTimeString(
+            "en-GB"
+        );
+
+}
+
+
+setInterval(
+    updateClock,
+    1000
+);
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        updateClock();
+
+        updateServices();
+
+        renderHistory();
+
+
+        const amount =
+            document.getElementById(
+                "socialAmount"
+            );
+
+
+        amount.addEventListener(
+            "input",
+            () => {
+
+                if (
+                    Number(amount.value) >
+                    1000000
+                ) {
+
+                    amount.value =
+                        1000000;
+
+                }
+
+                if (
+                    Number(amount.value) <
+                    0
+                ) {
+
+                    amount.value =
+                        0;
+
+                }
+
+            }
+        );
+
+
+        document
+            .getElementById("socialUrl")
+            .addEventListener(
+                "keydown",
+                event => {
+
+                    if (
+                        event.key === "Enter"
+                    ) {
+
+                        runSocialTool();
+
+                    }
+
+                }
+            );
+
+    }
+);
+
+</script>
+
+</body>
+</html>

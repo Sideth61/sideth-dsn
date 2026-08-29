@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nitalove.html - Offline Storage ❤️</title>
+    <style>
+        body {
+            background-color: #0b0714;
+            color: #ffffff;
+            font-family: sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #4a2c82;
+            background: #150b2e;
+            color: white;
+            font-size: 16px;
+        }
+        button {
+            background: linear-gradient(135deg, #8957e5, #6e40c9);
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 15px;
+            color: #ffb7c5;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>nitalove.html Offline DB 🚀</h2>
+    <p style="font-size: 13px; color: #79c0ff;">រក្សាទុកទិន្នន័យក្នុងទូរសព្ទដោយមិនបាច់ប្រើ Data[span_2](start_span)[span_2](end_span)</p>
+
+    <input type="text" id="dataInput" placeholder="វាយអត្ថបទ ឬទិន្នន័យដែលចង់ Save...">
+    <button onclick="saveData()">💾 Save ទុកក្នុង nitalove</button>
+    <button onclick="loadData()">📂 ទាញយកមកវិញ</button>
+
+    <div id="result"></div>
+
+    <script>
+        let db;
+        const request = indexedDB.open("NitaLoveDB", 1);
+
+        request.onerror = (event) => {
+            console.error("Database error: ", event.target.error);
+        };
+
+        request.onsuccess = (event) => {
+            db = event.target.result;
+            console.log("Database nitalove 開通 successfully!");
+        };
+
+        request.onupgradeneeded = (event) => {
+            let db = event.target.result;
+            if (!db.objectStoreNames.contains("loveStore")) {
+                db.createObjectStore("loveStore", { keyPath: "id" });
+            }
+        };
+
+        function saveData() {
+            let textValue = document.getElementById("dataInput").value;
+            if (!textValue) {
+                alert("សូមវាយអត្ថបទសិនប្រុសសង្ហារ!");
+                return;
+            }
+
+            const transaction = db.transaction(["loveStore"], "readwrite");
+            const store = transaction.objectStore("loveStore");
+            store.put({ id: "nitaData", content: textValue, time: new Date() });
+
+            transaction.oncomplete = () => {
+                document.getElementById("result").innerText = "✅ Save ចូល nitalove.html បានសម្រេច!";
+            };
+        }
+
+        function loadData() {
+            const transaction = db.transaction(["loveStore"], "readonly");
+            const store = transaction.objectStore("loveStore");
+            const request = store.get("nitaData");
+
+            request.onsuccess = (event) => {
+                let res = request.result;
+                if (res) {
+                    document.getElementById("result").innerText = "📥 ទិន្នន័យពី nitalove: " + res.content;
+                } else {
+                    document.getElementById("result").innerText = "❌ មិនទាន់មានទិន្នន័យក្នុង nitalove ទេ។";
+                }
+            };
+        }
+    </script>
+
+</body>
+</html>

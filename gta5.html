@@ -1,0 +1,330 @@
+<title>Grand Theft Auto V - DSN Cloud</title>
+
+<!-- App Icons -->
+<link rel="apple-touch-icon" href="IMG_3694.jpeg">
+<link rel="icon" type="image/jpeg" href="IMG_3694.jpeg">
+
+<!-- iOS Web App -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GTA V Cloud">
+
+<!-- Theme -->
+<meta name="theme-color" content="#070b14">
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap');
+
+    :root {
+        --bg: #070b14;
+        --panel: rgba(13, 20, 34, 0.94);
+        --line: rgba(56, 189, 248, 0.18);
+        --blue: #38bdf8;
+        --purple: #8b5cf6;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+    }
+
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Kantumruy Pro', sans-serif;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+
+    .header-bar {
+        min-height: 58px;
+        padding:
+            max(8px, env(safe-area-inset-top))
+            14px
+            8px
+            14px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+
+        background: var(--panel);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+
+        border-bottom: 1px solid var(--line);
+        z-index: 20;
+    }
+
+    .title-area {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+    .game-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .header-title {
+        margin: 0;
+        color: var(--blue);
+        font-size: 15px;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .status {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #86efac;
+        font-size: 10px;
+        margin-top: 1px;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #22c55e;
+        box-shadow: 0 0 8px #22c55e;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================== */
+
+    .actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        flex-shrink: 0;
+    }
+
+    .action-btn,
+    .back-btn {
+        border: 0;
+        color: white;
+        cursor: pointer;
+        text-decoration: none;
+
+        min-height: 34px;
+        padding: 7px 11px;
+
+        border-radius: 9px;
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 600;
+
+        background: rgba(30, 41, 59, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.14);
+
+        transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .action-btn:active,
+    .back-btn:active {
+        transform: scale(.95);
+    }
+
+    .back-btn {
+        background: linear-gradient(135deg, var(--purple), #c084fc);
+        border: none;
+    }
+
+    /* =========================
+       GAME AREA
+    ========================== */
+
+    .iframe-container {
+        position: relative;
+        flex: 1;
+        width: 100%;
+        min-height: 0;
+        background: #000;
+    }
+
+    iframe {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border: 0;
+        background: #000;
+    }
+
+    /* =========================
+       LOADING SCREEN
+    ========================== */
+
+    .loading-screen {
+        position: absolute;
+        inset: 0;
+        z-index: 15;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 13px;
+
+        background:
+            radial-gradient(circle at center,
+                rgba(56,189,248,.10),
+                transparent 45%),
+            #050812;
+
+        transition: opacity .35s ease, visibility .35s ease;
+    }
+
+    .loading-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .loader {
+        width: 42px;
+        height: 42px;
+
+        border: 3px solid rgba(255,255,255,.12);
+        border-top-color: var(--blue);
+        border-right-color: var(--purple);
+
+        border-radius: 50%;
+        animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loading-title {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .loading-text {
+        color: var(--muted);
+        font-size: 11px;
+        text-align: center;
+        padding: 0 20px;
+    }
+
+    /* =========================
+       ERROR PANEL
+    ========================== */
+
+    .error-panel {
+        position: absolute;
+        inset: 0;
+        z-index: 16;
+
+        display: none;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        padding: 25px;
+        text-align: center;
+
+        background: #050812;
+    }
+
+    .error-panel.show {
+        display: flex;
+    }
+
+    .error-icon {
+        font-size: 42px;
+        margin-bottom: 10px;
+    }
+
+    .error-title {
+        margin: 0 0 7px;
+        font-size: 16px;
+    }
+
+    .error-text {
+        max-width: 360px;
+        margin: 0 0 15px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media (max-width: 600px) {
+
+        .header-bar {
+            min-height: 54px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .game-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .header-title {
+            font-size: 13px;
+        }
+
+        .status {
+            font-size: 9px;
+        }
+
+        .action-btn,
+        .back-btn {
+            min-height: 32px;
+            padding: 6px 8px;
+            font-size: 10px;
+        }
+
+        .fullscreen-text {
+            display: none;
+        }
+    }
+
+    /* =========================
+       FULLSCREEN MODE
+    ========================== */
+
+    body.game-fullscreen .header-bar {
+        display: none;
+    }
+
+    body.game-fullscreen .iframe-container {
+        height: 100dvh;
+    }
+</style>

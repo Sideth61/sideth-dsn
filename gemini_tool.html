@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSN Obsidian V6 - Omega Ultimate Email Generator & Vault Core</title>
+    
+    <link rel="icon" type="image/png" href="app3.png">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+        
+        :root {
+            --primary-color: #10b981;
+            --primary-glow: rgba(16, 185, 129, 0.35);
+            --bg-color: #02040a;
+            --card-bg: rgba(8, 12, 24, 0.94);
+            --border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        body.theme-purple {
+            --primary-color: #a855f7;
+            --primary-glow: rgba(168, 85, 247, 0.35);
+            --border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        body.theme-amber {
+            --primary-color: #f59e0b;
+            --primary-glow: rgba(245, 158, 11, 0.35);
+            --border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        body { 
+            font-family: 'Kantumruy Pro', sans-serif; 
+            background: var(--bg-color);
+            color: #f8fafc; 
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.5s;
+        }
+
+        #matrixCanvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; opacity: 0.12;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 580px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            z-index: 5;
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 24px; 
+            border-radius: 24px; 
+            border: 1px solid var(--border-color);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.95), 0 0 35px var(--primary-glow);
+            transition: 0.3s;
+        }
+
+        .header-title { 
+            color: var(--primary-color); 
+            font-size: 1.1em; 
+            font-weight: 700; 
+            margin-bottom: 16px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            padding-bottom: 10px; 
+            text-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .theme-switcher { display: flex; gap: 6px; }
+        .theme-dot {
+            width: 15px; height: 15px; border-radius: 50%; cursor: pointer; border: 1px solid #fff;
+            transition: 0.2s;
+        }
+        .theme-dot:hover { transform: scale(1.2); }
+
+        label { font-size: 0.85em; color: #94a3b8; font-weight: 600; display: block; margin-top: 12px; }
+
+        .input-field, select, textarea { 
+            width: 100%; 
+            padding: 12px 15px; 
+            margin-top: 6px; 
+            margin-bottom: 10px;
+            background: rgba(3, 7, 18, 0.95); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            color: #fff; 
+            border-radius: 12px; 
+            box-sizing: border-box; 
+            font-family: 'Kantumruy Pro', sans-serif;
+            transition: 0.3s;
+        }
+
+        .input-field:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 18px var(--primary-glow);
+        }
+
+        select option { background: #02040a; color: #fff; }
+
+        .preset-group { display: flex; gap: 8px; margin-bottom: 14px; }
+        .btn-preset {
+            flex: 1; padding: 7px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--primary-color); border-radius: 8px; cursor: pointer;
+            font-size: 0.8em; font-weight: bold; font-family: 'Kantumruy Pro', sans-serif;
+            transition: 0.2s;
+        }
+        .btn-preset:hover { background: var(--primary-glow); color: #fff; }
+
+        .btn-gen { 
+            width: 100%; padding: 15px; 
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6); 
+            color: #02040a; border: none; border-radius: 14px; cursor: pointer; 
+            font-weight: bold; font-family: 'Kantumruy Pro', sans-serif;
+            transition: 0.3s; box-shadow: 0 0 25px var(--primary-glow);
+            font-size: 1em; margin-top: 12px;
+        }
+        .btn-gen:hover { filter: brightness(1.15); transform: translateY(-2px); }
+
+        .vault-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .search-box {
+            display: none;
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: var(--primary-color);
+            font-size: 0.85em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .search-box:focus { outline: none; border-color: var(--primary-color); }
+
+        .output-container {
+            margin-top: 12px;
+            max-height: 280px;
+            overflow-y: auto;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .account-card {
+            background: rgba(3, 7, 18, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: monospace;
+            font-size: 0.8em;
+            transition: 0.2s;
+        }
+        .account-card:hover { border-color: var(--primary-color); }
+        
+        .account-left { display: flex; align-items: center; gap: 10px; }
+        .account-info { color: #34d399; }
+        .status-badge {
+            font-size: 0.7em; padding: 2px 6px; border-radius: 4px;
+            background: rgba(16, 185, 129, 0.2); color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-group-card { display: flex; gap: 5px; }
+        .btn-mini {
+            background: var(--primary-color); color: #02040a; border: none;
+            padding: 5px 9px; border-radius: 6px; font-weight: bold; cursor: pointer;
+            font-family: 'Kantumruy Pro', sans-serif; font-size: 0.75em; transition: 0.2s;
+        }
+        .btn-mini:hover { filter: brightness(1.2); }
+        .btn-mini-del { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .btn-mini-del:hover { background: #ef4444; color: #fff; }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .btn-action { 
+            width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-family: 'Kantumruy Pro', sans-serif; transition: 0.3s; font-size: 0.85em;
+        }
+        .btn-copy { background: #10b981; color: white; }
+        .btn-download { background: #38bdf8; color: #02040a; }
+        .btn-json { background: #8b5cf6; color: white; }
+        .btn-csv { background: #f59e0b; color: #02040a; }
+        .btn-login { background: #ea4335; color: white; grid-column: span 2; }
+        .btn-clear { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); grid-column: span 2; }
+
+        /* Cyber Toast Notification */
+        #toast {
+            position: fixed; top: 20px; right: 20px; background: rgba(8, 12, 24, 0.95);
+            border: 1px solid var(--primary-color); color: #fff; padding: 12px 20px; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px var(--primary-glow); font-size: 0.9em;
+            z-index: 10000; display: none; align-items: center; gap: 10px; backdrop-filter: blur(10px);
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Floating Dock */
+        .dsn-dock {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--card-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color); padding: 8px 20px; border-radius: 35px;
+            display: flex; gap: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), 0 0 25px var(--primary-glow); z-index: 999;
+        }
+        .dock-item { font-size: 20px; text-decoration: none; padding: 8px; border-radius: 50%; display: flex; transition: 0.3s; }
+        .dock-item:hover { background: var(--primary-glow); transform: translateY(-5px); }
+    </style>
+</head>
+<body class="theme-green" onclick="resetIdleTimer()" onmousemove="resetIdleTimer()">
+
+<canvas id="matrixCanvas"></canvas>
+<div id="toast">✅ <span id="toastMsg">Notification message</span></div>
+
+<div class="container">
+    <div class="card">
+        <div class="header-title">
+            <span>🛡️ Obsidian V6 Omega Core</span>
+            <div class="theme-switcher">
+                <div class="theme-dot" style="background:#10b981;" onclick="setTheme('green', '#10b981', 'rgba(16,185,129,0.35)')" title="Emerald Green"></div>
+                <div class="theme-dot" style="background:#a855f7;" onclick="setTheme('purple', '#a855f7', 'rgba(168,85,247,0.35)')" title="Cyber Purple"></div>
+                <div class="theme-dot" style="background:#f59e0b;" onclick="setTheme('amber', '#f59e0b', 'rgba(245,158,11,0.35)')" title="Solar Amber"></div>
+            </div>
+        </div>
+        
+        <label>ពាក្យគន្លឹះដំបូង (Prefix):</label>
+        <input type="text" id="prefix" class="input-field" placeholder="ឧ. dsn.omega">
+        
+        <label>ជ្រើសរើស Domain:</label>
+        <select id="domainSelect" class="input-field">
+            <option value="@gmail.com">@gmail.com (Google Official)</option>
+            <option value="@dsn-os.net">@dsn-os.net (DSN Obsidian Cloud)</option>
+            <option value="@cyber-mail.org">@cyber-mail.org (Secure Anonymous)</option>
+        </select>
+
+        <label>កម្រិតសុវត្ថិភាព Password:</label>
+        <select id="passMode" class="input-field">
+            <option value="complex">អក្សរធំ+តូច+លេខ+សញ្ញា (Obsidian Secure)</option>
+            <option value="simple">អក្សរ+លេខធម្មតា (Standard)</option>
+            <option value="pin">លេខសុទ្ធ 6 ខ្ទង់ (PIN Code)</option>
+        </select>
+        
+        <label>ចំនួនដែលចង់បង្កើត (Quantity):</label>
+        <input type="number" id="qty" class="input-field" value="10">
+
+        <!-- Quick Presets -->
+        <div class="preset-group">
+            <button class="btn-preset" onclick="setQty(10)">10</button>
+            <button class="btn-preset" onclick="setQty(50)">50</button>
+            <button class="btn-preset" onclick="setQty(100)">100</button>
+            <button class="btn-preset" onclick="setQty(500)">500</button>
+        </div>
+
+        <button class="btn-gen" onclick="playQuantumSound(); generateEmailsObsidian()">⚡ ចុចបង្កើតគណនី (Omega Generate)</button>
+    </div>
+
+    <div class="card">
+        <div class="header-title">
+            <span>🔐 ប្រអប់រក្សាទុកទិន្នន័យ (Secure Vault)</span>
+            <span id="accountCountBadge" style="font-size: 0.8em; color: var(--primary-color);">0 គណនី</span>
+        </div>
+        
+        <div class="vault-controls" id="vaultControls" style="display:none;">
+            <button class="btn-preset" onclick="selectAllAccounts()">☑️ ជ្រើសរើសទាំងអស់</button>
+            <button class="btn-preset" style="color:#ef4444;" onclick="deleteSelectedAccounts()">🗑️ លុបដែលបានធីក</button>
+        </div>
+
+        <input type="text" id="searchFilter" class="search-box" placeholder="🔍 ស្វែងរកអ៊ីមែលក្នុង Vault..." onkeyup="filterOutput()">
+        
+        <div id="outputContainer" class="output-container" style="display:none;">
+            <!-- Dynamic Account Cards Will Load Here -->
+        </div>
+        
+        <div id="actionButtons" style="display:none;" class="action-grid">
+            <button class="btn-action btn-copy" onclick="playBeep(); copyAllOutput()">📋 Copy ទាំងអស់</button>
+            <button class="btn-action btn-download" onclick="playBeep(); downloadTxtFile()">📥 Download .TXT</button>
+            <button class="btn-action btn-json" onclick="playBeep(); downloadJsonFile()">📦 Export .JSON</button>
+            <button class="btn-action btn-csv" onclick="playBeep(); downloadCsvFile()">📊 Export .CSV</button>
+            <button class="btn-action btn-login" onclick="playBeep(); window.open('https://accounts.google.com/signin', '_blank')">🌐 ចូលទៅកាន់ Gmail Login</button>
+            <button class="btn-action btn-clear" onclick="playBeep(); clearOutputStorage()">🗑️ លុបទិន្នន័យទាំងអស់ចេញពីប្រព័ន្ធ</button>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Dock -->
+<div class="dsn-dock">
+    <a href="index.html" class="dock-item" title="ទំព័រដើម">🏠</a>
+    <a href="library.html" class="dock-item" title="Library">📚</a>
+    <a href="explorer.html" class="dock-item" title="File Explorer">📁</a>
+    <a href="browser.html" class="dock-item" title="Cyber Browser">🌐</a>
+    <a href="game.html" class="dock-item" title="ហ្គេម">🎮</a>
+    <a href="setting.html" class="dock-item" title="ការកំណត់">⚙️</a>
+</div>
+
+<script>
+    let isVaultLocked = false;
+    let idleTimer = null;
+
+    function resetIdleTimer() {
+        if (isVaultLocked) return;
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+            lockVault();
+        }, 120000); // Auto lock after 2 minutes of inactivity
+    }
+
+    function lockVault() {
+        isVaultLocked = true;
+        showToast("🔒 Secure Vault បានចាក់សោរដោយស្វ័យប្រវត្តិ!");
+        document.getElementById('outputContainer').style.display = 'none';
+        document.getElementById('actionButtons').style.display = 'none';
+        document.getElementById('vaultControls').style.display = 'none';
+        document.getElementById('searchFilter').style.display = 'none';
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toastMsg').innerText = message;
+        toast.style.display = 'flex';
+        setTimeout(() => { toast.style.display = 'none'; }, 2500);
+    }
+
+    function setTheme(themeName, colorHex, glowHex) {
+        document.body.className = `theme-${themeName}`;
+        localStorage.setItem('dsn_omega_theme', themeName);
+        playBeep();
+        showToast(`បានប្ដូរទៅ theme ថ្មីរួចរាល់!`);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('dsn_omega_theme') || 'green';
+        document.body.className = `theme-${savedTheme}`;
+        loadSavedAccounts();
+    });
+
+    function setQty(val) {
+        document.getElementById('qty').value = val;
+        playBeep();
+    }
+
+    function playBeep() {
+        try {
+            let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(750, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
+        } catch(e) {}
+    }
+
+    function playQuantumSound() {
+        try {
+            let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.2);
+        } catch(e) {}
+    }
+
+    let accountList = [];
+
+    function generateEmailsObsidian() {
+        if (isVaultLocked) {
+            let pass = prompt("🔐 Vault ត្រូវបានចាក់សោរ! បញ្ចូល PIN (1234) ដើម្បីដោះសោរ:");
+            if (pass !== "1234") {
+                alert("❌ លេខសម្ងាត់មិនត្រូវគ្នាទេ!");
+                return;
+            }
+            isVaultLocked = false;
+        }
+
+        const prefix = document.getElementById('prefix').value.trim() || "dsn.omega";
+        const domain = document.getElementById('domainSelect').value;
+        const passMode = document.getElementById('passMode').value;
+        const qty = parseInt(document.getElementById('qty').value) || 10;
+        
+        let newBatch = [];
+        for (let i = 1; i <= qty; i++) {
+            const randomNum = Math.floor(Math.random() * 90000) + 10000;
+            const email = `${prefix}${randomNum}${domain}`;
+            
+            let password = "";
+            if (passMode === "complex") {
+                password = Math.random().toString(36).slice(-8) + "Om!#";
+            } else if (passMode === "simple") {
+                password = Math.random().toString(36).slice(-8);
+            } else {
+                password = Math.floor(Math.random() * 900000) + 100000;
+            }
+
+            newBatch.push({ id: Date.now() + i, email: email, pass: password, status: 'Active', selected: false });
+        }
+
+        accountList = newBatch.concat(accountList);
+        saveAndRender();
+        showToast(`បានបង្កើតគណនីថ្មីចំនួន ${qty} ដោយជោគជ័យ!`);
+    }
+
+    function saveAndRender() {
+        localStorage.setItem('dsn_omega_accounts', JSON.stringify(accountList));
+        renderAccounts(accountList);
+    }
+
+    function loadSavedAccounts() {
+        const saved = localStorage.getItem('dsn_omega_accounts');
+        if (saved) {
+            accountList = JSON.parse(saved);
+            if (accountList.length > 0) {
+                renderAccounts(accountList);
+            }
+        }
+    }
+
+    function renderAccounts(data) {
+        const container = document.getElementById('outputContainer');
+        const badge = document.getElementById('accountCountBadge');
+        container.innerHTML = "";
+        badge.innerText = `${accountList.length} គណនី`;
+
+        if (data.length === 0) {
+            container.style.display = 'none';
+            document.getElementById('searchFilter').style.display = 'none';
+            document.getElementById('actionButtons').style.display = 'none';
+            document.getElementById('vaultControls').style.display = 'none';
+            return;
+        }
+
+        data.forEach((acc, index) => {
+            const card = document.createElement('div');
+            card.className = 'account-card';
+            card.innerHTML = `
+                <div class="account-left">
+                    <input type="checkbox" ${acc.selected ? 'checked' : ''} onchange="toggleSelect(${acc.id})" style="accent-color: var(--primary-color);">
+                    <div class="account-info">
+                        <b>[${index + 1}]</b> ${acc.email}<br>
+                        <span style="color: #94a3b8;">Pass:</span> ${acc.pass} 
+                        <span class="status-badge">${acc.status}</span>
+                    </div>
+                </div>
+                <div class="btn-group-card">
+                    <button class="btn-mini" onclick="copySingle('${acc.email}', '${acc.pass}')">Copy</button>
+                    <button class="btn-mini btn-mini-del" onclick="deleteSingle(${acc.id})">លុប</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        container.style.display = 'flex';
+        document.getElementById('searchFilter').style.display = 'block';
+        document.getElementById('actionButtons').style.display = 'grid';
+        document.getElementById('vaultControls').style.display = 'flex';
+    }
+
+    function toggleSelect(id) {
+        const acc = accountList.find(a => a.id === id);
+        if (acc) {
+            acc.selected = !acc.selected;
+        }
+    }
+
+    function selectAllAccounts() {
+        const allSelected = accountList.every(a => a.selected);
+        accountList.forEach(a => a.selected = !allSelected);
+        renderAccounts(accountList);
+        playBeep();
+    }
+
+    function deleteSelectedAccounts() {
+        const count = accountList.filter(a => a.selected).length;
+        if (count === 0) {
+            alert("⚠️ សូមធីកជ្រើសរើសគណនីណាមួយដែលចង់លុបសិន!");
+            return;
+        }
+        if (confirm(`⚠️ តើអ្នកពិតជាចង់លុបគណនីដែលបានជ្រើសរើសចំនួន ${count} មែនទេ?`)) {
+            accountList = accountList.filter(a => !a.selected);
+            saveAndRender();
+            playBeep();
+            showToast(`បានលុបគណនីដែលបានជ្រើសរើសរួចរាល់!`);
+        }
+    }
+
+    function deleteSingle(id) {
+        accountList = accountList.filter(acc => acc.id !== id);
+        saveAndRender();
+        playBeep();
+        showToast("បានលុបគណនីចេញពី Vault រួចរាល់!");
+    }
+
+    function filterOutput() {
+        const query = document.getElementById('searchFilter').value.toLowerCase();
+        const filtered = accountList.filter(acc => acc.email.toLowerCase().includes(query) || acc.pass.toLowerCase().includes(query));
+        renderAccountsSearchOnly(filtered);
+    }
+
+    function renderAccountsSearchOnly(data) {
+        const container = document.getElementById('outputContainer');
+        container.innerHTML = "";
+        if (data.length === 0) {
+            container.innerHTML = `<div style="color: #ef4444; text-align: center; padding: 10px;">❌ រកមិនឃើញទិន្នន័យទេ។</div>`;
+            return;
+        }
+        data.forEach((acc, index) => {
+            const card = document.createElement('div');
+            card.className = 'account-card';
+            card.innerHTML = `
+                <div class="account-left">
+                    <input type="checkbox" ${acc.selected ? 'checked' : ''} onchange="toggleSelect(${acc.id})" style="accent-color: var(--primary-color);">
+                    <div class="account-info">
+                        <b>[${index + 1}]</b> ${acc.email}<br>
+                        <span style="color: #94a3b8;">Pass:</span> ${acc.pass} 
+                        <span class="status-badge">${acc.status}</span>
+                    </div>
+                </div>
+                <div class="btn-group-card">
+                    <button class="btn-mini" onclick="copySingle('${acc.email}', '${acc.pass}')">Copy</button>
+                    <button class="btn-mini btn-mini-del" onclick="deleteSingle(${acc.id})">លុប</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function copySingle(email, pass) {
+        const text = `Email: ${email}\nPass: ${pass}`;
+        navigator.clipboard.writeText(text);
+        playBeep();
+        showToast(`បាន Copy: ${email}`);
+    }
+
+    function copyAllOutput() {
+        let fullText = "=== DSN OMEGA V6 VAULT ===\n";
+        accountList.forEach((acc, i) => {
+            fullText += `[${i+1}] Email: ${acc.email} | Pass: ${acc.pass}\n`;
+        });
+        navigator.clipboard.writeText(fullText);
+        showToast("បាន Copy ព័ត៌មានទាំងអស់ចូល Clipboard!");
+    }
+
+    function downloadTxtFile() {
+        let text = "=== DSN OMEGA V6 EMAIL REPORT ===\n";
+        text += `Generated Date: ${new Date().toLocaleString()}\n-----------------------------------------\n\n`;
+        accountList.forEach((acc, i) => {
+            text += `[${i+1}] Email: ${acc.email}\n    Pass:  ${acc.pass}\n-----------------------------------------\n`;
+        });
+
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `DSN_Omega_Emails_${Date.now()}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast("បានទាញយកឯកសារ .TXT រួចរាល់!");
+    }
+
+    function downloadJsonFile() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(accountList, null, 2));
+        const a = document.createElement('a');
+        a.href = dataStr;
+        a.download = `DSN_Omega_Accounts_${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast("បាន Export ឯកសារ .JSON រួចរាល់!");
+    }
+
+    function downloadCsvFile() {
+        let csvContent = "data:text/csv;charset=utf-8,No,Email,Password,Status\n";
+        accountList.forEach((acc, index) => {
+            csvContent += `${index + 1},${acc.email},${acc.pass},${acc.status}\n`;
+        });
+        const encodedUri = encodeURI(csvContent);
+        const a = document.createElement('a');
+        a.href = encodedUri;
+        a.download = `DSN_Omega_Accounts_${Date.now()}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast("បាន Export ឯកសារ .CSV រួចរាល់!");
+    }
+
+    function clearOutputStorage() {
+        if (confirm("⚠️ តើបងពិតជាចង់លុបទិន្នន័យទាំងអស់ចេញពីប្រព័ន្ធមែនទេ?")) {
+            accountList = [];
+            localStorage.removeItem('dsn_omega_accounts');
+            renderAccounts(accountList);
+            showToast("បានលុបទិន្នន័យទាំងអស់ចេញពី Vault!");
+        }
+    }
+
+    // Matrix Rain Background Effect
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const katakana = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ';
+    const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const alphabet = katakana + latin;
+    const fontSize = 16;
+    const columns = Math.floor(canvas.width / fontSize);
+    const rainDrops = [];
+    for (let x = 0; x < columns; x++) { rainDrops[x] = 1; }
+
+    function renderMatrixRain() {
+        ctx.fillStyle = 'rgba(2, 4, 10, 0.08)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--primary-color') || '#10b981';
+        ctx.font = fontSize + 'px monospace';
+        for (let i = 0; i < rainDrops.length; i++) {
+            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+            if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                rainDrops[i] = 0;
+            }
+            rainDrops[i]++;
+        }
+    }
+    setInterval(renderMatrixRain, 30);
+</script>
+
+</body>
+</html>

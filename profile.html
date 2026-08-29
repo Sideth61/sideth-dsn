@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <title>SUPREME GLOBAL CODE KING — Deth DSN</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="SUPREME GLOBAL CODE KING - Deth DSN">
+    <meta property="og:description" content="DSN OS Supreme Profile & Control Center">
+    <meta property="og:image" content="https://sideth61.github.io/-sideth-site-/icon1.jpg">
+    <meta property="og:url" content="https://sideth61.github.io/-sideth-site-/owner_sideth.html">
+    <meta property="og:type" content="website">
+
+    <!-- PWA / iPhone -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="icon1.jpg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DSN OS">
+    <meta name="theme-color" content="#120202">
+
+    <link rel="icon" type="image/png" href="icon1.jpg">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        :root {
+            --gold: #ffd700;
+            --cyan: #00ffff;
+            --green: #00ff66;
+            --red: #ef4444;
+            --purple: #8b5cf6;
+            --bg-glass: rgba(15, 23, 42, 0.25);
+            --border-glass: rgba(255, 215, 0, 0.35);
+            --muted: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: 'Kantumruy Pro', sans-serif;
+            color: #fff;
+        }
+
+        /* ផ្ទៃខាងក្រោយ icon1.jpg នៅស្ងៀមទ្រឹងល្អ អត់រត់តាមពេលអូស (background-attachment: fixed) 🥂✨ */
+        body {
+            background-image: url('icon1.jpg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            background-size: cover;
+            padding: 20px 10px 120px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* កាតកញ្ចក់ថ្លា មើលធ្លុះឃើញខាងក្រោយ */
+        .card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 24px;
+            border-radius: 24px;
+            border: 1px solid var(--border-glass);
+            box-shadow: 
+                0 15px 35px rgba(0, 0, 0, 0.45),
+                inset 0 0 15px rgba(255, 255, 255, 0.08);
+            text-align: center;
+            transition: .3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--gold);
+            background: rgba(15, 23, 42, 0.38);
+            box-shadow: 
+                0 20px 45px rgba(0, 0, 0, 0.6),
+                0 0 25px rgba(255, 215, 0, 0.2);
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 16px;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            object-fit: cover;
+            background: #1e293b;
+            box-shadow: 0 0 25px var(--gold);
+        }
+
+        .avatar-ring {
+            position: absolute;
+            inset: -8px;
+            border: 1px dashed var(--cyan);
+            border-radius: 50%;
+            animation: spin 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .badge {
+            position: absolute;
+            right: -5px;
+            bottom: 0;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: linear-gradient(135deg,#ef4444,var(--gold));
+            color: #000;
+            border: 2px solid #050508;
+            font-size: 10px;
+            font-weight: 900;
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        .profile-name {
+            font-size: 25px;
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(255,215,0,.6);
+        }
+
+        .profile-role {
+            margin-top: 5px;
+            margin-bottom: 15px;
+            color: var(--cyan);
+            font-size: 14px;
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba(0,255,255,.5);
+        }
+
+        .supreme-banner {
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px dashed var(--gold);
+            color: var(--gold);
+            background: rgba(0, 0, 0, 0.3);
+            font-size: 12px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            padding: 12px 5px;
+            border-radius: 14px;
+            background: rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(255,215,0,.25);
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-box h4 {
+            margin: 0;
+            color: var(--gold);
+            font-size: 18px;
+        }
+
+        .stat-box span {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 13px;
+            color: var(--gold);
+            font-size: 16px;
+            font-weight: 700;
+            text-shadow: 0 0 8px rgba(255,215,0,.4);
+            text-align: left;
+        }
+
+        .visitor-number {
+            margin: 5px 0;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 34px;
+            color: var(--gold);
+            text-shadow: 0 0 18px rgba(255,215,0,.6);
+        }
+
+        .visitor-status {
+            color: var(--cyan);
+            font-size: 12px;
+        }
+
+        .btn, .back-btn {
+            width: 100%;
+            min-height: 48px;
+            border-radius: 14px;
+            font-family: 'Kantumruy Pro',sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .25s ease;
+        }
+
+        .btn {
+            border: none;
+            background: linear-gradient(135deg,#b45309,var(--gold));
+            color: #000;
+            box-shadow: 0 5px 17px rgba(255,215,0,.25);
+        }
+
+        .btn:hover, .back-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.15);
+        }
+
+        .input-group {
+            margin-bottom: 14px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(15, 23, 42, 0.45);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            color: #fff;
+            outline: none;
+            font-family: 'Kantumruy Pro',sans-serif;
+            font-size: 13px;
+            backdrop-filter: blur(5px);
+        }
+
+        .input-field:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(255,215,0,.3);
+        }
+
+        .save-status {
+            min-height: 18px;
+            margin-top: 8px;
+            color: #34d399;
+            font-size: 12px;
+        }
+
+        .setting-btn {
+            position: fixed;
+            z-index: 1000;
+            top: 15px;
+            right: 17px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,215,0,.5);
+            background: rgba(15,23,42,0.6);
+            backdrop-filter: blur(10px);
+            color: var(--gold);
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,.5);
+        }
+
+        .setting-btn:hover {
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background: rgba(0,0,0,.75);
+            backdrop-filter: blur(12px);
+        }
+
+        .modal-card {
+            width: 100%;
+            max-width: 380px;
+            padding: 24px;
+            border-radius: 22px;
+            border: 2px solid var(--gold);
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 50px rgba(255,215,0,.4);
+        }
+
+        .modal-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--gold);
+            margin-bottom: 18px;
+        }
+
+        .close-modal {
+            border: none;
+            background: none;
+            color: #ef4444;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .setting-action-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #10b981;
+            color: white;
+            font-weight: bold;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .dsn-dock {
+            position: fixed;
+            z-index: 999;
+            left: 50%;
+            bottom: max(15px,env(safe-area-inset-bottom));
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+            padding: 9px 12px;
+            border-radius: 30px;
+            background: rgba(15,23,42,0.65);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,215,0,.4);
+            box-shadow: 0 15px 40px rgba(0,0,0,.7);
+        }
+
+        .dock-item {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 20px;
+            transition: .25s;
+        }
+
+        .dock-item:hover, .dock-active {
+            background: rgba(255,215,0,.25);
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .toast {
+            position: fixed;
+            z-index: 20000;
+            left: 50%;
+            bottom: 85px;
+            transform: translate(-50%,20px);
+            opacity: 0;
+            pointer-events: none;
+            max-width: 90%;
+            padding: 12px 18px;
+            border-radius: 14px;
+            background: rgba(15,23,42,0.9);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,215,0,.5);
+            color: #fff;
+            font-size: 13px;
+            transition: .3s;
+            text-align: center;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%,0);
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- QUICK SETTINGS -->
+<button class="setting-btn" onclick="toggleSetting(true)" title="Quick Settings">⚙️</button>
+
+<div class="modal-overlay" id="settingModal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <strong>⚙️ Supreme Settings</strong>
+            <button class="close-modal" onclick="toggleSetting(false)">✕</button>
+        </div>
+        <label style="color:#94a3b8;font-size:12px;">🎵 BGM</label>
+        <audio id="bgm" loop preload="metadata" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+        <button class="setting-action-btn" onclick="toggleBgm()" id="bgmBtn" style="margin-top:8px;">▶️ បើកតន្ត្រី / Play Music</button>
+    </div>
+</div>
+
+<div class="container" id="mainContainer">
+
+    <!-- PROFILE -->
+    <section class="card">
+        <div class="avatar-container">
+            <div class="avatar-ring"></div>
+            <img src="icon1.jpg" alt="DSN Avatar" class="avatar" id="userAvatar" onerror="this.src='icon1.jpg'">
+            <span class="badge">SUPREME</span>
+        </div>
+        <div class="profile-name" id="displayName">DSN OS (San Sideth)</div>
+        <div class="profile-role">👑 ស្ដេចកូត & មហាបុរស IT / Supreme Code King & IT Master 👑</div>
+        <div class="supreme-banner">
+            ⚡ <strong>DSN GLOBAL STATUS:</strong> ONLINE • GLASS SYSTEM READY
+        </div>
+        <div class="stats-row">
+            <div class="stat-box">
+                <h4 id="viewCount">1,042</h4>
+                <span>Total Views</span>
+            </div>
+            <div class="stat-box">
+                <h4>1st</h4>
+                <span>World Rank</span>
+            </div>
+            <div class="stat-box">
+                <h4>God-Tier</h4>
+                <span>Access</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISITOR & OWNER BADGE (Updated with "ជំនួយការរបស់ខ្ញុំគឺ AI") -->
+    <section class="card">
+        <div class="section-title" style="justify-content:center;">👁️ ចំនួនអ្នកទស្សនា / Visitors</div>
+        <div class="visitor-number" id="liveVisitorCount">0</div>
+        <div class="visitor-status">🌏 DSN OS Glassmorphic Counter 🌍</div>
+        
+        <script>
+            class DSNOwnerSystem {
+                constructor() {
+                    this.ownerName = "Mr. San Sideth ❤️️🌺";
+                    this.assistant = "ជំនួយការរបស់ខ្ញុំគឺ AI (My AI Assistant)";
+                    this.status = "VIP God-Tier Active 🚀";
+                }
+                injectOwnerBadge() {
+                    const visitorSection = document.querySelector('.card:has(#liveVisitorCount)');
+                    if (visitorSection) {
+                        const ownerDiv = document.createElement('div');
+                        ownerDiv.style.cssText = "margin-top: 14px; padding: 12px; border-radius: 14px; background: rgba(220, 38, 38, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255,215,0,0.5); font-size: 12px; color: #fff; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5);";
+                        ownerDiv.innerHTML = `👑 SYSTEM OWNER: ${this.ownerName}<br><span style="font-size:11px; color:#fbcfe8;">🤖 ${this.assistant} (${this.status})</span>`;
+                        visitorSection.appendChild(ownerDiv);
+                    }
+                }
+            }
+            new DSNOwnerSystem().injectOwnerBadge();
+        </script>
+    </section>
+
+    <!-- PROFILE EDIT -->
+    <section class="card">
+        <div class="section-title">✏️ កែប្រែអត្តសញ្ញាណ / Edit Profile</div>
+        <div class="input-group">
+            <label>ឈ្មោះបង្ហាញ / Display Name</label>
+            <input type="text" id="nameInput" class="input-field" value="Sideth (Deth DSN)" maxlength="60">
+        </div>
+        <div class="input-group">
+            <label>តំណររូបភាព Avatar / Avatar Image URL</label>
+            <input type="text" id="avatarInput" class="input-field" value="icon1.jpg">
+        </div>
+        <button class="btn" onclick="updateProfile()">💾 រក្សាទុក Profile / Save Profile</button>
+        <div id="profileSaveStatus" class="save-status"></div>
+    </section>
+
+    <!-- NOTE -->
+    <section class="card">
+        <div class="section-title">📓 បញ្ជាការ & កំណត់ត្រា / Commands & Notes</div>
+        <div class="input-group">
+            <textarea id="noteInput" class="input-field" rows="4" placeholder="សរសេរកំណត់ត្រារបស់បងទីនេះ... / Type your notes here..."></textarea>
+        </div>
+        <button class="btn" onclick="saveNote()">📌 រក្សាទុក Note / Save Note</button>
+        <div id="savedNoteDisplay" style="font-size:12px;color:var(--gold);margin-top:12px;text-align:left;white-space:pre-wrap;"></div>
+        <div id="noteSaveStatus" class="save-status"></div>
+    </section>
+
+    <a href="setting.html" class="back-btn" style="display:block;padding:14px;background:rgba(51,65,85,0.6);backdrop-filter:blur(10px);border:1px solid rgba(255,215,0,0.3);color:#fff;text-decoration:none;text-align:center;border-radius:14px;">⚙️ ទៅ Settings / Go to Settings</a>
+    <a href="index.html" class="back-btn" style="display:block;padding:14px;background:rgba(30,41,59,0.6);backdrop-filter:blur(10px);border:1px solid rgba(51,65,85,0.5);color:#fff;text-decoration:none;text-align:center;border-radius:14px;">⬅️ ត្រឡប់ទៅ Home / Back to Home</a>
+
+</div>
+
+<!-- DOCK (Connected owner_sideth.html instead of profile.html) -->
+<nav class="dsn-dock">
+    <a href="index.html" class="dock-item" title="Home">🏠</a>
+    <a href="owner_sideth.html" class="dock-item dock-active" title="Owner Profile">👤</a>
+    <a href="appstore.html" class="dock-item" title="App Store">🛒</a>
+    <a href="game.html" class="dock-item" title="Games">🎮</a>
+    <a href="setting.html" class="dock-item" title="Settings">⚙️</a>
+    <a href="library.html" class="dock-item" title="Library">💻</a>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script>
+function toggleSetting(show) {
+    document.getElementById('settingModal').style.display = show ? 'flex' : 'none';
+}
+
+document.getElementById('settingModal').addEventListener('click', event => {
+    if (event.target.id === 'settingModal') toggleSetting(false);
+});
+
+const bgm = document.getElementById('bgm');
+const bgmBtn = document.getElementById('bgmBtn');
+
+function toggleBgm() {
+    if (bgm.paused) {
+        bgm.play().then(() => {
+            bgmBtn.innerText = '⏸️ បិទតន្ត្រី / Pause Music';
+        }).catch(() => {
+            showToast('🎵 សូមចុចប៊ូតុងម្ដងទៀត ដើម្បីអនុញ្ញាតសំឡេង / Click again to enable audio');
+        });
+    } else {
+        bgm.pause();
+        bgmBtn.innerText = '▶️ បើកតន្ត្រី / Play Music';
+    }
+}
+
+function updateProfile() {
+    const name = document.getElementById('nameInput').value.trim();
+    const avatar = document.getElementById('avatarInput').value.trim();
+    if (!name) { showToast('⚠️ សូមបញ្ចូលឈ្មោះសិន / Please enter a name'); return; }
+    document.getElementById('displayName').innerText = name;
+    document.getElementById('userAvatar').src = avatar || 'icon1.jpg';
+    localStorage.setItem('dsn_username', name);
+    localStorage.setItem('dsn_avatar', avatar || 'icon1.jpg');
+    document.getElementById('profileSaveStatus').innerText = '✅ Profile saved locally';
+    showToast('💾 Profile របស់បងបានរក្សាទុកហើយ ❤️️');
+}
+
+function saveNote() {
+    const note = document.getElementById('noteInput').value;
+    localStorage.setItem('dsn_note', note);
+    renderSavedNote();
+    document.getElementById('noteSaveStatus').innerText = '✅ Note saved locally';
+    showToast('📌 Note បានរក្សាទុកហើយ ❤️️');
+}
+
+function renderSavedNote() {
+    const note = localStorage.getItem('dsn_note');
+    const display = document.getElementById('savedNoteDisplay');
+    display.innerText = note ? '📌 បញ្ជាការចុងក្រោយ / Latest Command:\n' + note : '';
+}
+
+let toastTimer;
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toast.classList.remove('show'); }, 2600);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const savedName = localStorage.getItem('dsn_username');
+    if (savedName) {
+        document.getElementById('displayName').innerText = savedName;
+        document.getElementById('nameInput').value = savedName;
+    }
+    const savedAvatar = localStorage.getItem('dsn_avatar');
+    if (savedAvatar) {
+        document.getElementById('userAvatar').src = savedAvatar;
+        document.getElementById('avatarInput').value = savedAvatar;
+    }
+    const savedNote = localStorage.getItem('dsn_note');
+    if (savedNote !== null) {
+        document.getElementById('noteInput').value = savedNote;
+        renderSavedNote();
+    }
+    let views = localStorage.getItem('dsn_page_views') || 1428;
+    document.getElementById('viewCount').innerText = Number(views).toLocaleString();
+    document.getElementById('liveVisitorCount').innerText = '🌍 ' + Number(views).toLocaleString();
+});
+</script>
+
+</body>
+</html>

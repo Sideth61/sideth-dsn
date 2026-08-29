@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSN Domain Idea Generator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+        body { font-family: 'Kantumruy Pro', sans-serif; background: #090d16; color: #fff; padding: 20px; text-align: center; margin: 0; padding-bottom: 90px; }
+        .container { max-width: 500px; margin: auto; background: #111827; padding: 25px; border-radius: 20px; border: 1px solid #38bdf8; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: left; }
+        h2 { color: #38bdf8; text-align: center; margin-top: 0; font-size: 20px; }
+        p { color: #94a3b8; font-size: 13px; text-align: center; }
+        .input-field { width: 100%; padding: 12px; margin: 15px 0; background: #1e293b; border: 1px solid #334155; color: #fff; border-radius: 10px; box-sizing: border-box; font-family: 'Kantumruy Pro', sans-serif; font-size: 15px; outline: none; }
+        .btn { width: 100%; padding: 12px; background: #38bdf8; color: #090d16; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-family: 'Kantumruy Pro', sans-serif; font-size: 15px; transition: 0.3s; }
+        .btn:hover { background: #0ea5e9; }
+        #output { margin-top: 20px; font-family: monospace; color: #34d399; background: #0f172a; padding: 15px; border-radius: 10px; border: 1px solid #334155; font-size: 14px; line-height: 1.8; text-align: left; }
+        .btn-back { display: block; text-align: center; background: #2563eb; color: #fff; padding: 12px; margin-top: 20px; text-decoration: none; border-radius: 10px; font-weight: bold; }
+        .btn-back:hover { background: #1d4ed8; }
+
+        /* Floating Dock */
+        .dsn-dock {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(56, 189, 248, 0.3); padding: 10px 20px; border-radius: 30px;
+            display: flex; gap: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); z-index: 999;
+        }
+        .dock-item { font-size: 20px; text-decoration: none; padding: 8px; border-radius: 50%; display: flex; transition: 0.3s; }
+        .dock-item:hover { background: rgba(56, 189, 248, 0.2); transform: translateY(-5px); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🌐 DSN Domain Idea Hub</h2>
+        <p>បង្កើតគំនិតឈ្មោះ Domain យ៉ាងសម្បូរបែបសម្រាប់ប្រេន ឬប្រយោជន៍ផ្សេងៗ!</p>
+        
+        <input type="text" id="keyword" class="input-field" placeholder="បញ្ចូលឈ្មោះ/ពាក្យគន្លឹះ (ឧ. sideth)">
+        <button class="btn" onclick="generateDomains()">🚀 បង្កើតឈ្មោះ Domain</button>
+        <div id="output">លទ្ធផលនឹងបង្ហាញនៅទីនេះ...</div>
+
+        <a href="index.html" class="btn-back">🏠 ត្រឡប់ទៅ DSN OS វិញ</a>
+    </div>
+
+    <!-- Floating Dock -->
+    <div class="dsn-dock">
+        <a href="index.html" class="dock-item" title="ទំព័រដើម">🏠</a>
+        <a href="domain_gen.html" class="dock-item" title="Domain Generator" style="background: rgba(56, 189, 248, 0.2); border-radius: 50%;">🌐</a>
+        <a href="facebook.html" class="dock-item" title="ហ្វេសប៊ុក">📘</a>
+        <a href="money_tool.html" class="dock-item" title="Money Tool">💰</a>
+        <a href="setting.html" class="dock-item" title="ការកំណត់">⚙️</a>
+    </div>
+
+    <script>
+        function generateDomains() {
+            let key = document.getElementById('keyword').value.trim() || 'dsn';
+            let tlds = ['.com', '.tech', '.store', '.online', '.site', '.net', '.kh'];
+            let results = [];
+            for (let tld of tlds) {
+                results.push('👉 ' + key + tld);
+                results.push('👉 ' + key + 'hub' + tld);
+                results.push('👉 get' + key + tld);
+            }
+            document.getElementById('output').innerHTML = results.join('<br>');
+        }
+    </script>
+</body>

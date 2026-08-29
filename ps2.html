@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#020617"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="DSN OS"
+    >
+
+    <title>
+        🕹️ PS2 Hub V1.0 — DSN OS
+    </title>
+
+    <!-- PWA -->
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/path-to-your-logo.png"
+    >
+
+    <!-- Google Font -->
+    <style>
+
+        @import url(
+            'https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700;800&display=swap'
+        );
+
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            padding:
+                18px
+                10px
+                115px;
+
+            font-family:
+                'Kantumruy Pro',
+                sans-serif;
+
+            color: #f8fafc;
+
+            background:
+
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(37,99,235,.18),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at 90% 25%,
+                    rgba(147,51,234,.15),
+                    transparent 35%
+                ),
+
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(14,165,233,.10),
+                    transparent 40%
+                ),
+
+                linear-gradient(
+                    145deg,
+                    #020617,
+                    #080d18 55%,
+                    #020617
+                );
+
+            background-attachment: fixed;
+
+            overflow-x: hidden;
+        }
+
+
+        /* Grid background */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            z-index: 0;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,.015) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.015) 1px,
+                    transparent 1px
+                );
+
+            background-size:
+                40px 40px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent
+                );
+        }
+
+
+        /* =====================================================
+           CONTAINER
+        ===================================================== */
+
+        .container {
+
+            width: 100%;
+
+            max-width: 650px;
+
+            margin: auto;
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 18px;
+
+            position: relative;
+
+            z-index: 1;
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            background:
+                rgba(15,23,42,.84);
+
+            backdrop-filter:
+                blur(18px);
+
+            -webkit-backdrop-filter:
+                blur(18px);
+
+            padding: 19px;
+
+            border-radius: 22px;
+
+            border:
+                1px solid
+                rgba(59,130,246,.28);
+
+            box-shadow:
+
+                0 20px 55px
+                rgba(0,0,0,.55),
+
+                inset 0 0 30px
+                rgba(59,130,246,.025);
+
+            transition:
+                .25s ease;
+        }
+
+
+        .card:hover {
+
+            border-color:
+                rgba(96,165,250,.5);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+
+            padding:
+                22px
+                18px;
+
+            text-align: center;
+
+            border-radius: 24px;
+
+            border:
+                1px solid
+                rgba(59,130,246,.4);
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(37,99,235,.20),
+                    rgba(15,23,42,.92)
+                );
+
+            box-shadow:
+
+                0 20px 60px
+                rgba(0,0,0,.6),
+
+                inset 0 0 40px
+                rgba(37,99,235,.05);
+
+            overflow: hidden;
+
+            position: relative;
+        }
+
+
+        .hero::after {
+
+            content:
+                "PS2";
+
+            position: absolute;
+
+            right: -12px;
+
+            bottom: -48px;
+
+            font-size: 135px;
+
+            line-height: 1;
+
+            font-weight: 800;
+
+            color:
+                rgba(96,165,250,.035);
+
+            pointer-events: none;
+        }
+
+
+        .hero-icon {
+
+            font-size: 52px;
+
+            animation:
+                floatPS2
+                3s
+                ease-in-out
+                infinite;
+        }
+
+
+        @keyframes floatPS2 {
+
+            0%,100% {
+                transform:
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    translateY(-8px);
+            }
+        }
+
+
+        .hero h1 {
+
+            margin:
+                7px 0 4px;
+
+            color:
+                #60a5fa;
+
+            font-size: 26px;
+
+            font-weight: 800;
+
+            letter-spacing:
+                1px;
+        }
+
+
+        .hero p {
+
+            margin: 0;
+
+            color:
+                #94a3b8;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+
+        .hero-welcome {
+
+            margin-top: 7px !important;
+
+            color:
+                #bfdbfe !important;
+
+            font-size: 12px !important;
+        }
+
+
+        /* =====================================================
+           PS2 BANNER
+        ===================================================== */
+
+        .ps2-banner {
+
+            width: 100%;
+
+            min-height: 165px;
+
+            background:
+
+                radial-gradient(
+                    circle at 50% 0%,
+                    rgba(96,165,250,.20),
+                    transparent 55%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #172554,
+                    #1e1b4b
+                );
+
+            border-radius: 17px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            border:
+                1px solid
+                rgba(96,165,250,.5);
+
+            box-shadow:
+
+                0 0 25px
+                rgba(37,99,235,.25),
+
+                inset 0 0 35px
+                rgba(37,99,235,.08);
+
+            margin-bottom: 16px;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .ps2-banner::before {
+
+            content:
+                "SONY";
+
+            position: absolute;
+
+            top: 12px;
+
+            left: 16px;
+
+            color:
+                rgba(191,219,254,.45);
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing:
+                3px;
+        }
+
+
+        .ps2-banner::after {
+
+            content:
+                "PLAYSTATION";
+
+            position: absolute;
+
+            right: 15px;
+
+            bottom: 12px;
+
+            color:
+                rgba(191,219,254,.25);
+
+            font-size: 9px;
+
+            letter-spacing:
+                2px;
+        }
+
+
+        .ps2-logo {
+
+            font-size: 42px;
+
+            margin-bottom: 4px;
+
+            filter:
+                drop-shadow(
+                    0 0 12px
+                    rgba(96,165,250,.5)
+                );
+        }
+
+
+        .ps2-banner h2 {
+
+            margin: 0;
+
+            color: #fff;
+
+            font-size: 25px;
+
+            letter-spacing:
+                3px;
+
+            font-weight: 800;
+        }
+
+
+        .ps2-banner p {
+
+            margin:
+                5px 0 0;
+
+            color:
+                #93c5fd;
+
+            font-size: 10px;
+
+            letter-spacing:
+                1.5px;
+        }
+
+
+        /* =====================================================
+           SECTION TITLE
+        ===================================================== */
+
+        .title {
+
+            color:
+                #60a5fa;
+
+            font-size: 17px;
+
+            margin-bottom: 12px;
+
+            font-weight: 700;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            border-bottom:
+                1px solid
+                rgba(59,130,246,.20);
+
+            padding-bottom: 9px;
+        }
+
+
+        .intro-text {
+
+            color:
+                #94a3b8;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+
+            margin: 0;
+        }
+
+
+        /* =====================================================
+           SEARCH
+        ===================================================== */
+
+        .search-box {
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        .search-box input {
+
+            width: 100%;
+
+            padding:
+                14px
+                18px
+                14px
+                46px;
+
+            border-radius: 15px;
+
+            border:
+                1px solid
+                rgba(59,130,246,.28);
+
+            background:
+                rgba(15,23,42,.88);
+
+            color: #fff;
+
+            outline: none;
+
+            font-family: inherit;
+
+            font-size: 13px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,.3);
+        }
+
+
+        .search-box input:focus {
+
+            border-color:
+                #60a5fa;
+
+            box-shadow:
+
+                0 0 20px
+                rgba(59,130,246,.15);
+        }
+
+
+        .search-icon {
+
+            position: absolute;
+
+            left: 16px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            font-size: 19px;
+
+            pointer-events: none;
+        }
+
+
+        /* =====================================================
+           GAME LIST
+        ===================================================== */
+
+        .game-card-item {
+
+            display: flex;
+
+            align-items: center;
+
+            background:
+                rgba(30,41,59,.72);
+
+            border:
+                1px solid
+                rgba(59,130,246,.20);
+
+            padding: 12px;
+
+            border-radius: 14px;
+
+            margin-bottom: 11px;
+
+            gap: 12px;
+
+            transition:
+                .25s ease;
+        }
+
+
+        .game-card-item:last-child {
+
+            margin-bottom: 0;
+        }
+
+
+        .game-card-item:hover {
+
+            border-color:
+                #3b82f6;
+
+            background:
+                rgba(56,189,248,.08);
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        .game-icon {
+
+            width: 50px;
+
+            height: 50px;
+
+            flex:
+                0 0 50px;
+
+            border-radius: 11px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 23px;
+
+            background:
+                rgba(0,0,0,.3);
+
+            border:
+                1px solid
+                rgba(59,130,246,.65);
+
+            box-shadow:
+                inset 0 0 15px
+                rgba(37,99,235,.08);
+        }
+
+
+        .game-info {
+
+            flex: 1;
+
+            min-width: 0;
+        }
+
+
+        .game-title {
+
+            color: #fff;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            margin:
+                0 0 3px;
+
+            line-height: 1.4;
+        }
+
+
+        .game-desc {
+
+            color:
+                #94a3b8;
+
+            font-size: 11px;
+
+            margin: 0;
+
+            line-height: 1.5;
+        }
+
+
+        .btn-play {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #1d4ed8
+                );
+
+            color: #fff;
+
+            padding:
+                8px 12px;
+
+            min-width: 54px;
+
+            text-align: center;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            transition:
+                .25s ease;
+
+            box-shadow:
+                0 5px 15px
+                rgba(37,99,235,.2);
+        }
+
+
+        .btn-play:hover {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #3b82f6,
+                    #2563eb
+                );
+
+            transform:
+                translateY(-2px);
+
+            filter:
+                brightness(1.1);
+        }
+
+
+        .btn-play:active {
+
+            transform:
+                scale(.96);
+        }
+
+
+        /* =====================================================
+           EXTRA BUTTONS
+        ===================================================== */
+
+        .hub-button {
+
+            width: 100%;
+
+            min-height: 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            border-radius: 13px;
+
+            text-decoration: none;
+
+            color: #fff;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            margin-top: 9px;
+
+            transition:
+                .25s ease;
+        }
+
+
+        .hub-button:hover {
+
+            transform:
+                translateY(-2px);
+
+            filter:
+                brightness(1.1);
+        }
+
+
+        .youtube-button {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ef4444,
+                    #b91c1c
+                );
+
+            box-shadow:
+                0 8px 20px
+                rgba(239,68,68,.2);
+        }
+
+
+        .game-button {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #1e40af
+                );
+        }
+
+
+        .library-button {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #10b981,
+                    #047857
+                );
+        }
+
+
+        /* =====================================================
+           SEARCH EMPTY
+        ===================================================== */
+
+        .no-results {
+
+            display: none;
+
+            text-align: center;
+
+            padding: 20px 10px;
+
+            color:
+                #64748b;
+
+            font-size: 13px;
+        }
+
+
+        .no-results.show {
+
+            display: block;
+        }
+
+
+        .hidden {
+
+            display: none !important;
+        }
+
+
+        /* =====================================================
+           INFO PANEL
+        ===================================================== */
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 8px;
+        }
+
+
+        .info-item {
+
+            padding: 11px 8px;
+
+            text-align: center;
+
+            border-radius: 11px;
+
+            background:
+                rgba(15,23,42,.72);
+
+            border:
+                1px solid
+                rgba(59,130,246,.16);
+        }
+
+
+        .info-number {
+
+            display: block;
+
+            color:
+                #60a5fa;
+
+            font-size: 18px;
+
+            font-weight: 800;
+        }
+
+
+        .info-label {
+
+            display: block;
+
+            margin-top: 3px;
+
+            color:
+                #64748b;
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        .back-button {
+
+            width: 100%;
+
+            min-height: 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-decoration: none;
+
+            border-radius: 14px;
+
+            background:
+                #374151;
+
+            color: #fff;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            transition:
+                .25s ease;
+        }
+
+
+        .back-button:hover {
+
+            background:
+                #4b5563;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =====================================================
+           FLOATING DOCK
+        ===================================================== */
+
+        .dsn-dock {
+
+            position: fixed;
+
+            z-index: 999;
+
+            left: 50%;
+
+            bottom:
+                max(
+                    14px,
+                    env(safe-area-inset-bottom)
+                );
+
+            transform:
+                translateX(-50%);
+
+            display: flex;
+
+            gap: 5px;
+
+            padding:
+                8px 10px;
+
+            border-radius: 27px;
+
+            background:
+                rgba(15,23,42,.90);
+
+            backdrop-filter:
+                blur(25px);
+
+            -webkit-backdrop-filter:
+                blur(25px);
+
+            border:
+                1px solid
+                rgba(56,189,248,.35);
+
+            box-shadow:
+
+                0 15px 40px
+                rgba(0,0,0,.7),
+
+                0 0 20px
+                rgba(56,189,248,.10);
+        }
+
+
+        .dock-item {
+
+            width: 45px;
+
+            height: 45px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-decoration: none;
+
+            border-radius: 50%;
+
+            font-size: 21px;
+
+            transition:
+                .25s ease;
+        }
+
+
+        .dock-item:hover {
+
+            background:
+                rgba(56,189,248,.18);
+
+            transform:
+                translateY(-5px)
+                scale(1.08);
+        }
+
+
+        .dock-active {
+
+            background:
+                rgba(37,99,235,.20);
+
+            box-shadow:
+                inset 0 0 12px
+                rgba(59,130,246,.12);
+        }
+
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
+
+        .toast {
+
+            position: fixed;
+
+            z-index: 2000;
+
+            left: 50%;
+
+            bottom: 88px;
+
+            transform:
+                translate(-50%,20px);
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            background:
+                rgba(15,23,42,.96);
+
+            border:
+                1px solid
+                rgba(56,189,248,.35);
+
+            padding:
+                11px 17px;
+
+            border-radius: 13px;
+
+            font-size: 12px;
+
+            transition:
+                .3s ease;
+
+            white-space: nowrap;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,.45);
+        }
+
+
+        .toast.show {
+
+            opacity: 1;
+
+            transform:
+                translate(-50%,0);
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width: 430px) {
+
+            body {
+
+                padding-left: 8px;
+
+                padding-right: 8px;
+
+                padding-top: 12px;
+            }
+
+
+            .card {
+
+                padding: 16px;
+            }
+
+
+            .hero {
+
+                padding:
+                    20px 15px;
+            }
+
+
+            .hero h1 {
+
+                font-size: 22px;
+            }
+
+
+            .ps2-banner {
+
+                min-height: 150px;
+            }
+
+
+            .ps2-banner h2 {
+
+                font-size: 22px;
+            }
+
+
+            .game-card-item {
+
+                gap: 9px;
+
+                padding: 10px;
+            }
+
+
+            .game-icon {
+
+                width: 45px;
+
+                height: 45px;
+
+                flex-basis: 45px;
+
+                font-size: 20px;
+            }
+
+
+            .game-title {
+
+                font-size: 13px;
+            }
+
+
+            .game-desc {
+
+                font-size: 10px;
+            }
+
+
+            .btn-play {
+
+                padding:
+                    7px 9px;
+
+                min-width: 48px;
+
+                font-size: 10px;
+            }
+
+
+            .dock-item {
+
+                width: 40px;
+
+                height: 40px;
+
+                font-size: 19px;
+            }
+
+
+            .dsn-dock {
+
+                gap: 3px;
+
+                padding:
+                    7px 8px;
+            }
+
+
+            .info-grid {
+
+                gap: 6px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     MAIN CONTAINER
+===================================================== -->
+
+<div class="container">
+
+
+    <!-- =================================================
+         HERO
+    ================================================= -->
+
+    <section class="hero">
+
+        <div class="hero-icon">
+            🕹️
+        </div>
+
+        <h1>
+            DSN PS2 Hub
+        </h1>
+
+        <p>
+            PlayStation 2 Classic Gaming Vault
+            • DSN OS
+        </p>
+
+        <p class="hero-welcome">
+            Welcome back, Sideth❤️️🌺 😘🎮
+        </p>
+
+    </section>
+
+
+    <!-- =================================================
+         INTRO
+    ================================================= -->
+
+    <section class="card">
+
+        <div class="ps2-banner">
+
+            <div class="ps2-logo">
+                🎮
+            </div>
+
+            <h2>
+                PlayStation 2
+            </h2>
+
+            <p>
+                CLASSIC GAMING VAULT • DSN OS HUB
+            </p>
+
+        </div>
+
+
+        <div class="title">
+
+            💿 ពិភពហ្គេម PS2 ក្នុងតำนៃ
+
+        </div>
+
+
+        <p class="intro-text">
+
+            ស្វាគមន៍មកកាន់បន្ទប់ប្រមូលផ្ដុំ
+            ហ្គេម PlayStation 2 ដែលជាមាសប្រាក់
+            នៃយុគសម័យឌីជីថលទសវត្សរ៍ទី 2000! 🎮
+
+            <br><br>
+
+            នៅទីនេះបងអាចស្វែងរកហ្គេម PS2
+            ល្បីៗ និងចូលទៅកាន់ Game Content
+            ដែលមានក្នុង DSN OS។
+
+        </p>
+
+    </section>
+
+
+    <!-- =================================================
+         SEARCH
+    ================================================= -->
+
+    <div class="search-box">
+
+        <span class="search-icon">
+            🔎
+        </span>
+
+        <input
+            id="ps2Search"
+            type="search"
+            placeholder="ស្វែងរកហ្គេម PS2..."
+            autocomplete="off"
+        >
+
+    </div>
+
+
+    <!-- =================================================
+         GAME STATISTICS
+    ================================================= -->
+
+    <section class="card">
+
+        <div class="title">
+            📊 DSN PS2 Collection
+        </div>
+
+
+        <div class="info-grid">
+
+            <div class="info-item">
+
+                <span
+                    class="info-number"
+                    id="gameCount"
+                >
+                    05
+                </span>
+
+                <span class="info-label">
+                    Games
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-number">
+                    PS2
+                </span>
+
+                <span class="info-label">
+                    Platform
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-number">
+                    🎮
+                </span>
+
+                <span class="info-label">
+                    Classic
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         GAME LIST
+    ================================================= -->
+
+    <section class="card">
+
+        <div class="title">
+
+            🎮 បញ្ជីរាយនាមហ្គេម PS2 ល្បីៗ
+
+        </div>
+
+
+        <div id="gameList">
+
+
+            <!-- GTA -->
+
+            <div
+                class="game-card-item searchable-game"
+                data-search="
+                    gta grand theft auto
+                    san andreas
+                    gta sa
+                    action
+                    open world
+                "
+            >
+
+                <div class="game-icon">
+                    🚲
+                </div>
+
+
+                <div class="game-info">
+
+                    <div class="game-title">
+                        GTA: San Andreas
+                    </div>
+
+                    <div class="game-desc">
+                        ហ្គេមបើកបរ និងបេសកកម្ម
+                        ដ៏ល្បីល្បាញបំផុត
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="https://www.youtube.com/@sideth99"
+                    target="_blank"
+                    rel="noopener"
+                    class="btn-play"
+                >
+                    ▶️ មើល
+                </a>
+
+            </div>
+
+
+            <!-- GOD OF WAR -->
+
+            <div
+                class="game-card-item searchable-game"
+                data-search="
+                    god of war
+                    god of war ii
+                    kratos
+                    action
+                    greek
+                "
+            >
+
+                <div class="game-icon">
+                    ⚔️
+                </div>
+
+
+                <div class="game-info">
+
+                    <div class="game-title">
+                        God of War II
+                    </div>
+
+                    <div class="game-desc">
+                        សង្រ្គាមព្រះក្រិក
+                        ដ៏រំជើបរំជួលចិត្ត
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="https://www.youtube.com/@sideth99"
+                    target="_blank"
+                    rel="noopener"
+                    class="btn-play"
+                >
+                    ▶️ មើល
+                </a>
+
+            </div>
+
+
+            <!-- PES -->
+
+            <div
+                class="game-card-item searchable-game"
+                data-search="
+                    winning eleven
+                    pes
+                    football
+                    soccer
+                    ball
+                    adriano
+                "
+            >
+
+                <div class="game-icon">
+                    ⚽
+                </div>
+
+
+                <div class="game-info">
+
+                    <div class="game-title">
+                        Winning Eleven / PES
+                    </div>
+
+                    <div class="game-desc">
+                        បាល់ទាត់ជំនាន់កាដូ /
+                        អាដ្រេអាណូ
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="https://www.youtube.com/@sideth99"
+                    target="_blank"
+                    rel="noopener"
+                    class="btn-play"
+                >
+                    ▶️ មើល
+                </a>
+
+            </div>
+
+
+            <!-- NFS -->
+
+            <div
+                class="game-card-item searchable-game"
+                data-search="
+                    need for speed
+                    most wanted
+                    nfs
+                    racing
+                    car
+                "
+            >
+
+                <div class="game-icon">
+                    🏎️
+                </div>
+
+
+                <div class="game-info">
+
+                    <div class="game-title">
+                        Need for Speed: MW
+                    </div>
+
+                    <div class="game-desc">
+                        ប្រណាំងឡានគេចប៉ូលិស
+                        កម្រិតកំពូល
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="https://www.youtube.com/@sideth99"
+                    target="_blank"
+                    rel="noopener"
+                    class="btn-play"
+                >
+                    ▶️ មើល
+                </a>
+
+            </div>
+
+
+            <!-- DBZ -->
+
+            <div
+                class="game-card-item searchable-game"
+                data-search="
+                    dbz
+                    dragon ball z
+                    budokai
+                    tenkaichi
+                    anime
+                    fighting
+                "
+            >
+
+                <div class="game-icon">
+                    🐉
+                </div>
+
+
+                <div class="game-info">
+
+                    <div class="game-title">
+                        DBZ: Budokai Tenkaichi 3
+                    </div>
+
+                    <div class="game-desc">
+                        ប្រយុទ្ធស៊ុយភើហ្សៃយ៉ែន
+                        ដ៏ជក់ចិត្ត
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="https://www.youtube.com/@sideth99"
+                    target="_blank"
+                    rel="noopener"
+                    class="btn-play"
+                >
+                    ▶️ មើល
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <div
+            id="noResults"
+            class="no-results"
+        >
+
+            😳 រកមិនឃើញហ្គេមដែលបងស្វែងរកទេ។
+
+            <br>
+
+            សាកល្បងវាយឈ្មោះផ្សេងទៀត 😝🎮
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         DSN GAME HUB
+    ================================================= -->
+
+    <section class="card">
+
+        <div class="title">
+
+            🎮 DSN Game Center
+
+        </div>
+
+
+        <p class="intro-text">
+
+            ចូលទៅកាន់ Game Hub របស់ DSN
+            ដើម្បីស្វែងរក Game Files និង
+            Game Content ផ្សេងៗ។
+
+        </p>
+
+
+        <a
+            href="game.html"
+            class="hub-button game-button"
+        >
+
+            🎮 បើក DSN Game Hub
+
+        </a>
+
+
+        <a
+            href="library.html"
+            class="hub-button library-button"
+        >
+
+            📚 ត្រឡប់ទៅ DSN Library
+
+        </a>
+
+    </section>
+
+
+    <!-- =================================================
+         YOUTUBE
+    ================================================= -->
+
+    <section class="card">
+
+        <div class="title">
+
+            📺 DSN Gaming Videos
+
+        </div>
+
+
+        <p class="intro-text">
+
+            មើលវីដេអូ Gaming និង Content
+            របស់ Sideth❤️️ នៅលើ YouTube។
+
+        </p>
+
+
+        <a
+            href="https://www.youtube.com/@sideth99"
+            target="_blank"
+            rel="noopener"
+            class="hub-button youtube-button"
+        >
+
+            ▶️ បើក YouTube @sideth99
+
+        </a>
+
+    </section>
+
+
+    <!-- =================================================
+         HOME
+    ================================================= -->
+
+    <section class="card">
+
+        <a
+            href="index.html"
+            class="back-button"
+        >
+
+            ⬅️ ត្រឡប់ទៅ DSN Home
+
+        </a>
+
+    </section>
+
+
+</div>
+
+
+<!-- =====================================================
+     FLOATING DOCK
+===================================================== -->
+
+<nav class="dsn-dock">
+
+
+    <a
+        href="index.html"
+        class="dock-item"
+        title="ទំព័រដើម"
+    >
+        🏠
+    </a>
+
+
+    <a
+        href="library.html"
+        class="dock-item"
+        title="Library"
+    >
+        📚
+    </a>
+
+
+    <a
+        href="explorer.html"
+        class="dock-item"
+        title="File Explorer"
+    >
+        📁
+    </a>
+
+
+    <a
+        href="game.html"
+        class="dock-item dock-active"
+        title="ហ្គេម"
+    >
+        🎮
+    </a>
+
+
+    <a
+        href="setting.html"
+        class="dock-item"
+        title="ការកំណត់"
+    >
+        ⚙️
+    </a>
+
+
+</nav>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+    id="toast"
+    class="toast"
+>
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   DSN PS2 HUB V1.0
+===================================================== */
+
+console.log(
+    "🎮 DSN PS2 Hub Version 1.0 loaded."
+);
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+const ps2Search =
+    document.getElementById(
+        "ps2Search"
+    );
+
+
+const gameCards =
+    document.querySelectorAll(
+        ".searchable-game"
+    );
+
+
+const noResults =
+    document.getElementById(
+        "noResults"
+    );
+
+
+ps2Search.addEventListener(
+    "input",
+    function() {
+
+        const query =
+            this.value
+                .trim()
+                .toLowerCase();
+
+
+        let visibleGames = 0;
+
+
+        gameCards.forEach(
+            card => {
+
+                const searchableText =
+                    (
+                        card.innerText +
+                        " " +
+                        (
+                            card.dataset.search ||
+                            ""
+                        )
+                    )
+                    .toLowerCase();
+
+
+                const matched =
+                    searchableText.includes(
+                        query
+                    );
+
+
+                card.classList.toggle(
+                    "hidden",
+                    !matched
+                );
+
+
+                if (matched) {
+
+                    visibleGames++;
+
+                }
+
+            }
+        );
+
+
+        noResults.classList.toggle(
+            "show",
+            visibleGames === 0
+        );
+
+    }
+);
+
+
+/* =====================================================
+   GAME COUNT
+===================================================== */
+
+const gameCount =
+    document.getElementById(
+        "gameCount"
+    );
+
+
+gameCount.textContent =
+    String(
+        gameCards.length
+    ).padStart(
+        2,
+        "0"
+    );
+
+
+/* =====================================================
+   DOCK ACTIVE EFFECT
+===================================================== */
+
+document
+    .querySelectorAll(
+        ".dock-item"
+    )
+    .forEach(
+        item => {
+
+            item.addEventListener(
+                "click",
+                function() {
+
+                    document
+                        .querySelectorAll(
+                            ".dock-item"
+                        )
+                        .forEach(
+                            dock => {
+
+                                dock.classList.remove(
+                                    "dock-active"
+                                );
+
+                            }
+                        );
+
+
+                    this.classList.add(
+                        "dock-active"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer;
+
+
+function showToast(
+    message
+) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2500
+        );
+
+}
+
+
+/* =====================================================
+   PWA INSTALL SUPPORT
+===================================================== */
+
+let deferredPrompt = null;
+
+
+window.addEventListener(
+    "beforeinstallprompt",
+    event => {
+
+        event.preventDefault();
+
+        deferredPrompt =
+            event;
+
+        console.log(
+            "📱 DSN OS PWA installation available."
+        );
+
+    }
+);
+
+
+/* =====================================================
+   PAGE READY
+===================================================== */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        console.log(
+            "🚀 DSN PS2 Hub V1.0 READY."
+        );
+
+    }
+);
+
+
+</script>
+
+
+</body>
+</html>

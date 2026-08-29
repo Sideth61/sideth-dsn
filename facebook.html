@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Center - San Sideth (DSN)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+        
+        body { 
+            font-family: 'Kantumruy Pro', sans-serif; 
+            background: linear-gradient(135deg, #12001c, #240046, #3c096c);
+            background-attachment: fixed;
+            background-size: cover;
+            color: #ffb7ff; 
+            text-align: center; 
+            padding: 80px 10px 100px 10px; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .logo-container {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #c77dff, #7b2cbf);
+            padding: 3px;
+            border-radius: 50%;
+            box-shadow: 0 4px 20px rgba(199, 125, 255, 0.5);
+        }
+        .logo-container img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: block;
+            border: 2px solid #12001c;
+        }
+
+        #effectCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
+
+        .container { width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 20px; z-index: 10; }
+        
+        .card { 
+            background: rgba(45, 10, 78, 0.45); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            padding: 25px 20px; 
+            border-radius: 24px; 
+            border: 1px solid rgba(199, 125, 255, 0.3); 
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2); 
+            text-align: left; 
+        }
+        .header-card { text-align: center; }
+        
+        h1 { color: #e0aaff; font-size: 24px; margin: 10px 0 5px 0; font-weight: 700; text-shadow: 0 0 10px rgba(224, 170, 255, 0.5); }
+        .title-sub { color: #d8b4fe; font-size: 14px; margin-bottom: 15px; }
+        
+        #follower-count {
+            background: rgba(199, 125, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 10px 0;
+            border: 1px solid rgba(199, 125, 255, 0.3);
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .section-title { color: #e0aaff; font-size: 16px; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(199, 125, 255, 0.3); padding-bottom: 8px; }
+        
+        .btn { 
+            display: flex; align-items: center; justify-content: center; gap: 10px; 
+            background: linear-gradient(135deg, #7b2cbf, #9d4edd); 
+            color: #fff; padding: 14px; margin: 10px 0; text-decoration: none; 
+            border-radius: 14px; font-weight: 600; 
+            transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(123, 44, 191, 0.4);
+            border: 1px solid rgba(224, 170, 255, 0.3);
+        }
+        .btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .btn-facebook { background: linear-gradient(135deg, #1877f2, #3b82f6); }
+        .btn-messenger { background: linear-gradient(135deg, #0084ff, #06b6d4); }
+        
+        .app-card-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(30, 10, 50, 0.6);
+            border: 1px solid rgba(199, 125, 255, 0.2);
+            padding: 12px 15px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            gap: 12px;
+        }
+        .app-icon { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .app-title { color: #fff; font-size: 15px; font-weight: 600; }
+        .app-desc { color: #d8b4fe; font-size: 12px; }
+        .btn-download {
+            background: linear-gradient(135deg, #7b2cbf, #c77dff);
+            color: white; padding: 8px 14px; border-radius: 10px;
+            text-decoration: none; font-size: 13px; font-weight: 600;
+            box-shadow: 0 4px 10px rgba(123, 44, 191, 0.3);
+        }
+
+        .dsn-dock {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(45, 10, 78, 0.7); backdrop-filter: blur(20px);
+            border: 1px solid rgba(199, 125, 255, 0.4); padding: 10px 20px;
+            border-radius: 30px; display: flex; gap: 15px; z-index: 999;
+        }
+        .dock-item { font-size: 20px; text-decoration: none; padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .dock-item:hover { background: rgba(199, 125, 255, 0.3); transform: translateY(-5px); }
+    </style>
+</head>
+<body>
+
+    <canvas id="effectCanvas"></canvas>
+
+    <div class="logo-container">
+        <img src="IMG_3350.jpeg" alt="Logo">
+    </div>
+
+    <div class="container">
+        <div class="card header-card">
+            <div style="font-size: 45px; margin-bottom: 10px;">💜📘</div>
+            <h1>DSN Facebook Purple Hub</h1>
+            
+            <div id="follower-count">កំពុងផ្ទុកចំនួនអ្នកតាមដាន...</div>
+            
+            <div class="title-sub">ប្រមូលផ្តុំរាល់តំណភ្ជាប់ និងសេវាកម្ម Facebook ស្វាយរលោង</div>
+            <a href="https://www.facebook.com/deth61" target="_blank" class="btn btn-facebook">📘 ចូលទៅកាន់ Facebook ផ្ទាល់ខ្លួន</a>
+            <a href="https://m.me/deth61" target="_blank" class="btn btn-messenger">💬 ឆាតសន្ទនាផ្ទាល់ (Messenger)</a>
+        </div>
+
+        <div class="card">
+            <div class="section-title">📱 កម្មវិធី និងទំព័រពាក់ព័ន្ធ</div>
+            <div class="app-card-item">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <img src="app3.png" alt="Facebook App" class="app-icon">
+                    <div>
+                        <div class="app-title">Facebook DSN PWA</div>
+                        <div class="app-desc">ប្រើប្រាស់បណ្តាញសង្គមហ្វេសប៊ុក</div>
+                    </div>
+                </div>
+                <a href="https://m.facebook.com/?ref=homescreenpwa" target="_blank" class="btn-download">🌐 បើកមើល</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">🛒 សេវាកម្ម និងទំនាក់ទំនង</div>
+            <a href="https://m.me/deth61" target="_blank" class="btn" style="background: linear-gradient(135deg, #10b981, #059669);">🛒 ទិញគណនីផ្សេងៗຜស្រាយ Messenger</a>
+        </div>
+    </div>
+
+    <div class="dsn-dock">
+        <a href="index.html" class="dock-item" title="ទំព័រដើម">🏠</a>
+        <a href="profile.html" class="dock-item" title="ប្រវត្តិរូប">👤</a>
+        <a href="facebook.html" class="dock-item" title="ហ្វេសប៊ុក">📘</a>
+        <a href="game.html" class="dock-item" title="ហ្គេម">🎮</a>
+        <a href="setting.html" class="dock-item" title="ការកំណត់">⚙️</a>
+    </div>
+
+    <script>
+        const TOKEN = "1469596064992874|VFDdLemdDcJQWpHpBepYuvHMVQc";
+        const PAGE_ID = "1469596064992874"; 
+        fetch(`https://graph.facebook.com/v21.0/${PAGE_ID}?fields=followers_count&access_token=${TOKEN}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.followers_count) {
+                    document.getElementById('follower-count').innerText = "👥 " + data.followers_count.toLocaleString() + " អ្នកតាមដាន";
+                } else {
+                    document.getElementById('follower-count').innerText = "👥 មិនអាចទាញទិន្នន័យបានទេ";
+                }
+            });
+
+        const canvas = document.getElementById('effectCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 40; i++) {
+                particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, speed: Math.random() * 0.4 + 0.1, radius: Math.random() * 2 + 0.5, opacity: Math.random() * 0.7 + 0.2 });
+            }
+        }
+        initParticles();
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(224, 170, 255, ${p.opacity})`;
+                ctx.fill();
+                p.y += p.speed;
+                if (p.y > canvas.height) { p.y = 0; p.x = Math.random() * canvas.width; }
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+    </script>
+</body>
+</html>

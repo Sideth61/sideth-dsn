@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>📚 DSN Library Hub — V5</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#020617">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DSN OS">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#020617;--card:rgba(15,23,42,.86);--text:#f8fafc;--muted:#94a3b8;--cyan:#38bdf8;--green:#10b981;--blue:#2563eb;--pink:#ec4899;--orange:#f59e0b;--red:#ef4444;--border:rgba(56,189,248,.25)}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;padding:18px 10px 120px;font-family:'Kantumruy Pro',sans-serif;color:var(--text);background:radial-gradient(circle at 10% 10%,rgba(56,189,248,.16),transparent 35%),radial-gradient(circle at 90% 30%,rgba(236,72,153,.12),transparent 35%),radial-gradient(circle at 50% 100%,rgba(16,185,129,.1),transparent 40%),linear-gradient(145deg,#020617,#090d16 55%,#020617);background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:40px 40px;mask-image:linear-gradient(to bottom,black,transparent)}
+.container{width:100%;max-width:650px;margin:auto;display:flex;flex-direction:column;gap:18px;position:relative;z-index:1}
+.hero,.card{background:var(--card);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--border);box-shadow:0 18px 45px rgba(0,0,0,.48)}
+.hero{padding:24px 20px;border-radius:25px;text-align:center;overflow:hidden}
+.hero-icon{font-size:48px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.hero h1{margin:7px 0 4px;font-size:25px;color:var(--cyan)}
+p{color:var(--muted);font-size:13px;line-height:1.65}
+.search-box{position:relative}.search-box input{width:100%;padding:15px 18px 15px 48px;border-radius:16px;border:1px solid rgba(56,189,248,.25);background:rgba(15,23,42,.86);color:#fff;outline:none;font-family:inherit;font-size:14px}.search-icon{position:absolute;left:17px;top:50%;transform:translateY(-50%);font-size:20px}
+.card{padding:19px;border-radius:21px}.section-title{color:var(--cyan);font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(56,189,248,.18);padding-bottom:9px;margin-bottom:12px}
+.btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:48px;padding:12px 14px;margin-top:9px;border:0;border-radius:14px;color:#fff;text-decoration:none;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.25s}.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}.btn:active{transform:scale(.98)}
+.btn-youtube{background:#f00}.btn-tool{background:linear-gradient(135deg,#38bdf8,#2563eb)}.btn-money{background:linear-gradient(135deg,#10b981,#047857)}.btn-gemini{background:linear-gradient(135deg,#2563eb,#9333ea)}.btn-social{background:linear-gradient(135deg,#06b6d4,#3b82f6)}.btn-book{background:linear-gradient(135deg,#10b981,#059669)}.btn-back{background:#374151}
+.video-container{position:relative;width:100%;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:14px;background:#000;margin:15px 0}.video-container iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+audio{width:100%;margin-bottom:9px}.player-label{color:var(--cyan);font-size:14px;font-weight:700;margin:17px 0 8px}.song-item{padding:12px;margin:7px 0;border-radius:11px;background:rgba(30,41,59,.7);color:#cbd5e1;border:1px solid transparent;cursor:pointer;font-size:13px}.song-item.active{color:var(--cyan);background:rgba(56,189,248,.15);border-color:rgba(56,189,248,.4);font-weight:700}
+textarea{width:100%;min-height:100px;padding:13px;border-radius:12px;background:#0f172a;border:1px solid #334155;color:#fff;resize:vertical;outline:none;font-family:inherit;font-size:14px}.note-status{text-align:center;font-size:12px;color:#94a3b8;margin-top:8px;min-height:18px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.dsn-dock{position:fixed;z-index:999;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:5px;padding:8px 10px;border-radius:25px;background:rgba(15,23,42,.88);backdrop-filter:blur(25px);border:1px solid rgba(56,189,248,.35);box-shadow:0 15px 40px rgba(0,0,0,.7)}
+.dock-item{width:45px;height:45px;display:flex;align-items:center;justify-content:center;text-decoration:none;border-radius:50%;font-size:21px}.dock-item:hover{background:rgba(56,189,248,.2);transform:translateY(-5px)}.dock-active{background:rgba(56,189,248,.16)}
+.toast{position:fixed;z-index:2000;left:50%;bottom:85px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:rgba(15,23,42,.95);border:1px solid rgba(56,189,248,.35);padding:12px 18px;border-radius:13px;font-size:13px;transition:.3s;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
+.hidden{display:none!important}
+@media(max-width:430px){body{padding-left:8px;padding-right:8px}.card{padding:16px}.hero h1{font-size:22px}.two-col{grid-template-columns:1fr}.dock-item{width:40px;height:40px;font-size:19px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="hero">
+<div class="hero-icon">📚</div>
+<h1>DSN Library Hub V5</h1>
+<p>All-in-One Library • Tools • Music • Utilities</p>
+<p>Welcome back, Sideth❤️️🌺 😘</p>
+</header>
+
+<div class="search-box"><span class="search-icon">🔎</span><input id="hubSearch" type="search" placeholder="ស្វែងរក Tools, Music, Notes..." autocomplete="off"></div>
+
+<section class="card searchable" data-search="music youtube mp3 ចម្រៀង">
+<div class="section-title">🎵 Deth DSN — Music & YouTube</div>
+<p>ទស្សនាវីដេអូ និងស្តាប់បទចម្រៀងក្នុង DSN Library Hub។</p>
+<div class="video-container"><iframe src="https://www.youtube.com/embed/Ra8mVoAwNfU?modestbranding=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+<a href="https://www.youtube.com/@sideth99" target="_blank" rel="noopener" class="btn btn-youtube">▶️ YouTube @sideth99</a>
+<div class="player-label">🎧 DSN MP3 Player</div><audio id="audioPlayer" controls preload="metadata"></audio><div id="playlist"></div>
+</section>
+
+<section class="card searchable" data-search="tools utilities password domain generator">
+<div class="section-title">🛠️ DSN Utilities & Tools Hub</div><p>ប្រមូលផ្តុំឧបករណ៍ជំនួយ និង Project Tools។</p>
+<a href="password_tool.html" class="btn btn-tool">🛡️ Password Security Analyzer</a>
+<a href="domain_gen.html" class="btn btn-tool">🌐 Domain Idea Generator</a>
+</section>
+
+<section class="card searchable" data-search="note quick note កត់ត្រា">
+<div class="section-title">📝 DSN Quick Note</div><p>Note ត្រូវបានរក្សាទុកក្នុង localStorage។</p>
+<textarea id="quickNoteInput" placeholder="សរសេរការងារ គំនិត ឬ Link ទីនេះ..."></textarea>
+<button id="saveNoteBtn" class="btn" style="background:#f59e0b;color:#000">💾 រក្សាទុកកត់ត្រា</button>
+<div id="noteStatus" class="note-status"></div>
+</section>
+
+<section class="card searchable" data-search="money shop digital sale account income">
+<div class="section-title" style="color:#10b981">💰 DSN VIP Money-Making & Digital Shop</div><p>ប្រព័ន្ធសម្រាប់ Digital Shop / Money Tools។</p>
+<a href="money_tool.html" class="btn btn-money">🛒 Money Tool & Shop</a>
+</section>
+
+<section class="card searchable" data-search="facebook social growth tracker">
+<div class="section-title" style="color:#ec4899">🎯 Facebook 100–200 Goal Tracker</div><p style="color:#f9a8d4">ជំហានដំបូងដើម្បីភាពជោគជ័យ៖ សំខាន់ជាងចំនួន គឺការគាំទ្រពិតប្រាកដ។</p>
+<div class="two-col"><a href="facebook.html" target="_blank" class="btn" style="background:#ec4899">🚀 Facebook Hub</a><a href="social_tools.html" class="btn" style="background:#4b5563">⚙️ Social Tools</a></div>
+</section>
+
+<section class="card searchable" data-search="gemini ai assistant coding">
+<div class="section-title">✨ DSN Gemini AI Assistant Hub</div><p>AI Assistant សម្រាប់ Coding និង Project។</p><a href="gemini_tool.html" class="btn btn-gemini">👽 បើក Gemini AI Tool</a>
+</section>
+
+<section class="card searchable" data-search="social growth booster tools">
+<div class="section-title">💻 DSN Social Growth & Booster Tools</div><p>ផ្ទាំងគ្រប់គ្រង Social Media Tools របស់ B Sideth។</p><a href="social_tools.html" class="btn btn-social">💻 Social Tools Center</a>
+</section>
+
+<section class="card searchable" data-search="book dsn library it technology">
+<div class="section-title">📗 Book DSN</div><p>ឯកសារ មេរៀន IT និងបច្ចេកវិទ្យា។</p><a href="bookdsn.html" class="btn btn-book">📖 ចូលអានសៀវភៅ</a>
+</section>
+
+<section class="card"><a href="game_library.html" class="btn" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">🎮 ទៅកាន់ទំព័រ DSN Game Library Hub</a></section>
+<section class="card"><a href="index.html" class="btn btn-back">⬅️ ត្រឡប់ទៅ Home</a></section>
+</div>
+
+<nav class="dsn-dock">
+<a href="index.html" class="dock-item" title="Home">🏠</a>
+<a href="game.html" class="dock-item" title="Games">🎮</a>
+<a href="money_tool.html" class="dock-item" title="Money">💰</a>
+<a href="library.html" class="dock-item dock-active" title="Library">📚</a>
+<a href="setting.html" class="dock-item" title="Settings">⚙️</a>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+
+function showToast(msg){
+  const t=$('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(window.__toast);
+  window.__toast=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* MUSIC */
+const songs=[
+  {title:'🎖️ ទាហ៊ានមុំបី ភ្នំ750',src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
+  {title:'💔 Blaming All Men',src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'}
+];
+
+const audio=$('audioPlayer');
+const playlist=$('playlist');
+let currentSong=Math.max(0,Math.min(songs.length-1,Number(localStorage.getItem('dsn_last_song')||0)));
+
+function renderPlaylist(){
+  playlist.innerHTML='';
+  songs.forEach((s,i)=>{
+    const d=document.createElement('div');
+    d.className='song-item';
+    d.textContent=s.title;
+    d.onclick=()=>playSong(i);
+    playlist.appendChild(d);
+  });
+}
+
+function playSong(i,auto=true){
+  if(!songs[i])return;
+  currentSong=i;
+  audio.src=songs[i].src;
+  localStorage.setItem('dsn_last_song',i);
+  document.querySelectorAll('.song-item').forEach((e,n)=>e.classList.toggle('active',n===i));
+  if(auto)audio.play().catch(()=>{});
+}
+
+renderPlaylist();
+playSong(currentSong,false);
+
+const savedAudioTime=Number(localStorage.getItem('dsn_audio_time')||0);
+audio.addEventListener('timeupdate',()=>{
+  if(Number.isFinite(audio.currentTime))localStorage.setItem('dsn_audio_time',audio.currentTime);
+});
+audio.addEventListener('loadedmetadata',()=>{
+  if(savedAudioTime>0&&savedAudioTime<audio.duration)audio.currentTime=savedAudioTime;
+});
+audio.addEventListener('ended',()=>playSong((currentSong+1)%songs.length,true));
+
+/* NOTE */
+const note=$('quickNoteInput');
+const NOTE_KEY='dsn_quick_note';
+note.value=localStorage.getItem(NOTE_KEY)||'';
+
+$('saveNoteBtn').onclick=()=>{
+  localStorage.setItem(NOTE_KEY,note.value);
+  $('noteStatus').textContent='✅ Saved locally';
+  showToast('💾 កត់ត្រាត្រូវបានរក្សាទុកហើយ ❤️️');
+};
+
+let noteTimer;
+note.oninput=()=>{
+  clearTimeout(noteTimer);
+  noteTimer=setTimeout(()=>{
+    localStorage.setItem(NOTE_KEY,note.value);
+    $('noteStatus').textContent='💾 Auto-saved';
+  },500);
+};
+
+/* SEARCH */
+$('hubSearch').addEventListener('input',e=>{
+  const q=e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.searchable').forEach(card=>{
+    const text=(card.innerText+' '+(card.dataset.search||'')).toLowerCase();
+    card.classList.toggle('hidden',q&&!text.includes(q));
+  });
+});
+
+window.addEventListener('beforeunload',()=>{
+  localStorage.setItem(NOTE_KEY,note.value);
+});
+</script>
+</body>
+</html>

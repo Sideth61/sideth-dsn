@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Matrix X - Deth DSN OS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+        
+        :root {
+            --accent-color: #00ff66;
+            --accent-glow: rgba(0, 255, 102, 0.4);
+            --card-bg: rgba(10, 15, 25, 0.88);
+            --custom-bg: none;
+        }
+
+        body.theme-dark { background-color: #05070b; color: #fff; }
+        body.theme-cyber { background-color: #12001c; color: #ff77ff; }
+        body.theme-ocean { background-color: #001522; color: #38bdf8; }
+        body.theme-matrix { background-color: #020b05; color: #00ff66; }
+        body.theme-quantum { background-color: #18052b; color: #f43f5e; }
+
+        body.no-blur .card, body.no-blur .dsn-dock, body.no-blur .modal-card, body.no-blur .terminal-box {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: rgba(10, 15, 25, 0.98) !important;
+        }
+
+        body { 
+            font-family: 'Kantumruy Pro', sans-serif; 
+            background-image: var(--custom-bg),
+                radial-gradient(circle at 15% 15%, var(--accent-glow) 0%, transparent 45%), 
+                radial-gradient(circle at 85% 85%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
+                linear-gradient(to bottom, #05070b, #020408);
+            background-attachment: fixed; background-size: cover;
+            margin: 0; padding: 20px; padding-bottom: 130px;
+            display: flex; flex-direction: column; align-items: center; 
+            min-height: 100vh; overflow-x: hidden; position: relative;
+        }
+
+        .container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 20px; z-index: 10; }
+        
+        .card { 
+            background: var(--card-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            padding: 20px; border-radius: 20px; border: 1px solid var(--accent-glow); 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); text-align: left; transition: border-color 0.3s ease;
+        }
+        .card:hover { border-color: var(--accent-color); }
+
+        .header-title { color: var(--accent-color); font-size: 17px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--accent-glow); padding-bottom: 8px; font-weight: bold; }
+        
+        .setting-group { margin: 15px 0; }
+        .setting-group label { display: block; color: #94a3b8; font-size: 13px; margin-bottom: 8px; font-weight: 600; }
+        
+        .options-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .option-btn, .theme-box { 
+            flex: 1; min-width: 65px; padding: 10px; border-radius: 10px; text-align: center; cursor: pointer; 
+            font-size: 11px; font-weight: bold; border: 1px solid #1e293b; background: #0f172a; color: #fff; transition: 0.3s;
+        }
+        .option-btn.active, .theme-box.active, .theme-box:hover, .option-btn:hover { 
+            border-color: var(--accent-color); background: var(--accent-color); color: #05070b; box-shadow: 0 0 15px var(--accent-glow); 
+        }
+
+        .color-dot { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; transition: 0.3s; }
+        .color-dot:hover { transform: scale(1.2); }
+
+        #effectCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
+        .back-btn { 
+            display: block; text-align: center; background: #334155; color: #fff; padding: 12px; 
+            border-radius: 12px; text-decoration: none; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+        }
+        .back-btn:hover { background: #1e293b; transform: translateY(-2px); }
+
+        .setting-btn {
+            position: fixed; top: 15px; right: 20px; z-index: 1000; background: rgba(10, 15, 25, 0.85);
+            border: 1px solid var(--accent-glow); color: var(--accent-color); width: 45px; height: 45px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: 0.3s;
+        }
+        .setting-btn:hover { background: var(--accent-color); color: #05070b; transform: scale(1.1); }
+
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            z-index: 9999; justify-content: center; align-items: center;
+        }
+        .modal-card {
+            background: #0a0f19; border: 2px solid var(--accent-color); padding: 25px; border-radius: 20px;
+            width: 90%; max-width: 350px; text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.7); color: #fff;
+        }
+        .modal-card h3 { color: var(--accent-color); margin-top: 0; display: flex; justify-content: space-between; align-items: center; font-size: 16px; }
+        .close-modal { background: none; border: none; color: #f43f5e; font-size: 20px; cursor: pointer; }
+        
+        .setting-action-btn { 
+            width: 100%; padding: 11px; background: var(--accent-color); color: #05070b; border: none; 
+            border-radius: 10px; font-weight: bold; cursor: pointer; font-family: 'Kantumruy Pro', sans-serif; 
+            transition: 0.3s; margin-top: 8px; box-shadow: 0 4px 12px var(--accent-glow);
+        }
+        .setting-action-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        .danger-btn { background: #ef4444 !important; color: white !important; box-shadow: 0 4px 12px rgba(239,68,68,0.4); }
+
+        .stats-box { background: rgba(0,0,0,0.5); padding: 12px; border-radius: 10px; font-size: 12px; color: #cbd5e1; display: flex; flex-direction: column; gap: 6px; border-left: 3px solid var(--accent-color); }
+        .progress-bar-container { background: #0f172a; border-radius: 6px; height: 8px; width: 100%; overflow: hidden; margin-top: 2px; border: 1px solid #1e293b; }
+        .progress-bar-fill { background: var(--accent-color); height: 100%; width: 0%; transition: width 0.5s ease; box-shadow: 0 0 10px var(--accent-glow); }
+
+        .terminal-box { background: #020408; border: 1px solid var(--accent-glow); border-radius: 10px; padding: 10px; font-family: monospace; font-size: 11px; color: var(--accent-color); max-height: 90px; overflow-y: auto; margin-top: 8px; }
+        .terminal-input { width: 100%; background: transparent; border: none; border-top: 1px solid #1e293b; color: #fff; font-family: monospace; font-size: 11px; padding-top: 5px; outline: none; margin-top: 5px; }
+        
+        .notepad-area, .url-input { width: 100%; background: #020408; border: 1px solid #1e293b; border-radius: 8px; color: #fff; padding: 8px; font-family: 'Kantumruy Pro', sans-serif; font-size: 12px; outline: none; box-sizing: border-box; margin-top: 5px; }
+        .notepad-area:focus, .url-input:focus { border-color: var(--accent-color); }
+        .notepad-area { height: 60px; resize: none; }
+
+        .asset-list { display: flex; flex-direction: column; gap: 6px; margin-top: 5px; }
+        .asset-item { background: #020408; border: 1px solid #1e293b; padding: 8px 10px; border-radius: 8px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; color: #e2e8f0; }
+        .asset-tag { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: var(--accent-glow); color: var(--accent-color); font-weight: bold; }
+
+        .game-container { background: #020408; border: 1px solid var(--accent-glow); border-radius: 10px; padding: 12px; text-align: center; }
+
+        .dsn-dock {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(10, 15, 25, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--accent-glow); padding: 10px 20px; border-radius: 30px;
+            display: flex; gap: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px var(--accent-glow); z-index: 999;
+        }
+        .dock-item {
+            font-size: 20px; text-decoration: none; transition: 0.3s; padding: 8px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .dock-item:hover { background: var(--accent-glow); transform: translateY(-5px) scale(1.1); }
+    </style>
+</head>
+<body class="theme-matrix">
+
+    <canvas id="effectCanvas"></canvas>
+    <button class="setting-btn" onclick="toggleSetting(true); playSound(700);" title="Quick Settings">⚙️</button>
+
+    <div class="modal-overlay" id="settingModal">
+        <div class="modal-card">
+            <h3><span>⚙️ X-Edition Settings</span> <button class="close-modal" onclick="toggleSetting(false)">✕</button></h3>
+            <div class="setting-group">
+                <label>🎨 រចនាបទពណ៌ (Theme):</label>
+                <div class="options-row">
+                    <div class="theme-box" id="mThemeDark" onclick="setTheme('theme-dark'); playSound(500);">Dark</div>
+                    <div class="theme-box" id="mThemeCyber" onclick="setTheme('theme-cyber'); playSound(500);">Cyber</div>
+                    <div class="theme-box" id="mThemeOcean" onclick="setTheme('theme-ocean'); playSound(500);">Ocean</div>
+                    <div class="theme-box" id="mThemeMatrix" onclick="setTheme('theme-matrix'); playSound(500);">Matrix</div>
+                    <div class="theme-box" id="mThemeQuantum" onclick="setTheme('theme-quantum'); playSound(500);">Quantum</div>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label>🎵 តន្ត្រីផ្ទៃខាងក្រោយ (BGM):</label>
+                <audio id="bgm" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+                <button class="setting-action-btn" onclick="toggleBgm(); playSound(800);" id="bgmBtn">▶️ បើកតន្ត្រី</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="card">
+            <div class="header-title">⚡ Matrix Core Greeting</div>
+            <div style="font-size: 13px; color: #cbd5e1; line-height: 1.5;">
+                <p id="greetingText">👋 ស្វាគមន៍ត្រឡប់មកកាន់ប្រព័ន្ធវិញ, San Sideth!</p>
+                <p style="font-size: 11px; color: #64748b; margin-top: 4px;">ស្ថានភាពប្រព័ន្ធ: សុវត្ថិភាពកម្រិតខ្ពស់ (Quantum Secure)</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-title">🎬 YouTube & Track Asset Manager</div>
+            <div class="setting-group" style="margin-bottom: 0;">
+                <label>📁 បញ្ជីProject កំពុងកែសម្រួលថ្មីៗ:</label>
+                <div class="asset-list">
+                    <div class="asset-item"><span>🎵 ទាហ៊ានមុំបី ភ្នំ750 (16:9)</span><span class="asset-tag">Ready</span></div>
+                    <div class="asset-item"><span>🎵 Blaming All Men (Visualizer)</span><span class="asset-tag">Active</span></div>
+                    <div class="asset-item"><span>🚀 Gemini Tutorial Video Edit</span><span class="asset-tag">Draft</span></div>
+                </div>
+                <label style="margin-top: 12px;">🔗 បើកតំណរ YouTube ផ្ទាល់ខ្លួន:</label>
+                <input type="text" class="url-input" id="quickUrlInput" placeholder="https://youtube.com/...">
+                <button class="setting-action-btn" onclick="launchCustomUrl(); playSound(750);">🚀 បើកតំណរនេះ (Launch URL)</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-title">🎮 Cyber Clicker Mini-Game</div>
+            <div class="game-container">
+                <div style="font-size: 12px; color: #94a3b8; margin-bottom: 8px;">Quantum Credits: <span id="clickScore" style="color: var(--accent-color); font-weight: bold; font-size: 16px;">0</span></div>
+                <button class="setting-action-btn" onclick="incrementClick(); playSound(850);" style="margin-top: 0; padding: 10px;">⚡ ចុចប្រមូលថាមពល (Mine Credits)</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-title">🎨 ពណ៌ទម្រង់ប្រព័ន្ធ (Accent Color)</div>
+            <div class="options-row" style="justify-content: space-around; padding: 5px 0;">
+                <div class="color-dot" style="background: #00ff66;" onclick="setAccent('#00ff66'); playSound(600);"></div>
+                <div class="color-dot" style="background: #38bdf8;" onclick="setAccent('#38bdf8'); playSound(600);"></div>
+                <div class="color-dot" style="background: #f43f5e;" onclick="setAccent('#f43f5e'); playSound(600);"></div>
+                <div class="color-dot" style="background: #fbbf24;" onclick="setAccent('#fbbf24'); playSound(600);"></div>
+                <div class="color-dot" style="background: #c084fc;" onclick="setAccent('#c084fc'); playSound(600);"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-title">📊 ស្ថានភាពធនធានប្រព័ន្ធ (Matrix Monitor)</div>
+            <div class="stats-box">
+                <div>⚡ CPU Load: <span id="cpuText">12%</span></div>
+                <div class="progress-bar-container"><div class="progress-bar-fill" id="cpuBar" style="width: 12%;"></div></div>
+                <div style="margin-top: 6px;">🧠 RAM Memory Usage: <span id="ramText">42%</span></div>
+                <div class="progress-bar-container"><div class="progress-bar-fill" id="ramBar" style="width: 42%;"></div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-title">🖼️ រូបភាពផ្ទៃខាងក្រោយ (Wallpaper Engine)</div>
+            <div class="setting-group" style="margin-bottom: 0;">
+                <label>🔗 ដាក់ Link រូបភាព (Image URL):</label>
+                <input type="text" class="url-input" id="wallpaperInput" placeholder="https://example.com/image.jpg" oninput="setWallpaper()">
+                <button class="setting-action-btn" onclick="clearWallpaper(); playSound(400);" style="background: #1e293b; color: #fff; margin-top: 6px;">🔄 កំណត់ដើមវិញ (Reset Wallpaper)</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-title">✨ បែបផែន និងក្រាហ្វិក (Effects & Blur)</div>
+            <div class="setting-group">
+                <label>🌟 ចលនាផ្ទៃខាងក្រោយ (Background FX):</label>
+                <div class="options-row" style="flex-wrap: wrap;">
+                    <div class="option-btn" id="effNone" onclick="setEffect('none'); playSound(500);">បិទ</div>
+                    <div class="option-btn" id="effRain" onclick="setEffect('rain'); playSound(500);">🌧️ ភ្លៀង</div>
+                    <div class="option-btn" id="effStars" onclick="setEffect('stars'); playSound(500);">✨ ផ្កាយ</div>
+                    <div class="option-btn" id="effMatrix" onclick="setEffect('matrix'); playSound(500);">🟢 ម៉ាទ្រីស</div>
+                </div>
+            </div>
+            <div class="setting-group" style="margin-bottom: 0;">
+                <label>⚡ ដំណើរការ Blur (Glassmorphism):</label>
+                <div class="options-row">
+                    <div class="option-btn active" id="blurOn" onclick="toggleBlur(true); playSound(500);">ເປີດ Blur</div>
+                    <div class="option-btn" id="blurOff" onclick="toggleBlur(false); playSound(500);">បិទ (លឿន)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-title">💻 X-Edition Terminal</div>
+            <div class="terminal-box" id="terminalOutput">
+                DSN-OS Matrix X [Ready]<br>Type 'help' for commands...
+            </div>
+            <input type="text" class="terminal-input" id="terminalInput" placeholder="Enter command (e.g. secret, help)..." onkeypress="handleTerminal(event)">
+        </div>
+
+        <div class="card">
+            <div class="header-title">📝 កត់ត្រាផ្ទាល់ខ្លួន (Quick Scratchpad)</div>
+            <textarea class="notepad-area" id="userNotepad" placeholder="សរសេរចំណាំ ឬគំនិតរបស់អ្នកទីនេះ..." oninput="saveNotepad()"></textarea>
+        </div>
+
+        <div class="card">
+            <div class="header-title">💾 ការគ្រប់គ្រងទិន្នន័យ (Data & Storage)</div>
+            <button class="setting-action-btn" onclick="exportData(); playSound(600);">📥 បម្រុងទុកការកំណត់ (Export JSON)</button>
+            <button class="setting-action-btn danger-btn" onclick="clearData(); playSound(300);">🗑️ សម្អាតទិន្នន័យទាំងអស់ (Reset OS)</button>
+        </div>
+
+        <a href="index.html" class="back-btn" onclick="playSound(500)">⬅️ ត្រឡប់ទៅទំព័រដើម (Back to Home)</a>
+    </div>
+
+    <div class="dsn-dock">
+        <a href="index.html" class="dock-item" onclick="playSound(500)" title="ទំព័រដើម">🏠</a>
+        <a href="profile.html" class="dock-item" onclick="playSound(500)" title="ប្រវត្តិរូប">👤</a>
+        <a href="appstore.html" class="dock-item" onclick="playSound(500)" title="App Store">🛒</a>
+        <a href="library.html" class="dock-item" onclick="playSound(500)" title="Library DSN">📚</a>
+        <a href="setting.html" class="dock-item" onclick="playSound(500)" title="ការកំណត់" style="color: var(--accent-color);">⚙️</a>
+    </div>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(freq = 600) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(freq + 200, audioCtx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+            } catch(e) {}
+        }
+
+        function setTheme(themeName) {
+            document.body.className = document.body.classList.contains('no-blur') ? themeName + ' no-blur' : themeName;
+            localStorage.setItem('ds_theme', themeName);
+            updateActiveStates();
+        }
+
+        function setAccent(colorHex) {
+            document.documentElement.style.setProperty('--accent-color', colorHex);
+            document.documentElement.style.setProperty('--accent-glow', colorHex + '66');
+            localStorage.setItem('ds_accent', colorHex);
+        }
+
+        let credits = parseInt(localStorage.getItem('dsn_credits') || '0');
+        document.getElementById('clickScore').innerText = credits;
+        function incrementClick() {
+            credits += 1;
+            document.getElementById('clickScore').innerText = credits;
+            localStorage.setItem('dsn_credits', credits);
+        }
+
+        function launchCustomUrl() {
+            const url = document.getElementById('quickUrlInput').value.trim();
+            if(url) {
+                window.open(url.startsWith('http') ? url : 'https://' + url, '_blank');
+            } else {
+                alert('សូមវាយបញ្ចូល Link ឱ្យបានត្រឹមត្រូវ!');
+            }
+        }
+
+        function setWallpaper() {
+            const url = document.getElementById('wallpaperInput').value.trim();
+            if(url) {
+                document.documentElement.style.setProperty('--custom-bg', `url('${url}')`);
+                localStorage.setItem('dsn_wallpaper', url);
+            }
+        }
+
+        function clearWallpaper() {
+            document.documentElement.style.setProperty('--custom-bg', 'none');
+            localStorage.removeItem('dsn_wallpaper');
+            document.getElementById('wallpaperInput').value = '';
+        }
+
+        function toggleSetting(show) {
+            const modal = document.getElementById('settingModal');
+            if(modal) modal.style.display = show ? 'flex' : 'none';
+        }
+
+        function toggleBlur(enable) {
+            document.body.classList.toggle('no-blur', !enable);
+            localStorage.setItem('dsn_blur', enable ? 'yes' : 'no');
+            updateActiveStates();
+        }
+
+        function exportData() {
+            const data = { theme: localStorage.getItem('ds_theme'), accent: localStorage.getItem('ds_accent'), effect: localStorage.getItem('dsn_effect'), blur: localStorage.getItem('dsn_blur'), note: localStorage.getItem('dsn_note'), credits: localStorage.getItem('dsn_credits') };
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'deth-dsn-matrix-x-settings.json'; a.click();
+        }
+
+        function clearData() {
+            if(confirm('តើបងពិតជាចង់សម្អាតការកំណត់ទាំងអស់មែនទេ?')) { localStorage.clear(); location.reload(); }
+        }
+
+        function saveNotepad() {
+            const text = document.getElementById('userNotepad').value;
+            localStorage.setItem('dsn_note', text);
+        }
+
+        const bgm = document.getElementById('bgm');
+        const bgmBtn = document.getElementById('bgmBtn');
+        function toggleBgm() {
+            if (bgm && bgmBtn) {
+                if (bgm.paused) { bgm.play().catch(e => console.log(e)); bgmBtn.innerText = "⏸️ បិទតន្ត្រី"; }
+                else { bgm.pause(); bgmBtn.innerText = "▶️ បើកតន្ត្រី"; }
+            }
+        }
+
+        const canvas = document.getElementById('effectCanvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        let particles = []; let currentEffect = 'matrix';
+
+        function resizeCanvas() { if(canvas) { canvas.width = window.innerWidth; canvas.height = window.innerHeight; } }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+        function setEffect(type) {
+            currentEffect = type; localStorage.setItem('dsn_effect', type);
+            updateActiveStates(); initParticles();
+        }
+
+        function initParticles() {
+            particles = []; if (currentEffect === 'none' || !canvas) return;
+            let count = currentEffect === 'rain' ? 80 : (currentEffect === 'matrix' ? 45 : 50);
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                    speed: currentEffect === 'rain' ? Math.random() * 5 + 4 : (currentEffect === 'matrix' ? Math.random() * 4 + 2 : Math.random() * 0.5 + 0.2),
+                    length: currentEffect === 'rain' ? Math.random() * 20 + 10 : 0,
+                    radius: currentEffect === 'stars' ? Math.random() * 2 + 1 : 0,
+                    text: String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96)),
+                    opacity: Math.random() * 0.7 + 0.3
+                });
+            }
+        }
+
+        function animateParticles() {
+            if (ctx && canvas) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (currentEffect !== 'none') {
+                    particles.forEach(p => {
+                        ctx.beginPath();
+                        if (currentEffect === 'rain') {
+                            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-color') || '#00ff66';
+                            ctx.lineWidth = 1.5;
+                            ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - 1, p.y + p.length); ctx.stroke();
+                            p.y += p.speed; p.x -= 0.5;
+                            if (p.y > canvas.height) { p.y = -20; p.x = Math.random() * canvas.width; }
+                        } else if (currentEffect === 'stars') {
+                            ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+                            p.y += p.speed;
+                            if (p.y > canvas.height) { p.y = 0; p.x = Math.random() * canvas.width; }
+                        } else if (currentEffect === 'matrix') {
+                            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-color') || '#00ff66';
+                            ctx.font = '14px monospace';
+                            ctx.fillText(p.text, p.x, p.y);
+                            p.y += p.speed;
+                            if (p.y > canvas.height) { p.y = 0; p.x = Math.random() * canvas.width; p.text = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96)); }
+                        }
+                    });
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        function updateActiveStates() {
+            const currentTheme = localStorage.getItem('ds_theme') || 'theme-matrix';
+            const currentEff = localStorage.getItem('dsn_effect') || 'matrix';
+            const currentBlur = localStorage.getItem('dsn_blur'] !== 'no';
+
+            ['themeDark', 'mThemeDark'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.toggle('active', currentTheme === 'theme-dark'); });
+            ['themeCyber', 'mThemeCyber'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.toggle('active', currentTheme === 'theme-cyber'); });
+            ['themeOcean', 'mThemeOcean'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.toggle('active', currentTheme === 'theme-ocean'); });
+            ['themeMatrix', 'mThemeMatrix'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.toggle('active', currentTheme === 'theme-matrix'); });
+            ['themeQuantum', 'mThemeQuantum'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.toggle('active', currentTheme === 'theme-quantum'); });
+
+            const eNone = document.getElementById('effNone'); const eRain = document.getElementById('effRain'); const eStars = document.getElementById('effStars'); const eMatrix = document.getElementById('effMatrix');
+            if(eNone) eNone.classList.toggle('active', currentEff === 'none');
+            if(eRain) eRain.classList.toggle('active', currentEff === 'rain');
+            if(eStars) eStars.classList.toggle('active', currentEff === 'stars');
+            if(eMatrix) eMatrix.classList.toggle('active', currentEff === 'matrix');
+
+            const bOn = document.getElementById('blurOn'); const bOff = document.getElementById('blurOff');
+            if(bOn) bOn.classList.toggle('active', currentBlur); if(bOff) bOn.classList.toggle('active', !currentBlur);
+        }
+
+        function handleTerminal(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('terminalInput');
+                const output = document.getElementById('terminalOutput');
+                const cmd = input.value.trim().toLowerCase();
+                
+                let res = `> ${cmd}<br>`;
+                if (cmd === 'help') res += `Commands: clear, version, secret, matrix, reload`;
+                else if (cmd === 'clear') { output.innerHTML = 'Matrix Core Ready...'; input.value = ''; return; }
+                else if (cmd === 'version') res += `Deth DSN OS v26.30.0 Matrix X`;
+                else if (cmd === 'secret') res += `🔓 Root Access Confirmed: San Sideth. Keep creating awesome content!`;
+                else if (cmd === 'matrix') { setTheme('theme-matrix'); setEffect('matrix'); res += `Matrix protocol fully engaged!`; }
+                else if (cmd === 'reload') { location.reload(); return; }
+                else res += `Unknown command. Type 'help'.`;
+
+                output.innerHTML += `<br>${res}`;
+                output.scrollTop = output.scrollHeight;
+                input.value = '';
+            }
+        }
+
+        setInterval(() => {
+            const cpu = Math.floor(Math.random() * 20) + 10;
+            const ram = Math.floor(Math.random() * 10) + 38;
+            document.getElementById('cpuText').innerText = cpu + '%';
+            document.getElementById('cpuBar').style.width = cpu + '%';
+            document.getElementById('ramText').innerText = ram + '%';
+            document.getElementById('ramBar').style.width = ram + '%';
+        }, 1000);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTheme(localStorage.getItem('ds_theme') || 'theme-matrix');
+            setAccent(localStorage.getItem('ds_accent') || '#00ff66');
+            setEffect(localStorage.getItem('dsn_effect') || 'matrix');
+            toggleBlur(localStorage.getItem('dsn_blur') !== 'no');
+            
+            const savedNote = localStorage.getItem('dsn_note');
+            if(savedNote) document.getElementById('userNotepad').value = savedNote;
+
+            const savedWp = localStorage.getItem('dsn_wallpaper');
+            if(savedWp) {
+                document.getElementById('wallpaperInput').value = savedWp;
+                document.documentElement.style.setProperty('--custom-bg', `url('${savedWp}')`);
+            }
+        });
+    </script>
+</body>
+</html>

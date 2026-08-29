@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090d16">
+    <meta name="description" content="DSN File Explorer - Deth DSN OS">
+    <title>DSN File Explorer - Deth DSN</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+
+        :root {
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.35);
+            --bg-card: rgba(17, 24, 39, 0.86);
+            --bg-item: rgba(30, 41, 59, 0.65);
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            background:
+                radial-gradient(
+                    circle at 15% 15%,
+                    rgba(56, 189, 248, 0.14),
+                    transparent 40%
+                ),
+                radial-gradient(
+                    circle at 85% 85%,
+                    rgba(99, 102, 241, 0.12),
+                    transparent 40%
+                ),
+                linear-gradient(
+                    135deg,
+                    #090d16 0%,
+                    #1e1b4b 100%
+                );
+
+            background-attachment: fixed;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 120px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--accent-glow);
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(56, 189, 248, 0.05);
+            transition: 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .header-title {
+            color: var(--accent);
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--accent-glow);
+            padding-bottom: 9px;
+        }
+
+        .sub-text {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        /* ==============================
+           STORAGE CONNECT
+        ============================== */
+
+        .cloud-connect-card {
+            text-align: center;
+        }
+
+        .storage-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            color: #94a3b8;
+            margin: 8px 0;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #64748b;
+            box-shadow: 0 0 8px rgba(100, 116, 139, 0.5);
+        }
+
+        .status-dot.connected {
+            background: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+        }
+
+        .connect-btn,
+        .upload-btn {
+            width: 100%;
+            padding: 12px;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-family: 'Kantumruy Pro', sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .connect-btn {
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #38bdf8
+            );
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .upload-btn {
+            background: linear-gradient(
+                135deg,
+                #0891b2,
+                #38bdf8
+            );
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+
+        .connect-btn:hover,
+        .upload-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        .connect-btn:active,
+        .upload-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ==============================
+           SEARCH
+        ============================== */
+
+        .search-box {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: #020617;
+            border: 1px solid var(--border);
+            color: #fff;
+            border-radius: 12px;
+            padding: 12px 14px 12px 40px;
+            outline: none;
+            font-family: 'Kantumruy Pro', sans-serif;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+            opacity: 0.7;
+        }
+
+        /* ==============================
+           FILE STATS
+        ============================== */
+
+        .file-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .stat {
+            background: rgba(2, 6, 23, 0.65);
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            padding: 9px;
+            text-align: center;
+        }
+
+        .stat-value {
+            display: block;
+            color: var(--accent);
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            display: block;
+            color: #64748b;
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        /* ==============================
+           FILE ITEMS
+        ============================== */
+
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+
+            background: var(--bg-item);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .file-item:hover {
+            border-color: var(--accent);
+            background: rgba(56, 189, 248, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .file-icon {
+            font-size: 26px;
+            width: 35px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .file-details {
+            min-width: 0;
+        }
+
+        .file-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-size {
+            font-size: 10px;
+            color: #94a3b8;
+            margin: 3px 0 0;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .action-btn {
+            padding: 7px 10px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--accent);
+            color: #090d16;
+            transform: scale(1.05);
+        }
+
+        .delete-btn {
+            background: #7f1d1d;
+        }
+
+        .delete-btn:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 15px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .empty-icon {
+            display: block;
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        /* ==============================
+           HIDDEN INPUT
+        ============================== */
+
+        #fileInput {
+            display: none;
+        }
+
+        /* ==============================
+           DOCK
+        ============================== */
+
+        .dsn-dock {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            background: rgba(17, 24, 39, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            border: 1px solid var(--accent-glow);
+            padding: 10px 18px;
+            border-radius: 30px;
+
+            display: flex;
+            gap: 12px;
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.6),
+                0 0 15px var(--accent-glow);
+
+            z-index: 999;
+        }
+
+        .dock-item {
+            font-size: 20px;
+            text-decoration: none;
+            transition: 0.3s;
+            padding: 8px;
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dock-item:hover {
+            background: var(--accent-glow);
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        /* ==============================
+           TOAST
+        ============================== */
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translate(-50%, -120px);
+
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--accent);
+            color: #fff;
+
+            padding: 11px 18px;
+            border-radius: 12px;
+
+            font-size: 12px;
+            z-index: 10000;
+
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+            opacity: 0;
+            transition: 0.35s ease;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 430px) {
+            body {
+                padding: 12px;
+                padding-bottom: 110px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+
+            .file-item {
+                padding: 10px;
+            }
+
+            .file-name {
+                max-width: 145px;
+            }
+
+            .action-btn {
+                padding: 6px 8px;
+                font-size: 10px;
+            }
+
+            .dsn-dock {
+                bottom: 12px;
+                gap: 7px;
+                padding: 8px 12px;
+            }
+
+            .dock-item {
+                font-size: 18px;
+                padding: 7px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ==============================
+             STORAGE CONNECTION
+        ============================== -->
+
+        <div class="card cloud-connect-card">
+
+            <div class="header-title" style="justify-content:center;">
+                🌐 Cloud & Device Storage
+            </div>
+
+            <p class="sub-text">
+                តភ្ជាប់ជាមួយ Folder ក្នុងឧបករណ៍របស់អ្នក
+                តាមរយៈ File System Access API។
+            </p>
+
+            <div class="storage-status">
+                <span class="status-dot" id="storageDot"></span>
+                <span id="storageStatus">
+                    មិនទាន់បានតភ្ជាប់
+                </span>
+            </div>
+
+            <button
+                class="connect-btn"
+                onclick="connectStorage(); playSound(650);"
+            >
+                📁 ជ្រើសរើស Folder
+            </button>
+
+            <input
+                type="file"
+                id="fileInput"
+                multiple
+                onchange="handleFileUpload(event)"
+            >
+
+            <button
+                class="upload-btn"
+                onclick="document.getElementById('fileInput').click(); playSound(750);"
+            >
+                ⬆️ Upload Files
+            </button>
+
+        </div>
+
+
+        <!-- ==============================
+             FILE EXPLORER
+        ============================== -->
+
+        <div class="card">
+
+            <div class="header-title">
+                📂 ឯកសារក្នុងប្រព័ន្ធ
+            </div>
+
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="ស្វែងរកឯកសារ..."
+                    oninput="filterFiles()"
+                >
+            </div>
+
+
+            <div class="file-stats">
+
+                <div class="stat">
+                    <span
+                        class="stat-value"
+                        id="totalFiles"
+                    >
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        Files
+                    </span>
+                </div>
+
+                <div class="stat">
+                    <span
+                        class="stat-value"
+                        id="totalSize"
+                    >
+                        0 KB
+                    </span>
+
+                    <span class="stat-label">
+                        Storage
+                    </span>
+                </div>
+
+                <div class="stat">
+                    <span
+                        class="stat-value"
+                        id="visibleFiles"
+                    >
+                        0
+                    </span>
+
+                    <span class="stat-label">
+                        Visible
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div
+                class="file-list"
+                id="fileList"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==============================
+         FLOATING DOCK
+    ============================== -->
+
+    <div class="dsn-dock">
+
+        <a
+            href="index.html"
+            class="dock-item"
+            title="ទំព័រដើម"
+            onclick="playSound(500)"
+        >
+            🏠
+        </a>
+
+        <a
+            href="explorer.html"
+            class="dock-item"
+            title="File Explorer"
+            style="color:var(--accent);"
+            onclick="playSound(500)"
+        >
+            📁
+        </a>
+
+        <a
+            href="appstore.html"
+            class="dock-item"
+            title="App Store"
+            onclick="playSound(500)"
+        >
+            🛒
+        </a>
+
+        <a
+            href="library.html"
+            class="dock-item"
+            title="Library DSN"
+            onclick="playSound(500)"
+        >
+            📚
+        </a>
+
+        <a
+            href="setting.html"
+            class="dock-item"
+            title="ការកំណត់"
+            onclick="playSound(500)"
+        >
+            ⚙️
+        </a>
+
+    </div>
+
+
+    <!-- Toast -->
+
+    <div
+        class="toast"
+        id="toast"
+    ></div>
+
+
+    <script>
+
+        /* ==========================================
+           DSN FILE EXPLORER X
+        ========================================== */
+
+        const STORAGE_KEY = 'dsn_virtual_files';
+
+        let virtualFiles = [];
+
+        let connectedDirectory = null;
+
+
+        /* ==========================================
+           SOUND ENGINE
+        ========================================== */
+
+        let audioCtx = null;
+
+        function playSound(freq = 600) {
+
+            try {
+
+                if (!audioCtx) {
+
+                    audioCtx =
+                        new (
+                            window.AudioContext ||
+                            window.webkitAudioContext
+                        )();
+
+                }
+
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const oscillator =
+                    audioCtx.createOscillator();
+
+                const gain =
+                    audioCtx.createGain();
+
+                oscillator.type = 'sine';
+
+                oscillator.frequency.setValueAtTime(
+                    freq,
+                    audioCtx.currentTime
+                );
+
+                oscillator.frequency.exponentialRampToValueAtTime(
+                    freq + 150,
+                    audioCtx.currentTime + 0.05
+                );
+
+                gain.gain.setValueAtTime(
+                    0.035,
+                    audioCtx.currentTime
+                );
+
+                gain.gain.exponentialRampToValueAtTime(
+                    0.001,
+                    audioCtx.currentTime + 0.06
+                );
+
+                oscillator.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                oscillator.start();
+
+                oscillator.stop(
+                    audioCtx.currentTime + 0.06
+                );
+
+            } catch (error) {
+
+                console.log(
+                    'Audio unavailable:',
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* ==========================================
+           TOAST
+        ========================================== */
+
+        let toastTimer;
+
+        function showToast(message) {
+
+            const toast =
+                document.getElementById('toast');
+
+            toast.textContent = message;
+
+            toast.classList.add('show');
+
+            clearTimeout(toastTimer);
+
+            toastTimer = setTimeout(() => {
+
+                toast.classList.remove('show');
+
+            }, 2500);
+
+        }
+
+
+        /* ==========================================
+           DEFAULT FILES
+        ========================================== */
+
+        const defaultFiles = [
+
+            {
+                id: 'default-audio',
+                name: 'ទាហានមុំបី ភ្នំ750.mp3',
+                size: 4.5 * 1024 * 1024,
+                type: 'audio/mpeg',
+                category: 'Audio Track',
+                icon: '🎵',
+                demo: true
+            },
+
+            {
+                id: 'default-video',
+                name: 'Blaming All Men.mp4',
+                size: 18.2 * 1024 * 1024,
+                type: 'video/mp4',
+                category: 'Video Content',
+                icon: '🎬',
+                demo: true
+            },
+
+            {
+                id: 'default-text',
+                name: 'Gemini_Tutorial.txt',
+                size: 12 * 1024,
+                type: 'text/plain',
+                category: 'Project Note',
+                icon: '📝',
+                demo: true
+            }
+
+        ];
+
+
+        /* ==========================================
+           LOAD STORAGE
+        ========================================== */
+
+        function loadFiles() {
+
+            try {
+
+                const saved =
+                    localStorage.getItem(
+                        STORAGE_KEY
+                    );
+
+                if (saved) {
+
+                    virtualFiles =
+                        JSON.parse(saved);
+
+                } else {
+
+                    virtualFiles =
+                        [...defaultFiles];
+
+                    saveFiles();
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                virtualFiles =
+                    [...defaultFiles];
+
+            }
+
+            renderFiles();
+
+        }
+
+
+        /* ==========================================
+           SAVE STORAGE
+        ========================================== */
+
+        function saveFiles() {
+
+            try {
+
+                const safeFiles =
+                    virtualFiles.map(file => ({
+
+                        id: file.id,
+                        name: file.name,
+                        size: file.size,
+                        type: file.type,
+                        category: file.category,
+                        icon: file.icon,
+                        demo: file.demo || false
+
+                    }));
+
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify(safeFiles)
+                );
+
+            } catch (error) {
+
+                console.error(
+                    'Could not save files:',
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* ==========================================
+           FILE ICON
+        ========================================== */
+
+        function getFileIcon(file) {
+
+            if (file.icon) {
+                return file.icon;
+            }
+
+            const type =
+                file.type || '';
+
+            if (type.startsWith('image/')) {
+                return '🖼️';
+            }
+
+            if (type.startsWith('video/')) {
+                return '🎬';
+            }
+
+            if (type.startsWith('audio/')) {
+                return '🎵';
+            }
+
+            if (
+                type.includes('pdf') ||
+                file.name.toLowerCase().endsWith('.pdf')
+            ) {
+                return '📕';
+            }
+
+            if (
+                type.includes('zip') ||
+                type.includes('compressed')
+            ) {
+                return '📦';
+            }
+
+            if (
+                type.includes('text') ||
+                file.name.toLowerCase().endsWith('.txt')
+            ) {
+                return '📝';
+            }
+
+            return '📄';
+
+        }
+
+
+        /* ==========================================
+           FORMAT SIZE
+        ========================================== */
+
+        function formatSize(bytes) {
+
+            if (!bytes || bytes <= 0) {
+                return '0 KB';
+            }
+
+            const units = [
+                'Bytes',
+                'KB',
+                'MB',
+                'GB'
+            ];
+
+            const index =
+                Math.floor(
+                    Math.log(bytes) /
+                    Math.log(1024)
+                );
+
+            const safeIndex =
+                Math.min(
+                    index,
+                    units.length - 1
+                );
+
+            return (
+                bytes /
+                Math.pow(1024, safeIndex)
+            ).toFixed(
+                safeIndex === 0 ? 0 : 1
+            ) +
+            ' ' +
+            units[safeIndex];
+
+        }
+
+
+        /* ==========================================
+           RENDER FILES
+        ========================================== */
+
+        function renderFiles(
+            searchTerm = ''
+        ) {
+
+            const list =
+                document.getElementById(
+                    'fileList'
+                );
+
+            const term =
+                searchTerm
+                    .trim()
+                    .toLowerCase();
+
+
+            const filtered =
+                virtualFiles.filter(file =>
+
+                    file.name
+                        .toLowerCase()
+                        .includes(term)
+
+                );
+
+
+            if (!filtered.length) {
+
+                list.innerHTML = `
+
+                    <div class="empty-state">
+
+                        <span class="empty-icon">
+                            📭
+                        </span>
+
+                        មិនមានឯកសារដែលត្រូវនឹងការស្វែងរកទេ។
+
+                    </div>
+
+                `;
+
+            } else {
+
+                list.innerHTML =
+                    filtered.map(
+                        file => createFileHTML(file)
+                    ).join('');
+
+            }
+
+
+            updateStats(
+                filtered.length
+            );
+
+        }
+
+
+        /* ==========================================
+           CREATE FILE HTML
+        ========================================== */
+
+        function createFileHTML(file) {
+
+            return `
+
+                <div
+                    class="file-item"
+                    data-file-id="${escapeHTML(file.id)}"
+                >
+
+                    <div class="file-info">
+
+                        <div class="file-icon">
+                            ${getFileIcon(file)}
+                        </div>
+
+                        <div class="file-details">
+
+                            <p class="file-name"
+                               title="${escapeHTML(file.name)}">
+                                ${escapeHTML(file.name)}
+                            </p>
+
+                            <p class="file-size">
+                                ${formatSize(file.size)}
+                                •
+                                ${escapeHTML(file.category || 'File')}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="file-actions">
+
+                        <button
+                            class="action-btn"
+                            onclick="openFileById('${escapeHTML(file.id)}')"
+                        >
+                            ${getOpenLabel(file)}
+                        </button>
+
+                        ${
+                            file.demo
+                            ? ''
+                            : `
+                                <button
+                                    class="action-btn delete-btn"
+                                    onclick="deleteFile('${escapeHTML(file.id)}')"
+                                    title="លុបឯកសារ"
+                                >
+                                    🗑️
+                                </button>
+                            `
+                        }
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* ==========================================
+           OPEN LABEL
+        ========================================== */
+
+        function getOpenLabel(file) {
+
+            const type =
+                file.type || '';
+
+            if (type.startsWith('video/')) {
+                return 'មើល';
+            }
+
+            if (type.startsWith('audio/')) {
+                return '▶️';
+            }
+
+            if (
+                type.startsWith('image/') ||
+                type === 'application/pdf'
+            ) {
+                return 'បើក';
+            }
+
+            return 'អាន';
+
+        }
+
+
+        /* ==========================================
+           ESCAPE HTML
+        ========================================== */
+
+        function escapeHTML(value) {
+
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+
+        }
+
+
+        /* ==========================================
+           UPDATE STATS
+        ========================================== */
+
+        function updateStats(
+            visibleCount =
+                virtualFiles.length
+        ) {
+
+            const total =
+                virtualFiles.length;
+
+            const totalBytes =
+                virtualFiles.reduce(
+                    (sum, file) =>
+                        sum +
+                        (Number(file.size) || 0),
+                    0
+                );
+
+            document.getElementById(
+                'totalFiles'
+            ).textContent = total;
+
+            document.getElementById(
+                'totalSize'
+            ).textContent =
+                formatSize(totalBytes);
+
+            document.getElementById(
+                'visibleFiles'
+            ).textContent =
+                visibleCount;
+
+        }
+
+
+        /* ==========================================
+           SEARCH
+        ========================================== */
+
+        function filterFiles() {
+
+            const input =
+                document.getElementById(
+                    'searchInput'
+                );
+
+            renderFiles(
+                input.value
+            );
+
+        }
+
+
+        /* ==========================================
+           UPLOAD FILES
+        ========================================== */
+
+        function handleFileUpload(event) {
+
+            const files =
+                Array.from(
+                    event.target.files || []
+                );
+
+            if (!files.length) {
+                return;
+            }
+
+
+            files.forEach(file => {
+
+                const newFile = {
+
+                    id:
+                        'file-' +
+                        Date.now() +
+                        '-' +
+                        Math.random()
+                            .toString(36)
+                            .slice(2),
+
+                    name: file.name,
+
+                    size: file.size,
+
+                    type:
+                        file.type ||
+                        'application/octet-stream',
+
+                    category:
+                        getCategory(file),
+
+                    icon:
+                        getFileIcon({
+                            type: file.type,
+                            name: file.name
+                        }),
+
+                    demo: false
+
+                };
+
+                virtualFiles.push(
+                    newFile
+                );
+
+            });
+
+
+            saveFiles();
+
+            renderFiles();
+
+            showToast(
+                `✅ បានបន្ថែម ${files.length} ឯកសារ`
+            );
+
+            playSound(850);
+
+            event.target.value = '';
+
+        }
+
+
+        /* ==========================================
+           CATEGORY
+        ========================================== */
+
+        function getCategory(file) {
+
+            const type =
+                file.type || '';
+
+            if (type.startsWith('audio/')) {
+                return 'Audio';
+            }
+
+            if (type.startsWith('video/')) {
+                return 'Video';
+            }
+
+            if (type.startsWith('image/')) {
+                return 'Image';
+            }
+
+            if (
+                type === 'application/pdf'
+            ) {
+                return 'PDF Document';
+            }
+
+            if (
+                type.startsWith('text/')
+            ) {
+                return 'Text Document';
+            }
+
+            return 'File';
+
+        }
+
+
+        /* ==========================================
+           DELETE FILE
+        ========================================== */
+
+        function deleteFile(id) {
+
+            const file =
+                virtualFiles.find(
+                    item => item.id === id
+                );
+
+            if (!file) {
+                return;
+            }
+
+            if (
+                !confirm(
+                    `តើបងចង់លុប "${file.name}" មែនទេ?`
+                )
+            ) {
+                return;
+            }
+
+
+            virtualFiles =
+                virtualFiles.filter(
+                    item => item.id !== id
+                );
+
+            saveFiles();
+
+            renderFiles();
+
+            showToast(
+                '🗑️ បានលុបឯកសារចេញពី Virtual Explorer'
+            );
+
+            playSound(300);
+
+        }
+
+
+        /* ==========================================
+           OPEN FILE
+        ========================================== */
+
+        function openFileById(id) {
+
+            const file =
+                virtualFiles.find(
+                    item => item.id === id
+                );
+
+            if (!file) {
+                showToast(
+                    '⚠️ រកមិនឃើញឯកសារ'
+                );
+                return;
+            }
+
+
+            if (file.demo) {
+
+                showToast(
+                    `📂 Demo File: ${file.name}`
+                );
+
+                playSound(700);
+
+                return;
+
+            }
+
+
+            /*
+             * Browser security prevents us from
+             * reconstructing the original File object
+             * from localStorage.
+             *
+             * Therefore uploaded files are currently
+             * stored as Explorer metadata.
+             */
+
+            showToast(
+                `📂 ${file.name} — Metadata loaded`
+            );
+
+            playSound(700);
+
+        }
+
+
+        /* ==========================================
+           CONNECT DIRECTORY
+        ========================================== */
+
+        async function connectStorage() {
+
+            try {
+
+                if (
+                    !(
+                        'showDirectoryPicker'
+                        in window
+                    )
+                ) {
+
+                    showToast(
+                        '⚠️ Browser នេះមិនគាំទ្រ Folder Picker ទេ'
+                    );
+
+                    return;
+
+                }
+
+
+                const dirHandle =
+                    await window.showDirectoryPicker({
+                        mode: 'read'
+                    });
+
+
+                connectedDirectory =
+                    dirHandle;
+
+
+                document
+                    .getElementById(
+                        'storageDot'
+                    )
+                    .classList.add(
+                        'connected'
+                    );
+
+
+                document
+                    .getElementById(
+                        'storageStatus'
+                    )
+                    .textContent =
+                    'បានតភ្ជាប់: ' +
+                    dirHandle.name;
+
+
+                showToast(
+                    '✅ Folder បានតភ្ជាប់ដោយជោគជ័យ!'
+                );
+
+
+                playSound(900);
+
+            } catch (error) {
+
+                if (
+                    error &&
+                    error.name ===
+                    'AbortError'
+                ) {
+
+                    showToast(
+                        'ℹ️ បានបោះបង់ការជ្រើសរើស Folder'
+                    );
+
+                } else {
+
+                    console.error(error);
+
+                    showToast(
+                        '⚠️ មិនអាចតភ្ជាប់ Folder បានទេ'
+                    );
+
+                }
+
+            }
+
+        }
+
+
+        /* ==========================================
+           KEYBOARD SHORTCUT
+        ========================================== */
+
+        document.addEventListener(
+            'keydown',
+            function(event) {
+
+                if (
+                    (event.metaKey ||
+                     event.ctrlKey) &&
+                    event.key.toLowerCase() === 'k'
+                ) {
+
+                    event.preventDefault();
+
+                    const search =
+                        document.getElementById(
+                            'searchInput'
+                        );
+
+                    search.focus();
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+           INIT
+        ========================================== */
+
+        window.addEventListener(
+            'DOMContentLoaded',
+            () => {
+
+                loadFiles();
+
+            }
+        );
+
+    </script>
+
+</body>

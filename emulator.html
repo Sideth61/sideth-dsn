@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta
+  name="theme-color"
+  content="#020617"
+>
+
+<title>DSN PS2 Emulator</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+
+  background:#000;
+  color:#fff;
+
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+body{
+  display:flex;
+  flex-direction:column;
+}
+
+.topbar{
+  flex:0 0 auto;
+
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  padding:
+    max(10px, env(safe-area-inset-top))
+    12px
+    10px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #020617,
+      #111827,
+      #1e1b4b
+    );
+
+  border-bottom:
+    1px solid
+    rgba(168,85,247,.35);
+
+  z-index:20;
+}
+
+.back-btn{
+  border:0;
+
+  border-radius:10px;
+
+  padding:9px 13px;
+
+  background:#1f2937;
+  color:#fff;
+
+  font-size:14px;
+  font-weight:600;
+
+  cursor:pointer;
+}
+
+.game-title{
+  flex:1;
+
+  min-width:0;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+  white-space:nowrap;
+
+  font-size:14px;
+  font-weight:700;
+}
+
+.state{
+  flex:0 0 auto;
+
+  font-size:11px;
+
+  color:#a78bfa;
+}
+
+.status{
+  flex:0 0 auto;
+
+  min-height:34px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:7px 12px;
+
+  background:#030712;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.05);
+
+  color:#94a3b8;
+
+  font-size:12px;
+
+  text-align:center;
+}
+
+#game{
+  position:relative;
+
+  flex:1;
+
+  width:100%;
+  min-height:0;
+
+  background:#000;
+
+  overflow:hidden;
+}
+
+#game canvas{
+  max-width:100%;
+  max-height:100%;
+}
+
+.loading{
+  position:absolute;
+
+  inset:0;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  flex-direction:column;
+
+  gap:10px;
+
+  padding:25px;
+
+  text-align:center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #111827,
+      #000 70%
+    );
+
+  color:#a78bfa;
+
+  z-index:10;
+}
+
+.loading-title{
+  font-size:17px;
+  font-weight:700;
+}
+
+.loading-text{
+  font-size:12px;
+  color:#94a3b8;
+}
+
+.spinner{
+  width:34px;
+  height:34px;
+
+  border-radius:50%;
+
+  border:
+    3px solid
+    rgba(168,85,247,.2);
+
+  border-top-color:#a855f7;
+
+  animation:
+    spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.error{
+  position:absolute;
+
+  inset:0;
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  flex-direction:column;
+
+  gap:10px;
+
+  padding:30px;
+
+  text-align:center;
+
+  background:#020617;
+
+  color:#f87171;
+
+  z-index:15;
+}
+
+.error strong{
+  font-size:16px;
+}
+
+.error small{
+  color:#94a3b8;
+  line-height:1.6;
+}
+
+.bottom{
+  flex:0 0 auto;
+
+  display:flex;
+
+  gap:7px;
+
+  padding:
+    8px
+    10px
+    max(8px, env(safe-area-inset-bottom));
+
+  background:#020617;
+
+  border-top:
+    1px solid
+    rgba(168,85,247,.25);
+
+  z-index:20;
+}
+
+.bottom button{
+  flex:1;
+
+  min-height:42px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:#1f2937;
+
+  color:#fff;
+
+  font-family:inherit;
+
+  font-size:12px;
+
+  cursor:pointer;
+}
+
+.bottom button:active{
+  transform:scale(.97);
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+
+<header class="topbar">
+
+<button
+  id="backBtn"
+  class="back-btn"
+  type="button"
+>
+  ← Back
+</button>
+
+<div
+  id="gameTitle"
+  class="game-title"
+>
+  DSN PS2
+</div>
+
+<div
+  id="playerState"
+  class="state"
+>
+  🔵 READY
+</div>
+
+</header>
+
+
+<!-- =====================================================
+     STATUS
+===================================================== -->
+
+<div
+  id="status"
+  class="status"
+>
+  Preparing PS2 emulator...
+</div>
+
+
+<!-- =====================================================
+     EMULATOR CONTAINER
+===================================================== -->
+
+<main id="game">
+
+<div
+  id="loading"
+  class="loading"
+>
+
+<div class="spinner"></div>
+
+<div
+  id="loadingTitle"
+  class="loading-title"
+>
+  🎮 Loading PS2 Game
+</div>
+
+<div
+  id="loadingText"
+  class="loading-text"
+>
+  Preparing secure game stream...
+</div>
+
+</div>
+
+
+<div
+  id="errorBox"
+  class="error"
+>
+
+<strong id="errorTitle">
+  🔴 Emulator Error
+</strong>
+
+<small id="errorText">
+  Unable to start the game.
+</small>
+
+</div>
+
+</main>
+
+
+<!-- =====================================================
+     CONTROLS
+===================================================== -->
+
+<footer class="bottom">
+
+<button
+  id="fullscreenBtn"
+  type="button"
+>
+  ⛶ Fullscreen
+</button>
+
+<button
+  id="stopBtn"
+  type="button"
+>
+  ⏹ Stop
+</button>
+
+</footer>
+
+
+<script>
+
+"use strict";
+
+/* =========================================================
+   QUERY PARAMETERS
+========================================================= */
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+const gameTitle =
+  params.get("title") ||
+  "PS2 Game";
+
+
+const gameFile =
+  params.get("file") ||
+  "";
+
+
+const streamUrl =
+  params.get("stream") ||
+  "";
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const $ =
+  id =>
+  document.getElementById(id);
+
+
+const game =
+  $("game");
+
+
+const loading =
+  $("loading");
+
+
+const loadingTitle =
+  $("loadingTitle");
+
+
+const loadingText =
+  $("loadingText");
+
+
+const errorBox =
+  $("errorBox");
+
+
+const errorTitle =
+  $("errorTitle");
+
+
+const errorText =
+  $("errorText");
+
+
+const status =
+  $("status");
+
+
+const playerState =
+  $("playerState");
+
+
+const gameTitleElement =
+  $("gameTitle");
+
+
+/* =========================================================
+   PAGE TITLE
+========================================================= */
+
+document.title =
+  `DSN PS2 — ${gameTitle}`;
+
+
+gameTitleElement.textContent =
+  gameTitle;
+
+
+loadingTitle.textContent =
+  `🎮 ${gameTitle}`;
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+$("backBtn").onclick =
+  () => {
+
+    if(
+      document.referrer &&
+      history.length > 1
+    ){
+
+      history.back();
+
+    }else{
+
+      window.location.href =
+        "game_library.html";
+
+    }
+
+  };
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function showError(
+  title,
+  message
+){
+
+  loading.style.display =
+    "none";
+
+  errorBox.style.display =
+    "flex";
+
+  errorTitle.textContent =
+    title;
+
+  errorText.textContent =
+    message;
+
+  playerState.textContent =
+    "🔴 ERROR";
+
+  status.textContent =
+    message;
+}
+
+
+/* =========================================================
+   VALIDATE
+========================================================= */
+
+if(!gameFile){
+
+  showError(
+    "🔴 Missing Game File",
+    "Game file was not supplied."
+  );
+
+}else if(!streamUrl){
+
+  showError(
+    "🔴 Missing Stream URL",
+    "Worker stream URL was not supplied."
+  );
+
+}
+
+
+/* =========================================================
+   EMULATORJS CONFIG
+========================================================= */
+
+/*
+ * IMPORTANT
+ *
+ * The game URL is supplied directly to EmulatorJS.
+ *
+ * No iframe.
+ * No HEAD request.
+ * No page reload.
+ */
+
+window.EJS_player =
+  "#game";
+
+
+window.EJS_gameName =
+  gameTitle;
+
+
+/*
+ * Worker Range Stream
+ */
+window.EJS_gameUrl =
+  streamUrl;
+
+
+/*
+ * Play! / PS2 core
+ */
+window.EJS_core =
+  "play";
+
+
+/*
+ * EmulatorJS data directory
+ */
+window.EJS_pathtodata =
+  "https://cdn.emulatorjs.org/stable/data/";
+
+
+/*
+ * Start automatically
+ */
+window.EJS_startOnLoaded =
+  true;
+
+
+/*
+ * Fullscreen support
+ */
+window.EJS_fullscreenOnLoaded =
+  false;
+
+
+/*
+ * Do not create another page.
+ */
+window.EJS_backgroundColor =
+  "#000000";
+
+
+/* =========================================================
+   LOAD EMULATORJS ONCE
+========================================================= */
+
+let emulatorStarted =
+  false;
+
+
+function startEmulator(){
+
+  if(emulatorStarted){
+    return;
+  }
+
+  emulatorStarted =
+    true;
+
+
+  playerState.textContent =
+    "🟡 STARTING";
+
+
+  status.textContent =
+    "🟡 Starting EmulatorJS...";
+
+
+  loadingText.textContent =
+    "Loading emulator core...";
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  script.src =
+    "https://cdn.emulatorjs.org/stable/data/loader.js";
+
+
+  script.async =
+    true;
+
+
+  script.onload =
+    () => {
+
+      /*
+       * EmulatorJS loader is now loaded.
+       *
+       * It will use:
+       *
+       * EJS_player
+       * EJS_gameUrl
+       * EJS_core
+       */
+
+      loadingText.textContent =
+        "🎮 Starting PS2 core...";
+
+      status.textContent =
+        "🟢 Emulator loaded — starting game";
+
+      playerState.textContent =
+        "🟢 PLAY";
+
+    };
+
+
+  script.onerror =
+    () => {
+
+      showError(
+        "🔴 EmulatorJS Failed",
+        "Could not load EmulatorJS. Check your internet connection or CDN access."
+      );
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+if(
+  gameFile &&
+  streamUrl
+){
+
+  startEmulator();
+
+}
+
+
+/* =========================================================
+   FULLSCREEN
+========================================================= */
+
+$("fullscreenBtn")
+  .onclick =
+  async () => {
+
+    try{
+
+      if(
+        document.fullscreenElement
+      ){
+
+        await document.exitFullscreen();
+
+        return;
+      }
+
+
+      if(
+        game.requestFullscreen
+      ){
+
+        await game.requestFullscreen();
+
+      }else{
+
+        showError(
+          "⚠️ Fullscreen Unsupported",
+          "This browser does not support fullscreen for the player."
+        );
+
+      }
+
+    }catch(error){
+
+      status.textContent =
+        "⚠️ Fullscreen unavailable";
+
+    }
+
+  };
+
+
+/* =========================================================
+   STOP
+========================================================= */
+
+$("stopBtn")
+  .onclick =
+  () => {
+
+    /*
+     * Do not reload the page.
+     *
+     * Simply remove emulator DOM
+     * and show stopped state.
+     */
+
+    const emulatorElements =
+      game.querySelectorAll(
+        "canvas,iframe"
+      );
+
+
+    emulatorElements.forEach(
+      element => {
+
+        if(
+          element.tagName
+            .toLowerCase() ===
+          "iframe"
+        ){
+
+          element.src =
+            "about:blank";
+
+        }
+
+        element.remove();
+
+      }
+    );
+
+
+    loading.style.display =
+      "flex";
+
+
+    errorBox.style.display =
+      "none";
+
+
+    loadingText.textContent =
+      "Game stopped.";
+
+
+    playerState.textContent =
+      "⏹ STOPPED";
+
+
+    status.textContent =
+      "Game stopped";
+
+
+  };
+
+
+/* =========================================================
+   PAGE VISIBILITY
+========================================================= */
+
+/*
+ * Do NOT reload when iPhone Safari
+ * changes visibility.
+ */
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    /*
+     * Intentionally empty.
+     *
+     * No reload.
+     * No emulator restart.
+     */
+
+  }
+);
+
+</script>
+
+</body>
+</html>

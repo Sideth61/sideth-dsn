@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080812">
+
+<title>🎧 DSN Music X - Deth DSN</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+
+:root{
+    --pink:#ec4899;
+    --purple:#8b5cf6;
+    --cyan:#38bdf8;
+    --bg:#05060d;
+    --card:rgba(15,17,30,.88);
+    --border:rgba(236,72,153,.35);
+    --muted:#94a3b8;
+}
+
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    padding:20px 15px 110px;
+    min-height:100vh;
+    font-family:'Kantumruy Pro',sans-serif;
+    color:#fff;
+    background:
+        radial-gradient(circle at 15% 10%,rgba(236,72,153,.18),transparent 35%),
+        radial-gradient(circle at 85% 90%,rgba(139,92,246,.18),transparent 35%),
+        linear-gradient(135deg,#05060d,#111827,#1e1b4b);
+    background-attachment:fixed;
+    overflow-x:hidden;
+}
+
+#visualizer{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:0;
+    opacity:.45;
+}
+
+.container{
+    width:100%;
+    max-width:470px;
+    margin:auto;
+    position:relative;
+    z-index:2;
+}
+
+/* HEADER */
+
+.hero{
+    text-align:center;
+    padding:20px 10px 15px;
+}
+
+.music-logo{
+    font-size:52px;
+    animation:pulse 2s infinite;
+    filter:drop-shadow(0 0 18px rgba(236,72,153,.7));
+}
+
+h1{
+    color:var(--pink);
+    font-size:24px;
+    margin:5px 0;
+    text-shadow:0 0 15px rgba(236,72,153,.4);
+}
+
+.subtitle{
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* CARD */
+
+.card{
+    background:var(--card);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 20px 45px rgba(0,0,0,.5);
+}
+
+/* NOW PLAYING */
+
+.now-playing{
+    text-align:center;
+}
+
+.album{
+    width:145px;
+    height:145px;
+    margin:5px auto 15px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:55px;
+    background:
+        radial-gradient(circle,#111827 0 25%,transparent 26%),
+        conic-gradient(
+            var(--pink),
+            var(--purple),
+            var(--cyan),
+            var(--pink)
+        );
+    box-shadow:
+        0 0 25px rgba(236,72,153,.35),
+        0 0 60px rgba(139,92,246,.15);
+}
+
+.album.playing{
+    animation:spin 7s linear infinite;
+}
+
+.song-title{
+    font-size:16px;
+    font-weight:bold;
+    color:#fff;
+    min-height:24px;
+}
+
+.song-status{
+    font-size:10px;
+    color:var(--pink);
+    margin-top:4px;
+}
+
+/* AUDIO */
+
+audio{
+    width:100%;
+    margin-top:14px;
+    height:40px;
+}
+
+.player-controls{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+}
+
+.control{
+    flex:1;
+    border:1px solid #334155;
+    background:#111827;
+    color:#fff;
+    padding:10px;
+    border-radius:11px;
+    cursor:pointer;
+    font-size:15px;
+    transition:.3s;
+}
+
+.control:hover{
+    border-color:var(--pink);
+    background:rgba(236,72,153,.12);
+    transform:translateY(-2px);
+}
+
+/* SEARCH */
+
+.search{
+    width:100%;
+    padding:12px 14px;
+    border-radius:12px;
+    border:1px solid #334155;
+    background:#080b14;
+    color:#fff;
+    outline:none;
+    font-family:inherit;
+}
+
+.search:focus{
+    border-color:var(--pink);
+    box-shadow:0 0 12px rgba(236,72,153,.2);
+}
+
+/* PLAYLIST */
+
+.section-title{
+    color:var(--pink);
+    font-size:15px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.song-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    margin-bottom:8px;
+    border-radius:13px;
+    background:rgba(30,41,59,.55);
+    border:1px solid #334155;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.song-item:hover{
+    transform:translateX(3px);
+    border-color:var(--pink);
+    background:rgba(236,72,153,.1);
+}
+
+.song-item.active{
+    border-color:var(--pink);
+    background:rgba(236,72,153,.17);
+    box-shadow:0 0 15px rgba(236,72,153,.1);
+}
+
+.song-number{
+    width:25px;
+    color:#64748b;
+    font-family:monospace;
+}
+
+.song-icon{
+    font-size:20px;
+}
+
+.song-info{
+    flex:1;
+    min-width:0;
+}
+
+.song-name{
+    font-size:12px;
+    font-weight:600;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.song-meta{
+    color:#64748b;
+    font-size:9px;
+    margin-top:2px;
+}
+
+.favorite{
+    background:none;
+    border:0;
+    color:#64748b;
+    cursor:pointer;
+    font-size:17px;
+}
+
+.favorite.active{
+    color:#f43f5e;
+}
+
+/* STATS */
+
+.stats{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:8px;
+}
+
+.stat{
+    text-align:center;
+    background:#080b14;
+    border:1px solid #1e293b;
+    border-radius:12px;
+    padding:10px 5px;
+}
+
+.stat-value{
+    color:var(--pink);
+    font-weight:bold;
+    font-size:15px;
+}
+
+.stat-label{
+    color:#64748b;
+    font-size:9px;
+}
+
+/* BUTTON */
+
+.btn{
+    width:100%;
+    border:0;
+    border-radius:12px;
+    padding:12px;
+    color:#fff;
+    font-family:inherit;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+    margin-top:8px;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+    filter:brightness(1.12);
+}
+
+.btn-browser{
+    background:linear-gradient(135deg,#4ecca3,#0f3460);
+}
+
+.btn-reset{
+    background:#1e293b;
+    border:1px solid #334155;
+}
+
+/* DOCK */
+
+.dsn-dock{
+    position:fixed;
+    bottom:18px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:99;
+    display:flex;
+    gap:7px;
+    padding:9px 13px;
+    border-radius:30px;
+    background:rgba(15,17,30,.92);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(236,72,153,.3);
+    box-shadow:0 10px 35px #000;
+}
+
+.dock-item{
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    text-decoration:none;
+    font-size:20px;
+    transition:.3s;
+}
+
+.dock-item:hover{
+    background:rgba(236,72,153,.15);
+    transform:translateY(-5px) scale(1.08);
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    top:18px;
+    left:50%;
+    transform:translate(-50%,-100px);
+    z-index:999;
+    background:#080b14;
+    border:1px solid var(--pink);
+    padding:11px 16px;
+    border-radius:12px;
+    font-size:11px;
+    transition:.4s;
+    box-shadow:0 0 20px rgba(236,72,153,.25);
+}
+
+.toast.show{
+    transform:translate(-50%,0);
+}
+
+@keyframes pulse{
+    50%{transform:scale(1.08)}
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+@media(max-width:380px){
+    .album{
+        width:120px;
+        height:120px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="visualizer"></canvas>
+
+<div class="toast" id="toast"></div>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="hero">
+        <div class="music-logo">🎧</div>
+        <h1>DSN Music X</h1>
+        <div class="subtitle">
+            Music • Audio • Visualizer • Playlist
+        </div>
+    </div>
+
+
+    <!-- NOW PLAYING -->
+    <div class="card now-playing">
+
+        <div class="album" id="album">
+            🎵
+        </div>
+
+        <div class="song-title" id="songTitle">
+            ជ្រើសរើសបទចម្រៀងមួយ
+        </div>
+
+        <div class="song-status" id="songStatus">
+            DSN MUSIC CORE READY
+        </div>
+
+        <audio id="audioPlayer" controls preload="metadata"></audio>
+
+        <div class="player-controls">
+
+            <button class="control" onclick="previousSong()">
+                ⏮️
+            </button>
+
+            <button class="control" onclick="togglePlay()">
+                ▶️ / ⏸️
+            </button>
+
+            <button class="control" onclick="nextSong()">
+                ⏭️
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+    <div class="card">
+
+        <div class="section-title">
+            🔎 ស្វែងរកបទចម្រៀង
+        </div>
+
+        <input
+            id="searchInput"
+            class="search"
+            type="search"
+            placeholder="ស្វែងរកបទ..."
+            oninput="renderPlaylist()"
+        >
+
+    </div>
+
+
+    <!-- PLAYLIST -->
+    <div class="card">
+
+        <div class="section-title">
+            🎶 DSN Playlist
+        </div>
+
+        <div id="playlist"></div>
+
+    </div>
+
+
+    <!-- STATS -->
+    <div class="card">
+
+        <div class="section-title">
+            📊 Music Statistics
+        </div>
+
+        <div class="stats">
+
+            <div class="stat">
+                <div class="stat-value" id="songCount">0</div>
+                <div class="stat-label">SONGS</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-value" id="playCount">0</div>
+                <div class="stat-label">PLAYS</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-value" id="favCount">0</div>
+                <div class="stat-label">FAVORITES</div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LINKS -->
+    <div class="card">
+
+        <a href="browser.html"
+           class="btn btn-browser"
+           style="display:block;text-align:center;text-decoration:none;">
+            🌐 បើក DSN Browser
+        </a>
+
+        <button class="btn btn-reset" onclick="resetMusicData()">
+            🗑️ Reset Music Data
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- DOCK -->
+<div class="dsn-dock">
+
+    <a href="index.html"
+       class="dock-item"
+       title="ទំព័រដើម">
+       🏠
+    </a>
+
+    <a href="profile.html"
+       class="dock-item"
+       title="ប្រវត្តិរូប">
+       👤
+    </a>
+
+    <a href="appstore.html"
+       class="dock-item"
+       title="App Store">
+       🛒
+    </a>
+
+    <a href="library.html"
+       class="dock-item"
+       title="Library DSN"
+       style="color:#ec4899;">
+       📚
+    </a>
+
+    <a href="setting.html"
+       class="dock-item"
+       title="ការកំណត់">
+       ⚙️
+    </a>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   SONG DATABASE
+===================================== */
+
+const songs = [
+
+    {
+        title:"ទាហានមុំបី ភ្នំ750",
+        id:"1K41ZSpc26GlRm3Vm-m3UPceRomH1KcGS"
+    },
+
+    {
+        title:"Blame You Too",
+        id:"10-PzHDJcyerQsqaRrAGLcuerUPOPIcfl"
+    },
+
+    {
+        title:"Blaming All Men English",
+        id:"1lVFI6bFLkBzUXTDdwRe0jvcA0j3aaCd-"
+    },
+
+    {
+        title:"ប៉ៃលិន ខ្ញុំមិនដែលភ្លេចអ្នកទេ",
+        id:"1OP42EERj_uyEUAlJ7t7MEVgoBAMLA3EY"
+    }
+
+];
+
+const audio=document.getElementById("audioPlayer");
+const playlist=document.getElementById("playlist");
+
+let currentIndex=
+    parseInt(
+        localStorage.getItem("dsn_music_index") || "0"
+    );
+
+let plays=
+    parseInt(
+        localStorage.getItem("dsn_music_plays") || "0"
+    );
+
+let favorites=
+    JSON.parse(
+        localStorage.getItem("dsn_music_favorites") || "[]"
+    );
+
+
+/* =====================================
+   TOAST
+===================================== */
+
+function toast(message){
+
+    const el=document.getElementById("toast");
+
+    el.textContent=message;
+    el.classList.add("show");
+
+    setTimeout(()=>{
+        el.classList.remove("show");
+    },2200);
+}
+
+
+/* =====================================
+   LOAD SONG
+===================================== */
+
+function loadSong(index, autoplay=false){
+
+    if(index<0) index=songs.length-1;
+    if(index>=songs.length) index=0;
+
+    currentIndex=index;
+
+    const song=songs[index];
+
+    audio.src=
+        `https://docs.google.com/uc?export=download&id=${song.id}`;
+
+    document.getElementById("songTitle")
+        .textContent=song.title;
+
+    document.getElementById("songStatus")
+        .textContent=
+        `TRACK ${index+1} • DSN MUSIC CORE`;
+
+    localStorage.setItem(
+        "dsn_music_index",
+        index
+    );
+
+    renderPlaylist();
+
+    if(autoplay){
+
+        audio.play().catch(()=>{
+
+            toast(
+                "⚠️ Google Drive មិនអនុញ្ញាតឱ្យ Stream បទនេះទេ"
+            );
+
+        });
+
+        plays++;
+
+        localStorage.setItem(
+            "dsn_music_plays",
+            plays
+        );
+
+        updateStats();
+    }
+}
+
+
+/* =====================================
+   PLAYLIST
+===================================== */
+
+function renderPlaylist(){
+
+    playlist.innerHTML="";
+
+    const query=
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+    songs.forEach((song,index)=>{
+
+        if(!song.title.toLowerCase().includes(query))
+            return;
+
+        const item=document.createElement("div");
+
+        item.className=
+            "song-item"+
+            (index===currentIndex?" active":"");
+
+        const isFav=favorites.includes(index);
+
+        item.innerHTML=`
+
+            <div class="song-number">
+                ${String(index+1).padStart(2,"0")}
+            </div>
+
+            <div class="song-icon">
+                🎵
+            </div>
+
+            <div class="song-info">
+
+                <div class="song-name">
+                    ${song.title}
+                </div>
+
+                <div class="song-meta">
+                    DSN AUDIO TRACK
+                </div>
+
+            </div>
+
+            <button
+                class="favorite ${isFav?"active":""}"
+                onclick="toggleFavorite(${index},event)"
+            >
+                ${isFav?"❤️":"♡"}
+            </button>
+        `;
+
+        item.onclick=()=>{
+
+            loadSong(index,true);
+
+        };
+
+        playlist.appendChild(item);
+
+    });
+
+}
+
+
+/* =====================================
+   PLAY / PAUSE
+===================================== */
+
+function togglePlay(){
+
+    if(!audio.src){
+
+        loadSong(currentIndex,true);
+        return;
+
+    }
+
+    if(audio.paused){
+
+        audio.play().catch(()=>{
+
+            toast("⚠️ មិនអាចចាក់បទនេះបានទេ");
+
+        });
+
+    }else{
+
+        audio.pause();
+
+    }
+
+}
+
+
+/* =====================================
+   NEXT / PREVIOUS
+===================================== */
+
+function nextSong(){
+
+    loadSong(currentIndex+1,true);
+
+}
+
+function previousSong(){
+
+    if(audio.currentTime>5){
+
+        audio.currentTime=0;
+        return;
+
+    }
+
+    loadSong(currentIndex-1,true);
+
+}
+
+
+/* =====================================
+   AUTO NEXT
+===================================== */
+
+audio.addEventListener(
+    "ended",
+    ()=>{
+        nextSong();
+    }
+);
+
+
+/* =====================================
+   FAVORITES
+===================================== */
+
+function toggleFavorite(index,event){
+
+    event.stopPropagation();
+
+    if(favorites.includes(index)){
+
+        favorites=
+            favorites.filter(i=>i!==index);
+
+        toast("💔 បានដកចេញពី Favorite");
+
+    }else{
+
+        favorites.push(index);
+
+        toast("❤️ បានបន្ថែមទៅ Favorite");
+
+    }
+
+    localStorage.setItem(
+        "dsn_music_favorites",
+        JSON.stringify(favorites)
+    );
+
+    renderPlaylist();
+    updateStats();
+}
+
+
+/* =====================================
+   STATISTICS
+===================================== */
+
+function updateStats(){
+
+    document.getElementById("songCount")
+        .textContent=songs.length;
+
+    document.getElementById("playCount")
+        .textContent=plays;
+
+    document.getElementById("favCount")
+        .textContent=favorites.length;
+
+}
+
+updateStats();
+
+
+/* =====================================
+   RESET
+===================================== */
+
+function resetMusicData(){
+
+    if(!confirm(
+        "តើបងពិតជាចង់ Reset Music Data មែនទេ?"
+    )) return;
+
+    localStorage.removeItem("dsn_music_index");
+    localStorage.removeItem("dsn_music_plays");
+    localStorage.removeItem("dsn_music_favorites");
+
+    currentIndex=0;
+    plays=0;
+    favorites=[];
+
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+
+    document.getElementById("songTitle")
+        .textContent="ជ្រើសរើសបទចម្រៀងមួយ";
+
+    document.getElementById("songStatus")
+        .textContent="DSN MUSIC CORE READY";
+
+    renderPlaylist();
+    updateStats();
+
+    toast("🗑️ Music Data បាន Reset!");
+}
+
+
+/* =====================================
+   VISUALIZER BACKGROUND
+===================================== */
+
+const canvas=
+    document.getElementById("visualizer");
+
+const ctx=
+    canvas.getContext("2d");
+
+let bars=[];
+
+function resizeCanvas(){
+
+    canvas.width=innerWidth;
+    canvas.height=innerHeight;
+
+    bars=[];
+
+    const count=
+        Math.floor(innerWidth/12);
+
+    for(let i=0;i<count;i++){
+
+        bars.push({
+            height:Math.random()*50+5,
+            speed:Math.random()*1.5+.3
+        });
+
+    }
+
+}
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+resizeCanvas();
+
+
+function animateVisualizer(){
+
+    ctx.clearRect(
+        0,0,
+        canvas.width,
+        canvas.height
+    );
+
+    const barWidth=
+        canvas.width/bars.length;
+
+    bars.forEach((bar,i)=>{
+
+        bar.height+=
+            Math.sin(Date.now()/400+i)*.7;
+
+        if(bar.height<5)
+            bar.height=5;
+
+        const gradient=
+            ctx.createLinearGradient(
+                0,
+                canvas.height,
+                0,
+                canvas.height-bar.height*2
+            );
+
+        gradient.addColorStop(
+            0,
+            "rgba(236,72,153,.15)"
+        );
+
+        gradient.addColorStop(
+            1,
+            "rgba(139,92,246,.02)"
+        );
+
+        ctx.fillStyle=gradient;
+
+        ctx.fillRect(
+            i*barWidth,
+            canvas.height-bar.height*2,
+            barWidth-2,
+            bar.height*2
+        );
+
+    });
+
+    requestAnimationFrame(
+        animateVisualizer
+    );
+
+}
+
+animateVisualizer();
+
+
+/* =====================================
+   INITIALIZE
+===================================== */
+
+renderPlaylist();
+
+loadSong(currentIndex,false);
+
+</script>
+
+</body>

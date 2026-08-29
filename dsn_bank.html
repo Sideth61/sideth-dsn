@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <title>DSN Bank — Personal Banking</title>
+  <style>
+    :root {
+      --color-bg: #0f172a;
+      --color-bg-dark: #020617;
+      --color-surface: rgba(30, 41, 59, 0.92);
+      --color-border: #334155;
+      --color-input-border: #475569;
+      --color-text: #e5e7eb;
+      --color-muted: #94a3b8;
+      --color-notice: #cbd5e1;
+      --color-primary: #38bdf8;
+      --color-primary-text: #082f49;
+      --color-success: #4ade80;
+      --color-danger: #fb7185;
+      --color-button-danger: #ef4444;
+      --radius-card: 22px;
+      --radius-control: 14px;
+      --shadow-card: 0 12px 35px rgba(0, 0, 0, 0.28);
+    }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--color-text);
+      font-family: system-ui, -apple-system, "Noto Sans Khmer", sans-serif;
+      background:
+        radial-gradient(
+          circle at top,
+          #1e3a5f 0%,
+          var(--color-bg) 42%,
+          var(--color-bg-dark) 100%
+        );
+    }
+    button,
+    input {
+      width: 100%;
+      border: 0;
+      border-radius: var(--radius-control);
+      padding: 13px;
+      font: inherit;
+    }
+    button {
+      margin-top: 8px;
+      color: var(--color-primary-text);
+      font-weight: 800;
+      background: var(--color-primary);
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    button:hover {
+      opacity: 0.92;
+    }
+    button:active {
+      transform: scale(0.98);
+    }
+    button.secondary {
+      color: #e2e8f0;
+      background: var(--color-border);
+    }
+    button.danger {
+      color: #fff;
+      background: var(--color-button-danger);
+    }
+    input {
+      margin: 6px 0;
+      color: #fff;
+      background: var(--color-bg);
+      border: 1px solid var(--color-input-border);
+      outline: none;
+    }
+    input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+    }
+    h2,
+    h3 {
+      margin-top: 0;
+    }
+    small {
+      color: var(--color-muted);
+    }
+    .app {
+      max-width: 520px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .brand {
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+    }
+    .sub {
+      margin-top: 3px;
+      color: var(--color-muted);
+      font-size: 12px;
+    }
+    .card {
+      margin-bottom: 14px;
+      padding: 18px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(10px);
+    }
+    .hidden {
+      display: none;
+    }
+    .label {
+      color: var(--color-muted);
+      font-size: 13px;
+    }
+    .notice {
+      color: var(--color-notice);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .login-head {
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .login-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 10px;
+      font-size: 32px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 20px;
+    }
+    .account-box {
+      margin: 12px 0;
+      padding: 13px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+    }
+    .account-name {
+      font-size: 19px;
+      font-weight: 900;
+    }
+    .pin-label {
+      margin-top: 12px;
+    }
+    .account-owner {
+      margin-top: 14px;
+      font-size: 21px;
+      font-weight: 900;
+    }
+    .balance {
+      margin: 8px 0;
+      font-size: 38px;
+      font-weight: 900;
+    }
+    .divider {
+      height: 1px;
+      margin: 14px 0;
+      background: var(--color-border);
+    }
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .transaction {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .transaction:last-child {
+      border-bottom: 0;
+    }
+    .transaction-amount--positive {
+      color: var(--color-success);
+    }
+    .transaction-amount--negative {
+      color: var(--color-danger);
+    }
+    .section-title {
+      margin-bottom: 7px;
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      color: var(--color-primary);
+      font-size: 11px;
+      font-weight: 800;
+      background: var(--color-bg);
+      border-radius: 999px;
+    }
+    .khqr {
+      text-align: center;
+    }
+    .merchant-name {
+      margin: 6px 0;
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .merchant-balance {
+      color: var(--color-primary);
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .currency {
+      color: var(--color-muted);
+      font-size: 12px;
+    }
+    .qr-box {
+      display: inline-block;
+      margin: 8px 0 10px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 18px;
+    }
+    .qr-image {
+      display: block;
+      width: 180px;
+      height: auto;
+      border-radius: 10px;
+    }
+    .merchant-account {
+      color: var(--color-notice);
+      font-size: 12px;
+    }
+    .merchant-account strong {
+      color: #fff;
+    }
+    .merchant-note {
+      margin-top: 5px;
+      color: #f472b6;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .logout-button {
+      display: none;
+      width: auto;
+      padding: 9px 12px;
+    }
+    @media (max-width: 400px) {
+      .app {
+        padding: 12px;
+      }
+      .balance {
+        font-size: 33px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="site-header">
+      <div>
+        <div class="brand">🏦 DSN Bank</div>
+        <div class="sub">Personal Banking • Server Edition</div>
+      </div>
+  <button id="logoutBtn" class="secondary logout-button" type="button">
+    ចេញ
+  </button>
+</header>
+<section id="loginView" class="card">
+  <div class="login-head">
+    <div class="login-icon">🔐</div>
+    <h2>ចូលគណនី DSN Bank</h2>
+    <div class="notice">
+      សូមបញ្ចូលព័ត៌មានគណនីរបស់អ្នក
+    </div>
+  </div>
+  <div class="account-box">
+    <div class="label">👤 ឈ្មោះគណនី</div>
+    <div class="account-name">Sideth61</div>
+    <div class="label pin-label">🔐 PIN</div>
+    <div class="account-name">••••••</div>
+  </div>
+  <input
+    id="nameInput"
+    value="Sideth61"
+    placeholder="ឈ្មោះម្ចាស់គណនី"
+    autocomplete="username">
+  <input
+    id="pinInput"
+    type="password"
+    inputmode="numeric"
+    maxlength="6"
+    placeholder="PIN 6 ខ្ទង់"
+    autocomplete="current-password">
+  <button id="loginBtn" type="button">
+    🔓 ចូលគណនី
+  </button>
+  <p id="loginMsg" class="notice"></p>
+</section>
+<main id="bankView" class="hidden">
+  <section class="card">
+    <span class="badge">● ACTIVE ACCOUNT</span>
+    <div class="label account-owner-label">
+      ម្ចាស់គណនី
+    </div>
+    <div id="owner" class="account-owner"></div>
+    <small id="accountId"></small>
+    <div class="divider"></div>
+    <div class="label">
+      💰 សមតុល្យបច្ចុប្បន្ន
+    </div>
+    <div class="balance">
+      $<span id="balance">0.00</span>
+    </div>
+  </section>
+  <section class="card">
+    <h3>💸 ប្រតិបត្តិការ</h3>
+    <input
+      id="amount"
+      type="number"
+      min="0.01"
+      step="0.01"
+      placeholder="💵 ចំនួនទឹកប្រាក់">
+    <input
+      id="note"
+      maxlength="200"
+      placeholder="📝 កំណត់ចំណាំ">
+    <div class="actions">
+      <button id="depositBtn" type="button">
+        ➕ ដាក់ប្រាក់
+      </button>
+      <button id="withdrawBtn" class="secondary" type="button">
+        ➖ ដកប្រាក់
+      </button>
+    </div>
+    <p id="txMsg" class="notice"></p>
+  </section>
+  <section class="card">
+    <h3>📜 ប្រវត្តិប្រតិបត្តិការ</h3>
+    <div id="history"></div>
+    <button id="refreshBtn" class="secondary" type="button">
+      🔄 Refresh
+    </button>
+  </section>
+  <section class="card khqr">
+    <div class="section-title">
+      💳 ACLEDA KHQR VIP Merchant
+    </div>
+    <div class="merchant-name">
+      ❤️ San Sideth ❤️
+    </div>
+    <div class="merchant-balance">
+      $ 0.00
+      <span class="currency">(USD)</span>
+    </div>
+    <div class="qr-box">
+      <img class="qr-image" src="qr.jpg" alt="KHQR">
+    </div>
+    <div class="merchant-account">
+      🏦 គណនី:
+      <strong>031 500 0714</strong>
+    </div>
+    <div class="merchant-note">
+      ✨ ស្កេនបាញ់លុយមកប្រុសសង្ហារម្នាក់នេះផង 2026! 🔥😂
+    </div>
+  </section>
+  <section class="card">
+    <div class="label">
+      🛡️ DSN Bank Server Edition
+    </div>
+    <p class="notice">
+      Balance និង Transaction ត្រូវបានគ្រប់គ្រងដោយ Server។
+      Version នេះសម្រាប់ DSN OS Hub / Test System ប៉ុណ្ណោះ
+      មិនមែនសម្រាប់លុយពិត ឬប្រព័ន្ធធនាគារផ្លូវការទេ។
+    </p>
+  </section>
+</main>
+  </div>
+  <script type="module">
+    const API_BASE_URL = "/api";
+    const TOKEN_STORAGE_KEY = "DSN_BANK_TOKEN";
+    const state = {
+      token: sessionStorage.getItem(TOKEN_STORAGE_KEY)
+    };
+    const elements = {
+      loginView: document.getElementById("loginView"),
+      bankView: document.getElementById("bankView"),
+      logoutButton: document.getElementById("logoutBtn"),
+      loginButton: document.getElementById("loginBtn"),
+      nameInput: document.getElementById("nameInput"),
+      pinInput: document.getElementById("pinInput"),
+      loginMessage: document.getElementById("loginMsg"),
+      owner: document.getElementById("owner"),
+      accountId: document.getElementById("accountId"),
+      balance: document.getElementById("balance"),
+      amountInput: document.getElementById("amount"),
+      noteInput: document.getElementById("note"),
+      depositButton: document.getElementById("depositBtn"),
+      withdrawButton: document.getElementById("withdrawBtn"),
+      transactionMessage: document.getElementById("txMsg"),
+      history: document.getElementById("history"),
+      refreshButton: document.getElementById("refreshBtn")
+    };
+    const formatMoney = (value) =>
+      Number(value).toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    const escapeHtml = (value) =>
+      String(value).replace(
+        /[&<>"']/g,
+        (character) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;"
+        }[character])
+      );
+    const showMessage = (element, text, isError = false) => {
+      element.textContent = text;
+      element.style.color = isError ? "#fb7185" : "#cbd5e1";
+    };
+    const setAuthenticatedView = (isAuthenticated) => {
+      elements.loginView.classList.toggle("hidden", isAuthenticated);
+      elements.bankView.classList.toggle("hidden", !isAuthenticated);
+      elements.logoutButton.style.display = isAuthenticated ? "block" : "none";
+    };
+    const saveToken = (token) => {
+      state.token = token;
+      sessionStorage.setItem(TOKEN_STORAGE_KEY, token);
+    };
+    const clearToken = () => {
+      state.token = null;
+      sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+    };
+    const request = async (path, options = {}) => {
+      const headers = {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      };
+      if (state.token) {
+        headers.Authorization = `Bearer ${state.token}`;
+      }
+      const response = await fetch(`${API_BASE_URL}${path}`, {
+        ...options,
+        headers
+      });
+      let data = {};
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+      if (!response.ok) {
+        throw new Error(data.error || "Server error");
+      }
+      return data;
+    };
+    const renderTransactions = (transactions) => {
+      if (!transactions.length) {
+        elements.history.innerHTML =
+          "<p class='notice'>មិនទាន់មានប្រតិបត្តិការ។</p>";
+        return;
+      }
+      elements.history.innerHTML = transactions
+        .map((transaction) => {
+          const isDeposit = transaction.type === "deposit";
+          const typeLabel = isDeposit ? "➕ ដាក់ប្រាក់" : "➖ ដកប្រាក់";
+          const amountPrefix = isDeposit ? "+" : "-";
+          const amountClass = isDeposit
+            ? "transaction-amount--positive"
+            : "transaction-amount--negative";
+          return `
+            <div class="transaction">
+              <div>
+                <b>${typeLabel}</b>
+                <br>
+                <small>
+                  ${escapeHtml(transaction.note || "គ្មានកំណត់ចំណាំ")}
+                  •
+                  ${escapeHtml(transaction.date)}
+                </small>
+              </div>
+              <b class="${amountClass}">
+                ${amountPrefix}$${formatMoney(transaction.amount)}
+              </b>
+            </div>
+          `;
+        })
+        .join("");
+    };
+    const loadAccount = async () => {
+      const data = await request("/me");
+      elements.owner.textContent = data.account.name;
+      elements.accountId.textContent =
+        `Account ID: ${data.account.accountId}`;
+      elements.balance.textContent = formatMoney(data.account.balance);
+      renderTransactions(data.transactions);
+    };
+    const logout = () => {
+      clearToken();
+      setAuthenticatedView(false);
+      elements.pinInput.value = "";
+    };
+    const showBank = async () => {
+      setAuthenticatedView(true);
+      try {
+        await loadAccount();
+      } catch {
+        logout();
+      }
+    };
+    const login = async () => {
+      const name = elements.nameInput.value.trim();
+      const pin = elements.pinInput.value.trim();
+      showMessage(elements.loginMessage, "");
+      if (!name) {
+        showMessage(
+          elements.loginMessage,
+          "សូមបញ្ចូលឈ្មោះ 😘",
+          true
+        );
+        return;
+      }
+      if (!/^\d{6}$/.test(pin)) {
+        showMessage(
+          elements.loginMessage,
+          "PIN ត្រូវមាន 6 ខ្ទង់ 😬",
+          true
+        );
+        return;
+      }
+      try {
+        const data = await request("/login", {
+          method: "POST",
+          body: JSON.stringify({ name, pin })
+        });
+        saveToken(data.token);
+        await showBank();
+      } catch (error) {
+        showMessage(
+          elements.loginMessage,
+          error.message,
+          true
+        );
+      }
+    };
+    const submitTransaction = async (type) => {
+      const amount = Number(elements.amountInput.value);
+      const note = elements.noteInput.value.trim();
+      showMessage(elements.transactionMessage, "");
+      if (!amount || amount <= 0) {
+        showMessage(
+          elements.transactionMessage,
+          "សូមបញ្ចូលចំនួនទឹកប្រាក់ឱ្យត្រឹមត្រូវ 😁",
+          true
+        );
+        return;
+      }
+      try {
+        await request("/transactions", {
+          method: "POST",
+          body: JSON.stringify({
+            type,
+            amount,
+            note
+          })
+        });
+        elements.amountInput.value = "";
+        elements.noteInput.value = "";
+        await loadAccount();
+        showMessage(
+          elements.transactionMessage,
+          "ប្រតិបត្តិការជោគជ័យ ✅❤️"
+        );
+      } catch (error) {
+        showMessage(
+          elements.transactionMessage,
+          error.message,
+          true
+        );
+      }
+    };
+    const refreshAccount = async () => {
+      try {
+        await loadAccount();
+      } catch {
+        logout();
+      }
+    };
+    const bindEvents = () => {
+      elements.loginButton.addEventListener("click", login);
+      elements.depositButton.addEventListener(
+        "click",
+        () => submitTransaction("deposit")
+      );
+      elements.withdrawButton.addEventListener(
+        "click",
+        () => submitTransaction("withdraw")
+      );
+      elements.refreshButton.addEventListener(
+        "click",
+        refreshAccount
+      );
+      elements.logoutButton.addEventListener(
+        "click",
+        logout
+      );
+      elements.pinInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          login();
+        }
+      });
+    };
+    const initializeApp = async () => {
+      bindEvents();
+      if (state.token) {
+        await showBank();
+      } else {
+        setAuthenticatedView(false);
+      }
+    };
+    initializeApp();
+  </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DSN OS Full System - Mr. Sideth Edition</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="qrmaney.jpg">
+<link rel="icon" type="image/jpeg" href="qrmaney.jpg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DSN OS">
+<meta name="theme-color" content="#1a0b2e">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{
+margin:0;padding:0;width:100%;min-height:100vh;
+font-family:'Kantumruy Pro',sans-serif;
+color:#fff;
+background:radial-gradient(circle at 50% 20%, #1a0b2e 0%, #030007 80%);
+display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+overflow-x:hidden;padding-bottom:40px;
+}
+.bg-glow{
+position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;
+background: radial-gradient(circle at 50% 40%, rgba(225,29,72,0.25) 0%, transparent 70%);
+}
+.container{
+width:100%;max-width:420px;margin:auto;padding:20px 12px;
+display:flex;flex-direction:column;gap:18px;position:relative;z-index:1;
+}
+.card{
+background:rgba(15, 8, 25, 0.85);
+backdrop-filter:blur(20px);
+-webkit-backdrop-filter:blur(20px);
+border:2px solid rgba(244,63,94,0.5);
+border-radius:32px;
+box-shadow: 0 0 40px rgba(225,29,72,0.3), 0 20px 40px rgba(0,0,0,0.7);
+padding:20px;text-align:center;
+}
+.os-logo{font-size:24px;font-weight:800;letter-spacing:1px;color:#fff;text-shadow:0 0 12px rgba(244,63,94,0.7);margin-bottom:6px;}
+.owner-badge{
+background:linear-gradient(135deg, rgba(220,38,38,0.9), rgba(157,23,77,0.9));
+border:1px solid rgba(255,255,255,0.4);
+padding:12px;border-radius:18px;font-size:13px;font-weight:700;color:#fff;
+margin-bottom:14px;box-shadow:0 5px 15px rgba(220,38,38,0.4);
+}
+.section-title{font-size:16px;font-weight:700;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:8px;display:flex;align-items:center;gap:8px;color:#fca5a5;}
+p{font-size:12px;line-height:1.6;margin:0 0 12px;color:#cbd5e1;}
+.btn{
+display:flex;align-items:center;justify-content:center;gap:8px;
+width:100%;min-height:46px;padding:10px;margin-top:8px;
+border:1px solid rgba(255,255,255,0.3);border-radius:14px;
+color:#fff;text-decoration:none;font-family:inherit;font-size:13px;font-weight:600;
+cursor:pointer;background:rgba(255,255,255,0.1);backdrop-filter:blur(6px);transition:.25s;
+}
+.btn:hover{background:rgba(255,255,255,0.25);transform:translateY(-2px);}
+.toast{
+position:fixed;z-index:2000;left:50%;bottom:20px;transform:translate(-50%,20px);
+opacity:0;pointer-events:none;background:rgba(20,10,30,0.95);
+border:1px solid rgba(255,255,255,0.4);padding:10px 16px;border-radius:14px;
+font-size:12px;transition:.3s;white-space:nowrap;max-width:90%;text-align:center;
+}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="container">
+<!-- SYSTEM OWNER INFO -->
+<div class="card">
+<div class="os-logo">💻 DSN OS VIP Core 🚀</div>
+<div class="owner-badge">
+⭐ OWNER: Mr. San Sideth ❤️️🌺 ⭐
+
+<span style="font-size:11px; font-weight:400; color:#fbcfe8;">My Wife: Ouza (Female) Vatana (Son) 💛🌺</span>
+</div>
+<!-- LINK TO SEPARATE AI CORE -->
+<a href="ai_core.html" class="btn" style="background:linear-gradient(135deg,rgba(147,51,234,0.8),rgba(126,34,206,0.9)); margin-top:12px;">🤖 បើក Vibe Build AI Neural Core</a>
+</div>
+<!-- PS2 LOCAL PLAYER -->
+<section class="card">
+<div class="section-title">🎮 DSN PS2 Direct Player</div>
+<p>ជ្រើសរើស File ហ្គេម PS2 (ISO, CHD) ផ្ទាល់ពីទូរស័ព្ទ លេងបានភ្លាមៗ 🔥</p>
+<button id="ps2Btn" class="btn" style="background:linear-gradient(135deg,rgba(5,150,105,0.8),rgba(4,120,87,0.9));">📂 បើកហ្គេម PS2 ផ្ទាល់</button>
+<input id="ps2Input" type="file" accept=".iso,.bin,.cue,.chd" hidden>
+</section>
+<!-- PSP LOCAL PLAYER -->
+<section class="card">
+<div class="section-title">🎯 DSN PSP Direct Player</div>
+<p>ជ្រើសរើស File ហ្គេម PSP (ISO, CSO) ផ្ទាល់ពីទូរស័ព្ទ រលូនកប់ស៊េរី 🚀</p>
+<button id="pspBtn" class="btn" style="background:linear-gradient(135deg,rgba(219,39,119,0.8),rgba(157,23,77,0.9));">📂 បើកហ្គេម PSP ផ្ទាល់</button>
+<input id="pspInput" type="file" accept=".iso,.cso" hidden>
+</section>
+<!-- KHQR VIP SECTION -->
+<section class="card">
+<div class="section-title">💳 ACleda KHQR VIP Merchant</div>
+<div style="font-size:16px;font-weight:700;color:#fff;margin:6px 0;">❤️️សាន ស៊ីដេត (San Sideth)❤️️</div>
+<div style="font-size:22px;font-weight:800;color:#38bdf8;margin-bottom:10px;">$ 0.00 <span style="font-size:12px;color:#94a3b8;">(USD)</span></div>
+<div style="background:#fff;padding:10px;border-radius:18px;display:inline-block;margin-bottom:10px;">
+<img src="qrmaney.jpg" alt="KHQR" style="width:180px;height:auto;display:block;border-radius:10px;">
+</div>
+<div style="font-size:12px;color:#cbd5e1;">🏦 គណនី: <b style="color:#fff;">031 500 0714</b></div>
+<div style="font-size:11px;color:#f472b6;font-weight:700;margin-top:4px;">✨ ស្កេនបាញ់លុយមកប្រុសសង្ហារម្នាក់នេះ 2026! 🔥</div>
+</section>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+function showToast(msg){
+const t = $("toast");
+t.textContent = msg;
+t.classList.add("show");
+clearTimeout(window.__t);
+window.__t = setTimeout(() => t.classList.remove("show"), 3000);
+}
+$("ps2Btn").onclick = () => $("ps2Input").click();
+$("ps2Input").onchange = e => handleFile(e.target.files?.[0], "ps2");
+$("pspBtn").onclick = () => $("pspInput").click();
+$("pspInput").onchange = e => handleFile(e.target.files?.[0], "psp");
+function handleFile(file, type){
+if(!file) return;
+showToast(⁠⏳ កំពុងផ្ទុក File ${file.name}... សូមរង់ចាំបន្តិច!⁠);
+try {
+const fileUrl = URL.createObjectURL(file);
+const params = new URLSearchParams({ title: file.name, system: type, stream: fileUrl });
+showToast(⁠🔥 បើកហ្គេម ${file.name} สำเร็จ! ជោគជ័យហើយប្រុសស្អិត!⁠);
+setTimeout(() => {
+window.location.href = ⁠emulator.html?${params.toString()}⁠;
+}, 1200);
+} catch (err) {
+showToast(⁠❌ មានបញ្ហា: ${err.message}⁠);
+}
+}
+</script>
+</body>
+</html>

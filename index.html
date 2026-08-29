@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#030712">
+    <title>San Sideth - DSN Supreme God-Tier Cyber OS</title>
+    <meta http-equiv="refresh" content="4; url=home-old.html">
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; }
+
+        body {
+            background: #030712;
+            color: #c084fc;
+            font-family: "Courier New", "Kantumruy Pro", monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #matrix {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.78;
+            pointer-events: none;
+            filter: none;
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(192,132,252,0.035) 0px,
+                rgba(192,132,252,0.035) 1px,
+                transparent 1px,
+                transparent 4px
+            );
+        }
+
+        .vignette {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            background: radial-gradient(
+                ellipse at center,
+                transparent 35%,
+                rgba(0,0,0,0.28) 72%,
+                rgba(0,0,0,0.58) 100%
+            );
+        }
+
+        .terminal-box {
+            position: relative;
+            z-index: 5;
+            background: rgba(5, 12, 24, 0.90);
+            border: 1px solid rgba(168,85,247,0.95);
+            box-shadow:
+                0 0 18px rgba(168,85,247,0.30),
+                0 0 55px rgba(124,58,237,0.12),
+                inset 0 0 30px rgba(168,85,247,0.035);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 470px;
+            width: 91%;
+            text-align: left;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            animation: terminalIn .7s ease-out both;
+        }
+
+        @keyframes terminalIn {
+            from { opacity: 0; transform: scale(.97) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .terminal-box::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 2px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                #c084fc,
+                #a855f7,
+                #7c3aed,
+                #c084fc,
+                transparent
+            );
+            box-shadow: 0 0 12px #a855f7;
+        }
+
+        .top-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 10px;
+            color: #c084fc;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed rgba(192,132,252,.38);
+            padding-bottom: 9px;
+            letter-spacing: .4px;
+        }
+
+        h2 {
+            color: #c084fc;
+            font-size: 15px;
+            text-shadow: 0 0 10px rgba(192,132,252,.7);
+            margin: 10px 0 13px;
+            letter-spacing: .5px;
+        }
+
+        .typing-text {
+            font-size: 13px;
+            color: #d7e4ef;
+            line-height: 1.72;
+            min-height: 126px;
+            border-left: 2px solid #a855f7;
+            padding: 11px 12px;
+            margin-bottom: 16px;
+            background: rgba(3, 8, 18, .90);
+            border-radius: 6px;
+            box-shadow: inset 0 0 18px rgba(168,85,247,.035);
+            white-space: pre-wrap;
+            overflow: hidden;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 7px;
+            height: 15px;
+            margin-left: 3px;
+            vertical-align: -2px;
+            background: #c084fc;
+            box-shadow: 0 0 9px #a855f7;
+            animation: blink .72s steps(1) infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .loading-bar {
+            width: 100%;
+            height: 7px;
+            background: rgba(30,41,59,.85);
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid rgba(168,85,247,.8);
+            position: relative;
+        }
+
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #7c3aed, #a855f7, #c084fc);
+            animation: loadProgress 4s linear forwards;
+            box-shadow: 0 0 12px #a855f7;
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .footer-status {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+
+        .footer-status span:last-child {
+            color: #c084fc;
+            text-shadow: 0 0 7px rgba(192,132,252,.65);
+        }
+
+        @media (max-width: 520px) {
+            .terminal-box { padding: 19px; }
+            .top-info { font-size: 8px; }
+            h2 { font-size: 13px; }
+            .typing-text { font-size: 12px; min-height: 122px; }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="matrix"></canvas>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <main class="terminal-box">
+        <div class="top-info">
+            <span>🌐 DSN_OS: SAN_SIDETH</span>
+            <span>STATUS: SECURE</span>
+        </div>
+
+        <h2>🛡️ SAN SIDETH - GOD-TIER TERMINAL</h2>
+
+        <div class="typing-text" id="console">
+            <span id="typed"></span><span class="cursor"></span>
+        </div>
+
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+
+        <div class="footer-status">
+            <span>Executing Warp Sequence...</span>
+            <span>100%</span>
+        </div>
+    </main>
+
+    <script>
+        const canvas = document.getElementById("matrix");
+        const ctx = canvas.getContext("2d");
+
+        let width, height, fontSize, columns, drops;
+        const chars = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>[]{}#$%&@DSN";
+
+        function resizeMatrix() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            width = window.innerWidth;
+            height = window.innerHeight;
+
+            canvas.width = Math.floor(width * dpr);
+            canvas.height = Math.floor(height * dpr);
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            fontSize = width < 600 ? 15 : 18;
+            columns = Math.ceil(width / fontSize);
+            drops = Array.from(
+                { length: columns },
+                () => Math.floor(Math.random() * (height / fontSize))
+            );
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(3, 7, 18, 0.075)";
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.font = "700 " + fontSize + "px 'Courier New', monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = "#a855f7";
+                ctx.fillStyle = Math.random() > 0.86 ? "#c084fc" : "#a855f7";
+                ctx.fillText(char, x, y);
+
+                ctx.shadowBlur = 0;
+
+                if (y > height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                } else {
+                    drops[i]++;
+                }
+            }
+
+            requestAnimationFrame(drawMatrix);
+        }
+
+        resizeMatrix();
+        window.addEventListener("resize", resizeMatrix);
+        drawMatrix();
+
+        const typed = document.getElementById("typed");
+
+        const messages = [
+            "Initializing San Sideth Core v10.0...",
+            "Connecting to Satellite Grid (195/195)...",
+            "Bypassing firewall protocols...",
+            "Redirecting to home-old.html..."
+        ];
+
+        let messageIndex = 0;
+        let charIndex = 0;
+        const typingSpeed = 42;
+        const linePause = 260;
+
+        function typeNext() {
+            if (messageIndex >= messages.length) return;
+
+            const current = messages[messageIndex];
+
+            if (charIndex < current.length) {
+                typed.textContent += current.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeNext, typingSpeed);
+            } else {
+                typed.textContent += "\n";
+                messageIndex++;
+                charIndex = 0;
+                setTimeout(typeNext, linePause);
+            }
+        }
+
+        typeNext();
+
+        setTimeout(function () {
+            window.location.replace("home-old.html");
+        }, 4000);
+    </script>
+</body>
+</html>

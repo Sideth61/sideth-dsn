@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSN Virtual SMS Receiver Hub - DSN OS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            background: linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);
+            background-attachment: fixed;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 110px; /* បន្ថែម padding សម្រាប់ Floating Dock */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 550px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header-card {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .header-card h2 {
+            color: #38bdf8;
+            margin: 0 0 5px 0;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .header-card p {
+            color: #94a3b8;
+            font-size: 12px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .card {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: 0.3s;
+        }
+        .card:hover { border-color: rgba(56, 189, 248, 0.5); }
+
+        .section-title {
+            color: #38bdf8;
+            font-size: 15px;
+            margin: 0 0 15px 0;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .number-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .number-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid #334155;
+            padding: 12px 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .number-card:hover {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.15);
+            transform: translateX(3px);
+        }
+
+        .number-info h4 {
+            margin: 0 0 3px 0;
+            color: #34d399;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .number-info span {
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .select-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Kantumruy Pro', sans-serif;
+            transition: 0.3s;
+        }
+        .select-btn:hover { background: #38bdf8; }
+
+        .sms-inbox {
+            background: #090d16;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 15px;
+            min-height: 120px;
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .sms-item {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            border-left: 3px solid #38bdf8;
+            line-height: 1.5;
+        }
+
+        .sms-item span {
+            color: #f43f5e;
+            font-weight: bold;
+        }
+
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-family: 'Kantumruy Pro', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        /* Floating Dock */
+        .dsn-dock {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(56, 189, 248, 0.3); padding: 10px 20px; border-radius: 30px;
+            display: flex; gap: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); z-index: 999;
+        }
+        .dock-item { font-size: 20px; text-decoration: none; padding: 8px; border-radius: 50%; display: flex; transition: 0.3s; }
+        .dock-item:hover { background: rgba(56, 189, 248, 0.2); transform: translateY(-5px); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-card">
+            <h2>📱 DSN Virtual SMS Receiver Hub</h2>
+            <p>ប្រព័ន្ធពិនិត្យលេខកូដ SMS បណ្តោះអាសន្នសម្រាប់ផ្ទៀងផ្ទាត់គណនី</p>
+        </div>
+
+        <!-- ☎️ Number List Card -->
+        <div class="card">
+            <div class="section-title">🌍 ជ្រើសរើសលេខទូរសព្ទ (Virtual Numbers)</div>
+            <div class="number-grid">
+                <div class="number-card" onclick="selectNumber('+1 (555) 234-5678', 'USA')">
+                    <div class="number-info">
+                        <h4>🇺🇸 +1 (555) 234-5678</h4>
+                        <span>United States (USA)</span>
+                    </div>
+                    <button class="select-btn">ရើសយក</button>
+                </div>
+
+                <div class="number-card" onclick="selectNumber('+44 (7911) 123456', 'UK')">
+                    <div class="number-info">
+                        <h4>🇬🇧 +44 (7911) 123456</h4>
+                        <span>United Kingdom (UK)</span>
+                    </div>
+                    <button class="select-btn">ရើសយក</button>
+                </div>
+
+                <div class="number-card" onclick="selectNumber('+855 (96) 888-9999', 'Cambodia')">
+                    <div class="number-info">
+                        <h4>🇰🇭 +855 (96) 888-9999</h4>
+                        <span>Cambodia (KH)</span>
+                    </div>
+                    <button class="select-btn">ရើសយក</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📥 Inbox Messages Card -->
+        <div class="card">
+            <div class="section-title">📥 ប្រអប់សារចូល (Live SMS Inbox)</div>
+            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;" id="activeNumberDisplay">
+                * កំពុងរើសលេខ: <b>ยังមិនបានជ្រើសរើស</b>
+            </div>
+            
+            <div class="sms-inbox" id="smsInboxList">
+                <div style="color: #64748b; text-align: center; margin-top: 35px; font-size: 12px;">សូមចុចជ្រើសរើសលេខខាងលើដើម្បីមើលសារកូដ SMS!</div>
+            </div>
+
+            <button class="btn" onclick="refreshInbox()">🔄 ឆែកមើលសារថ្មី (Refresh)</button>
+        </div>
+    </div>
+
+    <!-- Floating Dock -->
+    <div class="dsn-dock">
+        <a href="index.html" class="dock-item" title="ទំព័រដើម">🏠</a>
+        <a href="library.html" class="dock-item" title="Library">📚</a>
+        <a href="explorer.html" class="dock-item" title="File Explorer">📁</a>
+        <a href="game.html" class="dock-item" title="ហ្គេម">🎮</a>
+        <a href="setting.html" class="dock-item" title="ការកំណត់">⚙️</a>
+    </div>
+
+    <script>
+        let selectedNum = "";
+
+        function selectNumber(number, country) {
+            selectedNum = number;
+            document.getElementById('activeNumberDisplay').innerHTML = `* កំពុងរើសលេខ: <b style="color: #38bdf8;">${number} (${country})</b>`;
+            
+            const inbox = document.getElementById('smsInboxList');
+            inbox.innerHTML = `
+                <div class="sms-item">
+                    <b>System:</b> បានតភ្ជាប់ទៅកាន់ម៉ាស៊ីនមេ ${country} ដោយជោគជ័យ។ កំពុងរង់ចាំកូដ SMS...
+                </div>
+            `;
+        }
+
+        function refreshInbox() {
+            if (!selectedNum) {
+                alert('⚠️ សូមជ្រើសរើសលេខទូរសព្ទជាមុនសិនបង!');
+                return;
+            }
+
+            const inbox = document.getElementById('smsInboxList');
+            const randomCode = Math.floor(100000 + Math.random() * 900000);
+            inbox.innerHTML += `
+                <div class="sms-item">
+                    🕒 ពេលនេះទើបទទួលបាន:<br>
+                    <span>កូដផ្ទៀងផ្ទាត់របស់អ្នកគឺ: <b>${randomCode}</b> (Valid 2 mins)</span>
+                </div>
+            `;
+            inbox.scrollTop = inbox.scrollHeight;
+        }
+    </script>
+</body>
