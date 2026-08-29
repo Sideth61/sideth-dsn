@@ -1,38 +1,17 @@
-import express from 'express';
-import TelegramBot from 'node-telegram-bot-api';
-import dotenv from 'dotenv';
+នេះមែន
+const TelegramBot = require('node-telegram-bot-api');
 
-dotenv.config();
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// យក Token ពី Environment Variables របស់ Render
+// យក Token ពី Environment Variables របស់ Render ដោយស្វ័យប្រវត្តិ
 const token = process.env.TELEGRAM_BOT_TOKEN;
-
-if (!token) {
-  console.error("Error: TELEGRAM_BOT_TOKEN is missing in environment variables!");
-}
-
-// បង្កើត Telegram Bot ដោយប្រើ Polling
 const bot = new TelegramBot(token, { polling: true });
 
-// បង្កើត Express Server ធម្មតាដើម្បីទប់កុំឱ្យ Render Sleep
-app.get('/', (req, res) => {
-  res.send('DSN Email Telegram Bridge is running!');
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
-});
-
-// កូដសម្រាប់ឱ្យ Bot ចាប់យកសារ /start
+// ពេលមានគេផ្ញើសារ /start មកកាន់ Bot
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, "សួស្តីបង! Bot របស់បងបានតភ្ជាប់និងដំណើរការជោគជ័យហើយ 🎉");
+  bot.sendMessage(chatId, "សួស្តីបង! Telegram Bot (@sideth_bot) របស់បងបានដំណើរការជោគជ័យហើយ 🎉");
 });
 
-// កូដសម្រាប់ឱ្យ Bot តបាល់រាល់សារទាំងអស់ដែលផ្ញើមក
+// ចាប់គ្រប់សារទាំងអស់ដែលគេឆាតមក
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
@@ -41,3 +20,5 @@ bot.on('message', (msg) => {
     bot.sendMessage(chatId, `បងបានផ្ញើសារមកថា៖ "${text}"`);
   }
 });
+
+console.log("Telegram Bot is running...");
