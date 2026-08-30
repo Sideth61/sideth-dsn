@@ -1,24 +1,41 @@
-នេះមែន
 const TelegramBot = require('node-telegram-bot-api');
 
-// យក Token ពី Environment Variables របស់ Render ដោយស្វ័យប្រវត្តិ
-const token = process.env.TELEGRAM_BOT_TOKEN;
-const bot = new TelegramBot(token, { polling: true });
+// 1. Bot ចាស់ (ប្រើ Token ចាស់ពី Render)
+const oldToken = process.env.TELEGRAM_BOT_TOKEN;
+if (oldToken) {
+  const oldBot = new TelegramBot(oldToken, { polling: true });
+  
+  oldBot.onText(/\/start/, (msg) => {
+    const chatId = msg.chat.id;
+    oldBot.sendMessage(chatId, "សួស្តីបង! Bot ចាស់ដំណើរការធម្មតា 🎉");
+  });
 
-// ពេលមានគេផ្ញើសារ /start មកកាន់ Bot
-bot.onText(/\/start/, (msg) => {
-  const chatId = msg.chat.id;
-  bot.sendMessage(chatId, "សួស្តីបង! Telegram Bot (@sideth_bot) របស់បងបានដំណើរការជោគជ័យហើយ 🎉");
-});
+  oldBot.on('message', (msg) => {
+    const chatId = msg.chat.id;
+    const text = msg.text;
+    if (text && !text.startsWith('/start')) {
+      oldBot.sendMessage(chatId, `Bot ចាស់ទទួលបានសារ៖ "${text}"`);
+    }
+  });
+  console.log("Old Telegram Bot is running...");
+}
 
-// ចាប់គ្រប់សារទាំងអស់ដែលគេឆាតមក
-bot.on('message', (msg) => {
-  const chatId = msg.chat.id;
-  const text = msg.text;
+// 2. Bot ថ្មី (ប្រើ Token ថ្មី `NEW_BOT_TOKEN` ពី Render)
+const newToken = process.env.NEW_BOT_TOKEN;
+if (newToken) {
+  const newBot = new TelegramBot(newToken, { polling: true });
 
-  if (text && !text.startsWith('/start')) {
-    bot.sendMessage(chatId, `បងបានផ្ញើសារមកថា៖ "${text}"`);
-  }
-});
+  newBot.onText(/\/start/, (msg) => {
+    const chatId = msg.chat.id;
+    newBot.sendMessage(chatId, "សួស្តីបង! Telegram Bot ថ្មី (@sideth_bot) បានដំណើរការជោគជ័យហើយ 🎉");
+  });
 
-console.log("Telegram Bot is running...");
+  newBot.on('message', (msg) => {
+    const chatId = msg.chat.id;
+    const text = msg.text;
+    if (text && !text.startsWith('/start')) {
+      newBot.sendMessage(chatId, `Bot ថ្មីបានផ្ញើសារមកថា៖ "${text}"`);
+    }
+  });
+  console.log("New Telegram Bot is running...");
+}
