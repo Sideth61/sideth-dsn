@@ -1,5 +1,5 @@
-const express = require('express');
-const TelegramBot = require('node-telegram-bot-api');
+import express from 'express';
+import TelegramBot from 'node-telegram-bot-api';
 
 const app = express();
 app.use(express.json());
@@ -7,7 +7,7 @@ app.use(express.json());
 // Database រក្សាទុក Mapping រវាង Username និង Telegram Chat ID
 const userDatabase = {};
 
-// ប្រើប្រាស់ Bot ថ្មីតែមួយគត់ដើម្បីការពារការជាន់គ្នា (Conflict Polling)
+// ប្រើប្រាស់ Bot Token ពី Environment Variables
 const token = process.env.NEW_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
 let bot = null;
 
@@ -27,7 +27,7 @@ if (token) {
     const chatId = msg.chat.id;
     const username = match[1].trim().toLowerCase();
     
-    // บันทึกទិន្នន័យចូល Database
+    // ទុកទិន្នន័យចូល Database
     userDatabase[username] = chatId;
 
     bot.sendMessage(chatId, 
