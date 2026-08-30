@@ -1,146 +1,1802 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSN Game Hub</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap');
-        body { font-family: 'Kantumruy Pro', sans-serif; background: #090d16; color: #fff; padding: 20px; text-align: center; margin: 0; padding-bottom: 120px; }
-        .container { max-width: 520px; margin: auto; background: rgba(17, 24, 39, 0.9); padding: 25px; border-radius: 20px; border: 1px solid #38bdf8; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: left; }
-        h2 { color: #38bdf8; text-align: center; margin-top: 0; }
-        p { color: #94a3b8; font-size: 14px; text-align: center; }
-        
-        .game-card { background: #1e293b; padding: 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-        
-        .game-logo {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid #334155;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        .game-info { display: flex; flex-direction: column; gap: 4px; flex-grow: 1; }
-        .game-title { font-weight: bold; color: #fff; font-size: 15px; }
-        .game-desc { font-size: 11px; color: #94a3b8; }
-
-        .btn-group { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
-
-        .btn-play { background: #2563eb; color: #fff; padding: 7px 12px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: bold; transition: 0.3s; white-space: nowrap; }
-        .btn-play:hover { background: #1d4ed8; }
-
-        .btn-download { background: #10b981; color: #fff; padding: 12px; display: block; text-align: center; border-radius: 10px; text-decoration: none; font-weight: bold; margin-top: 20px; }
-        .btn-download:hover { background: #059669; }
-        
-        .btn-back { display: block; text-align: center; background: #334155; color: #fff; padding: 10px; margin-top: 10px; text-decoration: none; border-radius: 10px; font-size: 14px; }
-        .btn-back:hover { background: #475569; }
-
-        /* Floating Dock */
-        .dsn-dock {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(56, 189, 248, 0.3); padding: 10px 20px; border-radius: 30px;
-            display: flex; gap: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); z-index: 999;
-        }
-        .dock-item { font-size: 20px; text-decoration: none; padding: 8px; border-radius: 50%; display: flex; transition: 0.3s; }
-        .dock-item:hover { background: rgba(56, 189, 248, 0.2); transform: translateY(-5px); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#030007">
+<meta name="description" content="DSN PS2 និង PSP Local File Player">
+<title>PS2PSP Local - Sideth Version 1.6 Offline</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="logo_psp.jpg">
+<link rel="icon" type="image/jpeg" href="logo_psp.jpg">
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+:root{
+  --bg-deep:#030007;
+  --text:#fff;
+  --focus:#fde68a;
+  --success-start:rgba(5,150,105,.78);
+  --success-end:rgba(4,120,87,.88);
+  --pink-start:rgba(219,39,119,.78);
+  --pink-end:rgba(157,23,77,.88);
+  --danger-start:rgba(220,38,38,.82);
+  --danger-end:rgba(153,27,27,.9);
+  --blue-start:rgba(37,99,235,.82);
+  --blue-end:rgba(29,78,216,.9);
+}
+html,
+body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100vh;
+  font-family:"Noto Sans Khmer","Khmer OS","Leelawadee UI",Arial,sans-serif;
+  color:var(--text);
+  overflow-x:hidden;
+  background:var(--bg-deep);
+}
+body{
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.fixed-bg{
+  position:fixed;
+  inset:0;
+  z-index:-999;
+  background:url("icon4.jpg") center/cover no-repeat;
+}
+.fixed-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(3,0,7,.48);
+}
+.container{
+  width:100%;
+  max-width:650px;
+  margin:auto;
+  padding:clamp(16px,4vw,24px) 12px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  position:relative;
+  z-index:1;
+}
+.card{
+  padding:clamp(16px,4vw,20px);
+  overflow:hidden;
+  position:relative;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:28px;
+  background:rgba(255,255,255,.06);
+  box-shadow:0 15px 35px rgba(0,0,0,.25);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.banner-img{
+  display:block;
+  width:100%;
+  height:clamp(150px,35vw,180px);
+  object-fit:cover;
+  margin-bottom:15px;
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:18px;
+  background:#12091b;
+}
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0 0 12px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,.2);
+  color:#fff;
+  font-size:clamp(17px,4.5vw,18px);
+  font-weight:700;
+}
+p{
+  margin:0 0 12px;
+  color:#f8fafc;
+  font-size:14px;
+  line-height:1.7;
+}
+.btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  width:100%;
+  min-height:52px;
+  margin-top:9px;
+  padding:13px 14px;
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:16px;
+  color:#fff;
+  text-align:center;
+  text-decoration:none;
+  font:700 14px/1.45 inherit;
+  cursor:pointer;
+  transition:transform .2s ease,background .2s ease,opacity .2s ease,box-shadow .2s ease;
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  touch-action:manipulation;
+}
+.btn:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.2);
+}
+.btn:active{
+  transform:scale(.98);
+}
+.btn:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:3px;
+  box-shadow:0 0 0 5px rgba(253,230,138,.22);
+}
+.btn:disabled{
+  cursor:not-allowed;
+  opacity:.72;
+  transform:none;
+}
+.btn.is-loading{
+  cursor:wait;
+}
+.btn-spinner{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  border:2px solid rgba(255,255,255,.4);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+.status{
+  min-height:22px;
+  margin:10px 0 0;
+  color:#fef3c7;
+  font-size:12px;
+  line-height:1.5;
+}
+.storage-summary{
+  display:grid;
+  gap:12px;
+  margin-top:12px;
+}
+.storage-stat{
+  padding:13px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:16px;
+  background:rgba(0,0,0,.2);
+}
+.storage-stat-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  color:#fff;
+  font-size:12px;
+  line-height:1.5;
+}
+.storage-stat-row strong{
+  color:#fde68a;
+  font-size:13px;
+  text-align:right;
+}
+.storage-progress{
+  width:100%;
+  height:9px;
+  margin-top:9px;
+  overflow:hidden;
+  border-radius:999px;
+  background:rgba(255,255,255,.14);
+}
+.storage-progress-bar{
+  width:0;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#22c55e,#eab308,#ef4444);
+  transition:width .3s ease;
+}
+.library-toolbar{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.library-toolbar .btn{
+  flex:1 1 180px;
+  margin-top:0;
+}
+.library-list{
+  display:grid;
+  gap:10px;
+  margin-top:14px;
+}
+.library-empty{
+  padding:18px 12px;
+  border:1px dashed rgba(255,255,255,.3);
+  border-radius:16px;
+  color:rgba(255,255,255,.78);
+  font-size:13px;
+  line-height:1.7;
+  text-align:center;
+}
+.game-item{
+  display:grid;
+  gap:10px;
+  padding:13px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:18px;
+  background:rgba(0,0,0,.22);
+}
+.game-item-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+.game-item-title{
+  min-width:0;
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+.game-item-badge{
+  flex:0 0 auto;
+  padding:4px 8px;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;
+  background:rgba(255,255,255,.1);
+  color:#fde68a;
+  font-size:10px;
+  font-weight:700;
+}
+.game-item-meta{
+  display:grid;
+  gap:4px;
+  color:rgba(255,255,255,.72);
+  font-size:11px;
+  line-height:1.5;
+}
+.game-item-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.game-item-actions .btn{
+  flex:1 1 130px;
+  min-height:42px;
+  margin-top:0;
+  padding:9px 10px;
+  font-size:12px;
+}
+.btn-open{
+  background:linear-gradient(135deg,var(--blue-start),var(--blue-end));
+}
+.btn-delete{
+  background:linear-gradient(135deg,var(--danger-start),var(--danger-end));
+}
+.btn-clear{
+  background:linear-gradient(135deg,var(--danger-start),var(--danger-end));
+}
+.btn-refresh{
+  background:linear-gradient(135deg,rgba(124,58,237,.82),rgba(91,33,182,.9));
+}
+.toast{
+  position:fixed;
+  z-index:2000;
+  left:50%;
+  bottom:calc(24px + env(safe-area-inset-bottom));
+  width:max-content;
+  max-width:min(90vw,520px);
+  padding:12px 18px;
+  border:1px solid rgba(255,255,255,.4);
+  border-radius:16px;
+  background:rgba(20,10,30,.92);
+  color:#fff;
+  font-size:13px;
+  line-height:1.5;
+  text-align:center;
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,20px);
+  transition:opacity .3s ease,transform .3s ease;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+.version{
+  margin-top:-8px;
+  color:rgba(255,255,255,.72);
+  font-size:11px;
+  text-align:center;
+}
+.offline-badge{
+  position:fixed;
+  top:10px;
+  right:10px;
+  z-index:1500;
+  padding:6px 10px;
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:999px;
+  background:rgba(5,150,105,.82);
+  color:#fff;
+  font-size:11px;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(-8px);
+  transition:opacity .25s ease,transform .25s ease;
+}
+.offline-badge.show{
+  opacity:1;
+  transform:translateY(0);
+}
+@media (prefers-reduced-motion:reduce){
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+    transition-duration:.01ms!important;
+  }
+}
+@media (max-width:380px){
+  .card{
+    border-radius:22px;
+  }
+  .btn{
+    font-size:13px;
+  }
+  .game-item-header{
+    display:grid;
+  }
+  .game-item-badge{
+    width:max-content;
+  }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h2>🎮 DSN Game Hub</h2>
-        <p>ជ្រើសរើសហ្គេមដែលបងចង់លេង ឬទាញយកទាំង Android និង iOS! 😂</p>
-        
-        <!-- GTA Card -->
-        <div class="game-card">
-            <div class="game-logo">🚗</div>
-            <div class="game-info">
-                <span class="game-title">Grand Theft Auto (GTA)</span>
-                <span class="game-desc">Open World Action Game</span>
-            </div>
-            <a href="gta.html" class="btn-play">ចូលមើល</a>
-        </div>
-
-        <!-- Tomb Raider Card -->
-        <div class="game-card">
-            <div class="game-logo">🏹</div>
-            <div class="game-info">
-                <span class="game-title">Tomb Raider (Feral)</span>
-                <span class="game-desc">Action Adventure Survival</span>
-            </div>
-            <div class="btn-group">
-                <a href="https://play.google.com/store/apps/details?id=com.feralinteractive.tombraider_android&hl=en" target="_blank" class="btn-play">Android</a>
-                <a href="https://apps.apple.com/kh/app/tomb-raider/id6742988247" target="_blank" class="btn-play" style="background: #38bdf8; color: #02040a;">🍎 iOS</a>
-            </div>
-        </div>
-
-        <!-- Hitman Absolution Card -->
-        <div class="game-card">
-            <div class="game-logo">👔</div>
-            <div class="game-info">
-                <span class="game-title">Hitman: Absolution</span>
-                <span class="game-desc">Stealth Action Assassin</span>
-            </div>
-            <div class="btn-group">
-                <a href="https://play.google.com/store/apps/details?id=com.feralinteractive.hitmanabsolution_android" target="_blank" class="btn-play">Android</a>
-                <a href="https://apps.apple.com/kh/app/hitman-absolution/id6737513240" target="_blank" class="btn-play" style="background: #38bdf8; color: #02040a;">🍎 iOS</a>
-            </div>
-        </div>
-
-        <!-- GTA SA DE Card -->
-        <div class="game-card">
-            <div class="game-logo">🔥</div>
-            <div class="game-info">
-                <span class="game-title">GTA: San Andreas - DE</span>
-                <span class="game-desc">Definitive Edition Open World</span>
-            </div>
-            <a href="https://play.google.com/store/apps/details?id=com.rockstargames.gtasa.de&hl=en" target="_blank" class="btn-play">Play Store</a>
-        </div>
-
-        <!-- Call of Duty Card -->
-        <div class="game-card">
-            <div class="game-logo">🔫</div>
-            <div class="game-info">
-                <span class="game-title">Call of Duty</span>
-                <span class="game-desc">Multiplayer Shooter</span>
-            </div>
-            <a href="call_of_duty.html" class="btn-play">ចូលមើល</a>
-        </div>
-
-        <!-- App Store & Play Store Story Card -->
-        <div class="game-card">
-            <div class="game-logo">📱</div>
-            <div class="game-info">
-                <span class="game-title">Featured App & Story</span>
-                <span class="game-desc">Universal Android & iOS Links</span>
-            </div>
-            <div class="btn-group">
-                <a href="https://play.google.com/store/apps/details?id=com.rockstargames.gtasa.de&hl=en" target="_blank" class="btn-play">Android</a>
-                <a href="https://apps.apple.com/kh/story/id1593165384" target="_blank" class="btn-play" style="background: #38bdf8; color: #02040a;">🍎 iOS</a>
-            </div>
-        </div>
-
-        <!-- ឯកសារហ្គេមពី Google Drive -->
-        <a href="https://drive.google.com/file/d/0B5JtcY9bqji2Y2RsdlhQZXY2Q1k/view?usp=drivesdk&resourcekey=0-J5-WYZXLhfoqqM2hnLeL9Q" target="_blank" class="btn-download">📥 ទាញយកឯកសារហ្គេម (Google Drive)</a>
-
-        <a href="index.html" class="btn-back">🏠 ត្រឡប់ទៅ DSN OS វិញ</a>
+<div class="fixed-bg" aria-hidden="true"></div>
+<div id="offlineBadge" class="offline-badge" role="status" aria-live="polite"></div>
+<main class="container" aria-labelledby="pageTitle">
+  <h1 id="pageTitle" class="section-title" hidden>
+    DSN PS2 និង PSP Local File Player
+  </h1>
+  <section class="card" aria-labelledby="ps2Title">
+    <img
+      src="ps2.JPEG"
+      alt="រូបភាពបណ្ណាល័យហ្គេម PS2"
+      class="banner-img"
+      decoding="async"
+    >
+<h2 id="ps2Title" class="section-title">
+  🎮 DSN PS2 Local File Player
+</h2>
+<p id="ps2Description">
+  Welcome back, San Sidet ❤️️🌺 😘<br>
+  លេងហ្គេម PS2 ផ្ទាល់ពីក្នុងទូរស័ព្ទ
+  លឿនរហ័ស មិនបាច់ពឹង Server ក្រៅ 🔥
+</p>
+<button
+  id="localPs2Btn"
+  class="btn"
+  type="button"
+  aria-label="ជ្រើសរើសឯកសារហ្គេម PS2 ពីទូរស័ព្ទ"
+  aria-describedby="ps2Description ps2Status"
+  aria-controls="localPs2Input"
+  style="background:linear-gradient(135deg,var(--success-start),var(--success-end));"
+>
+  <span class="btn-label">
+    📂 បើកហ្គេម PS2 ផ្ទាល់ពីទូរស័ព្ទ (ISO, ZIP, CHD)
+  </span>
+</button>
+<input
+  id="localPs2Input"
+  type="file"
+  accept=".iso,.bin,.cue,.chd,.cso,.zip"
+  aria-label="ជ្រើសរើសឯកសារហ្គេម PS2"
+  hidden
+>
+<p id="ps2Status" class="status" role="status" aria-live="polite"></p>
+  </section>
+  <section class="card" aria-labelledby="pspTitle">
+    <img
+      src="psp.jpg"
+      alt="រូបភាពបណ្ណាល័យហ្គេម PSP"
+      class="banner-img"
+      decoding="async"
+    >
+<h2 id="pspTitle" class="section-title">
+  🎯 DSN PSP Local File Player
+</h2>
+<p id="pspDescription">
+  លេងហ្គេម PSP ផ្ទាល់ពីក្នុងទូរស័ព្ទ
+  អត់មានរឿង Error 1016 ទៀតទេ 🚀
+</p>
+<button
+  id="localPspBtn"
+  class="btn"
+  type="button"
+  aria-label="ជ្រើសរើសឯកសារហ្គេម PSP ពីទូរស័ព្ទ"
+  aria-describedby="pspDescription pspStatus"
+  aria-controls="localPspInput"
+  style="background:linear-gradient(135deg,var(--pink-start),var(--pink-end));"
+>
+  <span class="btn-label">
+    📂 បើកហ្គេម PSP ផ្ទាល់ពីទូរស័ព្ទ (ISO, CSO, ZIP)
+  </span>
+</button>
+<input
+  id="localPspInput"
+  type="file"
+  accept=".iso,.cso,.zip"
+  aria-label="ជ្រើសរើសឯកសារហ្គេម PSP"
+  hidden
+>
+<p id="pspStatus" class="status" role="status" aria-live="polite"></p>
+  </section>
+  <section class="card" aria-labelledby="libraryTitle">
+    <h2 id="libraryTitle" class="section-title">
+      🗂️ បណ្ណាល័យហ្គេមដែលបានរក្សាទុក
+    </h2>
+<p>
+  បញ្ជីនេះអានពី IndexedDB ក្នុងទូរស័ព្ទ។
+  អ្នកអាចបើកហ្គេមចាស់ លុបឯកសារមួយៗ ឬសម្អាតទាំងអស់។
+</p>
+<div class="storage-summary" aria-live="polite">
+  <div class="storage-stat">
+    <div class="storage-stat-row">
+      <span>📦 ចំនួនហ្គេម</span>
+      <strong id="gameCount">0</strong>
     </div>
-
-    <!-- Floating Dock -->
-    <div class="dsn-dock">
-        <a href="index.html" class="dock-item" title="ទំព័រដើម">🏠</a>
-        <a href="game.html" class="dock-item" title="Games" style="background: rgba(56, 189, 248, 0.2); border-radius: 50%;">🎮</a>
-        <a href="facebook.html" class="dock-item" title="ហ្វេសប៊ុក">📘</a>
-        <a href="money_tool.html" class="dock-item" title="Money Tool">💰</a>
-        <a href="setting.html" class="dock-item" title="ការកំណត់">⚙️</a>
+  </div>
+  <div class="storage-stat">
+    <div class="storage-stat-row">
+      <span>💾 ទំហំបានប្រើ</span>
+      <strong id="usedStorage">0 B</strong>
     </div>
+    <div class="storage-stat-row">
+      <span>📊 ទំហំដែល Browser រាយការណ៍</span>
+      <strong id="quotaStorage">មិនមានទិន្នន័យ</strong>
+    </div>
+    <div
+      class="storage-progress"
+      role="progressbar"
+      aria-label="ភាគរយទំហំផ្ទុកដែលបានប្រើ"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+    >
+      <div id="storageProgressBar" class="storage-progress-bar"></div>
+    </div>
+  </div>
+</div>
+<div class="library-toolbar">
+  <button
+    id="refreshLibraryBtn"
+    class="btn btn-refresh"
+    type="button"
+  >
+    🔄 Refresh បញ្ជី
+  </button>
+  <button
+    id="clearLibraryBtn"
+    class="btn btn-clear"
+    type="button"
+  >
+    🗑️ លុបឯកសារទាំងអស់
+  </button>
+</div>
+<div
+  id="libraryStatus"
+  class="status"
+  role="status"
+  aria-live="polite"
+></div>
+<div
+  id="libraryList"
+  class="library-list"
+  aria-live="polite"
+  aria-label="បញ្ជីហ្គេមដែលបានរក្សាទុក"
+></div>
+  </section>
+  <div class="version" aria-label="កំណែកម្មវិធី">
+    DSN PS2PSP Local • Version 1.6 Offline
+  </div>
+</main>
+<div
+  id="toast"
+  class="toast"
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+></div>
+<script src="vendor/jszip.min.js"></script>
+<script>
+"use strict";
+/* =====================================================
+   CONFIGURATION
+===================================================== */
+const CONFIG = Object.freeze({
+  database:{
+    name:"DSN_OS_LOCAL_GAMES",
+    version:1,
+    store:"games"
+  },
+  files:{
+    maxSize:20 * 1024 * 1024 * 1024,
+    maxExtractedSize:20 * 1024 * 1024 * 1024
+  },
+  systems:{
+    ps2:{
+      button:"localPs2Btn",
+      input:"localPs2Input",
+      status:"ps2Status",
+      extensions:[".iso",".bin",".cue",".chd",".cso"]
+    },
+    psp:{
+      button:"localPspBtn",
+      input:"localPspInput",
+      status:"pspStatus",
+      extensions:[".iso",".cso"]
+    }
+  }
+});
+const state = {
+  processing:false,
+  indexedDBAvailable:false,
+  redirectTimer:null,
+  toastTimer:null,
+  libraryLoading:false
+};
+/* =====================================================
+   DOM UTILITIES
+===================================================== */
+const $ = id => document.getElementById(id);
+function getSystemConfig(system){
+  return CONFIG.systems[system] || null;
+}
+function getSystemElement(system,key){
+  const config = getSystemConfig(system);
+  return config ? $(config[key]) : null;
+}
+function setText(element,value){
+  if(element){
+    element.textContent = String(value ?? "");
+  }
+}
+function setStatus(system,message){
+  setText(
+    getSystemElement(system,"status"),
+    message
+  );
+}
+function setLibraryStatus(message){
+  setText(
+    $("libraryStatus"),
+    message
+  );
+}
+function addClass(element,className){
+  element?.classList?.add(className);
+}
+function removeClass(element,className){
+  element?.classList?.remove(className);
+}
+function query(element,selector){
+  return element?.querySelector?.(selector) || null;
+}
+/* =====================================================
+   USER FEEDBACK
+===================================================== */
+function showToast(message){
+  const toast = $("toast");
+  if(!toast){
+    console.warn(message);
+    return;
+  }
+  setText(toast,message);
+  addClass(toast,"show");
+  clearTimeout(state.toastTimer);
+  state.toastTimer = setTimeout(() => {
+    removeClass(toast,"show");
+  },3200);
+}
+function setButtonLoading(system,isLoading,labelText="កំពុងដំណើរការ..."){
+  const button = getSystemElement(system,"button");
+  if(!button){
+    return;
+  }
+  const label = query(button,".btn-label");
+  if(isLoading){
+    if(!button.dataset.originalLabel && label){
+      button.dataset.originalLabel = label.textContent;
+    }
+    button.disabled = true;
+    button.classList.add("is-loading");
+    button.setAttribute("aria-busy","true");
+    setText(label,labelText);
+    if(!query(button,".btn-spinner")){
+      const spinner = document.createElement("span");
+      spinner.className = "btn-spinner";
+      spinner.setAttribute("aria-hidden","true");
+      button.prepend(spinner);
+    }
+  }else{
+    button.disabled = false;
+    button.classList.remove("is-loading");
+    button.removeAttribute("aria-busy");
+    const spinner = query(button,".btn-spinner");
+    spinner?.remove();
+    if(label && button.dataset.originalLabel){
+      setText(label,button.dataset.originalLabel);
+    }
+  }
+}
+function setProcessing(system,isProcessing,label){
+  state.processing = isProcessing;
+  setButtonLoading(system,isProcessing,label);
+}
+/* =====================================================
+   ERROR MESSAGES
+===================================================== */
+function indexedDBGuidance(){
+  return "Browser នេះមិនគាំទ្រ IndexedDB ឬត្រូវបានបិទ។ សូមប្រើ Safari/Chrome ជំនាន់ថ្មី បើក JavaScript និងកុំប្រើ Private/Incognito Mode។";
+}
+function formatError(error){
+  if(!error){
+    return "មានបញ្ហាមិនស្គាល់។";
+  }
+  switch(error.name){
+    case "IndexedDBUnsupportedError":
+      return indexedDBGuidance();
+    case "QuotaExceededError":
+      return "ទំហំផ្ទុកក្នុង Browser មិនគ្រប់គ្រាន់។ សូមលុបឯកសារចាស់ ឬបង្កើនទំហំផ្ទុក។";
+    case "InvalidStateError":
+      return "Local Database ត្រូវបានបិទ ឬមិនទាន់រួចរាល់។ សូម Refresh ទំព័រ។";
+    case "AbortError":
+      return "ប្រតិបត្តិការ Database ត្រូវបានបញ្ឈប់។ សូមសាកល្បងម្ដងទៀត។";
+    case "NotAllowedError":
+    case "SecurityError":
+      return "Browser មិនអនុញ្ញាតឱ្យប្រើ Local Database។ សូមបិទ Private/Incognito Mode។";
+    default:
+      return error.message || "មានបញ្ហាក្នុងការដំណើរការ។";
+  }
+}
+/* =====================================================
+   FORMATTERS
+===================================================== */
+function formatBytes(bytes){
+  const value = Number(bytes);
+  if(!Number.isFinite(value) || value <= 0){
+    return "0 B";
+  }
+  const units = ["B","KB","MB","GB","TB"];
+  const index = Math.min(
+    Math.floor(Math.log(value) / Math.log(1024)),
+    units.length - 1
+  );
+  return `${(value / Math.pow(1024,index)).toFixed(index ? 2 : 0)} ${units[index]}`;
+}
+function formatDate(timestamp){
+  if(!timestamp){
+    return "មិនស្គាល់កាលបរិច្ឆេទ";
+  }
+  try{
+    return new Intl.DateTimeFormat(
+      "km-KH",
+      {
+        dateStyle:"medium",
+        timeStyle:"short"
+      }
+    ).format(new Date(timestamp));
+  }catch(error){
+    return new Date(timestamp).toLocaleString();
+  }
+}
+function systemLabel(system){
+  return system === "psp" ? "PSP" : "PS2";
+}
+/* =====================================================
+   INDEXEDDB SERVICE
+===================================================== */
+const GameStore = {
+  supported(){
+    return Boolean(
+      window.indexedDB &&
+      typeof window.indexedDB.open === "function"
+    );
+  },
+  close(db){
+    try{
+      db?.close?.();
+    }catch(error){
+      console.warn("Database close warning:",error);
+    }
+  },
+  open(){
+    return new Promise((resolve,reject) => {
+      if(!this.supported()){
+        const error = new Error(indexedDBGuidance());
+        error.name = "IndexedDBUnsupportedError";
+        reject(error);
+        return;
+      }
+      let request;
+      try{
+        request = indexedDB.open(
+          CONFIG.database.name,
+          CONFIG.database.version
+        );
+      }catch(error){
+        reject(error);
+        return;
+      }
+      request.onupgradeneeded = event => {
+        const db = event.target.result;
+        if(!db.objectStoreNames.contains(CONFIG.database.store)){
+          db.createObjectStore(
+            CONFIG.database.store,
+            {keyPath:"id"}
+          );
+        }
+      };
+      request.onsuccess = () => {
+        const db = request.result;
+        db.onversionchange = () => this.close(db);
+        resolve(db);
+      };
+      request.onerror = () => {
+        reject(
+          request.error ||
+          new Error("IndexedDB បើកមិនបានទេ។")
+        );
+      };
+      request.onblocked = () => {
+        reject(
+          new Error(
+            "IndexedDB ត្រូវបានរារាំងដោយ Connection ចាស់។ សូមបិទ Tab ផ្សេងទៀត ហើយ Refresh ទំព័រ។"
+          )
+        );
+      };
+    });
+  },
+  async save(file,system){
+    const db = await this.open();
+    const id =
+      `${system}_${Date.now()}_${Math.random()
+        .toString(36)
+        .slice(2,10)}`;
+    return new Promise((resolve,reject) => {
+      let transaction;
+      let settled = false;
+      const finish = (callback,value) => {
+        if(settled){
+          return;
+        }
+        settled = true;
+        this.close(db);
+        callback(value);
+      };
+      try{
+        transaction =
+          db.transaction(
+            CONFIG.database.store,
+            "readwrite"
+          );
+        const request =
+          transaction.objectStore(
+            CONFIG.database.store
+          ).put({
+            id,
+            title:file.name,
+            system,
+            file,
+            size:file.size,
+            mime:file.type || "application/octet-stream",
+            createdAt:Date.now()
+          });
+        request.onerror = () => {
+          finish(
+            reject,
+            request.error ||
+            new Error("ការរក្សា Game File បរាជ័យ។")
+          );
+        };
+        transaction.oncomplete = () => {
+          finish(resolve,id);
+        };
+        transaction.onerror = () => {
+          finish(
+            reject,
+            transaction.error ||
+            new Error("IndexedDB Transaction បានបរាជ័យ។")
+          );
+        };
+        transaction.onabort = () => {
+          finish(
+            reject,
+            transaction.error ||
+            new Error("IndexedDB Transaction ត្រូវបានបញ្ឈប់។")
+          );
+        };
+      }catch(error){
+        finish(reject,error);
+      }
+    });
+  },
+  async get(id){
+    if(!id){
+      throw new Error("Game ID មិនត្រឹមត្រូវ។");
+    }
+    const db = await this.open();
+    return new Promise((resolve,reject) => {
+      let transaction;
+      let result = null;
+      let settled = false;
+      const finish = (callback,value) => {
+        if(settled){
+          return;
+        }
+        settled = true;
+        this.close(db);
+        callback(value);
+      };
+      try{
+        transaction =
+          db.transaction(
+            CONFIG.database.store,
+            "readonly"
+          );
+        const request =
+          transaction.objectStore(
+            CONFIG.database.store
+          ).get(id);
+        request.onsuccess = () => {
+          result = request.result || null;
+        };
+        request.onerror = () => {
+          finish(
+            reject,
+            request.error ||
+            new Error(
+              "មិនអាចអាន Game File ពី Local Database បានទេ។"
+            )
+          );
+        };
+        transaction.oncomplete = () => {
+          finish(resolve,result);
+        };
+        transaction.onerror = () => {
+          finish(
+            reject,
+            transaction.error ||
+            new Error("IndexedDB Transaction បានបរាជ័យ។")
+          );
+        };
+        transaction.onabort = () => {
+          finish(
+            reject,
+            transaction.error ||
+            new Error("IndexedDB Transaction ត្រូវបានបញ្ឈប់។")
+          );
+        };
+      }catch(error){
+        finish(reject,error);
+      }
+    });
+  },
+  async list(){
+    const db = await this.open();
+    return new Promise((resolve,reject) => {
+      let transaction;
+      let result = [];
+      let settled = false;
+      const finish = (callback,value) => {
+        if(settled){
+          return;
+        }
+        settled = true;
+        this.close(db);
+        callback(value);
+      };
+      try{
+        transaction =
+          db.transaction(
+            CONFIG.database.store,
+            "readonly"
+          );
+        const request =
+          transaction.objectStore(
+            CONFIG.database.store
+          ).getAll();
+        request.onsuccess = () => {
+          result = Array.isArray(request.result)
+            ? request.result
+            : [];
+        };
+        request.onerror = () => {
+          finish(
+            reject,
+            request.error ||
+            new Error(
+              "មិនអាចអានបញ្ជីហ្គេមបានទេ។"
+            )
+          );
+        };
+        transaction.oncomplete = () => {
+          result.sort((a,b) =>
+            Number(b.createdAt || 0) -
+            Number(a.createdAt || 0)
+          );
+          finish(resolve,result);
+        };
+        transaction.onerror = () => {
+          finish(
+            reject,
+            transaction.error ||
+            new Error("ការអានបញ្ជីហ្គេមបានបរាជ័យ។")
+          );
+        };
+        transaction.onabort = () => {
+          finish(
+            reject,
+            transaction.error ||
+            new Error("ការអានបញ្ជីហ្គេមត្រូវបានបញ្ឈប់។")
+          );
+        };
+      }catch(error){
+        finish(reject,error);
+      }
+    });
+  },
+  async delete(id){
+    if(!id){
+      throw new Error("Game ID មិនត្រឹមត្រូវ។");
+    }
+    const db = await this.open();
+    return new Promise((resolve,reject) => {
+      let transaction;
+      let settled = false;
+      const finish = (callback,value) => {
+        if(settled){
+          return;
+        }
+        settled = true;
+        this.close(db);
+        callback(value);
+      };
+      try{
+        transaction =
+          db.transaction(
+            CONFIG.database.store,
+            "readwrite"
+          );
+        const request =
+          transaction.objectStore(
+            CONFIG.database.store
+          ).delete(id);
+        request.onerror = () => {
+          finish(
+            reject,
+            request.error ||
+            new Error("លុប Game File មិនបានទេ។")
+          );
+        };
+        transaction.oncomplete = () => {
+          finish(resolve,true);
+        };
+        transaction.onerror = () => {
+          finish(
+            reject,
+            transaction.error ||
+            new Error("ការលុប Game File បានបរាជ័យ។")
+          );
+        };
+        transaction.onabort = () => {
+          finish(
+            reject,
+            transaction.error ||
+            new Error("ការលុប Game File ត្រូវបានបញ្ឈប់។")
+          );
+        };
+      }catch(error){
+        finish(reject,error);
+      }
+    });
+  },
+  async clear(){
+    const db = await this.open();
+    return new Promise((resolve,reject) => {
+      let transaction;
+      let settled = false;
+      const finish = (callback,value) => {
+        if(settled){
+          return;
+        }
+        settled = true;
+        this.close(db);
+        callback(value);
+      };
+      try{
+        transaction =
+          db.transaction(
+            CONFIG.database.store,
+            "readwrite"
+          );
+        const request =
+          transaction.objectStore(
+            CONFIG.database.store
+          ).clear();
+        request.onerror = () => {
+          finish(
+            reject,
+            request.error ||
+            new Error("មិនអាចលុប Game File ទាំងអស់បានទេ។")
+          );
+        };
+        transaction.oncomplete = () => {
+          finish(resolve,true);
+        };
+        transaction.onerror = () => {
+          finish(
+            reject,
+            transaction.error ||
+            new Error("ការសម្អាតបណ្ណាល័យបានបរាជ័យ។")
+          );
+        };
+        transaction.onabort = () => {
+          finish(
+            reject,
+            transaction.error ||
+            new Error("ការសម្អាតបណ្ណាល័យត្រូវបានបញ្ឈប់។")
+          );
+        };
+      }catch(error){
+        finish(reject,error);
+      }
+    });
+  }
+};
+/* =====================================================
+   STORAGE MANAGEMENT
+===================================================== */
+const StorageManager = {
+  async estimate(){
+    if(
+      navigator.storage &&
+      typeof navigator.storage.estimate === "function"
+    ){
+      try{
+        return await navigator.storage.estimate();
+      }catch(error){
+        console.warn("Storage estimate warning:",error);
+      }
+    }
+    return {
+      usage:0,
+      quota:0
+    };
+  },
+  async update(games){
+    const list = Array.isArray(games)
+      ? games
+      : [];
+    const usedByGames =
+      list.reduce(
+        (total,game) =>
+          total + Number(game?.size || game?.file?.size || 0),
+        0
+      );
+    const estimate =
+      await this.estimate();
+    const usage =
+      Number(estimate.usage || usedByGames);
+    const quota =
+      Number(estimate.quota || 0);
+    const count =
+      $("gameCount");
+    const used =
+      $("usedStorage");
+    const quotaElement =
+      $("quotaStorage");
+    const progress =
+      $("storageProgressBar");
+    setText(count,list.length);
+    setText(used,formatBytes(usedByGames));
+    if(quota > 0){
+      setText(
+        quotaElement,
+        `${formatBytes(quota)} (${Math.min(100,(usage / quota) * 100).toFixed(1)}%)`
+      );
+    }else{
+      setText(
+        quotaElement,
+        "Browser មិនរាយការណ៍"
+      );
+    }
+    const percent =
+      quota > 0
+        ? Math.min(100,(usage / quota) * 100)
+        : 0;
+    if(progress){
+      progress.style.width =
+        `${percent.toFixed(2)}%`;
+      progress.parentElement?.setAttribute(
+        "aria-valuenow",
+        percent.toFixed(2)
+      );
+      progress.parentElement?.setAttribute(
+        "aria-valuetext",
+        `${percent.toFixed(1)}%`
+      );
+    }
+  }
+};
+/* =====================================================
+   LIBRARY UI
+===================================================== */
+function createButton(label,className,onClick){
+  const button =
+    document.createElement("button");
+  button.type = "button";
+  button.className = `btn ${className || ""}`;
+  button.textContent = label;
+  button.addEventListener(
+    "click",
+    onClick
+  );
+  return button;
+}
+function createGameItem(game){
+  const item =
+    document.createElement("article");
+  item.className = "game-item";
+  item.dataset.gameId = game.id;
+  const header =
+    document.createElement("div");
+  header.className = "game-item-header";
+  const title =
+    document.createElement("div");
+  title.className = "game-item-title";
+  title.textContent = game.title || "Untitled Game";
+  const badge =
+    document.createElement("span");
+  badge.className = "game-item-badge";
+  badge.textContent = systemLabel(game.system);
+  header.append(title,badge);
+  const meta =
+    document.createElement("div");
+  meta.className = "game-item-meta";
+  const size =
+    Number(game.size || game.file?.size || 0);
+  const sizeLine =
+    document.createElement("span");
+  sizeLine.textContent =
+    `💾 ទំហំ: ${formatBytes(size)}`;
+  const dateLine =
+    document.createElement("span");
+  dateLine.textContent =
+    `🕒 រក្សាទុក: ${formatDate(game.createdAt)}`;
+  meta.append(sizeLine,dateLine);
+  const actions =
+    document.createElement("div");
+  actions.className = "game-item-actions";
+  const openButton =
+    createButton(
+      "▶️ បើកហ្គេម",
+      "btn-open",
+      () => openSavedGame(game.id)
+    );
+  const deleteButton =
+    createButton(
+      "🗑️ លុប",
+      "btn-delete",
+      () => deleteSavedGame(game)
+    );
+  actions.append(openButton,deleteButton);
+  item.append(header,meta,actions);
+  return item;
+}
+async function renderLibrary(){
+  const listElement =
+    $("libraryList");
+  if(!listElement){
+    return;
+  }
+  if(state.libraryLoading){
+    return;
+  }
+  state.libraryLoading = true;
+  setLibraryStatus(
+    "⏳ កំពុងអានបញ្ជីហ្គេមពី IndexedDB..."
+  );
+  listElement.replaceChildren();
+  try{
+    if(!state.indexedDBAvailable){
+      throw new Error(indexedDBGuidance());
+    }
+    const games =
+      await GameStore.list();
+    await StorageManager.update(games);
+    if(!games.length){
+      const empty =
+        document.createElement("div");
+      empty.className = "library-empty";
+      empty.textContent =
+        "មិនទាន់មានហ្គេមដែលបានរក្សាទុកទេ។ ជ្រើសរើស ISO/CSO/ZIP ខាងលើ ដើម្បីបន្ថែម។";
+      listElement.append(empty);
+      setLibraryStatus("✅ បណ្ណាល័យទទេ។");
+      return;
+    }
+    const fragment =
+      document.createDocumentFragment();
+    games.forEach(game => {
+      fragment.append(
+        createGameItem(game)
+      );
+    });
+    listElement.append(fragment);
+    setLibraryStatus(
+      `✅ បានរកឃើញហ្គេម ${games.length} ឯកសារ។`
+    );
+  }catch(error){
+    console.error(
+      "Render library error:",
+      error
+    );
+    await StorageManager.update([]);
+    const errorElement =
+      document.createElement("div");
+    errorElement.className = "library-empty";
+    errorElement.textContent =
+      `❌ ${formatError(error)}`;
+    listElement.append(errorElement);
+    setLibraryStatus(
+      `បរាជ័យ: ${formatError(error)}`
+    );
+  }finally{
+    state.libraryLoading = false;
+  }
+}
+async function openSavedGame(id){
+  try{
+    if(!state.indexedDBAvailable){
+      throw new Error(indexedDBGuidance());
+    }
+    const game =
+      await GameStore.get(id);
+    if(!game?.file){
+      throw new Error(
+        "រកមិនឃើញឯកសារហ្គេមនេះក្នុង Local Database ទេ។"
+      );
+    }
+    const params =
+      new URLSearchParams({
+        id:game.id,
+        title:game.title || "Local Game",
+        system:game.system || "ps2"
+      });
+    showToast(
+      "🚀 កំពុងបើកហ្គេម..."
+    );
+    setTimeout(() => {
+      window.location.href =
+        `emulator.html?${params.toString()}`;
+    },500);
+  }catch(error){
+    console.error(
+      "Open saved game error:",
+      error
+    );
+    showToast(
+      `❌ ${formatError(error)}`
+    );
+  }
+}
+async function deleteSavedGame(game){
+  if(!game?.id){
+    return;
+  }
+  const confirmed =
+    window.confirm(
+      `តើអ្នកចង់លុប "${game.title || "ហ្គេមនេះ"}" មែនទេ?`
+    );
+  if(!confirmed){
+    return;
+  }
+  try{
+    await GameStore.delete(game.id);
+    showToast(
+      "🗑️ លុប Game File ជោគជ័យ!"
+    );
+    await renderLibrary();
+  }catch(error){
+    console.error(
+      "Delete saved game error:",
+      error
+    );
+    showToast(
+      `❌ លុបមិនបាន: ${formatError(error)}`
+    );
+  }
+}
+async function clearSavedGames(){
+  if(!state.indexedDBAvailable){
+    showToast(
+      `⚠️ ${indexedDBGuidance()}`
+    );
+    return;
+  }
+  let games = [];
+  try{
+    games = await GameStore.list();
+  }catch(error){
+    showToast(
+      `❌ ${formatError(error)}`
+    );
+    return;
+  }
+  if(!games.length){
+    showToast(
+      "ℹ️ មិនមានឯកសារសម្រាប់លុបទេ។"
+    );
+    return;
+  }
+  const confirmed =
+    window.confirm(
+      `តើអ្នកចង់លុបហ្គេមទាំង ${games.length} ឯកសារមែនទេ? សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។`
+    );
+  if(!confirmed){
+    return;
+  }
+  try{
+    await GameStore.clear();
+    showToast(
+      "🗑️ លុប Game File ទាំងអស់ជោគជ័យ!"
+    );
+    await renderLibrary();
+  }catch(error){
+    console.error(
+      "Clear library error:",
+      error
+    );
+    showToast(
+      `❌ សម្អាតមិនបាន: ${formatError(error)}`
+    );
+  }
+}
+/* =====================================================
+   FILE SERVICE
+===================================================== */
+const FileService = {
+  extension(name){
+    const clean =
+      String(name || "")
+        .split("?")[0]
+        .toLowerCase();
+    const index = clean.lastIndexOf(".");
+    return index === -1
+      ? ""
+      : clean.slice(index);
+  },
+  supported(name,system){
+    const config = getSystemConfig(system);
+    return Boolean(
+      config &&
+      config.extensions.includes(
+        this.extension(name)
+      )
+    );
+  },
+  safeZipName(name){
+    const normalized =
+      String(name || "")
+        .replace(/\\/g,"/")
+        .replace(/^\/+/,"");
+    const unsafe =
+      !normalized ||
+      normalized === ".." ||
+      normalized.startsWith("../") ||
+      normalized.includes("/../") ||
+      /^[a-zA-Z]:/.test(normalized) ||
+      normalized.startsWith("//");
+    if(unsafe){
+      throw new Error(
+        "ZIP មាន Path មិនមានសុវត្ថិភាព!"
+      );
+    }
+    return normalized;
+  },
+  async extractZip(file,system){
+    if(typeof JSZip === "undefined"){
+      throw new Error(
+        "ZIP Library ក្នុងស្រុកមិនទាន់ Load ទេ។ សូមពិនិត្យ vendor/jszip.min.js។"
+      );
+    }
+    const zip = await JSZip.loadAsync(file);
+    const config = getSystemConfig(system);
+    const candidates = [];
+    for(const rawName of Object.keys(zip.files || {})){
+      const entry = zip.files[rawName];
+      const name = this.safeZipName(rawName);
+      if(entry?.dir || name.endsWith("/")){
+        continue;
+      }
+      if(config.extensions.some(ext =>
+        name.toLowerCase().endsWith(ext)
+      )){
+        candidates.push({name,entry});
+      }
+    }
+    if(!candidates.length){
+      throw new Error(
+        "រកមិនឃើញ File ហ្គេមដែលគាំទ្រនៅក្នុង ZIP ទេ!"
+      );
+    }
+    candidates.sort((a,b) => {
+      const aRank =
+        config.extensions.indexOf(
+          this.extension(a.name)
+        );
+      const bRank =
+        config.extensions.indexOf(
+          this.extension(b.name)
+        );
+      return aRank - bRank ||
+        a.name.length - b.name.length;
+    });
+    const selected = candidates[0];
+    const blob = await selected.entry.async("blob");
+    if(
+      !blob ||
+      blob.size > CONFIG.files.maxExtractedSize
+    ){
+      throw new Error(
+        "ទំហំ Game File បន្ទាប់ពី Extract លើសកំណត់!"
+      );
+    }
+    return new File(
+      [blob],
+      selected.name.split("/").pop() || file.name,
+      {type:"application/octet-stream"}
+    );
+  },
+  async prepare(file,system){
+    const extension = this.extension(file.name);
+    if(file.size > CONFIG.files.maxSize){
+      throw new Error(
+        "File ធំពេក សម្រាប់ Local Storage!"
+      );
+    }
+    if(extension === ".zip"){
+      return this.extractZip(file,system);
+    }
+    if(extension === ".rar"){
+      throw new Error(
+        "RAR មិនអាចបើកដោយ JSZip បានទេ។ សូម Extract ជា ZIP ឬ ISO/CSO ជាមុន។"
+      );
+    }
+    return file;
+  }
+};
+/* =====================================================
+   EMULATOR NAVIGATION
+===================================================== */
+function openEmulator(gameId,game){
+  const params = new URLSearchParams({
+    id:gameId,
+    title:game.title,
+    system:game.system
+  });
+  clearTimeout(state.redirectTimer);
+  state.redirectTimer = setTimeout(() => {
+    window.location.href =
+      `emulator.html?${params.toString()}`;
+  },900);
+}
+/* =====================================================
+   GAME FLOW
+===================================================== */
+async function handleLocalFile(file,system){
+  if(!file || state.processing){
+    return;
+  }
+  if(!state.indexedDBAvailable){
+    const message = indexedDBGuidance();
+    setStatus(system,message);
+    showToast(`⚠️ ${message}`);
+    return;
+  }
+  setProcessing(
+    system,
+    true,
+    "⏳ កំពុងពិនិត្យឯកសារ..."
+  );
+  setStatus(
+    system,
+    "កំពុងពិនិត្យឯកសារ..."
+  );
+  try{
+    setButtonLoading(
+      system,
+      true,
+      "📦 កំពុងរៀបចំឯកសារ..."
+    );
+    const gameFile =
+      await FileService.prepare(
+        file,
+        system
+      );
+    if(!FileService.supported(
+      gameFile.name,
+      system
+    )){
+      throw new Error(
+        `File ${gameFile.name} មិនមែនជា Format ${system.toUpperCase()} ដែលគាំទ្រទេ!`
+      );
+    }
+    setButtonLoading(
+      system,
+      true,
+      "💾 កំពុងរក្សាទុក..."
+    );
+    setStatus(
+      system,
+      "កំពុងរក្សា Game File ក្នុងទូរស័ព្ទ..."
+    );
+    const gameId =
+      await GameStore.save(
+        gameFile,
+        system
+      );
+    const saved =
+      await GameStore.get(gameId);
+    if(!saved?.file){
+      throw new Error(
+        "រក្សា Game File មិនបាន!"
+      );
+    }
+    await renderLibrary();
+    setStatus(
+      system,
+      "រក្សាទុកជោគជ័យ។ កំពុងបើក Emulator..."
+    );
+    showToast(
+      "🔥 Game បានរក្សាទុកជោគជ័យ!"
+    );
+    openEmulator(
+      gameId,
+      saved
+    );
+  }catch(error){
+    console.error(
+      "DSN Local Player Error:",
+      error
+    );
+    const message =
+      formatError(error);
+    setStatus(
+      system,
+      `បរាជ័យ: ${message}`
+    );
+    showToast(
+      `❌ បរាជ័យ: ${message}`
+    );
+    setProcessing(
+      system,
+      false
+    );
+  }
+}
+/* =====================================================
+   FILE PICKER EVENTS
+===================================================== */
+function openFilePicker(system){
+  if(state.processing){
+    showToast(
+      "⏳ សូមរង់ចាំដំណើរការបច្ចុប្បន្នបញ្ចប់សិន!"
+    );
+    return;
+  }
+  if(!state.indexedDBAvailable){
+    const message = indexedDBGuidance();
+    setStatus(system,message);
+    showToast(`⚠️ ${message}`);
+    return;
+  }
+  const input =
+    getSystemElement(system,"input");
+  if(!input){
+    showToast(
+      "❌ File Input មិនមាននៅក្នុង HTML ទេ។"
+    );
+    return;
+  }
+  try{
+    input.value = "";
+    input.click();
+  }catch(error){
+    console.error("File picker error:",error);
+    showToast(
+      "❌ មិនអាចបើក File Picker បានទេ។"
+    );
+  }
+}
+function bindSystem(system){
+  const button =
+    getSystemElement(system,"button");
+  const input =
+    getSystemElement(system,"input");
+  button?.addEventListener(
+    "click",
+    () => openFilePicker(system)
+  );
+  input?.addEventListener(
+    "change",
+    event => {
+      const file =
+        event.currentTarget?.files?.[0];
+      handleLocalFile(
+        file,
+        system
+      );
+    }
+  );
+}
+/* =====================================================
+   LIBRARY EVENTS
+===================================================== */
+function bindLibraryEvents(){
+  $("refreshLibraryBtn")?.addEventListener(
+    "click",
+    async () => {
+      await renderLibrary();
+      showToast("🔄 បញ្ជីហ្គេមបាន Refresh!");
+    }
+  );
+  $("clearLibraryBtn")?.addEventListener(
+    "click",
+    clearSavedGames
+  );
+}
+/* =====================================================
+   NETWORK AND OFFLINE UI
+===================================================== */
+function updateNetworkUI(){
+  const badge = $("offlineBadge");
+  if(!badge){
+    return;
+  }
+  const offline =
+    navigator.onLine === false;
+  setText(
+    badge,
+    offline
+      ? "🔌 Offline Mode"
+      : "✅ Local Mode"
+  );
+  addClass(badge,"show");
+  if(!offline){
+    setTimeout(() => {
+      removeClass(badge,"show");
+    },2200);
+  }
+}
+function bindNetworkEvents(){
+  window.addEventListener(
+    "offline",
+    () => {
+      updateNetworkUI();
+      showToast(
+        "🔌 Offline Mode — Local Player នៅតែអាចប្រើបាន ❤️️"
+      );
+    }
+  );
+  window.addEventListener(
+    "online",
+    () => {
+      updateNetworkUI();
+      showToast(
+        "🌐 Online Mode — Local Assets នៅតែប្រើបាន"
+      );
+    }
+  );
+}
+/* =====================================================
+   SERVICE WORKER
+===================================================== */
+async function registerServiceWorker(){
+  if(!("serviceWorker" in navigator)){
+    return false;
+  }
+  const isSecure =
+    location.protocol === "https:" ||
+    (
+      location.protocol === "http:" &&
+      ["localhost","127.0.0.1"].includes(
+        location.hostname
+      )
+    );
+  if(!isSecure){
+    console.warn(
+      "Service Worker ត្រូវការ HTTPS ឬ localhost។"
+    );
+    return false;
+  }
+  try{
+    const registration =
+      await navigator.serviceWorker.register(
+        "service-worker.js",
+        {scope:"./"}
+      );
+    console.log(
+      "DSN Service Worker registered:",
+      registration.scope
+    );
+    return true;
+  }catch(error){
+    console.error(
+      "Service Worker registration failed:",
+      error
+    );
+    return false;
+  }
+}
+/* =====================================================
+   APPLICATION STARTUP
+===================================================== */
+async function initializeApp(){
+  bindSystem("ps2");
+  bindSystem("psp");
+  bindLibraryEvents();
+  bindNetworkEvents();
+  updateNetworkUI();
+  await registerServiceWorker();
+  try{
+    const db =
+      await GameStore.open();
+    GameStore.close(db);
+    state.indexedDBAvailable = true;
+    console.log(
+      "DSN Local Database: READY"
+    );
+    await renderLibrary();
+  }catch(error){
+    state.indexedDBAvailable = false;
+    console.error(
+      "IndexedDB Error:",
+      error
+    );
+    const message =
+      formatError(error);
+    setStatus("ps2",message);
+    setStatus("psp",message);
+    setLibraryStatus(message);
+    showToast(`⚠️ ${message}`);
+  }
+}
+if(document.readyState === "loading"){
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeApp,
+    {once:true}
+  );
+}else{
+  initializeApp();
+}
+</script>
 </body>
 </html>
