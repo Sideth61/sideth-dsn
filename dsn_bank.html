@@ -278,119 +278,118 @@
         <div class="brand">🏦 DSN Bank</div>
         <div class="sub">Personal Banking • Server Edition</div>
       </div>
-  <button id="logoutBtn" class="secondary logout-button" type="button">
-    ចេញ
-  </button>
-</header>
-<section id="loginView" class="card">
-  <div class="login-head">
-    <div class="login-icon">🔐</div>
-    <h2>ចូលគណនី DSN Bank</h2>
-    <div class="notice">
-      សូមបញ្ចូលព័ត៌មានគណនីរបស់អ្នក
-    </div>
-  </div>
-  <div class="account-box">
-    <div class="label">👤 ឈ្មោះគណនី</div>
-    <div class="account-name">Sideth61</div>
-    <div class="label pin-label">🔐 PIN</div>
-    <div class="account-name">••••••</div>
-  </div>
-  <input
-    id="nameInput"
-    value="Sideth61"
-    placeholder="ឈ្មោះម្ចាស់គណនី"
-    autocomplete="username">
-  <input
-    id="pinInput"
-    type="password"
-    inputmode="numeric"
-    maxlength="6"
-    placeholder="PIN 6 ខ្ទង់"
-    autocomplete="current-password">
-  <button id="loginBtn" type="button">
-    🔓 ចូលគណនី
-  </button>
-  <p id="loginMsg" class="notice"></p>
-</section>
-<main id="bankView" class="hidden">
-  <section class="card">
-    <span class="badge">● ACTIVE ACCOUNT</span>
-    <div class="label account-owner-label">
-      ម្ចាស់គណនី
-    </div>
-    <div id="owner" class="account-owner"></div>
-    <small id="accountId"></small>
-    <div class="divider"></div>
-    <div class="label">
-      💰 សមតុល្យបច្ចុប្បន្ន
-    </div>
-    <div class="balance">
-      $<span id="balance">0.00</span>
-    </div>
-  </section>
-  <section class="card">
-    <h3>💸 ប្រតិបត្តិការ</h3>
-    <input
-      id="amount"
-      type="number"
-      min="0.01"
-      step="0.01"
-      placeholder="💵 ចំនួនទឹកប្រាក់">
-    <input
-      id="note"
-      maxlength="200"
-      placeholder="📝 កំណត់ចំណាំ">
-    <div class="actions">
-      <button id="depositBtn" type="button">
-        ➕ ដាក់ប្រាក់
+      <button id="logoutBtn" class="secondary logout-button" type="button">
+        ចេញ
       </button>
-      <button id="withdrawBtn" class="secondary" type="button">
-        ➖ ដកប្រាក់
+    </header>
+    <section id="loginView" class="card">
+      <div class="login-head">
+        <div class="login-icon">🔐</div>
+        <h2>ចូលគណនី DSN Bank</h2>
+        <div class="notice">
+          សូមបញ្ចូលព័ត៌មានគណនីរបស់អ្នក
+        </div>
+      </div>
+      <div class="account-box">
+        <div class="label">👤 ឈ្មោះគណនី</div>
+        <div class="account-name">Sideth61</div>
+        <div class="label pin-label">🔐 Password</div>
+        <div class="account-name">@sidet@</div>
+      </div>
+      <input
+        id="nameInput"
+        value="Sideth61"
+        placeholder="ឈ្មោះម្ចាស់គណនី"
+        autocomplete="username">
+      <input
+        id="pinInput"
+        type="password"
+        value="@sidet@"
+        placeholder="Password"
+        autocomplete="current-password">
+      <button id="loginBtn" type="button">
+        🔓 ចូលគណនី
       </button>
-    </div>
-    <p id="txMsg" class="notice"></p>
-  </section>
-  <section class="card">
-    <h3>📜 ប្រវត្តិប្រតិបត្តិការ</h3>
-    <div id="history"></div>
-    <button id="refreshBtn" class="secondary" type="button">
-      🔄 Refresh
-    </button>
-  </section>
-  <section class="card khqr">
-    <div class="section-title">
-      💳 ACLEDA KHQR VIP Merchant
-    </div>
-    <div class="merchant-name">
-      ❤️ San Sideth ❤️
-    </div>
-    <div class="merchant-balance">
-      $ 0.00
-      <span class="currency">(USD)</span>
-    </div>
-    <div class="qr-box">
-      <img class="qr-image" src="qr.jpg" alt="KHQR">
-    </div>
-    <div class="merchant-account">
-      🏦 គណនី:
-      <strong>031 500 0714</strong>
-    </div>
-    <div class="merchant-note">
-      ✨ ស្កេនបាញ់លុយមកប្រុសសង្ហារម្នាក់នេះផង 2026! 🔥😂
-    </div>
-  </section>
-  <section class="card">
-    <div class="label">
-      🛡️ DSN Bank Server Edition
-    </div>
-    <p class="notice">
-      Balance និង Transaction ត្រូវបានគ្រប់គ្រងដោយ Server។
-      Version នេះសម្រាប់ DSN OS Hub / Test System ប៉ុណ្ណោះ
-      មិនមែនសម្រាប់លុយពិត ឬប្រព័ន្ធធនាគារផ្លូវការទេ។
-    </p>
-  </section>
-</main>
+      <p id="loginMsg" class="notice"></p>
+    </section>
+    <main id="bankView" class="hidden">
+      <section class="card">
+        <span class="badge">● ACTIVE ACCOUNT</span>
+        <div class="label account-owner-label">
+          ម្ចាស់គណនី
+        </div>
+        <div id="owner" class="account-owner"></div>
+        <small id="accountId"></small>
+        <div class="divider"></div>
+        <div class="label">
+          💰 សមតុល្យបច្ចុប្បន្ន
+        </div>
+        <div class="balance">
+          $<span id="balance">0.00</span>
+        </div>
+      </section>
+      <section class="card">
+        <h3>💸 ប្រតិបត្តិការ</h3>
+        <input
+          id="amount"
+          type="number"
+          min="0.01"
+          step="0.01"
+          placeholder="💵 ចំនួនទឹកប្រាក់">
+        <input
+          id="note"
+          maxlength="200"
+          placeholder="📝 កំណត់ចំណាំ">
+        <div class="actions">
+          <button id="depositBtn" type="button">
+            ➕ ដាក់ប្រាក់
+          </button>
+          <button id="withdrawBtn" class="secondary" type="button">
+            ➖ ដកប្រាក់
+          </button>
+        </div>
+        <p id="txMsg" class="notice"></p>
+      </section>
+      <section class="card">
+        <h3>📜 ប្រវត្តិប្រតិបត្តិការ</h3>
+        <div id="history"></div>
+        <button id="refreshBtn" class="secondary" type="button">
+          🔄 Refresh
+        </button>
+      </section>
+      <section class="card khqr">
+        <div class="section-title">
+          💳 ACLEDA KHQR VIP Merchant
+        </div>
+        <div class="merchant-name">
+          ❤️ San Sideth ❤️
+        </div>
+        <div class="merchant-balance">
+          $ 0.00
+          <span class="currency">(USD)</span>
+        </div>
+        <div class="qr-box">
+          <img class="qr-image" src="qr.jpg" alt="KHQR">
+        </div>
+        <div class="merchant-account">
+          🏦 គណនី:
+          <strong>031 500 0714</strong>
+        </div>
+        <div class="merchant-note">
+          ✨ ស្កេនបាញ់លុយមកប្រុសសង្ហារម្នាក់នេះផង 2026! 🔥😂
+        </div>
+      </section>
+      <section class="card">
+        <div class="label">
+          🛡️ DSN Bank Server Edition
+        </div>
+        <p class="notice">
+          Balance និង Transaction ត្រូវបានគ្រប់គ្រងដោយ Server។
+          Version នេះសម្រាប់ DSN OS Hub / Test System ប៉ុណ្ណោះ
+          មិនមែនសម្រាប់លុយពិត ឬប្រព័ន្ធធនាគារផ្លូវការទេ។
+        </p>
+      </section>
+    </main>
   </div>
   <script type="module">
     const API_BASE_URL = "/api";
@@ -517,7 +516,7 @@
     const logout = () => {
       clearToken();
       setAuthenticatedView(false);
-      elements.pinInput.value = "";
+      elements.pinInput.value = "@sidet@";
     };
     const showBank = async () => {
       setAuthenticatedView(true);
@@ -539,10 +538,10 @@
         );
         return;
       }
-      if (!/^\d{6}$/.test(pin)) {
+      if (!pin) {
         showMessage(
           elements.loginMessage,
-          "PIN ត្រូវមាន 6 ខ្ទង់ 😬",
+          "សូមបញ្ចូល Password 😬",
           true
         );
         return;
