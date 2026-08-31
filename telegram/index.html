@@ -21,7 +21,25 @@
         .container {
             width: 100%;
             max-width: 480px;
-            margin-top: 30px;
+            margin-top: 20px;
+        }
+        /* រចនាប័ទ្មសម្រាប់ Cover Image ខាងលើสุด */
+        .site-cover {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px auto;
+            border-radius: 50%;
+            border: 2px solid #00ff66;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+        }
+        .site-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         h1 {
             color: #00ff66;
@@ -61,16 +79,23 @@
             align-items: center;
             gap: 12px;
         }
+        /* រចនាប័ទ្មសម្រាប់រូបភាពតំណាងក្នុងកាតនីមួយៗ */
         .bot-icon {
-            font-size: 24px;
-            background: rgba(0, 255, 102, 0.1);
             width: 45px;
             height: 45px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 102, 0.3);
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 255, 102, 0.3);
+            background: rgba(0, 255, 102, 0.1);
+            flex-shrink: 0;
+        }
+        .bot-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .bot-title {
             font-weight: 600;
@@ -102,12 +127,20 @@
 </head>
 <body>
     <div class="container">
+        <!-- រូបភាព Cover របស់ Index (index.jpg) -->
+        <div class="site-cover">
+            <img src="index.jpg" alt="DSN Bot Center Cover">
+        </div>
+
         <h1>🤖 DSN Telegram Bot Hub</h1>
         <p>ជ្រើសរើស Telegram Bot របស់ San Sideth ដែលបងចង់ប្រើប្រាស់៖</p>
 
+        <!-- Sideth Bot -->
         <a href="sideth_bot.html" class="bot-card">
             <div class="bot-info">
-                <div class="bot-icon">🤖</div>
+                <div class="bot-icon">
+                    <img src="sideth_bot.JPG" alt="Sideth Bot Icon">
+                </div>
                 <div>
                     <div class="bot-title">Sideth Bot</div>
                     <div class="bot-desc">ប្រព័ន្ធជំនួយការផ្ទាល់ខ្លួនរបស់ Sideth</div>
@@ -116,9 +149,12 @@
             <div class="arrow">➔</div>
         </a>
 
+        <!-- DSN OS Bot -->
         <a href="dsnos_bot.html" class="bot-card">
             <div class="bot-info">
-                <div class="bot-icon">⚡</div>
+                <div class="bot-icon">
+                    <img src="dsnos_bot.jpg" alt="DSN OS Bot Icon">
+                </div>
                 <div>
                     <div class="bot-title">DSN OS Bot</div>
                     <div class="bot-desc">ប្រព័ន្ធបញ្ជាកម្រិត God-Tier OS</div>
@@ -127,10 +163,12 @@
             <div class="arrow">➔</div>
         </a>
 
-        <!-- បានកែប្រែត្រង់នេះឱ្យទៅជា តំណភ្ជាប់ Telegram Bot ផ្ទាល់ -->
+        <!-- Sideth Mail Bot -->
         <a href="https://t.me/sideth_mail_bot" target="_blank" class="bot-card">
             <div class="bot-info">
-                <div class="bot-icon">📧</div>
+                <div class="bot-icon">
+                    <img src="sidet_mail_bot.jpg" alt="Sideth Mail Bot Icon">
+                </div>
                 <div>
                     <div class="bot-title">Sideth Mail Bot</div>
                     <div class="bot-desc">ប្រព័ន្ធគ្រប់គ្រងសារ និងអ៊ីមែល</div>
