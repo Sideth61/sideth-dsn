@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIDETH - ProLink & Games</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif, Khmer OS Siemreap;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .profile-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid #38bdf8;
+            margin: 0 auto 15px;
+            object-fit: cover;
+            background-color: #334155;
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            color: #f8fafc;
+        }
+        p.bio {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+        .links-section {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .link-btn {
+            background-color: #1e293b;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .link-btn:hover {
+            background-color: #38bdf8;
+            color: #0f172a;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="https://via.placeholder.com/110" alt="Profile" class="profile-img">
+        <h1>SIDETH</h1>
+        <p class="bio">Digital Creator & Game Developer</p>
+
+        <div class="links-section">
+            <a href="https://facebook.com" class="link-btn" target="_blank">📘 Facebook Page</a>
+            <a href="https://youtube.com" class="link-btn" target="_blank">▶️ YouTube Channel</a>
+            <a href="https://tiktok.com" class="link-btn" target="_blank">🛒 TikTok Shop</a>
+            <!-- តំណភ្ជាប់ចូលទៅកាន់ game.html ក្នុង folder games -->
+            <a href="games/game.html" class="link-btn" style="background-color: #10b981; border: none;">🎮 លេងហ្គេម (Mini Game)</a>
+        </div>
+    </div>
+
+</body>
+</html>
 
