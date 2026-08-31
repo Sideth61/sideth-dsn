@@ -78,7 +78,7 @@
             transform: translateY(-3px);
         }
 
-        /* 📌 កែសម្រួល Cover រូបភាពឱ្យត្រូវទំហំ 4:3 យ៉ាងស្រស់ស្អាត */
+        /* 📌 Cover រូបភាពទំហំ 4:3 ធំច្បាស់ពេញភ្នែក */
         .bot-cover {
             width: 100%;
             aspect-ratio: 4 / 3;
@@ -100,6 +100,13 @@
             font-size: 14px;
             color: #e2e8f0;
             line-height: 1.6;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
         }
 
         .btn-launch {
@@ -168,17 +175,22 @@
                 <h3>DSN OS Bot</h3>
                 <p>@dsnos_bot • ប្រព័ន្ធគ្រប់គ្រង កម្មវិធី និងហ្គេម PSP, PS2 ដ៏សម្បូរបែប</p>
             </div>
-            <a href="https://t.me/dsnos_bot" class="btn-launch" target="_blank">🚀 ចូលកាន់ Telegram Bot</a>
+            <div class="btn-group">
+                <a href="https://t.me/dsnos_bot" class="btn-launch" target="_blank">🚀 ចូលកាន់ Telegram Bot</a>
+            </div>
         </div>
 
-        <!-- Bot 2: Sideth Bot -->
+        <!-- Bot 2: Sideth Bot (តភ្ជាប់លីងទាំងពីរតាមបងចង់បាន) -->
         <div class="bot-card">
             <img src="sideth_bot.jpg" alt="Sideth Bot" class="bot-cover">
             <div class="bot-info">
                 <h3>Sideth Bot</h3>
-                <p>@sideth_bot • ផ្លូវចូលរហ័សទៅកាន់ Website ផ្ទាល់ខ្លួនរបស់ San Sideth</p>
+                <p>@sideth_bot • ផ្លូវចូលរហ័សទៅកាន់ Website និង Telegram Bot ផ្ទាល់ខ្លួន</p>
             </div>
-            <a href="https://t.me/sideth_bot" class="btn-launch" target="_blank">🚀 ចូលកាន់ Telegram Bot</a>
+            <div class="btn-group">
+                <a href="https://t.me/sideth_bot" class="btn-launch" target="_blank">🚀 ចូល Telegram (@sideth_bot)[span_0](start_span)[span_0](end_span)</a>
+                <a href="https://sideth.site/sideth.bot" class="btn-launch" style="background: linear-gradient(135deg, #00ffff, #7c3aed); color: #000;" target="_blank">🌐 បើក Domain (sideth.bot)[span_1](start_span)[span_1](end_span)</a>
+            </div>
         </div>
 
         <!-- Bot 3: SidethMailBot -->
@@ -188,7 +200,9 @@
                 <h3>SidethMailBot</h3>
                 <p>@sideth_mail_bot • ប្រព័ន្ធជំនួយបង្កើតអ៊ីមែលបណ្តោះអាសន្នសុវត្ថិភាពខ្ពស់</p>
             </div>
-            <a href="https://t.me/sideth_mail_bot" class="btn-launch" target="_blank">🚀 ចូលកាន់ Telegram Bot</a>
+            <div class="btn-group">
+                <a href="https://t.me/sideth_mail_bot" class="btn-launch" target="_blank">🚀 ចូលកាន់ Telegram Bot</a>
+            </div>
         </div>
     </div>
 
