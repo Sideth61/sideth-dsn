@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sideth Bot - Telegram Bot</title>
+    <title>Sideth Mail Bot - DSN Center</title>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -21,100 +21,62 @@
         .container {
             width: 100%;
             max-width: 480px;
-            margin-top: 20px;
+            margin-top: 30px;
             text-align: center;
         }
-        .bot-avatar {
+        .icon-box {
+            font-size: 50px;
+            background: rgba(0, 255, 102, 0.1);
             width: 90px;
             height: 90px;
-            background: rgba(0, 255, 102, 0.1);
-            border: 2px solid #00ff66;
-            border-radius: 50%;
+            margin: 0 auto 20px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            margin: 0 auto 15px auto;
-            box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+            border-radius: 24px;
+            border: 1px solid rgba(0, 255, 102, 0.3);
+            box-shadow: 0 0 20px rgba(0,255,102,0.2);
         }
         h1 {
             color: #00ff66;
             font-size: 22px;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             text-shadow: 0 0 10px rgba(0,255,102,0.4);
-        }
-        .username {
-            color: #38bdf8;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 15px;
         }
         p {
             color: #94a3b8;
             font-size: 13px;
+            margin-bottom: 30px;
             line-height: 1.6;
-            margin-bottom: 25px;
-            padding: 0 10px;
-        }
-        .card {
-            background: rgba(10, 15, 30, 0.85);
-            border: 1px solid rgba(0, 255, 102, 0.3);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            text-align: left;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        .card h3 {
-            color: #f8fafc;
-            font-size: 15px;
-            margin-top: 0;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .feature-list li {
-            font-size: 13px;
-            color: #cbd5e1;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         .btn-telegram {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            background: #0088cc;
-            color: #ffffff;
+            background: #00ff66;
+            color: #030712;
+            padding: 14px 20px;
+            border-radius: 14px;
             text-decoration: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 15px;
-            margin-bottom: 15px;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 255, 102, 0.4);
+            margin-bottom: 15px;
         }
         .btn-telegram:hover {
-            background: #0099e6;
+            background: #00cc52;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.6);
+            box-shadow: 0 6px 25px rgba(0, 255, 102, 0.6);
         }
         .back-link {
             display: inline-block;
+            margin-top: 20px;
             color: #38bdf8;
             text-decoration: none;
             font-size: 13px;
             font-weight: 600;
-            margin-top: 10px;
         }
         .back-link:hover {
             text-decoration: underline;
@@ -123,26 +85,17 @@
 </head>
 <body>
     <div class="container">
-        <div class="bot-avatar">🤖</div>
-        <h1>Sideth Bot</h1>
-        <div class="username">@sideth_bot</div>
-        <p>ប្រព័ន្ធជំនួយការផ្ទាល់ខ្លួន និងស្វ័យប្រវត្តិកម្មដ៏មានឥទ្ធិពលរបស់ San Sideth សម្រាប់សម្រួលរាល់កិច្ចការងារទូទៅ។</p>
+        <div class="icon-box">📧</div>
+        <h1>Sideth Mail Bot</h1>
+        <p>ប្រព័ន្ធគ្រប់គ្រងសារ និងអ៊ីមែលស្វ័យប្រវត្តិ។ ចុចប៊ូតុងខាងក្រោមដើម្បីចាប់ផ្តើមប្រើប្រាស់ Bot នេះនៅលើ Telegram ផ្ទាល់ខ្លួនរបស់អ្នក។</p>
 
-        <a href="https://t.me/sideth_bot" target="_blank" class="btn-telegram">
-            <span>🚀 ចុចទីនេះដើម្បីចាប់ផ្តើមប្រើប្រាស់ Bot</span>
+        <a href="https://t.me/sideth_mail_bot" target="_blank" class="btn-telegram">
+            🚀 បើកใช้งานលើ Telegram
         </a>
 
-        <div class="card">
-            <h3>⚙️ លក្ខណៈពិសេសរបស់ Bot៖</h3>
-            <ul class="feature-list">
-                <li>⚡ ឆ្លើយតបសំណួរ និងបញ្ជាការងាររហ័ស</li>
-                <li>🔗 ភ្ជាប់ប្រព័ន្ធគ្រប់គ្រងទិន្នន័យដោយស្វ័យប្រវត្តិ</li>
-                <li>🛠️ ជំនួយការបង្កើត និងចែកចាយមាតិកាឌីជីថល</li>
-                <li>🔒 សុវត្ថិភាពខ្ពស់ ស្ថិតក្រោមការគ្រប់គ្រងផ្ទាល់</li>
-            </ul>
+        <div>
+            <a href="index.html" class="back-link">🏠 ត្រឡប់ទៅទំព័រដើមវិញ</a>
         </div>
-
-        <a href="index.html" class="back-link">← ត្រឡប់ទៅទំព័រ Telegram Hub វិញ</a>
     </div>
 </body>
 </html>
