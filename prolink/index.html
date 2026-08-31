@@ -1,1 +1,146 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIDETH - ProLink</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif, Khmer OS Siemreap, sans-serif;
+        }
+        body {
+            background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .prolink-container {
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 35px 25px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        .profile-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 15px;
+        }
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #38bdf8;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            background-color: #334155;
+        }
+        h1 {
+            font-size: 1.7rem;
+            margin-bottom: 5px;
+            color: #f8fafc;
+            letter-spacing: 0.5px;
+        }
+        p.bio {
+            color: #94a3b8;
+            font-size: 0.92rem;
+            margin-bottom: 25px;
+        }
+        .links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        /* Styling Scrollbar to look cool */
+        .links-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .links-list::-webkit-scrollbar-thumb {
+            background: rgba(56, 189, 248, 0.3);
+            border-radius: 10px;
+        }
+        .link-item {
+            background: linear-gradient(135deg, rgba(51, 65, 85, 0.8), rgba(30, 41, 59, 0.9));
+            color: #ffffff;
+            padding: 12px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .link-item:hover {
+            background: #38bdf8;
+            color: #0f172a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(56, 189, 248, 0.4);
+            border-color: #38bdf8;
+        }
+        .link-item.game-btn {
+            background: linear-gradient(135deg, #059669, #10b981);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+        .link-item.game-btn:hover {
+            background: #34d399;
+            color: #064e3b;
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.5);
+        }
+        .footer-text {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="prolink-container">
+        <!-- រូបភាព Profile -->
+        <div class="profile-wrapper">
+            <img src="https://via.placeholder.com/110" alt="SIDETH Profile" class="profile-img">
+        </div>
+        
+        <h1>SIDETH</h1>
+        <p class="bio">Digital Creator & Game Developer</p>
+
+        <!-- បញ្ជីប៊ូតុងតំណភ្ជាប់ឯកសារ និងហ្គេម -->
+        <div class="links-list">
+            <a href="index.html" class="link-item">🏠 Index Home</a>
+            <a href="games/game.html" class="link-item game-btn">🎮 លេងហ្គេម (Mini Game)</a>
+            <a href="webarchive.html" class="link-item">📁 Web Archive</a>
+            <a href="barchive.html" class="link-item">📦 B-Archive</a>
+            <a href="DL-720.html" class="link-item">📄 DL-720</a>
+            <a href="DL-7203E.html" class="link-item">📄 DL-7203E</a>
+            <a href="DL-7203E 2.html" class="link-item">📄 DL-7203E (2)</a>
+            <a href="DL-7203E 5.weba.html" class="link-item">📄 DL-7203E 5 (Weba)</a>
+            <a href="DL-7203E 6.html" class="link-item">📄 DL-7203E 6</a>
+        </div>
+
+        <div class="footer-text">
+            © 2026 SIDETH. All rights reserved.
+        </div>
+    </div>
+
+</body>
+</html>
