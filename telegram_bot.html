@@ -26,7 +26,6 @@
             background: #030712;
         }
 
-        /* ផ្ទៃខាងក្រោយស្ងៀមទ្រឹងបែប Cyber */
         body::before {
             content: "";
             position: fixed;
@@ -38,7 +37,7 @@
 
         .container {
             width: 100%;
-            max-width: 650px; /* ទម្រង់ធំទូលាយច្បាស់ល្អ */
+            max-width: 650px;
             margin: auto;
             padding: 25px 16px 100px;
             display: flex;
@@ -57,7 +56,6 @@
             font-weight: 700;
         }
 
-        /* កាតបង្ហាញ Bot ទម្រង់ធំៗ មើលច្បាស់ៗ */
         .bot-card {
             background: var(--bg-glass);
             backdrop-filter: blur(14px);
@@ -80,10 +78,10 @@
             transform: translateY(-3px);
         }
 
-        /* Cover រូបភាពធំច្បាស់ស្អាត (16:9 ឬរង្វង់ធំ) */
+        /* 📌 កែសម្រួល Cover រូបភាពឱ្យត្រូវទំហំ 4:3 យ៉ាងស្រស់ស្អាត */
         .bot-cover {
             width: 100%;
-            height: 160px;
+            aspect-ratio: 4 / 3;
             border-radius: 16px;
             object-fit: cover;
             border: 2px solid var(--gold);
@@ -104,7 +102,6 @@
             line-height: 1.6;
         }
 
-        /* ប៊ូតុងធំៗ ងាយស្រួលចុច */
         .btn-launch {
             width: 100%;
             padding: 14px;
@@ -125,7 +122,6 @@
             filter: brightness(1.15);
         }
 
-        /* Navigation Dock ខាងក្រោម */
         .dsn-dock {
             position: fixed;
             z-index: 1000;
