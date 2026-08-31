@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Sideth - DSN Telegram Bots Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background: #030712;
+            color: #c084fc;
+            font-family: 'Kantumruy Pro', monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-bottom: 70px;
+        }
+        h1 {
+            font-size: 18px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(192,132,252,.7);
+            margin: 10px 0 20px;
+        }
+        .bot-card {
+            background: rgba(5, 12, 24, 0.9);
+            border: 1px solid rgba(168,85,247,0.8);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 0 18px rgba(168,85,247,0.25);
+            transition: 0.3s;
+        }
+        .bot-card:hover {
+            border-color: #c084fc;
+            box-shadow: 0 0 25px rgba(192,132,252,0.45);
+            transform: translateY(-2px);
+        }
+        .bot-info h3 {
+            margin: 0 0 4px;
+            font-size: 15px;
+            color: #fff;
+        }
+        .bot-info p {
+            margin: 0;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        .btn-launch {
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 0 10px rgba(168,85,247,0.5);
+            white-space: nowrap;
+        }
+        .btn-launch:hover {
+            background: linear-gradient(90deg, #6d28d9, #9333ea);
+        }
+        .dsn-dock {
+            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
+            background: rgba(10, 15, 30, 0.95); padding: 8px 18px; border-radius: 30px;
+            border: 1px solid rgba(168, 85, 247, 0.4); display: flex; gap: 15px; z-index: 1000;
+            box-shadow: 0 0 15px rgba(168,85,247,0.3);
+        }
+        .dock-item { font-size: 20px; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🤖 DSN TELEGRAM BOTS HUB</h1>
+
+        <!-- Bot 1: DSN OS Bot -->
+        <div class="bot-card">
+            <div class="bot-info">
+                <h3>DSN OS Bot</h3>
+                <p>@dsnos_bot • កម្មវិធី និងហ្គេម PSP, PS2</p>
+            </div>
+            <a href="dsnos_bot.html" class="btn-launch">ចូលកាន់ Bot</a>
+        </div>
+
+        <!-- Bot 2: Sideth Bot -->
+        <div class="bot-card">
+            <div class="bot-info">
+                <h3>Sideth Bot</h3>
+                <p>@sideth_bot • ផ្លូវចូល Website ផ្ទាល់ខ្លួន</p>
+            </div>
+            <a href="sideth_bot.html" class="btn-launch">ចូលកាន់ Bot</a>
+        </div>
+
+        <!-- Bot 3: SidethMailBot -->
+        <div class="bot-card">
+            <div class="bot-info">
+                <h3>SidethMailBot</h3>
+                <p>@sideth_mail_bot • ប្រព័ន្ធជំនួយស្វ័យប្រវត្តិ</p>
+            </div>
+            <a href="sideth_mail_bot.html" class="btn-launch">ចូលកាន់ Bot</a>
+        </div>
+    </div>
+
+    <!-- Navigation Dock សម្រាប់ភ្ជាប់ទៅទំព័រដើម និងទំព័រផ្សេងៗ -->
+    <nav class="dsn-dock">
+        <a href="index.html" class="dock-item" title="Home">🏠</a>
+        <a href="telegram_bot.html" class="dock-item" title="Telegram Bots">🤖</a>
+        <a href="library.html" class="dock-item" title="Library">📚</a>
+        <a href="setting.html" class="dock-item" title="Settings">⚙️</a>
+    </nav>
+
+</body>
+</html>
