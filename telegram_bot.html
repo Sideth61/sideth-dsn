@@ -2,130 +2,197 @@
 <html lang="km">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>San Sideth - DSN Telegram Bots Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
-        body {
-            background: #030712;
-            color: #c084fc;
-            font-family: 'Kantumruy Pro', monospace;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+        :root {
+            --gold: #ffd700;
+            --cyan: #00ffff;
+            --purple: #c084fc;
+            --bg-glass: rgba(15, 23, 42, 0.45);
+            --border-glass: rgba(192, 132, 252, 0.4);
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Kantumruy Pro', sans-serif;
+            color: #fff;
+            background: #030712;
+        }
+
+        /* ផ្ទៃខាងក្រោយស្ងៀមទ្រឹងបែប Cyber */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at center, rgba(124, 58, 237, 0.15), #030712 80%);
+            z-index: 0;
+        }
+
         .container {
             width: 100%;
-            max-width: 480px;
+            max-width: 650px; /* ទម្រង់ធំទូលាយច្បាស់ល្អ */
+            margin: auto;
+            padding: 25px 16px 100px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            padding-bottom: 70px;
+            gap: 22px;
+            position: relative;
+            z-index: 10;
         }
+
         h1 {
-            font-size: 18px;
+            font-size: 22px;
             text-align: center;
-            text-shadow: 0 0 10px rgba(192,132,252,.7);
-            margin: 10px 0 20px;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            margin: 10px 0 15px;
+            font-weight: 700;
         }
+
+        /* កាតបង្ហាញ Bot ទម្រង់ធំៗ មើលច្បាស់ៗ */
         .bot-card {
-            background: rgba(5, 12, 24, 0.9);
-            border: 1px solid rgba(168,85,247,0.8);
-            border-radius: 14px;
-            padding: 14px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 22px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 14px;
-            box-shadow: 0 0 18px rgba(168,85,247,0.25);
-            transition: 0.3s;
+            text-align: center;
+            gap: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(192, 132, 252, 0.08);
+            transition: 0.3s ease;
         }
+
         .bot-card:hover {
-            border-color: #c084fc;
-            box-shadow: 0 0 25px rgba(192,132,252,0.45);
-            transform: translateY(-2px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.3);
+            transform: translateY(-3px);
         }
-        .bot-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
+
+        /* Cover រូបភាពធំច្បាស់ស្អាត (16:9 ឬរង្វង់ធំ) */
+        .bot-cover {
+            width: 100%;
+            height: 160px;
+            border-radius: 16px;
             object-fit: cover;
-            border: 2px solid #a855f7;
-            box-shadow: 0 0 10px rgba(168,85,247,0.5);
-            flex-shrink: 0;
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
         }
-        .bot-info {
-            flex-grow: 1;
-        }
+
         .bot-info h3 {
-            margin: 0 0 4px;
-            font-size: 15px;
-            color: #fff;
+            margin: 0 0 8px;
+            font-size: 20px;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
+
         .bot-info p {
             margin: 0;
-            font-size: 11px;
-            color: #94a3b8;
+            font-size: 14px;
+            color: #e2e8f0;
+            line-height: 1.6;
         }
+
+        /* ប៊ូតុងធំៗ ងាយស្រួលចុច */
         .btn-launch {
-            background: linear-gradient(90deg, #7c3aed, #a855f7);
-            color: #fff;
-            padding: 8px 14px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 12px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #7c3aed, var(--gold));
+            color: #000;
+            font-family: 'Kantumruy Pro', sans-serif;
+            font-size: 16px;
             font-weight: 700;
-            box-shadow: 0 0 10px rgba(168,85,247,0.5);
-            white-space: nowrap;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+            transition: 0.25s ease;
+            display: inline-block;
         }
+
         .btn-launch:hover {
-            background: linear-gradient(90deg, #6d28d9, #9333ea);
+            transform: translateY(-2px);
+            filter: brightness(1.15);
         }
+
+        /* Navigation Dock ខាងក្រោម */
         .dsn-dock {
-            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-            background: rgba(10, 15, 30, 0.95); padding: 8px 18px; border-radius: 30px;
-            border: 1px solid rgba(168, 85, 247, 0.4); display: flex; gap: 15px; z-index: 1000;
-            box-shadow: 0 0 15px rgba(168,85,247,0.3);
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: max(15px, env(safe-area-inset-bottom));
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            padding: 10px 18px;
+            border-radius: 35px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--gold);
+            box-shadow: 0 15px 40px rgba(0,0,0,.8);
         }
-        .dock-item { font-size: 20px; text-decoration: none; }
+
+        .dock-item {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 22px;
+            transition: .25s;
+        }
+
+        .dock-item:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: translateY(-5px) scale(1.1);
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🤖 DSN TELEGRAM BOTS HUB</h1>
+        <h1>🤖 DSN SUPREME TELEGRAM BOTS HUB</h1>
 
         <!-- Bot 1: DSN OS Bot -->
         <div class="bot-card">
-            <img src="dsnos_bot.jpg" alt="DSN OS Bot" class="bot-avatar">
+            <img src="dsnos_bot.jpg" alt="DSN OS Bot" class="bot-cover">
             <div class="bot-info">
                 <h3>DSN OS Bot</h3>
-                <p>@dsnos_bot • កម្មវិធី និងហ្គេម PSP, PS2</p>
+                <p>@dsnos_bot • ប្រព័ន្ធគ្រប់គ្រង កម្មវិធី និងហ្គេម PSP, PS2 ដ៏សម្បូរបែប</p>
             </div>
-            <a href="https://t.me/dsnos_bot" class="btn-launch" target="_blank">ចូល Bot</a>
+            <a href="https://t.me/dsnos_bot" class="btn-launch" target="_blank">🚀 ចូលកាន់ Telegram Bot</a>
         </div>
 
         <!-- Bot 2: Sideth Bot -->
         <div class="bot-card">
-            <img src="sideth_bot.jpg" alt="Sideth Bot" class="bot-avatar">
+            <img src="sideth_bot.jpg" alt="Sideth Bot" class="bot-cover">
             <div class="bot-info">
                 <h3>Sideth Bot</h3>
-                <p>@sideth_bot • ផ្លូវចូល Website ផ្ទាល់ខ្លួន</p>
+                <p>@sideth_bot • ផ្លូវចូលរហ័សទៅកាន់ Website ផ្ទាល់ខ្លួនរបស់ San Sideth</p>
             </div>
-            <a href="https://t.me/sideth_bot" class="btn-launch" target="_blank">ចូល Bot</a>
+            <a href="https://t.me/sideth_bot" class="btn-launch" target="_blank">🚀 ចូលកាន់ Telegram Bot</a>
         </div>
 
         <!-- Bot 3: SidethMailBot -->
         <div class="bot-card">
-            <img src="sideth_mail_bot.jpg" alt="SidethMailBot" class="bot-avatar">
+            <img src="sideth_mail_bot.jpg" alt="SidethMailBot" class="bot-cover">
             <div class="bot-info">
                 <h3>SidethMailBot</h3>
-                <p>@sideth_mail_bot • ប្រព័ន្ធជំនួយស្វ័យប្រវត្តិ</p>
+                <p>@sideth_mail_bot • ប្រព័ន្ធជំនួយបង្កើតអ៊ីមែលបណ្តោះអាសន្នសុវត្ថិភាពខ្ពស់</p>
             </div>
-            <a href="https://t.me/sideth_mail_bot" class="btn-launch" target="_blank">ចូល Bot</a>
+            <a href="https://t.me/sideth_mail_bot" class="btn-launch" target="_blank">🚀 ចូលកាន់ Telegram Bot</a>
         </div>
     </div>
 
