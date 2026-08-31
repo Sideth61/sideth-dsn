@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Photo Editor - Mobile & PC</title>
+    <title>Web Photo Editor Pro - Full Ratios</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #121212;
@@ -31,7 +29,7 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            max-width: 900px;
+            max-width: 950px;
             width: 100%;
             gap: 20px;
         }
@@ -39,7 +37,17 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
+            max-height: 550px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .controls::-webkit-scrollbar {
+            width: 5px;
+        }
+        .controls::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
         }
         .preview-area {
             flex: 1.5;
@@ -50,67 +58,73 @@
             background: #2a2a2a;
             border-radius: 8px;
             padding: 15px;
-            min-height: 280px;
+            min-height: 320px;
             position: relative;
             overflow: hidden;
         }
         canvas {
             max-width: 100%;
-            max-height: 400px;
+            max-height: 420px;
             border-radius: 4px;
             object-fit: contain;
         }
         .control-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
         }
-        label { font-size: 13px; color: #b0b0b0; }
+        label { font-size: 12px; color: #b0b0b0; }
         input[type="range"] { width: 100%; cursor: pointer; accent-color: #4CAF50; }
         input[type="file"] { display: none; }
         
-        .btn-container {
+        .btn-row {
             display: flex;
-            gap: 10px;
+            gap: 6px;
+            flex-wrap: wrap;
         }
         .btn {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 12px 15px;
+            padding: 10px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
             text-align: center;
             display: block;
             width: 100%;
-            font-size: 14px;
+            font-size: 13px;
             transition: background 0.2s;
         }
         .btn:hover { background-color: #45a049; }
-        .btn-secondary { background-color: #008CBA; }
+        .btn-secondary { background-color: #008CBA; color: white; flex: 1; }
         .btn-secondary:hover { background-color: #007bb5; }
+        .btn-secondary.active { background-color: #4CAF50; }
         .btn-danger { background-color: #f44336; }
         .btn-danger:hover { background-color: #d32f2f; }
+        .btn-warning { background-color: #ff9800; color: #fff; }
+        .btn-warning:hover { background-color: #e68a00; }
 
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
                 padding: 12px;
             }
-            body {
-                padding: 5px;
+            .controls {
+                max-height: none;
             }
+            body { padding: 5px; }
         }
     </style>
 </head>
 <body>
 
-    <h2>កម្មវិធីកាត់តរូបភាព (PC & Mobile)</h2>
+    <h2>កម្មវិធីកាត់តរូបភាព Pro (Full Ratios)</h2>
     
     <div class="container">
+        <!-- ផ្ទាំងបញ្ជា (Controls) -->
         <div class="controls">
-            <label for="upload" class="btn">📁 ជ្រើសរើសរូបភាពពីឧបករណ៍</label>
+            <label for="upload" class="btn">📁 ជ្រើសរើសរូបភាពថ្មី</label>
             <input type="file" id="upload" accept="image/*">
 
             <div class="control-group">
@@ -128,14 +142,33 @@
                 <input type="range" id="saturation" min="0" max="200" value="100">
             </div>
 
-            <div class="btn-container">
-                <button class="btn btn-secondary" id="grayscale-btn">ស / ខ្មៅ</button>
-                <button class="btn btn-danger" id="reset-btn">កំណត់ដើម</button>
+            <label style="margin-top: 5px; color: #4CAF50; font-weight: bold;">ឧបករណ៍កែទម្រង់រូបភាព៖</label>
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="rotate-btn" style="flex:1;">🔄 បង្វិល 90°</button>
+                <button class="btn btn-secondary" id="flip-h-btn" style="flex:1;">↔️ ច្រាសផ្ដេក</button>
             </div>
 
-            <button class="btn" id="download-btn" style="background-color: #ff9800; margin-top: 5px;">⬇️ ទាញយក (Download)</button>
+            <label style="margin-top: 5px; color: #4CAF50; font-weight: bold;">ទំហំស្ដង់ដារ (Aspect Ratios):</label>
+            <div class="btn-row">
+                <button class="btn btn-secondary active" id="ratio-free">Free</button>
+                <button class="btn btn-secondary" id="ratio-1-1">1:1</button>
+                <button class="btn btn-secondary" id="ratio-4-3">4:3</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="ratio-3-4">3:4</button>
+                <button class="btn btn-secondary" id="ratio-9-16">9:16</button>
+                <button class="btn btn-secondary" id="ratio-16-9">16:9</button>
+            </div>
+
+            <div class="btn-row" style="margin-top: 5px;">
+                <button class="btn btn-secondary" id="grayscale-btn" style="background:#555;">ស / ខ្មៅ</button>
+                <button class="btn btn-danger" id="reset-btn" style="flex:1;">កំណត់ដើម</button>
+            </div>
+
+            <button class="btn btn-warning" id="download-btn" style="margin-top: 5px;">⬇️ ទាញយករូបភាព (Download)</button>
         </div>
 
+        <!-- ផ្ទាំងបង្ហាញរូបភាព (Preview) -->
         <div class="preview-area">
             <canvas id="canvas"></canvas>
             <p id="placeholder-text" style="color: #777; text-align: center; font-size: 14px;">សូមចុច "ជ្រើសរើសរូបភាព" ដើម្បីចាប់ផ្តើម</p>
@@ -159,6 +192,9 @@
         let img = new Image();
         let isImageLoaded = false;
         let isGrayscale = false;
+        let rotationAngle = 0;
+        let flipH = 1;
+        let currentAspect = 'free';
 
         upload.addEventListener('change', (e) => {
             const file = e.target.files[0];
@@ -166,8 +202,7 @@
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     img.onload = function() {
-                        canvas.width = img.width;
-                        canvas.height = img.height;
+                        resetEdits();
                         isImageLoaded = true;
                         placeholder.style.display = 'none';
                         applyFilters();
@@ -178,18 +213,82 @@
             }
         });
 
+        function resetEdits() {
+            rotationAngle = 0;
+            flipH = 1;
+            setAspect('free');
+            isGrayscale = false;
+            brightnessInput.value = 100;
+            contrastInput.value = 100;
+            saturationInput.value = 100;
+        }
+
+        function setAspect(aspect) {
+            currentAspect = aspect;
+            document.querySelectorAll('.btn-row .btn-secondary').forEach(btn => {
+                if(btn.id.startsWith('ratio-')) btn.classList.remove('active');
+            });
+            const activeBtn = document.getElementById('ratio-' + aspect);
+            if(activeBtn) activeBtn.classList.add('active');
+        }
+
         function applyFilters() {
             if (!isImageLoaded) return;
 
+            let orgW = img.width;
+            let orgH = img.height;
+
+            let targetW = orgW;
+            let targetH = orgH;
+
+            // គណនាទំហំតាម Ratio ដែលបានរើស
+            if (currentAspect === '1:1') {
+                let size = Math.min(orgW, orgH);
+                targetW = size;
+                targetH = size;
+            } else if (currentAspect === '4:3') {
+                if (orgW > orgH) {
+                    targetH = orgH;
+                    targetW = (orgH * 4) / 3;
+                } else {
+                    targetW = orgW;
+                    targetH = (orgW * 4) / 3;
+                }
+            } else if (currentAspect === '3:4') {
+                if (orgW > orgH) {
+                    targetW = orgW;
+                    targetH = (orgW * 4) / 3;
+                } else {
+                    targetH = orgH;
+                    targetW = (orgH * 3) / 4;
+                }
+            } else if (currentAspect === '9:16') {
+                targetW = orgW;
+                targetH = (orgW * 16) / 9;
+            } else if (currentAspect === '16:9') {
+                targetW = orgW;
+                targetH = (orgW * 9) / 16;
+            }
+
+            canvas.width = targetW;
+            canvas.height = targetH;
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((rotationAngle * Math.PI) / 180);
+            ctx.scale(flipH, 1);
+
             let brightness = brightnessInput.value;
             let contrast = contrastInput.value;
             let saturation = saturationInput.value;
             let gray = isGrayscale ? 'grayscale(100%)' : 'grayscale(0%)';
 
             ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%) ${gray}`;
-            ctx.drawImage(img, 0, 0);
+            
+            // គូររូបភាពកណ្តាលកូនសោ
+            ctx.drawImage(img, -orgW / 2, -orgH / 2);
+            ctx.restore();
 
             brightnessVal.innerText = brightness;
             contrastVal.innerText = contrast;
@@ -202,16 +301,30 @@
             saturationInput.addEventListener(evt, applyFilters);
         });
 
+        document.getElementById('rotate-btn').addEventListener('click', () => {
+            rotationAngle = (rotationAngle + 90) % 360;
+            applyFilters();
+        });
+
+        document.getElementById('flip-h-btn').addEventListener('click', () => {
+            flipH *= -1;
+            applyFilters();
+        });
+
+        document.getElementById('ratio-free').addEventListener('click', () => { setAspect('free'); applyFilters(); });
+        document.getElementById('ratio-1-1').addEventListener('click', () => { setAspect('1-1'); applyFilters(); });
+        document.getElementById('ratio-4-3').addEventListener('click', () => { setAspect('4-3'); applyFilters(); });
+        document.getElementById('ratio-3-4').addEventListener('click', () => { setAspect('3-4'); applyFilters(); });
+        document.getElementById('ratio-9-16').addEventListener('click', () => { setAspect('9-16'); applyFilters(); });
+        document.getElementById('ratio-16-9').addEventListener('click', () => { setAspect('16-9'); applyFilters(); });
+
         document.getElementById('grayscale-btn').addEventListener('click', () => {
             isGrayscale = !isGrayscale;
             applyFilters();
         });
 
         document.getElementById('reset-btn').addEventListener('click', () => {
-            brightnessInput.value = 100;
-            contrastInput.value = 100;
-            saturationInput.value = 100;
-            isGrayscale = false;
+            resetEdits();
             applyFilters();
         });
 
@@ -221,7 +334,7 @@
                 return;
             }
             const link = document.createElement('a');
-            link.download = 'edited-image.png';
+            link.download = 'pro-ratio-image.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         });
