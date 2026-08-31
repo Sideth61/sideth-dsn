@@ -25,17 +25,22 @@
             text-align: center;
         }
         .bot-avatar {
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             background: rgba(0, 255, 102, 0.1);
             border: 2px solid #00ff66;
             border-radius: 50%;
+            overflow: hidden; /* ធានាថារูปភាពស្ថិតក្នុងរង្វង់មូល */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
             margin: 0 auto 15px auto;
             box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+        }
+        .bot-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* ធ្វើឱ្យរូបភាពពេញកន្លែងស្អាត */
         }
         h1 {
             color: #00ff66;
@@ -123,7 +128,11 @@
 </head>
 <body>
     <div class="container">
-        <div class="bot-avatar">⚡</div>
+        <!-- ដាក់បញ្ចូលរូបភាព Cover ជំនួស Emoji -->
+        <div class="bot-avatar">
+            <img src="dsnos_bot.jpg" alt="DSN OS Bot Cover">
+        </div>
+
         <h1>DSN OS Bot</h1>
         <div class="username">@dsnos_bot</div>
         <p>ប្រព័ន្ធបញ្ជាកម្រិត God-Tier OS សម្រាប់គ្រប់គ្រងកិច្ចការប្រព័ន្ធ កូដ និងស្វ័យប្រវត្តិកម្មកម្រិតខ្ពស់របស់ San Sideth។</p>
@@ -146,4 +155,3 @@
     </div>
 </body>
 </html>
-
