@@ -2,217 +2,143 @@
 <html lang="km">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>San Sideth - DSN Telegram Bots Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSN Telegram Bot Center - San Sideth</title>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --gold: #ffd700;
-            --cyan: #00ffff;
-            --purple: #c084fc;
-            --bg-glass: rgba(15, 23, 42, 0.45);
-            --border-glass: rgba(192, 132, 252, 0.4);
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100vh;
+        * { box-sizing: border-box; }
+        body {
             font-family: 'Kantumruy Pro', sans-serif;
-            color: #fff;
-            background: #030712;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background: radial-gradient(circle at center, rgba(124, 58, 237, 0.15), #030712 80%);
-            z-index: 0;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 650px;
-            margin: auto;
-            padding: 25px 16px 100px;
-            display: flex;
-            flex-direction: column;
-            gap: 22px;
-            position: relative;
-            z-index: 10;
-        }
-
-        h1 {
-            font-size: 22px;
-            text-align: center;
-            color: var(--gold);
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-            margin: 10px 0 15px;
-            font-weight: 700;
-        }
-
-        .bot-card {
-            background: var(--bg-glass);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1.5px solid var(--border-glass);
-            border-radius: 24px;
-            padding: 22px;
+            background-color: #030712;
+            color: #f8fafc;
+            margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            margin-top: 30px;
+        }
+        h1 {
+            color: #00ff66;
+            font-size: 22px;
             text-align: center;
-            gap: 16px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(192, 132, 252, 0.08);
-            transition: 0.3s ease;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(0,255,102,0.4);
         }
-
-        .bot-card:hover {
-            border-color: var(--gold);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 215, 0, 0.3);
-            transform: translateY(-3px);
+        p {
+            color: #94a3b8;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 25px;
         }
-
-        /* 📌 Cover រូបភាពទំហំ 4:3 ធំច្បាស់ពេញភ្នែក */
-        .bot-cover {
-            width: 100%;
-            aspect-ratio: 4 / 3;
+        .bot-card {
+            background: rgba(10, 15, 30, 0.85);
+            border: 1px solid rgba(0, 255, 102, 0.3);
+            padding: 16px;
             border-radius: 16px;
-            object-fit: cover;
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-        }
-
-        .bot-info h3 {
-            margin: 0 0 8px;
-            font-size: 20px;
-            color: var(--gold);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        .bot-info p {
-            margin: 0;
-            font-size: 14px;
-            color: #e2e8f0;
-            line-height: 1.6;
-        }
-
-        .btn-group {
+            margin-bottom: 12px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
-
-        .btn-launch {
-            width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #7c3aed, var(--gold));
-            color: #000;
-            font-family: 'Kantumruy Pro', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
+            align-items: center;
+            justify-content: space-between;
             text-decoration: none;
-            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
-            transition: 0.25s ease;
-            display: inline-block;
+            color: #fff;
+            transition: 0.3s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
-
-        .btn-launch:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.15);
+        .bot-card:hover {
+            border-color: #00ff66;
+            background: rgba(0, 255, 102, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0, 255, 102, 0.3);
         }
-
-        .dsn-dock {
-            position: fixed;
-            z-index: 1000;
-            left: 50%;
-            bottom: max(15px, env(safe-area-inset-bottom));
-            transform: translateX(-50%);
+        .bot-info {
             display: flex;
-            gap: 10px;
-            padding: 10px 18px;
-            border-radius: 35px;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(25px);
-            border: 1px solid var(--gold);
-            box-shadow: 0 15px 40px rgba(0,0,0,.8);
+            align-items: center;
+            gap: 12px;
         }
-
-        .dock-item {
-            width: 48px;
-            height: 48px;
+        .bot-icon {
+            font-size: 24px;
+            background: rgba(0, 255, 102, 0.1);
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            text-decoration: none;
-            font-size: 22px;
-            transition: .25s;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 102, 0.3);
         }
-
-        .dock-item:hover {
-            background: rgba(255, 215, 0, 0.3);
-            transform: translateY(-5px) scale(1.1);
+        .bot-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: #f8fafc;
+        }
+        .bot-desc {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        .arrow {
+            color: #00ff66;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            color: #38bdf8;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .back-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1>🤖 DSN SUPREME TELEGRAM BOTS HUB</h1>
+        <h1>🤖 DSN Telegram Bot Hub</h1>
+        <p>ជ្រើសរើស Telegram Bot របស់ San Sideth ដែលបងចង់ប្រើប្រាស់៖</p>
 
-        <!-- Bot 1: DSN OS Bot -->
-        <div class="bot-card">
-            <img src="dsnos_bot.jpg" alt="DSN OS Bot" class="bot-cover">
+        <a href="sideth_bot.html" class="bot-card">
             <div class="bot-info">
-                <h3>DSN OS Bot</h3>
-                <p>@dsnos_bot • ប្រព័ន្ធគ្រប់គ្រង កម្មវិធី និងហ្គេម PSP, PS2 ដ៏សម្បូរបែប</p>
+                <div class="bot-icon">🤖</div>
+                <div>
+                    <div class="bot-title">Sideth Bot</div>
+                    <div class="bot-desc">ប្រព័ន្ធជំនួយការផ្ទាល់ខ្លួនរបស់ Sideth</div>
+                </div>
             </div>
-            <div class="btn-group">
-                <a href="https://t.me/dsnos_bot" class="btn-launch" target="_blank">🚀 ចូលកាន់ Telegram Bot</a>
-            </div>
-        </div>
+            <div class="arrow">➔</div>
+        </a>
 
-        <!-- Bot 2: Sideth Bot (តភ្ជាប់លីងទាំងពីរតាមបងចង់បាន) -->
-        <div class="bot-card">
-            <img src="sideth_bot.jpg" alt="Sideth Bot" class="bot-cover">
+        <a href="dsnos_bot.html" class="bot-card">
             <div class="bot-info">
-                <h3>Sideth Bot</h3>
-                <p>@sideth_bot • ផ្លូវចូលរហ័សទៅកាន់ Website និង Telegram Bot ផ្ទាល់ខ្លួន</p>
+                <div class="bot-icon">⚡</div>
+                <div>
+                    <div class="bot-title">DSN OS Bot</div>
+                    <div class="bot-desc">ប្រព័ន្ធបញ្ជាកម្រិត God-Tier OS</div>
+                </div>
             </div>
-            <div class="btn-group">
-                <a href="https://t.me/sideth_bot" class="btn-launch" target="_blank">🚀 ចូល Telegram (@sideth_bot)[span_0](start_span)[span_0](end_span)</a>
-                <a href="https://sideth.site/sideth.bot" class="btn-launch" style="background: linear-gradient(135deg, #00ffff, #7c3aed); color: #000;" target="_blank">🌐 បើក Domain (sideth.bot)[span_1](start_span)[span_1](end_span)</a>
-            </div>
-        </div>
+            <div class="arrow">➔</div>
+        </a>
 
-        <!-- Bot 3: SidethMailBot -->
-        <div class="bot-card">
-            <img src="sideth_mail_bot.jpg" alt="SidethMailBot" class="bot-cover">
+        <a href="sideth_mail_bot.html" class="bot-card">
             <div class="bot-info">
-                <h3>SidethMailBot</h3>
-                <p>@sideth_mail_bot • ប្រព័ន្ធជំនួយបង្កើតអ៊ីមែលបណ្តោះអាសន្នសុវត្ថិភាពខ្ពស់</p>
+                <div class="bot-icon">📧</div>
+                <div>
+                    <div class="bot-title">Sideth Mail Bot</div>
+                    <div class="bot-desc">ប្រព័ន្ធគ្រប់គ្រងសារ និងអ៊ីមែល</div>
+                </div>
             </div>
-            <div class="btn-group">
-                <a href="https://t.me/sideth_mail_bot" class="btn-launch" target="_blank">🚀 ចូលកាន់ Telegram Bot</a>
-            </div>
-        </div>
+            <div class="arrow">➔</div>
+        </a>
+
+        <a href="../index.html" class="back-link">🏠 ត្រឡប់ទៅទំព័រដើមវិញ (Home)</a>
     </div>
-
-    <!-- Navigation Dock -->
-    <nav class="dsn-dock">
-        <a href="index.html" class="dock-item" title="Home">🏠</a>
-        <a href="telegram_bot.html" class="dock-item" title="Telegram Bots">🤖</a>
-        <a href="library.html" class="dock-item" title="Library">📚</a>
-        <a href="setting.html" class="dock-item" title="Settings">⚙️</a>
-    </nav>
-
 </body>
 </html>
