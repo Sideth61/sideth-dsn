@@ -36,10 +36,10 @@
             background: rgba(5, 12, 24, 0.9);
             border: 1px solid rgba(168,85,247,0.8);
             border-radius: 14px;
-            padding: 16px;
+            padding: 14px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 14px;
             box-shadow: 0 0 18px rgba(168,85,247,0.25);
             transition: 0.3s;
         }
@@ -47,6 +47,18 @@
             border-color: #c084fc;
             box-shadow: 0 0 25px rgba(192,132,252,0.45);
             transform: translateY(-2px);
+        }
+        .bot-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #a855f7;
+            box-shadow: 0 0 10px rgba(168,85,247,0.5);
+            flex-shrink: 0;
+        }
+        .bot-info {
+            flex-grow: 1;
         }
         .bot-info h3 {
             margin: 0 0 4px;
@@ -88,33 +100,36 @@
 
         <!-- Bot 1: DSN OS Bot -->
         <div class="bot-card">
+            <img src="dsnos_bot.jpg" alt="DSN OS Bot" class="bot-avatar">
             <div class="bot-info">
                 <h3>DSN OS Bot</h3>
                 <p>@dsnos_bot • កម្មវិធី និងហ្គេម PSP, PS2</p>
             </div>
-            <a href="dsnos_bot.html" class="btn-launch">ចូលកាន់ Bot</a>
+            <a href="https://t.me/dsnos_bot" class="btn-launch" target="_blank">ចូល Bot</a>
         </div>
 
         <!-- Bot 2: Sideth Bot -->
         <div class="bot-card">
+            <img src="sideth_bot.jpg" alt="Sideth Bot" class="bot-avatar">
             <div class="bot-info">
                 <h3>Sideth Bot</h3>
                 <p>@sideth_bot • ផ្លូវចូល Website ផ្ទាល់ខ្លួន</p>
             </div>
-            <a href="sideth_bot.html" class="btn-launch">ចូលកាន់ Bot</a>
+            <a href="https://t.me/sideth_bot" class="btn-launch" target="_blank">ចូល Bot</a>
         </div>
 
         <!-- Bot 3: SidethMailBot -->
         <div class="bot-card">
+            <img src="sideth_mail_bot.jpg" alt="SidethMailBot" class="bot-avatar">
             <div class="bot-info">
                 <h3>SidethMailBot</h3>
                 <p>@sideth_mail_bot • ប្រព័ន្ធជំនួយស្វ័យប្រវត្តិ</p>
             </div>
-            <a href="sideth_mail_bot.html" class="btn-launch">ចូលកាន់ Bot</a>
+            <a href="https://t.me/sideth_mail_bot" class="btn-launch" target="_blank">ចូល Bot</a>
         </div>
     </div>
 
-    <!-- Navigation Dock សម្រាប់ភ្ជាប់ទៅទំព័រដើម និងទំព័រផ្សេងៗ -->
+    <!-- Navigation Dock -->
     <nav class="dsn-dock">
         <a href="index.html" class="dock-item" title="Home">🏠</a>
         <a href="telegram_bot.html" class="dock-item" title="Telegram Bots">🤖</a>
