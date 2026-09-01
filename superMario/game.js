@@ -78,17 +78,28 @@ const ctx = canvas.getContext("2d");
 const W = canvas.width;
 const H = canvas.height;
 
-let score = 0, coins = 0, level = 1, maxLevel = 10, lives = 3, gravity = 0.65;
-let paused = false, gameOver = false, gameWon = false;
+let score = 0;
+let highScore = localStorage.getItem("sideth_highscore") || 0;
+let coins = 0;
+let level = 1;
+let maxLevel = 10;
+let lives = 3;
+let gravity = 0.65;
+let paused = false;
+let gameOver = false;
+let gameWon = false;
 
-const input = { left: false, right: false, jump: false, pause: false };
+const input = { left: false, right: false, jump: false };
 
 const player = {
     x: 70, y: 350, width: 34, height: 46, vx: 0, vy: 0,
-    speed: 5, jumpPower: -13, grounded: false, invincible: 0
+    speed: 5.2, jumpPower: -13.2, grounded: false, invincible: 0
 };
 
-let platforms = [], coinList = [], enemies = [], flagPole = { x: 820, y: 150, reached: false };
+let platforms = [];
+let coinList = [];
+let enemies = [];
+let flagPole = { x: 820, y: 150, reached: false };
 
 function createLevel() {
     flagPole.reached = false;
@@ -97,8 +108,8 @@ function createLevel() {
     for(let i = 1; i <= 4; i++) {
         platforms.push({
             x: i * 180 - 40,
-            y: 360 - (i % 2) * 80 - (Math.sin(level * i) * 30),
-            width: 110,
+            y: 350 - (i % 2) * 85 - (Math.sin(level * i) * 25),
+            width: 105,
             height: 18
         });
     }
@@ -122,7 +133,7 @@ function createLevel() {
             y: 395,
             width: 35,
             height: 35,
-            vx: 1 + level * 0.2,
+            vx: 1 + level * 0.22,
             alive: true
         });
     }
@@ -136,13 +147,22 @@ function resetPlayer() {
     player.x = 70; player.y = 350; player.vx = 0; player.vy = 0; player.invincible = 120;
 }
 
+function checkHighScore() {
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem("sideth_highscore", highScore);
+    }
+}
+
 function loseLife() {
     if (player.invincible > 0 || gameOver || gameWon) return;
     playSound('hurt');
     lives--;
+    particles.add(player.x + 15, player.y + 20, "#e74c3c");
     if (lives <= 0) {
         gameOver = true;
-        document.getElementById("message").innerHTML = "💀 GAME OVER<br><small style='font-size:14px; color:#aaa;'>ចុចលើអេក្រង់ដើម្បីលេងម្ដងទៀត</small>";
+        checkHighScore();
+        document.getElementById("message").innerHTML = "💀 GAME OVER<br><small style='font-size:13px; color:#aaa;'>ចុចលើអេក្រង់ដើម្បីលេងម្ដងទៀត</small>";
     } else {
         resetPlayer();
     }
@@ -162,6 +182,7 @@ function update() {
         player.vy = player.jumpPower;
         player.grounded = false;
         input.jump = false;
+        particles.add(player.x + 15, player.y + 45, "#ffffff");
         playSound('jump');
     }
 
@@ -192,6 +213,8 @@ function update() {
             coin.collected = true;
             coins++;
             score += 10;
+            checkHighScore();
+            particles.add(coin.x + 8, coin.y + 8, "#f1c40f");
             playSound('coin');
         }
     }
@@ -204,8 +227,10 @@ function update() {
         if (collision(player, enemy)) {
             if (player.vy > 0 && player.y + player.height - 10 < enemy.y + 15) {
                 enemy.alive = false;
-                player.vy = -9;
+                player.vy = -9.5;
                 score += 50;
+                checkHighScore();
+                particles.add(enemy.x + 15, enemy.y + 15, "#9b59b6");
                 playSound('stomp');
             } else {
                 loseLife();
@@ -215,15 +240,17 @@ function update() {
     }
 
     if (player.invincible > 0) player.invincible--;
+    particles.update();
 
     if (!flagPole.reached && collision(player, { x: flagPole.x, y: flagPole.y, width: 20, height: 180 })) {
         flagPole.reached = true;
-        score += 100 * level;
+        score += 150 * level;
+        checkHighScore();
         playSound('win');
 
         if (level >= maxLevel) {
             gameWon = true;
-            document.getElementById("message").innerHTML = "🏆 CONGRATULATIONS!<br><small style='font-size:14px; color:#aaa;'>អ្នកបានឈ្នះទាំង ១០ កម្រិតដោយជោគជ័យ! 🎉</small>";
+            document.getElementById("message").innerHTML = "🏆 CONGRATULATIONS!<br><small style='font-size:13px; color:#aaa;'>អ្នកបានឈ្នះទាំង ១០ កម្រិតដោយជោគជ័យ! 🎉</small>";
         } else {
             level++;
             gravity += 0.01;
@@ -236,25 +263,25 @@ function update() {
 
 function drawBackground() {
     const sky = ctx.createLinearGradient(0, 0, 0, H);
-    sky.addColorStop(0, "#3a7bd5");
-    sky.addColorStop(1, "#3a6073");
+    sky.addColorStop(0, "#2980b9");
+    sky.addColorStop(1, "#2c3e50");
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, W, H);
 
-    ctx.fillStyle = "rgba(255,255,255,0.15)";
-    ctx.beginPath(); ctx.arc(150, 100, 30, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(520, 120, 40, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.12)";
+    ctx.beginPath(); ctx.arc(160, 90, 32, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(540, 110, 45, 0, Math.PI * 2); ctx.fill();
 }
 
 function drawWorld() {
     for (const p of platforms) {
-        ctx.fillStyle = "#5c4033";
+        ctx.fillStyle = "#4a3525";
         ctx.fillRect(p.x, p.y, p.width, p.height);
-        ctx.fillStyle = "#4caf50";
+        ctx.fillStyle = "#2ecc71";
         ctx.fillRect(p.x, p.y, p.width, 6);
     }
 
-    ctx.fillStyle = "#95a5a6";
+    ctx.fillStyle = "#bdc3c7";
     ctx.fillRect(flagPole.x + 8, flagPole.y, 4, 180);
     ctx.fillStyle = "#e74c3c";
     ctx.beginPath();
@@ -269,12 +296,12 @@ function drawWorld() {
         ctx.fillStyle = "#f1c40f";
         ctx.beginPath(); ctx.arc(coin.x + 8, coin.y + 8, 8, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = "#f39c12";
-        ctx.beginPath(); ctx.arc(coin.x + 8, coin.y + 8, 5, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(coin.x + 8, coin.y + 8, 4, 0, Math.PI * 2); ctx.fill();
     }
 
     for (const enemy of enemies) {
         if (!enemy.alive) continue;
-        ctx.fillStyle = "#9b59b6";
+        ctx.fillStyle = "#8e44ad";
         ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
         ctx.fillStyle = "white";
         ctx.fillRect(enemy.x + 6, enemy.y + 8, 6, 6);
@@ -288,20 +315,21 @@ function drawPlayer() {
     ctx.fillRect(player.x + 4, player.y, 27, 9);
     ctx.fillStyle = "#f39c12";
     ctx.fillRect(player.x + 7, player.y + 13, 20, 17);
-    ctx.fillStyle = "#2980b9";
+    ctx.fillStyle = "#3498db";
     ctx.fillRect(player.x + 5, player.y + 29, 24, 12);
 }
 
 function draw() {
     drawBackground();
     drawWorld();
+    particles.draw(ctx);
     drawPlayer();
 
     if (paused && !gameOver && !gameWon) {
-        ctx.fillStyle = "rgba(0,0,0,0.6)";
+        ctx.fillStyle = "rgba(0,0,0,0.65)";
         ctx.fillRect(0, 0, W, H);
         ctx.fillStyle = "white";
-        ctx.font = "bold 36px Arial";
+        ctx.font = "bold 36px 'Poppins', sans-serif";
         ctx.textAlign = "center";
         ctx.fillText("⏸️ PAUSED", W / 2, H / 2);
         ctx.textAlign = "left";
@@ -310,6 +338,7 @@ function draw() {
 
 function updateHUD() {
     document.getElementById("score").textContent = score;
+    document.getElementById("highScore").textContent = highScore;
     document.getElementById("coins").textContent = coins;
     document.getElementById("level").textContent = level;
     document.getElementById("lives").textContent = lives;
