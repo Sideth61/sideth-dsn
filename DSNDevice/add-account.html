@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>➕ Add 2FA Account - DSN OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 15px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        header h1 { font-size: 18px; color: var(--accent); }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 13px; color: var(--text-sub); }
+        input, textarea, select { width: 100%; padding: 12px 15px; background: #000; border: 1px solid var(--border-color); color: #fff; border-radius: 12px; outline: none; font-size: 14px; }
+        input:focus, textarea:focus { border-color: var(--accent); }
+        .btn-main { width: 100%; padding: 14px; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #030712; text-align: center; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 15px; margin-top: 10px; box-shadow: 0 4px 15px rgba(56,189,248,0.3); }
+        .back-btn { display: block; text-align: center; background: #1e293b; color: var(--text-sub); padding: 12px; border-radius: 12px; text-decoration: none; font-weight: bold; border: 1px solid var(--border-color); margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>➕ បន្ថែមគណនី 2FA</h1>
+            <a href="index.html" style="color: var(--text-sub); text-decoration: none;">❌ បោះបង់</a>
+        </header>
+
+        <div class="form-group">
+            <label>ឈ្មោះ Issuer (ឧ. GitHub, Google)</label>
+            <input type="text" id="issuerInput" placeholder="GitHub">
+        </div>
+
+        <div class="form-group">
+            <label>ឈ្មោះ Account (ឧ. san.sideth@dsn.os)</label>
+            <input type="text" id="accountInput" placeholder="username@domain.com">
+        </div>
+
+        <div class="form-group">
+            <label>🔑 Secret Key (Base32)</label>
+            <textarea id="secretInput" rows="3" placeholder="BK5V TVQ7 D2RB..."></textarea>
+        </div>
+
+        <button class="btn-main" id="saveBtn">💾 រក្សាទុក Account</button>
+        <a href="index.html" class="back-btn">⬅️ ត្រឡប់ក្រោយ</a>
+    </div>
+
+    <script src="js/totp.js"></script>
+    <script>
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            let issuer = document.getElementById('issuerInput').value.trim();
+            let name = document.getElementById('accountInput').value.trim();
+            let secret = document.getElementById('secretInput').value.trim().replace(/\s+/g, '');
+
+            if(!secret) {
+                alert('⚠️ សូមបញ្ចូល Secret Key ជាមុនសិន!');
+                return;
+            }
+
+            let accounts = JSON.parse(localStorage.getItem('dsn_2fa_accounts') || '[]');
+            accounts.push({ issuer: issuer || 'Unknown', name: name || 'Account', secret: secret });
+            localStorage.setItem('dsn_2fa_accounts', JSON.stringify(accounts));
+
+            alert('✅ បានរក្សាទុក Account ដោយសុវត្ថិភាព!');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
