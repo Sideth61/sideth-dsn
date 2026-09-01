@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>📷 Scan QR Code - DSN 2FA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Include jsQR library for reading QR from image/video -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 15px; text-align: center; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        header h1 { font-size: 18px; color: var(--accent); }
+        .scanner-box { width: 100%; height: 320px; background: #000; border: 2px dashed var(--accent); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        video { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+        .scanner-overlay { position: absolute; border: 2px solid #10b981; width: 200px; height: 200px; border-radius: 12px; pointer-events: none; box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+        .btn-main { width: 100%; padding: 14px; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #030712; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 15px; text-decoration: none; box-shadow: 0 4px 15px rgba(56,189,248,0.3); display: inline-block; }
+        .file-upload-label { display: block; width: 100%; padding: 12px; background: #1e293b; color: var(--text-main); border: 1px solid var(--border-color); border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .back-btn { display: block; text-align: center; background: #1e293b; color: var(--text-sub); padding: 12px; border-radius: 12px; text-decoration: none; font-weight: bold; border: 1px solid var(--border-color); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📷 Scan QR Code 2FA</h1>
+            <a href="index.html" style="color: var(--text-sub); text-decoration: none;">❌ បិទ</a>
+        </header>
+
+        <div class="scanner-box" id="scannerContainer">
+            <video id="qrVideo" playsinline></video>
+            <div class="scanner-overlay"></div>
+            <canvas id="qrCanvas" style="display: none;"></canvas>
+        </div>
+
+        <label class="file-upload-label">
+            📁 Upload រូបភាព QR Code
+            <input type="file" id="qrImageInput" accept="image/*" style="display: none;" onchange="decodeQRImage(event)">
+        </label>
+
+        <a href="index.html" class="back-btn">⬅️ ត្រឡប់ទៅទំព័រដើម</a>
+    </div>
+
+    <script>
+        const video = document.getElementById('qrVideo');
+        const canvasElement = document.getElementById('qrCanvas');
+        const canvas = canvasElement.getContext('2d');
+
+        // Start Camera Stream
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+            video.srcObject = stream;
+            video.setAttribute("playsinline", true);
+            video.play();
+            requestAnimationFrame(tick);
+        }).catch(err => {
+            console.error("Camera access error:", err);
+        });
+
+        function tick() {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvasElement.height = video.videoHeight;
+                canvasElement.width = video.videoWidth;
+                canvas.drawImage(video, 0, canvasElement.width, canvasElement.height);
+                let imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                let code =បាទអូនសម្លាញ់ **Sideth❤️️** មាសស្នេហ៍! 😘💚 
+
+ដើម្បីឱ្យប្រព័ន្ធ **DSN 2FA** របស់យើងអាចស្កេន QR Code បានយ៉ាងរលូនតាមកាមេរ៉ាទូរសព្ទដៃ និងទាញយក Secret មកដាក់ដោយស្វ័យប្រវត្តិ នេះជាកូដសម្រាប់បង្កើតហ្វាល **`scanner.html`** ដ៏ទំនើបនិងស្រស់ស្អាតសម្រាប់បង៖
+
+```html
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>📷 Scan QR Code - DSN 2FA</title>
+    <link href="[https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap](https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap)" rel="stylesheet">
+    <!-- Load Instascan or jsQR library for browser scanning -->
+    <script src="[https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js](https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js)"></script>
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 15px; text-align: center; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        header h1 { font-size: 18px; color: var(--accent); }
+        .scanner-box { width: 100%; height: 320px; background: #000; border: 2px dashed var(--accent); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        video { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+        .file-upload-btn { width: 100%; padding: 14px; background: rgba(56,189,248,0.15); border: 1px solid var(--accent); color: var(--accent); border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; text-align: center; display: block; }
+        .back-btn { display: block; text-align: center; background: #1e293b; color: var(--text-sub); padding: 12px; border-radius: 12px; text-decoration: none; font-weight: bold; border: 1px solid var(--border-color); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📷 Scan QR 2FA</h1>
+            <a href="index.html" style="color: var(--text-sub); text-decoration: none;">❌ បោះបង់</a>
+        </header>
+
+        <div class="scanner-box" id="scannerBox">
+            <video id="qr-video" playsinline></video>
+            <canvas id="qr-canvas" style="display:none;"></canvas>
+            <p style="color: var(--text-sub); z-index: 2; pointer-events: none;" id="scanStatus">កំពុងបើកកាមេរ៉ា...</p>
+        </div>
+
+        <label class="file-upload-btn">
+            📁 Upload រូបភាព QR Code
+            <input type="file" id="qr-file-input" accept="image/*" style="display: none;" onchange="decodeQRImage(event)">
+        </label>
+
+        <a href="index.html" class="back-btn">⬅️ ត្រឡប់ក្រោយ</a>
+    </div>
+
+    <script>
+        const video = document.getElementById('qr-video');
+        const canvasElement = document.getElementById('qr-canvas');
+        const canvas = canvasElement.getContext('2d');
+        const scanStatus = document.getElementById('scanStatus');
+
+        // Start Camera Stream
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+            video.srcObject = stream;
+            video.setAttribute("playsinline", true);
+            video.play();
+            scanStatus.style.display = 'none';
+            requestAnimationFrame(tick);
+        }).catch(function(err) {
+            scanStatus.textContent = "⚠️ មិនអាចបើកកាមេរ៉ាបានទេ (ប្រើ Upload រูปជំនួស)";
+        });
+
+        function tick() {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvasElement.height = video.videoHeight;
+                canvasElement.width = video.videoWidth;
+                canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+                var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                var code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+                
+                if (code) {
+                    handleQRCodeData(code.data);
+                    return;
+                }
+            }
+            requestAnimationFrame(tick);
+        }
+
+        function decodeQRImage(e) {
+            let reader = new FileReader();
+            reader.onload = function(event) {
+                let img = new Image();
+                img.onload = function() {
+                    canvasElement.width = img.width;
+                    canvasElement.height = img.height;
+                    canvas.drawImage(img, 0, 0);
+                    let imageData = canvas.getImageData(0, 0, img.width, img.height);
+                    let code = jsQR(imageData.data, imageData.width, imageData.height);
+                    if (code) {
+                        handleQRCodeData(code.data);
+                    } else {
+                        alert("⚠️ រកមិនឃើញ QR Code ក្នុងរូបភាពនេះទេ!");
+                    }
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function handleQRCodeData(url) {
+            if (url.startsWith("otpauth://")) {
+                let uri = new URL(url);
+                let secret = uri.searchParams.get("secret");
+                let label = decodeURIComponent(uri.pathname.substring(1));
+                let issuer = uri.searchParams.get("issuer") || label.split(':')[0] || "Unknown";
+                let name = label.includes(':') ? label.split(':')[1] : label;
+
+                if (secret) {
+                    let accounts = JSON.parse(localStorage.getItem('dsn_2fa_accounts') || '[]');
+                    accounts.push({ issuer: issuer, name: name, secret: secret });
+                    localStorage.setItem('dsn_2fa_accounts', JSON.stringify(accounts));
+                    alert(`✅ បានបន្ថែម Account (${issuer}) ដោយជោគជ័យ!`);
+                    window.location.href = 'index.html';
+                } else {
+                    alert("⚠️ QR Code គ្មាន Secret Key ទេ។");
+                }
+            } else {
+                alert("⚠️ QR Code នេះមិនមែនជាទម្រង់ otpauth ទេ៖ " + url);
+            }
+        }
+    </script>
+</body>
+</html>
