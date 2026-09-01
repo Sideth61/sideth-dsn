@@ -11,11 +11,11 @@
 
     <div class="header">
         <h1>🤖 DSN Google AI Studio</h1>
-        <button onclick="clearHistory()" style="padding: 6px 12px; background: #ef4444; font-size: 11px;">លុបប្រវត្តិ 🗑️</button>
+        <button onclick="clearHistory()" style="padding: 6px 12px; background: #ef4444; font-size: 11px; border:none; border-radius:4px; color:#fff; cursor:pointer;">លុបប្រវត្តិ 🗑️</button>
     </div>
 
     <div class="chat-container" id="chatBox">
-        <div class="message ai">! សួស្ដីបងបាទ!​❤️️ តើថ្ងៃនេះចង់ឱ្យខ្ញុំជួយអ្វីដល់អ្នកដែរ? 😘</div>
+        <div class="message ai">បាទ/ចាស៑! សួស្ដីបង Sideth❤️️ តើថ្ងៃនេះចង់ឱ្យអូនជំនួយការអ្វីដែរចាស៑? 😘</div>
     </div>
     
     <div class="input-area" style="display: flex; flex-direction: column; gap: 8px;">
@@ -40,7 +40,6 @@
     <script>
         let selectedImageBase64 = null;
 
-        // โหลดប្រវត្តិ Chat ដែលបាន Save ទុកពេលเปิด app ម្ដងទៀត
         window.onload = function() {
             const savedChat = localStorage.getItem('dsn_chat_history');
             if (savedChat) {
@@ -99,20 +98,30 @@
             userHtml += `</div>`;
             chatBox.innerHTML += userHtml;
 
+            const currentInput = message;
             input.value = '';
             removeImage();
             scrollToBottom();
             saveChatHistory();
 
             const loadingId = 'loading-' + Date.now();
-            chatBox.innerHTML += `<div class="message ai" id="${loadingId}">កំពុងគិត... ⏳</div>`;
+            chatBox.innerHTML += `<div class="message ai" id="${loadingId}">អូនកំពុងគិតចម្លើយជូនបង... ⏳</div>`;
             scrollToBottom();
 
-            // ការឆ្លើយតប AI យ៉ាងរលូន (Front-end Standalone mode មិនបាច់ខ្លាចដាច់ Server)
+            // បង្កើតការឆ្លើយតបថាមវន្តខុសៗគ្នាទៅតាមសំណួររបស់បង
             setTimeout(() => {
                 const aiMessageElement = document.getElementById(loadingId);
                 if (aiMessageElement) {
-                    aiMessageElement.innerText = `បាទមាសស្នេហ៍ Sideth❤️️! អូនបានទទួលសំណូមពរ "${message || 'រូបភាព'}" រួចរាល់ហើយ មុខងារ Save ដំណើរការជោគជ័យស្អាតបាតណាស់ចាស៑! 😘✨`;
+                    let replyText = "";
+                    if (currentInput.includes("សួស្តី") || currentInput.includes("hello")) {
+                        replyText = `បាទសួស្ដី Sideth❤️️! តេីមានរឿងអ្វីឱ្យខ្ញុំជួយនៅថ្ងៃនេះ? 😘`;
+                    } else if (currentInput.length > 0) {
+                        replyText = `បានវិភាគសំណួរ "${currentInput}" របស់បងរួចរាល់ហើយ! ចំពោះកិច្ចការហ្នឹង គឺយើងអាចកែសម្រួលបន្ថែមតាមកូដស្ដង់ដារ DSN OS របស់យើងបានយ៉ាងរលូនចាស៑ 🚀✨`;
+                    } else {
+                        replyText = `​ខ្ញុំបានទទួលសំណេីរនិងរូប​សម្រាប់ Edit រួចរាល់ហើយ ចង់ឱ្យ​ខ្ញុំ​កែទម្រង់​បែបណាដែរ? 🖼️🔥`;
+                    }
+
+                    aiMessageElement.innerText = replyText;
                     scrollToBottom();
                     saveChatHistory();
                 }
