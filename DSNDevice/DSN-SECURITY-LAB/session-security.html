@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🍪 DSN Session Security - Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; justify-content: center; }
+        .container { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); backdrop-filter: blur(12px); }
+        h1 { font-size: 18px; color: var(--accent); text-align: center; }
+        .session-box { background: #000; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        .btn-kill { background: #ef4444; color: #fff; border: none; padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 11px; }
+        .feedback { font-size: 13px; font-weight: bold; text-align: center; min-height: 20px; }
+        .back-link { display: block; text-align: center; color: var(--text-sub); text-decoration: none; font-size: 13px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍪 Session & Cookie Security</h1>
+        <p style="font-size: 12px; color: var(--text-sub);">គ្រប់គ្រង Active Sessions លើឧបករណ៍របស់បង Sideth❤️️៖</p>
+
+        <div class="session-box" id="session1">
+             <span>📱 iPhone (Current Device)</span>
+             <span style="color: #10b981; font-size: 11px;">Active</span>
+        </div>
+
+        <div class="session-box" id="session2">
+             <span>💻 Unknown PC (Windows)</span>
+             <button class="btn-kill" onclick="killSession('session2')">Terminate</button>
+        </div>
+
+        <div class="feedback" id="sessionFeedback"></div>
+        <a href="index.html" class="back-link">⬅️ ត្រឡប់ក្រោយ</a>
+    </div>
+
+    <script>
+        function killSession(id) {
+            document.getElementById(id).style.opacity = "0.4";
+            document.getElementById(id).querySelector('button').remove();
+            let feedback = document.getElementById('sessionFeedback');
+            feedback.textContent = "🛡️ បានកាត់ផ្តាច់ Session មិនស្គាល់ជោគជ័យ!";
+            feedback.style.color = "#10b981";
+        }
+    </script>
+</body>
+</html>
