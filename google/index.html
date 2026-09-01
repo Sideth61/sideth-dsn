@@ -5,29 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DSN AI Studio - Google AI Chat</title>
     <link href="https://fonts.googleapis.com/css2?family=Preahvihear&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --chat-bg: rgba(15, 23, 42, 0.85);
-            --border-color: rgba(56, 189, 248, 0.3);
-            --accent: #38bdf8;
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Preahvihear', sans-serif; }
-        body { background: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; }
-        .header { background: #1e293b; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); }
-        .header h1 { font-size: 16px; color: var(--accent); display: flex; align-items: center; gap: 8px; }
-        .chat-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .message { padding: 12px 16px; border-radius: 12px; max-width: 85%; word-break: break-word; font-size: 14px; line-height: 1.5; }
-        .user { background: #3b82f6; align-self: flex-end; color: #fff; border-bottom-right-radius: 2px; }
-        .ai { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); align-self: flex-start; border: 1px solid var(--border-color); border-bottom-left-radius: 2px; }
-        .input-area { display: flex; padding: 12px 15px; background: rgba(15, 23, 42, 0.95); border-top: 1px solid var(--border-color); gap: 10px; }
-        input { flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: #fff; outline: none; font-size: 14px; }
-        input:focus { border-color: var(--accent); }
-        button { padding: 0 20px; background: #3b82f6; border: none; border-radius: 8px; color: #fff; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        button:active { transform: scale(0.95); }
-    </style>
+    <!-- តភ្ជាប់ជាមួយហ្វាល Style ខាងក្រៅ -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -39,34 +18,83 @@
         <div class="message ai">បាទ/ចាស៑! សួស្ដីបង Sideth❤️️ តើថ្ងៃនេះចង់ឱ្យអូនជំនួយការអ្វីដែរចាស៑? 😘</div>
     </div>
     
-    <div class="input-area">
-        <input type="text" id="userInput" placeholder="វាយសំនួរ ឬបញ្ជាទីនេះ..." onkeypress="handleKeyPress(event)" />
-        <button onclick="sendMessage()">➤</button>
+    <div class="input-area" style="display: flex; flex-direction: column; gap: 8px;">
+        <!-- ប្រអប់ Preview រូបភាពមុននឹងផ្ញើឱ្យ AI Edit -->
+        <div id="previewContainer" style="display: none; align-items: center; gap: 10px;">
+            <img id="imagePreview" src="" alt="Preview" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color);">
+            <span style="font-size: 12px; color: var(--text-sub);">បានជ្រើសរើសរូបភាពរួចរាល់ 🖼️</span>
+            <button onclick="removeImage()" style="padding: 4px 8px; background: #ef4444; font-size: 12px; border: none; border-radius: 4px; color: #fff; cursor: pointer;">លុបចេញ</button>
+        </div>
+
+        <div style="display: flex; width: 100%; gap: 8px; align-items: center;">
+            <!-- ប៊ូតុងជ្រើសរើសរូបភាព -->
+            <label for="imageInput" style="padding: 10px 14px; background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                📷
+            </label>
+            <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="previewSelectedImage(event)" />
+
+            <!-- ប្រអប់សរសេរសំណួរ ឬបញ្ជាកែរូបភាព -->
+            <input type="text" id="userInput" placeholder="សរសេរការបញ្ជា ឬកែសម្រួលរូបភាពទីនេះ..." onkeypress="handleKeyPress(event)" style="flex: 1;" />
+            
+            <!-- ប៊ូតុងបញ្ជូន -->
+            <button onclick="sendMessage()">➤</button>
+        </div>
     </div>
 
     <script>
+        let selectedImageBase64 = null;
+
+        function previewSelectedImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImageBase64 = e.target.result;
+                    document.getElementById('imagePreview').src = selectedImageBase64;
+                    document.getElementById('previewContainer').style.display = 'flex';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeImage() {
+            selectedImageBase64 = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('previewContainer').style.display = 'none';
+        }
+
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const chatBox = document.getElementById('chatBox');
             const message = input.value.trim();
-            if (!message) return;
+            if (!message && !selectedImageBase64) return;
 
-            // បង្ហាញសាររបស់ User
-            chatBox.innerHTML += `<div class="message user">${message}</div>`;
+            // បង្ហាញសារ ឬរូបភាពរបស់ User
+            let userHtml = `<div class="message user">`;
+            if (selectedImageBase64) {
+                userHtml += `<img src="${selectedImageBase64}" style="max-width: 150px; border-radius: 8px; display: block; margin-bottom: 6px;">`;
+            }
+            if (message) {
+                userHtml += `<span>${message}</span>`;
+            }
+            userHtml += `</div>`;
+            chatBox.innerHTML += userHtml;
+
+            const currentImage = selectedImageBase64;
             input.value = '';
+            removeImage();
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // បង្ហាញ Loading ពេលកំពុងរង់ចាំ AI ឆ្លើយតប
+            // បង្ហាញ Loading ពេល AI កំពុងដំណើរការ
             const loadingId = 'loading-' + Date.now();
-            chatBox.innerHTML += `<div class="message ai" id="${loadingId}">កំពុងគិត... ⏳</div>`;
+            chatBox.innerHTML += `<div class="message ai" id="${loadingId}">កំពុងគិត និងរៀបចំកែសម្រួល... ⏳</div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // តភ្ជាប់ទៅកាន់ Server API Endpoint របស់បង (កែសម្រួល URL តាម Server Actual Host)
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: message })
+                    body: JSON.stringify({ prompt: message, image: currentImage })
                 });
 
                 const data = await response.json();
@@ -75,7 +103,7 @@
                 if (response.ok && data.reply) {
                     aiMessageElement.innerText = data.reply;
                 } else {
-                    aiMessageElement.innerText = data.error || "អុញណ៎! មានបញ្ហាប្រព័ន្ធបន្តិច កسាងសង់ឡើងវិញតោះមាសស្នេហ៍! 😅";
+                    aiMessageElement.innerText = data.error || "អុញណ៎! មានបញ្ហាប្រព័ន្ធបន្តិច មាសស្នេហ៍សាកល្បងម្ដងទៀតណា! 😅";
                 }
             } catch (error) {
                 document.getElementById(loadingId).innerText = "សូមអភ័យទោស! មិនអាចតភ្ជាប់ទៅកាន់ Server បានទេ (Connection Error)។ 🔌";
