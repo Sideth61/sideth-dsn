@@ -1,141 +1,77 @@
 "use strict";
 
-let audioCtx = null;
-let soundEnabled = true;
-
+let audioCtx = null, soundEnabled = true;
 function initAudio() {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
 }
 
 function playSound(type) {
     if (!soundEnabled) return;
     initAudio();
     if (!audioCtx) return;
-
     const osc = audioCtx.createOscillator();
     const gainNode = audioCtx.createGain();
-    osc.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-
+    osc.connect(gainNode); gainNode.connect(audioCtx.destination);
     const now = audioCtx.currentTime;
 
     if (type === 'jump') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(450, now + 0.15);
-        gainNode.gain.setValueAtTime(0.1, now);
-        gainNode.gain.linearRampToValueAtTime(0.01, now + 0.15);
-        osc.start(now);
-        osc.stop(now + 0.15);
+        osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(450, now + 0.15);
+        gainNode.gain.setValueAtTime(0.1, now); gainNode.gain.linearRampToValueAtTime(0.01, now + 0.15);
+        osc.start(now); osc.stop(now + 0.15);
     } else if (type === 'coin') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(987.77, now);
-        osc.frequency.setValueAtTime(1318.51, now + 0.08);
-        gainNode.gain.setValueAtTime(0.1, now);
-        gainNode.gain.linearRampToValueAtTime(0.01, now + 0.25);
-        osc.start(now);
-        osc.stop(now + 0.25);
+        osc.frequency.setValueAtTime(987.77, now); osc.frequency.setValueAtTime(1318.51, now + 0.08);
+        gainNode.gain.setValueAtTime(0.1, now); gainNode.gain.linearRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now); osc.stop(now + 0.25);
     } else if (type === 'stomp') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(120, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.12);
-        gainNode.gain.setValueAtTime(0.15, now);
-        gainNode.gain.linearRampToValueAtTime(0.01, now + 0.12);
-        osc.start(now);
-        osc.stop(now + 0.12);
-    } else if (type === 'hurt') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(180, now);
-        osc.frequency.linearRampToValueAtTime(80, now + 0.3);
-        gainNode.gain.setValueAtTime(0.15, now);
-        gainNode.gain.linearRampToValueAtTime(0.01, now + 0.3);
-        osc.start(now);
-        osc.stop(now + 0.3);
-    } else if (type === 'win') {
-        const notes = [523.25, 659.25, 783.99, 1046.50];
-        notes.forEach((freq, idx) => {
-            const noteOsc = audioCtx.createOscillator();
-            const noteGain = audioCtx.createGain();
-            noteOsc.connect(noteGain);
-            noteGain.connect(audioCtx.destination);
-            noteOsc.type = 'square';
-            noteOsc.frequency.setValueAtTime(freq, now + idx * 0.12);
-            noteGain.gain.setValueAtTime(0.1, now + idx * 0.12);
-            noteGain.gain.linearRampToValueAtTime(0.01, now + idx * 0.12 + 0.15);
-            noteOsc.start(now + idx * 0.12);
-            noteOsc.stop(now + idx * 0.12 + 0.15);
-        });
+        osc.frequency.setValueAtTime(120, now); osc.frequency.exponentialRampToValueAtTime(40, now + 0.12);
+        gainNode.gain.setValueAtTime(0.15, now); gainNode.gain.linearRampToValueAtTime(0.01, now + 0.12);
+        osc.start(now); osc.stop(now + 0.12);
     }
 }
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const W = canvas.width;
-const H = canvas.height;
+const W = canvas.width, H = canvas.height;
 
-let score = 0;
-let highScore = localStorage.getItem("sideth_highscore") || 0;
-let coins = 0;
-let level = 1;
-let maxLevel = 10;
-let lives = 3;
-let gravity = 0.65;
-let paused = false;
-let gameOver = false;
-let gameWon = false;
+let score = 0, highScore = localStorage.getItem("sideth_highscore") || 0, coins = 0;
+let level = 1, maxLevel = 10, lives = 3, gravity = 0.65;
+let paused = false, gameOver = false, gameWon = false;
+let screenShake = 0;
+
+let floatingTexts = [];
+function addFloatingText(text, x, y, color = "#f1c40f") {
+    floatingTexts.push({ text, x, y, vy: -1.5, alpha: 1, color });
+}
 
 const input = { left: false, right: false, jump: false };
-
 const player = {
     x: 70, y: 350, width: 34, height: 46, vx: 0, vy: 0,
-    speed: 5.2, jumpPower: -13.2, grounded: false, invincible: 0
+    speed: 5.2, jumpPower: -13.2, grounded: false, invincible: 0,
+    color: "#e74c3c"
 };
 
-let platforms = [];
-let coinList = [];
-let enemies = [];
-let flagPole = { x: 820, y: 150, reached: false };
+let platforms = [], coinList = [], enemies = [], flagPole = { x: 820, y: 150, reached: false };
 
 function createLevel() {
     flagPole.reached = false;
     platforms = [{ x: 0, y: 430, width: 900, height: 70 }];
-
     for(let i = 1; i <= 4; i++) {
         platforms.push({
             x: i * 180 - 40,
             y: 350 - (i % 2) * 85 - (Math.sin(level * i) * 25),
-            width: 105,
-            height: 18
+            width: 105, height: 18
         });
     }
 
     coinList = [];
-    const count = 5 + Math.floor(level * 1.2);
-    for (let i = 0; i < count; i++) {
-        coinList.push({
-            x: 100 + Math.random() * 700,
-            y: 140 + Math.random() * 220,
-            size: 16,
-            collected: false
-        });
+    for (let i = 0; i < 5 + Math.floor(level * 1.2); i++) {
+        coinList.push({ x: 100 + Math.random() * 700, y: 140 + Math.random() * 220, size: 16, collected: false });
     }
 
     enemies = [];
-    const enemyCount = Math.min(1 + Math.floor(level * 0.6), 5);
-    for (let i = 0; i < enemyCount; i++) {
-        enemies.push({
-            x: 200 + Math.random() * 550,
-            y: 395,
-            width: 35,
-            height: 35,
-            vx: 1 + level * 0.22,
-            alive: true
-        });
+    for (let i = 0; i < Math.min(1 + Math.floor(level * 0.6), 5); i++) {
+        enemies.push({ x: 200 + Math.random() * 550, y: 395, width: 35, height: 35, vx: 1 + level * 0.22, alive: true });
     }
 }
 
@@ -147,205 +83,124 @@ function resetPlayer() {
     player.x = 70; player.y = 350; player.vx = 0; player.vy = 0; player.invincible = 120;
 }
 
-function checkHighScore() {
-    if (score > highScore) {
-        highScore = score;
-        localStorage.setItem("sideth_highscore", highScore);
-    }
-}
-
-function loseLife() {
-    if (player.invincible > 0 || gameOver || gameWon) return;
-    playSound('hurt');
-    lives--;
-    particles.add(player.x + 15, player.y + 20, "#e74c3c");
-    if (lives <= 0) {
-        gameOver = true;
-        checkHighScore();
-        document.getElementById("message").innerHTML = "💀 GAME OVER<br><small style='font-size:13px; color:#aaa;'>ចុចលើអេក្រង់ដើម្បីលេងម្ដងទៀត</small>";
-    } else {
-        resetPlayer();
-    }
-    updateHUD();
-}
-
 function update() {
     if (paused || gameOver || gameWon) return;
 
     if (input.left) player.vx = -player.speed;
     else if (input.right) player.vx = player.speed;
     else player.vx *= .75;
-    
     player.x += player.vx;
 
     if (input.jump && player.grounded) {
-        player.vy = player.jumpPower;
-        player.grounded = false;
-        input.jump = false;
-        particles.add(player.x + 15, player.y + 45, "#ffffff");
+        player.vy = player.jumpPower; player.grounded = false; input.jump = false;
         playSound('jump');
     }
 
-    player.vy += gravity;
-    player.y += player.vy;
-    player.grounded = false;
+    player.vy += gravity; player.y += player.vy; player.grounded = false;
 
     for (const p of platforms) {
         if (player.x + player.width > p.x && player.x < p.x + p.width &&
             player.y + player.height >= p.y && player.y + player.height <= p.y + 25 && player.vy >= 0) {
-            player.y = p.y - player.height;
-            player.vy = 0;
-            player.grounded = true;
+            player.y = p.y - player.height; player.vy = 0; player.grounded = true;
         }
     }
 
-    if (player.x < 0) player.x = 0;
-    if (player.x + player.width > W) player.x = W - player.width;
+    if (player.x < 0) player.x = 0; if (player.x + player.width > W) player.x = W - player.width;
 
     if (player.y > H + 50) {
-        loseLife();
-        return;
+        lives--; screenShake = 20; resetPlayer();
+        if (lives <= 0) gameOver = true;
     }
 
     for (const coin of coinList) {
-        if (coin.collected) continue;
-        if (collision(player, { x: coin.x, y: coin.y, width: coin.size, height: coin.size })) {
-            coin.collected = true;
-            coins++;
-            score += 10;
-            checkHighScore();
-            particles.add(coin.x + 8, coin.y + 8, "#f1c40f");
+        if (!coin.collected && collision(player, { x: coin.x, y: coin.y, width: coin.size, height: coin.size })) {
+            coin.collected = true; coins++; score += 10;
+            addFloatingText("+10", coin.x, coin.y);
             playSound('coin');
         }
     }
 
     for (const enemy of enemies) {
         if (!enemy.alive) continue;
-        enemy.x += enemy.vx;
-        if (enemy.x < 50 || enemy.x > W - 50) enemy.vx *= -1;
+        enemy.x += enemy.vx; if (enemy.x < 50 || enemy.x > W - 50) enemy.vx *= -1;
 
         if (collision(player, enemy)) {
             if (player.vy > 0 && player.y + player.height - 10 < enemy.y + 15) {
-                enemy.alive = false;
-                player.vy = -9.5;
-                score += 50;
-                checkHighScore();
-                particles.add(enemy.x + 15, enemy.y + 15, "#9b59b6");
+                enemy.alive = false; player.vy = -9.5; score += 50;
+                addFloatingText("+50", enemy.x, enemy.y, "#9b59b6");
                 playSound('stomp');
             } else {
-                loseLife();
-                return;
+                if (player.invincible === 0) {
+                    lives--; player.invincible = 120; screenShake = 15;
+                    if (lives <= 0) gameOver = true;
+                }
             }
         }
     }
 
     if (player.invincible > 0) player.invincible--;
-    particles.update();
+    if (screenShake > 0) screenShake--;
+
+    for (let i = floatingTexts.length - 1; i >= 0; i--) {
+        let ft = floatingTexts[i];
+        ft.y += ft.vy; ft.alpha -= 0.03;
+        if (ft.alpha <= 0) floatingTexts.splice(i, 1);
+    }
 
     if (!flagPole.reached && collision(player, { x: flagPole.x, y: flagPole.y, width: 20, height: 180 })) {
-        flagPole.reached = true;
-        score += 150 * level;
-        checkHighScore();
-        playSound('win');
-
-        if (level >= maxLevel) {
-            gameWon = true;
-            document.getElementById("message").innerHTML = "🏆 CONGRATULATIONS!<br><small style='font-size:13px; color:#aaa;'>អ្នកបានឈ្នះទាំង ១០ កម្រិតដោយជោគជ័យ! 🎉</small>";
-        } else {
-            level++;
-            gravity += 0.01;
-            createLevel();
-            resetPlayer();
-        }
+        flagPole.reached = true; score += 150 * level;
+        if (level >= maxLevel) gameWon = true;
+        else { level++; createLevel(); resetPlayer(); }
     }
-    updateHUD();
-}
-
-function drawBackground() {
-    const sky = ctx.createLinearGradient(0, 0, 0, H);
-    sky.addColorStop(0, "#2980b9");
-    sky.addColorStop(1, "#2c3e50");
-    ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.fillStyle = "rgba(255,255,255,0.12)";
-    ctx.beginPath(); ctx.arc(160, 90, 32, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(540, 110, 45, 0, Math.PI * 2); ctx.fill();
-}
-
-function drawWorld() {
-    for (const p of platforms) {
-        ctx.fillStyle = "#4a3525";
-        ctx.fillRect(p.x, p.y, p.width, p.height);
-        ctx.fillStyle = "#2ecc71";
-        ctx.fillRect(p.x, p.y, p.width, 6);
-    }
-
-    ctx.fillStyle = "#bdc3c7";
-    ctx.fillRect(flagPole.x + 8, flagPole.y, 4, 180);
-    ctx.fillStyle = "#e74c3c";
-    ctx.beginPath();
-    ctx.moveTo(flagPole.x + 12, flagPole.y);
-    ctx.lineTo(flagPole.x + 38, flagPole.y + 15);
-    ctx.lineTo(flagPole.x + 12, flagPole.y + 30);
-    ctx.closePath();
-    ctx.fill();
-
-    for (const coin of coinList) {
-        if (coin.collected) continue;
-        ctx.fillStyle = "#f1c40f";
-        ctx.beginPath(); ctx.arc(coin.x + 8, coin.y + 8, 8, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = "#f39c12";
-        ctx.beginPath(); ctx.arc(coin.x + 8, coin.y + 8, 4, 0, Math.PI * 2); ctx.fill();
-    }
-
-    for (const enemy of enemies) {
-        if (!enemy.alive) continue;
-        ctx.fillStyle = "#8e44ad";
-        ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-        ctx.fillStyle = "white";
-        ctx.fillRect(enemy.x + 6, enemy.y + 8, 6, 6);
-        ctx.fillRect(enemy.x + 22, enemy.y + 8, 6, 6);
-    }
-}
-
-function drawPlayer() {
-    if (player.invincible > 0 && Math.floor(player.invincible / 5) % 2 === 0) return;
-    ctx.fillStyle = "#e74c3c";
-    ctx.fillRect(player.x + 4, player.y, 27, 9);
-    ctx.fillStyle = "#f39c12";
-    ctx.fillRect(player.x + 7, player.y + 13, 20, 17);
-    ctx.fillStyle = "#3498db";
-    ctx.fillRect(player.x + 5, player.y + 29, 24, 12);
-}
-
-function draw() {
-    drawBackground();
-    drawWorld();
-    particles.draw(ctx);
-    drawPlayer();
-
-    if (paused && !gameOver && !gameWon) {
-        ctx.fillStyle = "rgba(0,0,0,0.65)";
-        ctx.fillRect(0, 0, W, H);
-        ctx.fillStyle = "white";
-        ctx.font = "bold 36px 'Poppins', sans-serif";
-        ctx.textAlign = "center";
-        ctx.fillText("⏸️ PAUSED", W / 2, H / 2);
-        ctx.textAlign = "left";
-    }
-}
-
-function updateHUD() {
+    
     document.getElementById("score").textContent = score;
-    document.getElementById("highScore").textContent = highScore;
     document.getElementById("coins").textContent = coins;
     document.getElementById("level").textContent = level;
     document.getElementById("lives").textContent = lives;
 }
 
+function draw() {
+    ctx.save();
+    if (screenShake > 0) {
+        let offsetX = (Math.random() - 0.5) * 8;
+        let offsetY = (Math.random() - 0.5) * 8;
+        ctx.translate(offsetX, offsetY);
+    }
+
+    ctx.fillStyle = "#2c3e50"; ctx.fillRect(0, 0, W, H);
+
+    for (const p of platforms) {
+        ctx.fillStyle = "#4a3525"; ctx.fillRect(p.x, p.y, p.width, p.height);
+        ctx.fillStyle = "#2ecc71"; ctx.fillRect(p.x, p.y, p.width, 6);
+    }
+
+    for (const coin of coinList) {
+        if (coin.collected) continue;
+        ctx.fillStyle = "#f1c40f"; ctx.beginPath(); ctx.arc(coin.x + 8, coin.y + 8, 8, 0, Math.PI * 2); ctx.fill();
+    }
+
+    for (const enemy of enemies) {
+        if (!enemy.alive) continue;
+        ctx.fillStyle = "#8e44ad"; ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+    }
+
+    ctx.fillStyle = player.color;
+    ctx.fillRect(player.x + 4, player.y, 27, 40);
+
+    for (const ft of floatingTexts) {
+        ctx.fillStyle = ft.color;
+        ctx.globalAlpha = ft.alpha;
+        ctx.font = "bold 16px Poppins";
+        ctx.fillText(ft.text, ft.x, ft.y);
+        ctx.globalAlpha = 1.0;
+    }
+
+    ctx.restore();
+    requestAnimationFrame(loop);
+}
+
 function holdButton(element, property) {
-    const down = e => { e.preventDefault(); initAudio(); input[property] = true; };
+    const down = e => { e.preventDefault(); input[property] = true; };
     const up = e => { e.preventDefault(); input[property] = false; };
     element.addEventListener("touchstart", down, { passive: false });
     element.addEventListener("touchend", up, { passive: false });
@@ -355,51 +210,14 @@ function holdButton(element, property) {
 
 holdButton(document.getElementById("leftBtn"), "left");
 holdButton(document.getElementById("rightBtn"), "right");
-
-const jumpBtn = document.getElementById("jumpBtn");
-jumpBtn.addEventListener("touchstart", e => { e.preventDefault(); initAudio(); input.jump = true; }, { passive: false });
-jumpBtn.addEventListener("mousedown", () => { initAudio(); input.jump = true; });
-
-const soundBtn = document.getElementById("soundBtn");
-soundBtn.addEventListener("click", () => {
-    initAudio();
-    soundEnabled = !soundEnabled;
-    soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
-});
-
-document.getElementById("pauseBtn").addEventListener("click", () => {
-    if (!gameOver && !gameWon) paused = !paused;
-});
-
-window.addEventListener("keydown", e => {
-    initAudio();
-    if (e.code === "ArrowLeft" || e.code === "KeyA") input.left = true;
-    if (e.code === "ArrowRight" || e.code === "KeyD") input.right = true;
-    if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyW") {
-        e.preventDefault(); input.jump = true;
-    }
-});
-window.addEventListener("keyup", e => {
-    if (e.code === "ArrowLeft" || e.code === "KeyA") input.left = false;
-    if (e.code === "ArrowRight" || e.code === "KeyD") input.right = false;
-});
-
-function restartGame() {
-    score = 0; coins = 0; level = 1; lives = 3; gravity = 0.65;
-    gameOver = false; gameWon = false; paused = false;
-    document.getElementById("message").innerHTML = "";
-    createLevel(); resetPlayer(); updateHUD();
-}
-
-canvas.addEventListener("click", () => { if (gameOver || gameWon) restartGame(); });
+document.getElementById("jumpBtn").addEventListener("touchstart", e => { e.preventDefault(); input.jump = true; }, { passive: false });
+document.getElementById("jumpBtn").addEventListener("mousedown", () => { input.jump = true; });
 
 function loop() {
     update();
     draw();
-    requestAnimationFrame(loop);
 }
 
 createLevel();
 resetPlayer();
-updateHUD();
 loop();
