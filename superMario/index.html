@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Sideth Mini Game V2.5 🎮 Modern Edition</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="gameWrap">
+    <div id="hud">
+        <span>⭐ <b id="score">0</b></span>
+        <span>🪙 <b id="coins">0</b></span>
+        <span>🏁 Lv.<b id="level">1</b>/10</span>
+        <span>❤️ <b id="lives">3</b></span>
+    </div>
+
+    <div id="gamepadStatus">
+        🎮 Gamepad: រង់ចាំ...
+    </div>
+
+    <div class="top-btns">
+        <button class="ctrl-top-btn" id="soundBtn" title="Sound On/Off">🔊</button>
+        <button class="ctrl-top-btn" id="pauseBtn">⏸️</button>
+    </div>
+
+    <canvas id="gameCanvas" width="900" height="500"></canvas>
+    <div id="message"></div>
+
+    <!-- TOUCH CONTROLLER -->
+    <div id="controls">
+        <div class="group">
+            <button class="btn" id="leftBtn">◀</button>
+            <button class="btn" id="rightBtn">▶</button>
+        </div>
+        <div class="group">
+            <button class="btn" id="jumpBtn">▲</button>
+        </div>
+    </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
