@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🤖 DSN AI Studio - Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding: 15px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 15px; }
+        header h1 { font-size: 16px; color: var(--accent); }
+        .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+        .menu-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 18px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: var(--text-main); transition: 0.2s; backdrop-filter: blur(12px); box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
+        .menu-card:active { transform: scale(0.96); border-color: var(--accent); }
+        .menu-icon { font-size: 26px; }
+        .menu-title { font-size: 13px; font-weight: bold; text-align: center; }
+        .section-title { font-size: 13px; color: var(--text-sub); margin-bottom: 10px; font-weight: bold; }
+        .recent-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; font-size: 12px; color: var(--text-sub); margin-bottom: 15px; }
+        .back-link { display: block; text-align: center; color: var(--text-sub); text-decoration: none; font-size: 13px; margin-top: auto; padding-top: 10px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🤖 DSN AI STUDIO</h1>
+        <a href="settings.html" style="font-size: 20px; text-decoration: none;">⚙️</a>
+    </header>
+
+    <div class="grid-menu">
+        <a href="chat.html" class="menu-card">
+            <span class="menu-icon">💬</span>
+            <span class="menu-title">AI Chat</span>
+        </a>
+        <a href="image.html" class="menu-card">
+            <span class="menu-icon">🖼️</span>
+            <span class="menu-title">AI Image</span>
+        </a>
+        <a href="video.html" class="menu-card">
+            <span class="menu-icon">🎬</span>
+            <span class="menu-title">AI Video</span>
+        </a>
+        <a href="audio.html" class="menu-card">
+            <span class="menu-icon">🎵</span>
+            <span class="menu-title">AI Audio</span>
+        </a>
+        <a href="files.html" class="menu-card">
+            <span class="menu-icon">📄</span>
+            <span class="menu-title">File AI</span>
+        </a>
+        <a href="code.html" class="menu-card">
+            <span class="menu-icon">💻</span>
+            <span class="menu-title">Code AI</span>
+        </a>
+        <a href="research.html" class="menu-card">
+            <span class="menu-icon">🌐</span>
+            <span class="menu-title">AI Research</span>
+        </a>
+        <a href="agents.html" class="menu-card">
+            <span class="menu-icon">🧠</span>
+            <span class="menu-title">AI Agents</span>
+        </a>
+    </div>
+
+    <div class="section-title">🕘 សកម្មភាពថ្មីៗ (Recent Activity)</div>
+    <div class="recent-box">
+        ✨ ត្រៀមខ្លួនរួចរាល់! ភ្ជាប់ API Gateway សុវត្ថិភាពតាមស្ថាបត្យកម្ម DSN Server ហ្មង មាសស្នេហ៍។
+    </div>
+
+    <a href="../index.html" class="back-link">⬅️ ត្រឡប់ទៅ DSN OS Hub</a>
+</body>
+</html>
