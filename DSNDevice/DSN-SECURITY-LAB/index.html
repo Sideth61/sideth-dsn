@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🔐 DSN Password Strength Tester - Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; justify-content: center; }
+        .container { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); backdrop-filter: blur(12px); }
+        h1 { font-size: 18px; color: var(--accent); text-align: center; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        label { font-size: 13px; color: var(--text-sub); }
+        input { width: 100%; padding: 12px 15px; background: #000; border: 1px solid var(--border-color); color: #fff; border-radius: 12px; outline: none; font-size: 14px; }
+        input:focus { border-color: var(--accent); }
+        .strength-bar { width: 100%; height: 8px; background: #1e293b; border-radius: 4px; overflow: hidden; margin-top: 5px; }
+        .strength-progress { height: 100%; width: 0%; transition: width 0.3s ease, background-color 0.3s ease; }
+        .feedback { font-size: 13px; font-weight: bold; min-height: 20px; }
+        .back-link { display: block; text-align: center; color: var(--text-sub); text-decoration: none; font-size: 13px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Password Strength Tester</h1>
+        
+        <div class="input-group">
+            <label>បញ្ចូល Password ដើម្បីពិនិត្យសុវត្ថិភាព៖</label>
+            <input type="password" id="passwordInput" placeholder="វាយបញ្ចូលពាក្យសម្ងាត់..." oninput="checkPasswordStrength()">
+        </div>
+
+        <div class="strength-bar">
+            <div class="strength-progress" id="progress"></div>
+        </div>
+        
+        <div class="feedback" id="feedbackText">សូមវាយបញ្ចូល Password...</div>
+    </div>
+
+    <script>
+        function checkPasswordStrength() {
+            let pwd = document.getElementById('passwordInput').value;
+            let progress = document.getElementById('progress');
+            let feedback = document.getElementById('feedbackText');
+            
+            let strength = 0;
+            if (pwd.length >= 8) strength += 25;
+            if (/[A-Z]/.test(pwd)) strength += 25;
+            if (/[0-9]/.test(pwd)) strength += 25;
+            if (/[^A-Za-z0-9]/.test(pwd)) strength += 25;
+
+            progress.style.width = strength + '%';
+
+            if (strength <= 25) {
+                progress.style.backgroundColor = '#ef4444';
+                feedback.style.color = '#ef4444';
+                feedback.textContent = '❌ ខ្សោយខ្លាំង (Weak) - ងាយនឹងត្រូវគេទាយដឹង!';
+            } else if (strength <= 50) {
+                progress.style.backgroundColor = '#f59e0b';
+                feedback.style.color = '#f59e0b';
+                feedback.textContent = '⚠️ មធ្យម (Medium) - គួរថែមသင်္ខេប ឬ លេខ!';
+            } else if (strength <= 75) {
+                progress.style.backgroundColor = '#38bdf8';
+                feedback.style.color = '#38bdf8';
+                feedback.textContent = '👍 ល្អប្រសើរ (Strong)';
+            } else {
+                progress.style.backgroundColor = '#10b981';
+                feedback.style.color = '#10b981';
+                feedback.textContent = '🔒 រឹងមាំខ្លាំងបំផុត (Very Strong)!';
+            }
+        }
+    </script>
+</body>
+</html>
