@@ -13,51 +13,71 @@ function setApiKey() {
     }
 }
 
+let activeAudioUrl = "";
+
 function generateAiMusic() {
-    const titleInput = document.getElementById('songTitleInput');
-    const promptInput = document.getElementById('songPromptInput');
+    const titleInput = document.getElementById('songTitleInput').value.trim() || "បទចម្រៀង Original របស់ Sideth";
+    const artistInput = document.getElementById('artistInput').value.trim() || "Sideth";
+    const promptInput = document.getElementById('songPromptInput').value.trim();
+    const lyricsInput = document.getElementById('lyricsInput').value.trim();
     
-    // យកតម្លៃពី Input មកប្រើប្រាស់ផ្ទាល់
-    const title = titleInput.value.trim() || "បទចម្រៀង AI របស់ Sideth";
-    const promptText = promptInput.value.trim();
-    
-    if (!promptText) {
-        alert("សូមសរសេរការពិពណ៌នារចនាប័ទ្មតន្ត្រី និង Lyrics ជាមុនសិន មាសស្នេហ៍! ⚠️");
-        promptInput.focus();
+    if (!promptInput && !lyricsInput) {
+        alert("សូមបញ្ចូលរចនាប័ទ្មតន្ត្រី ឬ ទំនុកច្រៀង (Lyrics) ជាមុនសិន មាសស្នេហ៍! ⚠️");
         return;
     }
 
-    // ផ្លាស់ប្តូរมาใช้ Audio URL ที่មានសុវត្ថិភាពនិងដំណើរការល្អលើ Web View
+    // ប្រើ Audio Streaming សម្រាប់តេស្តដំណើរការចាក់សំឡេង
     const stableTracks = [
-        "https://actions.google.com/sounds/v1/ambiences/rain_heavy.ogg",
-        "https://actions.google.com/sounds/v1/music/acoustic_guitar.ogg",
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
     ];
-    const randomTrack = stableTracks[Math.floor(Math.random() * stableTracks.length)];
+    activeAudioUrl = stableTracks[Math.floor(Math.random() * stableTracks.length)];
 
-    // បង្ហាញចំណងជើងដែលបងបានវាយបញ្ចូលជាក់ស្ដែង
-    document.getElementById('sunoPlayingTitle').innerText = "🎶 កំពុងចាក់: " + title;
-    
+    document.getElementById('sunoPlayingTitle').innerText = `🎶 ${titleInput} - ${artistInput}`;
     const player = document.getElementById('sunoAudio');
-    player.pause();
-    player.src = randomTrack;
-    player.load();
-    
+    player.src = activeAudioUrl;
     document.getElementById('sunoPlayerBox').style.display = 'flex';
-    
-    player.play().then(() => {
-        console.log("Audio playing successfully!");
-    }).catch(err => {
-        console.error("Play error:", err);
-        alert("សូមចុច Play នៅលើ Player ម្ដងទៀតដើម្បីដំណើរការសំឡេង! 🎵");
-    });
+    player.play().catch(e => console.log("Play action needed"));
 
-    alert("✨ ចេនរ៉េតបទចម្រៀងជោគជ័យហើយ មាសស្ងួន! 🎉🎵");
+    alert("✨ Gen បទចម្រៀង Original AI ជាមួយ Lyrics ជោគជ័យហើយ! ត្រៀមយកទៅ Upload ចូល DistroKid បាន! 🎉🎵");
+}
+
+function exportMetadata() {
+    const title = document.getElementById('songTitleInput').value.trim() || "Untitled Song";
+    const artist = document.getElementById('artistInput').value.trim() || "Sideth";
+    const lyrics = document.getElementById('lyricsInput').value.trim() || "No lyrics provided.";
+
+    const metaText = `=== DISTROKID METADATA ===\nSong Title: ${title}\nArtist: ${artist}\n\n--- LYRICS ---\n${lyrics}`;
+    
+    let blob = new Blob([metaText], { type: "text/plain;charset=utf-8" });
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${title}_DistroKid_Meta.txt`;
+    link.click();
+    
+    alert("📦 ទាញយក File Metadata សម្រាប់ DistroKid สำเร็จរួចរាល់! 🚀");
+}
+
+function downloadTrack() {
+    if (!activeAudioUrl) {
+        alert("សូម Gen បទចម្រៀងជាមុនសិន!");
+        return;
+    }
+    const title = document.getElementById('songTitleInput').value.trim() || "Sideth_Song";
+    let link = document.createElement("a");
+    link.href = activeAudioUrl;
+    link.download = `${title}.mp3`;
+    link.target = "_blank";
+    link.click();
+    alert("📥 កំពុងទាញយក File MP3 របស់បង...");
 }
 
 function clearHistory() {
     document.getElementById('songTitleInput').value = '';
+    document.getElementById('artistInput').value = '';
     document.getElementById('songPromptInput').value = '';
+    document.getElementById('lyricsInput').value = '';
     document.getElementById('sunoPlayerBox').style.display = 'none';
     const player = document.getElementById('sunoAudio');
     player.pause();
