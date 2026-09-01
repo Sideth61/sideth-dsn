@@ -1,155 +1,58 @@
 :root {
     --glass-bg: rgba(15, 15, 25, 0.85);
     --border-color: rgba(255, 255, 255, 0.15);
-    --accent-glow: #5c94fc;
 }
-*{
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
+*{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body{
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #050508;
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    touch-action: none;
+    margin: 0; width: 100%; height: 100%; overflow: hidden;
+    background: #050508; color: white; font-family: 'Poppins', sans-serif; touch-action: none;
 }
 #gameWrap{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    width: 100%; height: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
     background: radial-gradient(circle at center, #1b1b3a 0%, #050508 100%);
 }
 #hud{
-    width: min(100%, 900px);
-    padding: 10px 18px;
-    display: flex;
-    justify-content: space-between;
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    font-size: 14px;
-    font-weight: 600;
-    border-top-left-radius: 14px;
-    border-top-right-radius: 14px;
-    border: 1px solid var(--border-color);
-    border-bottom: none;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    width: min(100%, 900px); padding: 10px 18px; display: flex;
+    justify-content: space-between; background: var(--glass-bg);
+    backdrop-filter: blur(12px); font-size: 14px; font-weight: 600;
+    border-top-left-radius: 14px; border-top-right-radius: 14px;
+    border: 1px solid var(--border-color); border-bottom: none;
 }
 #gameCanvas{
-    width: min(100vw, 900px);
-    height: auto;
-    max-height: 70vh;
-    border-left: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
-    display: block;
-    background: #5c94fc;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+    width: min(100vw, 900px); height: auto; max-height: 70vh;
+    border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color);
+    display: block; background: #5c94fc; box-shadow: 0 15px 35px rgba(0,0,0,0.8);
 }
-#gamepadStatus{
-    position: fixed;
-    top: 65px;
-    left: 15px;
-    z-index: 10;
-    padding: 6px 12px;
-    border-radius: 20px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(8px);
-    font-size: 11px;
-    border: 1px solid var(--border-color);
-}
-.top-btns {
-    position: fixed;
-    top: 12px;
-    right: 15px;
-    display: flex;
-    gap: 10px;
-    z-index: 10;
-}
+.top-btns { position: fixed; top: 12px; right: 15px; display: flex; gap: 10px; z-index: 10; }
 .ctrl-top-btn{
-    width: 42px;
-    height: 42px;
-    border: 1px solid var(--border-color);
-    border-radius: 50%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(8px);
-    color: white;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.2s;
+    width: 42px; height: 42px; border: 1px solid var(--border-color);
+    border-radius: 50%; background: var(--glass-bg); backdrop-filter: blur(8px);
+    color: white; font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer;
 }
-.ctrl-top-btn:active{
-    transform: scale(0.88);
+#shopMenu {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(20, 20, 35, 0.95); padding: 25px; border-radius: 16px;
+    border: 1px solid var(--border-color); backdrop-filter: blur(15px);
+    z-index: 30; text-align: center; display: none; width: 320px;
 }
-#controls{
-    position: fixed;
-    bottom: 16px;
-    left: 0;
-    width: 100%;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
+.shop-item {
+    background: rgba(255,255,255,0.08); padding: 10px; margin: 8px 0;
+    border-radius: 8px; cursor: pointer; transition: 0.2s; border: 1px solid transparent;
 }
-.group{
-    display: flex;
-    gap: 14px;
-    pointer-events: auto;
-}
+.shop-item:hover { border-color: #5c94fc; background: rgba(92,148,252,0.2); }
+#controls{ position: fixed; bottom: 16px; left: 0; width: 100%; padding: 0 20px; display: flex; justify-content: space-between; pointer-events: none; }
+.group{ display: flex; gap: 14px; pointer-events: auto; }
 .btn{
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.25);
+    width: 72px; height: 72px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.25);
     background: linear-gradient(135deg, rgba(40,40,65,0.85), rgba(15,15,25,0.95));
-    backdrop-filter: blur(10px);
-    color: white;
-    font-size: 26px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-    touch-action: none;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-    transition: transform 0.1s, background 0.2s;
-}
-.btn:active{
-    transform: scale(0.9);
-    background: linear-gradient(135deg, rgba(92,148,252,0.7), rgba(20,20,35,0.95));
+    color: white; font-size: 26px; font-weight: bold; display: flex;
+    align-items: center; justify-content: center; touch-action: none;
 }
 #message{
-    position: fixed;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    text-align: center;
-    font-size: 22px;
-    font-weight: 800;
-    text-shadow: 0 3px 6px rgba(0,0,0,0.8);
-    z-index: 20;
-    pointer-events: none;
-    background: rgba(10, 10, 20, 0.85);
-    padding: 22px 35px;
-    border-radius: 18px;
-    border: 1px solid var(--border-color);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    position: fixed; top: 45%; left: 50%; transform: translate(-50%,-50%);
+    text-align: center; font-size: 22px; font-weight: 800; z-index: 20;
+    pointer-events: none; background: rgba(10, 10, 20, 0.85); padding: 22px 35px;
+    border-radius: 18px; border: 1px solid var(--border-color); backdrop-filter: blur(15px);
 }
-#message:empty {
-    display: none;
-}
-@media(min-width: 700px){
-    .btn{
-        width: 64px;
-        height: 64px;
-    }
-}
+#message:empty { display: none; }
