@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🔑 DSN 2FA & OTP Lab - Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; justify-content: center; }
+        .container { width: 100%; max-width: 420px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); backdrop-filter: blur(12px); text-align: center; }
+        h1 { font-size: 18px; color: var(--accent); }
+        .otp-display { font-size: 32px; font-weight: bold; color: #10b981; background: #000; padding: 15px; border-radius: 12px; border: 1px dashed var(--border-color); letter-spacing: 5px; margin: 10px 0; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; text-align: left; }
+        label { font-size: 13px; color: var(--text-sub); }
+        input { width: 100%; padding: 12px 15px; background: #000; border: 1px solid var(--border-color); color: #fff; border-radius: 12px; outline: none; font-size: 16px; text-align: center; letter-spacing: 3px; }
+        input:focus { border-color: var(--accent); }
+        .btn { width: 100%; padding: 12px; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #030712; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; font-size: 14px; }
+        .feedback { font-size: 13px; font-weight: bold; min-height: 20px; }
+        .back-link { display: block; text-align: center; color: var(--text-sub); text-decoration: none; font-size: 13px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔑 DSN 2FA & OTP Demo</h1>
+        <p style="font-size: 12px; color: var(--text-sub);">កូដសម្ងាត់ផ្ទៀងផ្ទាត់សម្រាប់គណនីបង Sideth❤️️</p>
+
+        <div class="otp-display" id="otpCode">------</div>
+        <button class="btn" onclick="generateOTP()">🔄 បង្កើត OTP ថ្មី</button>
+
+        <div class="input-group" style="margin-top: 10px;">
+            <label>វាយបញ្ចូល OTP ដើម្បីផ្ទៀងផ្ទាត់៖</label>
+            <input type="text" id="verifyInput" maxlength="6" placeholder="______">
+        </div>
+        <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669); color: #fff;" onclick="verifyOTP()">✅ ផ្ទៀងផ្ទាត់ (Verify)</button>
+
+        <div class="feedback" id="feedbackText"></div>
+        <a href="index.html" class="back-link">⬅️ ត្រឡប់ក្រោយ</a>
+    </div>
+
+    <script>
+        let currentOTP = "";
+
+        function generateOTP() {
+            currentOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            document.getElementById('otpCode').textContent = currentOTP;
+            document.getElementById('feedbackText').textContent = "✨ បានបង្កើត OTP ថ្មីជោគជ័យ!";
+            document.getElementById('feedbackText').style.color = "#38bdf8";
+        }
+
+        function verifyOTP() {
+            let userInput = document.getElementById('verifyInput').value.trim();
+            let feedback = document.getElementById('feedbackText');
+
+            if (!currentOTP) {
+                feedback.textContent = "⚠️សូមចុចបង្កើត OTP ជាមុនសិន!";
+                feedback.style.color = "#f59e0b";
+                return;
+            }
+
+            if (userInput === currentOTP) {
+                feedback.textContent = "🎉 ត្រឹមត្រូវ! ការផ្ទៀងផ្ទាត់ 2FA ជោគជ័យសុវត្ថិភាព 100%!";
+                feedback.style.color = "#10b981";
+            } else {
+                feedback.textContent = "❌ ខុសកូដ OTP ហើយ! សូមព្យាយាមម្តងទៀត។";
+                feedback.style.color = "#ef4444";
+            }
+        }
+
+        // Generate initial OTP on load
+        generateOTP();
+    </script>
+</body>
+</html>
