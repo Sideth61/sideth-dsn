@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🎬 DSN Video Generation - Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 15px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        header h1 { font-size: 18px; color: var(--accent); }
+        .video-box { width: 100%; height: 280px; background: var(--card-bg); border: 1px dashed var(--border-color); border-radius: 16px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .video-box video { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .placeholder-text { color: var(--text-sub); font-size: 14px; text-align: center; padding: 20px; }
+        .input-group { display: flex; flex-direction: column; gap: 10px; }
+        textarea { width: 100%; height: 90px; padding: 12px 15px; background: #000; border: 1px solid var(--border-color); color: #fff; border-radius: 12px; outline: none; font-size: 14px; resize: none; }
+        textarea:focus { border-color: var(--accent); }
+        button { padding: 14px; background: linear-gradient(135deg, #f43f5e, #fb7185); color: #fff; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; font-size: 15px; }
+        .nav-back { display: inline-block; color: var(--text-sub); text-decoration: none; font-size: 13px; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-back">← ត្រឡប់ក្រោយវិញ</a>
+        <header>
+            <h1>🎬 DSN Video AI</h1>
+            <span style="font-size: 12px; color: #10b981;">● Ready</span>
+        </header>
+
+        <div class="video-box" id="videoBox">
+            <span class="placeholder-text" id="placeholderVideoText">វីដេអូ Cinematic ដែលបានបង្កើតនឹងបង្ហាញទីនេះ... 🎥</span>
+            <video id="generatedVideo" controls autoplay loop></video>
+        </div>
+
+        <div class="input-group">
+            <textarea id="videoPrompt" placeholder="ពណ៌នាវីដេអូដែលបងចង់បង្កើត (ឧទាហរណ៍៖ ទាហានដើរល្បាតក្រោមពន្លឺព្រះច័ន្ទ)..."></textarea>
+            <button onclick="generateVideo()">បង្កើតវីដេអូ Cinematic 🚀</button>
+        </div>
+    </div>
+
+    <script src="js/media.js"></script>
+    <script>
+        async function generateVideo() {
+            let prompt = document.getElementById('videoPrompt').value.trim();
+            let placeholder = document.getElementById('placeholderVideoText');
+            let videoElement = document.getElementById('generatedVideo');
+            if(!prompt) return alert("សូមបញ្ចូលការពណ៌នាវីដេអូជាមុនសិន!");
+
+            placeholder.innerText = "ប្រព័ន្ធកំពុង Render វីដេអូជូនបង Sideth... សូមរង់ចាំបន្តិច ⏳";
+
+            // ហៅមុខងារពី media.js
+            let videoUrl = await DSNMedia.generateVideo(prompt);
+
+            if(videoUrl) {
+                videoElement.src = videoUrl;
+                videoElement.style.display = 'block';
+                placeholder.style.display = 'none';
+            } else {
+                placeholder.innerText = "⚠️ ការបង្កើតវីដេអូត្រូវការ API Endpoint គាំទ្របន្ថែម!";
+            }
+        }
+    </script>
+</body>
+</html>
