@@ -3,38 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSN Suno AI Studio Pro</title>
+    <title>DSN Suno AI Studio - DistroKid Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Preahvihear&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="header">
-        <h1>🎵 DSN Suno AI Studio Pro</h1>
+        <h1>🎵 DSN Suno AI Studio (DistroKid Ready)</h1>
         <div style="display: flex; gap: 6px;">
             <button onclick="setApiKey()" class="btn-action" style="background: #3b82f6;">🔑 API</button>
             <button onclick="clearHistory()" class="btn-action" style="background: #ef4444;">🗑️ សម្អាត</button>
         </div>
     </div>
 
-    <!-- 🎶 Suno Style Music Generator Panel -->
+    <!-- 🎶 Suno Style Music Generator Panel with Custom Lyrics -->
     <div class="creator-box">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 13px; font-weight: bold; color: #ec4899;">🎸 AI Music Creator (HD Sound)</span>
-            <span style="font-size: 11px; color: #38bdf8;">v2.0 Mobile HD</span>
+            <span style="font-size: 13px; font-weight: bold; color: #ec4899;">🎸 AI Vocal & Original Lyrics Studio</span>
+            <span style="font-size: 11px; color: #38bdf8;">DistroKid Exporter</span>
         </div>
         
         <input type="text" id="songTitleInput" placeholder="ចំណងជើងបទចម្រៀង (ឧ. ទាហានមុំបី ភ្នំ750)..." />
         
-        <textarea id="songPromptInput" placeholder="រៀបរាប់ពីរចនាប័ទ្មតន្ត្រី និងទំនុកច្រៀង (ឧ. Modern Pop, HD Acoustic, ហ្គាតាកាក់ស្ដាប់ជ្រាលជ្រៅ)..."></textarea>
+        <input type="text" id="artistInput" placeholder="ឈ្មោះសិល្បករ/Artist (ឧ. Sideth)..." />
+        
+        <textarea id="songPromptInput" placeholder="រៀបរាប់ពីរចនាប័ទ្មតន្ត្រី (ឧ. Modern Pop, Emotional, Acoustic Guitar)..."></textarea>
 
-        <button class="btn-gen" onclick="generateAiMusic()">✨ ចេនរ៉េតបទចម្រៀង HD (Generate Track)</button>
+        <textarea id="lyricsInput" placeholder="សរសេរ Lyrics (ទំនុកច្រៀង) ផ្ទាល់ខ្លួនរបស់បងទីនេះ..."></textarea>
 
-        <!-- Player for Generated Song with HD Equalizer Effect -->
+        <button class="btn-gen" onclick="generateAiMusic()">✨ ចេនរ៉េតបទចម្រៀង Original AI (Generate)</button>
+
+        <!-- Player & DistroKid Export Box -->
         <div id="sunoPlayerBox" class="player-box">
             <span id="sunoPlayingTitle" style="font-size: 11px; color: #34d399; font-weight: bold;">🎶 កំពុងចាក់: -</span>
-            <audio id="sunoAudio" crossorigin="anonymous" controls style="width: 100%; height: 36px; border-radius: 6px;"></audio>
-            <span style="font-size: 10px; color: #a78bfa;">🎧 HD Audio Enhancer: Active (ច្បាស់ល្អឥតខ្ចោះ)</span>
+            <audio id="sunoAudio" controls style="width: 100%; height: 36px; border-radius: 6px;"></audio>
+            
+            <div style="display: flex; gap: 6px; margin-top: 6px;">
+                <button onclick="exportMetadata()" style="flex: 1; padding: 8px; background: #8b5cf6; border: none; border-radius: 6px; color: #fff; font-size: 11px; font-weight: bold; cursor: pointer;">📦 ត្រៀមទិន្នន័យ DistroKid</button>
+                <button onclick="downloadTrack()" style="flex: 1; padding: 8px; background: #238636; border: none; border-radius: 6px; color: #fff; font-size: 11px; font-weight: bold; cursor: pointer;">📥 ទាញយក MP3</button>
+            </div>
         </div>
     </div>
 
