@@ -25,7 +25,7 @@ body {
     margin-bottom: 10px;
 }
 .header h1 {
-    font-size: 15px;
+    font-size: 14px;
     margin: 0;
     color: #ec4899;
 }
@@ -58,7 +58,7 @@ input, textarea {
     box-sizing: border-box;
 }
 textarea {
-    height: 70px;
+    height: 60px;
     resize: none;
 }
 .btn-gen {
