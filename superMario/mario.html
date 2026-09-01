@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>Sideth Mini Game V2.1 🎮</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
+    touch-action:none;
+}
+
+#gameWrap{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+#hud{
+    width:min(100%,900px);
+    padding:8px 12px;
+    display:flex;
+    justify-content:space-between;
+    background:#181818;
+    font-size:14px;
+    font-weight:bold;
+}
+
+#gameCanvas{
+    width:min(100vw,900px);
+    height:auto;
+    max-height:74vh;
+    border:3px solid white;
+    display:block;
+    background:#5c94fc;
+    image-rendering:pixelated;
+}
+
+#gamepadStatus{
+    position:fixed;
+    top:55px;
+    left:10px;
+    z-index:10;
+    padding:6px 10px;
+    border-radius:8px;
+    background:rgba(0,0,0,.65);
+    font-size:12px;
+}
+
+#pauseBtn{
+    position:fixed;
+    top:50px;
+    right:10px;
+    width:46px;
+    height:46px;
+    border:2px solid white;
+    border-radius:50%;
+    background:#222;
+    color:white;
+    font-size:20px;
+    z-index:10;
+}
+
+#controls{
+    position:fixed;
+    bottom:12px;
+    left:0;
+    width:100%;
+    padding:0 18px;
+    display:flex;
+    justify-content:space-between;
+    pointer-events:none;
+}
+
+.group{
+    display:flex;
+    gap:12px;
+    pointer-events:auto;
+}
+
+.btn{
+    width:68px;
+    height:68px;
+    border-radius:50%;
+    border:3px solid white;
+    background:rgba(20,20,20,.75);
+    color:white;
+    font-size:28px;
+    font-weight:bold;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    user-select:none;
+    touch-action:none;
+}
+
+.btn:active{
+    transform:scale(.92);
+    background:rgba(255,255,255,.3);
+}
+
+#message{
+    position:fixed;
+    top:45%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+    text-shadow:2px 2px #000;
+    z-index:20;
+    pointer-events:none;
+}
+
+@media(min-width:700px){
+    .btn{
+        width:60px;
+        height:60px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="gameWrap">
+
+    <div id="hud">
+        <span>⭐ <b id="score">0</b></span>
+        <span>🪙 <b id="coins">0</b></span>
+        <span>🏁 Lv.<b id="level">1</b></span>
+        <span>❤️ <b id="lives">3</b></span>
+    </div>
+
+    <div id="gamepadStatus">
+        🎮 Gamepad: រង់ចាំ...
+    </div>
+
+    <button id="pauseBtn">Ⅱ</button>
+
+    <canvas id="gameCanvas"
+            width="900"
+            height="500"></canvas>
+
+    <div id="message"></div>
+
+    <!-- TOUCH CONTROLLER -->
+    <div id="controls">
+
+        <div class="group">
+            <button class="btn" id="leftBtn">←</button>
+            <button class="btn" id="rightBtn">→</button>
+        </div>
+
+        <div class="group">
+            <button class="btn" id="jumpBtn">⬆️</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+"use strict";
+
+/* ==================================
+   CANVAS
+================================== */
+
+const canvas =
+    document.getElementById("gameCanvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+const W = canvas.width;
+const H = canvas.height;
+
+
+/* ==================================
+   GAME STATE
+================================== */
+
+let score = 0;
+let coins = 0;
+let level = 1;
+let lives = 3;
+
+let gravity = 0.65;
+
+let paused = false;
+let gameOver = false;
+
+
+/* ==================================
+   INPUT
+================================== */
+
+const input = {
+    left:false,
+    right:false,
+    jump:false,
+    pause:false
+};
+
+
+/* ==================================
+   PLAYER
+================================== */
+
+const player = {
+
+    x:70,
+    y:350,
+
+    width:34,
+    height:46,
+
+    vx:0,
+    vy:0,
+
+    speed:5,
+    jumpPower:-13,
+
+    grounded:false,
+    invincible:0
+};
+
+
+/* ==================================
+   LEVEL OBJECTS
+================================== */
+
+let platforms = [];
+let coinList = [];
+let enemies = [];
+
+
+/* ==================================
+   CREATE LEVEL
+================================== */
+
+function createLevel(){
+
+    platforms = [
+
+        {
+            x:0,
+            y:430,
+            width:900,
+            height:70
+        },
+
+        {
+            x:170,
+            y:350,
+            width:140,
+            height:18
+        },
+
+        {
+            x:400,
+            y:290,
+            width:140,
+            height:18
+        },
+
+        {
+            x:650,
+            y:350,
+            width:140,
+            height:18
+        }
+    ];
+
+
+    coinList=[];
+
+    const count = 5 + level * 2;
+
+    for(let i=0;i<count;i++){
+
+        coinList.push({
+
+            x:120 + Math.random()*700,
+
+            y:170 + Math.random()*210,
+
+            size:16,
+
+            collected:false
+        });
+    }
+
+
+    enemies=[];
+
+    const enemyCount =
+        Math.min(1 + level,5);
+
+    for(let i=0;i<enemyCount;i++){
+
+        enemies.push({
+
+            x:300 + Math.random()*500,
+
+            y:395,
+
+            width:35,
+
+            height:35,
+
+            vx:1 + level*.35,
+
+            alive:true
+        });
+    }
+}
+
+
+/* ==================================
+   COLLISION
+================================== */
+
+function collision(a,b){
+
+    return (
+
+        a.x < b.x+b.width &&
+
+        a.x+a.width > b.x &&
+
+        a.y < b.y+b.height &&
+
+        a.y+a.height > b.y
+    );
+}
+
+
+/* ==================================
+   RESET PLAYER
+================================== */
+
+function resetPlayer(){
+
+    player.x=70;
+    player.y=350;
+
+    player.vx=0;
+    player.vy=0;
+
+    player.invincible=120;
+}
+
+
+/* ==================================
+   LOSE LIFE
+================================== */
+
+function loseLife(){
+
+    if(player.invincible>0)
+        return;
+
+    lives--;
+
+    if(lives<=0){
+
+        gameOver=true;
+
+        document.getElementById("message")
+            .innerHTML=
+            "💀 GAME OVER<br><small>ចុច Restart ដើម្បីលេងម្ដងទៀត</small>";
+
+    }else{
+
+        resetPlayer();
+    }
+
+    updateHUD();
+}
+
+
+/* ==================================
+   UPDATE
+================================== */
+
+function update(){
+
+    if(paused || gameOver)
+        return;
+
+
+    /* MOVEMENT */
+
+    if(input.left){
+
+        player.vx=-player.speed;
+
+    }else if(input.right){
+
+        player.vx=player.speed;
+
+    }else{
+
+        player.vx*=.75;
+    }
+
+
+    player.x += player.vx;
+
+
+    /* JUMP */
+
+    if(input.jump && player.grounded){
+
+        player.vy=player.jumpPower;
+
+        player.grounded=false;
+
+        input.jump=false;
+    }
+
+
+    /* GRAVITY */
+
+    player.vy += gravity;
+
+    player.y += player.vy;
+
+    player.grounded=false;
+
+
+    /* PLATFORM */
+
+    for(const p of platforms){
+
+        if(
+
+            player.x+player.width>p.x &&
+
+            player.x<p.x+p.width &&
+
+            player.y+player.height>=p.y &&
+
+            player.y+player.height<=p.y+25 &&
+
+            player.vy>=0
+
+        ){
+
+            player.y=
+                p.y-player.height;
+
+            player.vy=0;
+
+            player.grounded=true;
+        }
+    }
+
+
+    /* BOUNDARIES */
+
+    if(player.x<0)
+        player.x=0;
+
+    if(player.x+player.width>W)
+        player.x=W-player.width;
+
+
+    /* FALL */
+
+    if(player.y>H+50){
+
+        loseLife();
+
+        return;
+    }
+
+
+    /* COINS */
+
+    for(const coin of coinList){
+
+        if(coin.collected)
+            continue;
+
+        const box={
+
+            x:coin.x,
+
+            y:coin.y,
+
+            width:coin.size,
+
+            height:coin.size
+        };
+
+        if(collision(player,box)){
+
+            coin.collected=true;
+
+            coins++;
+
+            score+=10;
+        }
+    }
+
+
+    /* ENEMIES */
+
+    for(const enemy of enemies){
+
+        if(!enemy.alive)
+            continue;
+
+        enemy.x += enemy.vx;
+
+
+        if(enemy.x<150 ||
+           enemy.x>W-50){
+
+            enemy.vx*=-1;
+        }
+
+
+        if(collision(player,enemy)){
+
+            /* STOMP */
+
+            if(
+
+                player.vy>0 &&
+
+                player.y+
+                player.height-10
+                <
+                enemy.y+15
+
+            ){
+
+                enemy.alive=false;
+
+                player.vy=-9;
+
+                score+=50;
+
+            }else{
+
+                loseLife();
+
+                return;
+            }
+        }
+    }
+
+
+    if(player.invincible>0)
+        player.invincible--;
+
+
+    /* LEVEL UP */
+
+    if(score>=level*100){
+
+        level++;
+
+        gravity+=.03;
+
+        score+=25;
+
+        createLevel();
+
+        resetPlayer();
+    }
+
+
+    updateHUD();
+}
+
+
+/* ==================================
+   GAMEPAD API
+================================== */
+
+let activeGamepad=null;
+
+window.addEventListener(
+    "gamepadconnected",
+    e=>{
+
+        activeGamepad=e.gamepad;
+
+        document.getElementById(
+            "gamepadStatus"
+        ).textContent=
+            "🎮 Connected: "+
+            e.gamepad.id.substring(0,30);
+
+        console.log(
+            "Gamepad connected:",
+            e.gamepad
+        );
+    }
+);
+
+
+window.addEventListener(
+    "gamepaddisconnected",
+    e=>{
+
+        if(
+            activeGamepad &&
+            activeGamepad.index===
+            e.gamepad.index
+        ){
+
+            activeGamepad=null;
+        }
+
+        document.getElementById(
+            "gamepadStatus"
+        ).textContent=
+            "🎮 Gamepad: រង់ចាំ...";
+    }
+);
+
+
+/* ==================================
+   READ GAMEPAD
+================================== */
+
+function readGamepad(){
+
+    const pads =
+        navigator.getGamepads
+        ? navigator.getGamepads()
+        : [];
+
+    let pad=null;
+
+
+    if(activeGamepad){
+
+        pad=pads[activeGamepad.index];
+    }
+
+
+    if(!pad){
+
+        for(const p of pads){
+
+            if(p){
+
+                pad=p;
+                activeGamepad=p;
+                break;
+            }
+        }
+    }
+
+
+    if(!pad)
+        return;
+
+
+    /*
+       Standard Gamepad Mapping
+
+       Axis 0:
+       Left Stick ← →
+
+       Axis 1:
+       Left Stick ↑ ↓
+
+       Button 0:
+       A / Cross = Jump
+
+       Button 1:
+       B / Circle
+
+       D-pad:
+       Button 12 = Up
+       Button 13 = Down
+       Button 14 = Left
+       Button 15 = Right
+    */
+
+
+    const axisX =
+        pad.axes[0] || 0;
+
+
+    /* LEFT STICK */
+
+    input.left =
+        axisX < -0.25 ||
+        !!pad.buttons[14]?.pressed;
+
+
+    input.right =
+        axisX > 0.25 ||
+        !!pad.buttons[15]?.pressed;
+
+
+    /* D-PAD */
+
+    if(
+        pad.buttons[12]?.pressed
+    ){
+
+        input.jump=true;
+    }
+
+
+    /* A / CROSS */
+
+    if(
+        pad.buttons[0]?.pressed
+    ){
+
+        input.jump=true;
+    }
+
+
+    /* B / CIRCLE */
+
+    if(
+        pad.buttons[1]?.pressed
+    ){
+
+        if(!input.pause){
+
+            paused=!paused;
+
+            input.pause=true;
+        }
+
+    }else{
+
+        input.pause=false;
+    }
+
+
+    /*
+       L1 / R1
+       Optional jump backup
+    */
+
+    if(
+        pad.buttons[4]?.pressed
+    ){
+
+        input.jump=true;
+    }
+
+
+    if(
+        pad.buttons[5]?.pressed
+    ){
+
+        input.jump=true;
+    }
+}
+
+
+/* ==================================
+   DRAW BACKGROUND
+================================== */
+
+function drawBackground(){
+
+    const sky =
+        ctx.createLinearGradient(
+            0,0,0,H
+        );
+
+    sky.addColorStop(0,"#5c94fc");
+
+    sky.addColorStop(1,"#d9efff");
+
+    ctx.fillStyle=sky;
+
+    ctx.fillRect(0,0,W,H);
+
+
+    /* CLOUDS */
+
+    ctx.fillStyle=
+        "rgba(255,255,255,.8)";
+
+    drawCloud(120,80);
+
+    drawCloud(500,100);
+
+    drawCloud(760,70);
+
+
+    /* HILLS */
+
+    ctx.fillStyle="#66bb6a";
+
+    ctx.beginPath();
+
+    ctx.moveTo(0,430);
+
+    ctx.lineTo(160,270);
+
+    ctx.lineTo(320,430);
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(500,430);
+
+    ctx.lineTo(680,250);
+
+    ctx.lineTo(900,430);
+
+    ctx.closePath();
+
+    ctx.fill();
+}
+
+
+function drawCloud(x,y){
+
+    ctx.beginPath();
+
+    ctx.arc(x,y,25,0,Math.PI*2);
+
+    ctx.arc(
+        x+30,
+        y-10,
+        32,
+        0,
+        Math.PI*2
+    );
+
+    ctx.arc(
+        x+65,
+        y,
+        25,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+}
+
+
+/* ==================================
+   DRAW WORLD
+================================== */
+
+function drawWorld(){
+
+    /* PLATFORMS */
+
+    for(const p of platforms){
+
+        ctx.fillStyle="#8b4513";
+
+        ctx.fillRect(
+            p.x,
+            p.y,
+            p.width,
+            p.height
+        );
+
+        ctx.fillStyle="#2ecc71";
+
+        ctx.fillRect(
+            p.x,
+            p.y,
+            p.width,
+            7
+        );
+    }
+
+
+    /* COINS */
+
+    for(const coin of coinList){
+
+        if(coin.collected)
+            continue;
+
+        ctx.fillStyle="#ffd700";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            coin.x+8,
+            coin.y+8,
+            8,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+        ctx.fillStyle="#fff3a0";
+
+        ctx.fillRect(
+            coin.x+6,
+            coin.y+4,
+            3,
+            8
+        );
+    }
+
+
+    /* ENEMIES */
+
+    for(const enemy of enemies){
+
+        if(!enemy.alive)
+            continue;
+
+        ctx.fillStyle="#8e44ad";
+
+        ctx.fillRect(
+            enemy.x,
+            enemy.y,
+            enemy.width,
+            enemy.height
+        );
+
+
+        ctx.fillStyle="white";
+
+        ctx.fillRect(
+            enemy.x+7,
+            enemy.y+8,
+            7,
+            7
+        );
+
+        ctx.fillRect(
+            enemy.x+21,
+            enemy.y+8,
+            7,
+            7
+        );
+
+
+        ctx.fillStyle="black";
+
+        ctx.fillRect(
+            enemy.x+9,
+            enemy.y+10,
+            4,
+            4
+        );
+
+        ctx.fillRect(
+            enemy.x+23,
+            enemy.y+10,
+            4,
+            4
+        );
+    }
+}
+
+
+/* ==================================
+   DRAW PLAYER
+================================== */
+
+function drawPlayer(){
+
+    if(
+
+        player.invincible>0 &&
+
+        Math.floor(
+            player.invincible/6
+        )%2===0
+
+    ){
+
+        return;
+    }
+
+
+    /* HAT */
+
+    ctx.fillStyle="#e53935";
+
+    ctx.fillRect(
+        player.x+4,
+        player.y,
+        27,
+        9
+    );
+
+    ctx.fillRect(
+        player.x,
+        player.y+7,
+        34,
+        6
+    );
+
+
+    /* FACE */
+
+    ctx.fillStyle="#ffcc99";
+
+    ctx.fillRect(
+        player.x+7,
+        player.y+13,
+        20,
+        17
+    );
+
+
+    /* SHIRT */
+
+    ctx.fillStyle="#e53935";
+
+    ctx.fillRect(
+        player.x+5,
+        player.y+29,
+        24,
+        12
+    );
+
+
+    /* PANTS */
+
+    ctx.fillStyle="#1565c0";
+
+    ctx.fillRect(
+        player.x+7,
+        player.y+39,
+        9,
+        7
+    );
+
+    ctx.fillRect(
+        player.x+18,
+        player.y+39,
+        9,
+        7
+    );
+}
+
+
+/* ==================================
+   DRAW
+================================== */
+
+function draw(){
+
+    drawBackground();
+
+    drawWorld();
+
+    drawPlayer();
+
+
+    if(paused && !gameOver){
+
+        ctx.fillStyle=
+            "rgba(0,0,0,.55)";
+
+        ctx.fillRect(
+            0,0,W,H
+        );
+
+        ctx.fillStyle="white";
+
+        ctx.font=
+            "bold 42px Arial";
+
+        ctx.textAlign="center";
+
+        ctx.fillText(
+            "⏸️ PAUSED",
+            W/2,
+            H/2
+        );
+
+        ctx.textAlign="left";
+    }
+}
+
+
+/* ==================================
+   HUD
+================================== */
+
+function updateHUD(){
+
+    document.getElementById(
+        "score"
+    ).textContent=score;
+
+    document.getElementById(
+        "coins"
+    ).textContent=coins;
+
+    document.getElementById(
+        "level"
+    ).textContent=level;
+
+    document.getElementById(
+        "lives"
+    ).textContent=lives;
+}
+
+
+/* ==================================
+   TOUCH BUTTON
+================================== */
+
+function holdButton(
+    element,
+    property
+){
+
+    function down(e){
+
+        e.preventDefault();
+
+        input[property]=true;
+    }
+
+    function up(e){
+
+        e.preventDefault();
+
+        input[property]=false;
+    }
+
+
+    element.addEventListener(
+        "touchstart",
+        down,
+        {passive:false}
+    );
+
+    element.addEventListener(
+        "touchend",
+        up,
+        {passive:false}
+    );
+
+    element.addEventListener(
+        "touchcancel",
+        up,
+        {passive:false}
+    );
+
+
+    /* MOUSE */
+
+    element.addEventListener(
+        "mousedown",
+        down
+    );
+
+    element.addEventListener(
+        "mouseup",
+        up
+    );
+
+    element.addEventListener(
+        "mouseleave",
+        up
+    );
+}
+
+
+holdButton(
+    document.getElementById("leftBtn"),
+    "left"
+);
+
+holdButton(
+    document.getElementById("rightBtn"),
+    "right"
+);
+
+
+/* JUMP TOUCH */
+
+const jumpBtn=
+    document.getElementById("jumpBtn");
+
+
+jumpBtn.addEventListener(
+    "touchstart",
+    e=>{
+
+        e.preventDefault();
+
+        input.jump=true;
+
+    },
+    {passive:false}
+);
+
+
+jumpBtn.addEventListener(
+    "mousedown",
+    ()=>{
+
+        input.jump=true;
+    }
+);
+
+
+/* ==================================
+   KEYBOARD
+================================== */
+
+window.addEventListener(
+    "keydown",
+    e=>{
+
+        if(
+            e.code==="ArrowLeft" ||
+            e.code==="KeyA"
+        ){
+
+            input.left=true;
+        }
+
+
+        if(
+            e.code==="ArrowRight" ||
+            e.code==="KeyD"
+        ){
+
+            input.right=true;
+        }
+
+
+        if(
+            e.code==="Space" ||
+            e.code==="ArrowUp" ||
+            e.code==="KeyW"
+        ){
+
+            e.preventDefault();
+
+            input.jump=true;
+        }
+
+
+        if(e.code==="KeyP"){
+
+            paused=!paused;
+        }
+    }
+);
+
+
+window.addEventListener(
+    "keyup",
+    e=>{
+
+        if(
+            e.code==="ArrowLeft" ||
+            e.code==="KeyA"
+        ){
+
+            input.left=false;
+        }
+
+
+        if(
+            e.code==="ArrowRight" ||
+            e.code==="KeyD"
+        ){
+
+            input.right=false;
+        }
+    }
+);
+
+
+/* ==================================
+   PAUSE BUTTON
+================================== */
+
+document.getElementById(
+    "pauseBtn"
+).addEventListener(
+    "click",
+    ()=>{
+
+        if(!gameOver)
+            paused=!paused;
+    }
+);
+
+
+/* ==================================
+   RESTART
+================================== */
+
+function restartGame(){
+
+    score=0;
+    coins=0;
+    level=1;
+    lives=3;
+
+    gravity=.65;
+
+    gameOver=false;
+    paused=false;
+
+    document.getElementById(
+        "message"
+    ).innerHTML="";
+
+    createLevel();
+
+    resetPlayer();
+
+    updateHUD();
+}
+
+
+canvas.addEventListener(
+    "click",
+    ()=>{
+
+        if(gameOver)
+            restartGame();
+    }
+);
+
+
+/* ==================================
+   MAIN LOOP
+================================== */
+
+function loop(){
+
+    readGamepad();
+
+    update();
+
+    draw();
+
+    requestAnimationFrame(loop);
+}
+
+
+/* ==================================
+   START
+================================== */
+
+createLevel();
+
+resetPlayer();
+
+updateHUD();
+
+loop();
+
+</script>
+
+</body>
+</html>
