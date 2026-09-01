@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#030712">
+    <title>DSN Music Web App - San Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030712;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --accent-pink: #f472b6;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding-bottom: 90px; }
+
+        .fixed-bg { position: fixed; inset: 0; z-index: -999; background: #030712; }
+
+        .container { width: 100%; max-width: 500px; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+
+        header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        header h1 { font-size: 18px; color: var(--accent-purple); text-shadow: 0 0 10px rgba(192,132,252,0.5); }
+
+        .card { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border-color); border-radius: 20px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+        /* Player Screen */
+        .player-screen { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .album-art { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-purple); box-shadow: 0 0 25px rgba(192,132,252,0.4); animation: spin 20s linear infinite paused; }
+        .album-art.playing { animation-play-state: running; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .song-title { font-size: 16px; font-weight: 700; color: #fff; }
+        .song-artist { font-size: 12px; color: var(--text-sub); }
+
+        /* Progress Bar */
+        .progress-container { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; appearance: none; outline: none; cursor: pointer; accent-color: var(--accent-purple); }
+        .time-info { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-sub); }
+
+        /* Controls */
+        .controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 5px; }
+        .ctrl-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--border-color); color: #fff; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: 0.2s; }
+        .ctrl-btn.main { width: 55px; height: 55px; background: linear-gradient(135deg, #c084fc, #7c3aed); font-size: 20px; box-shadow: 0 0 15px rgba(192,132,252,0.5); }
+        .ctrl-btn:active { transform: scale(0.92); }
+
+        /* Playlist & Library */
+        .section-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .song-list { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px; }
+        .song-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .song-item:hover, .song-item.active { background: rgba(192,132,252,0.1); border-color: var(--accent-purple); }
+        .song-info-small { display: flex; flex-direction: column; gap: 2px; }
+        .song-name-s { font-size: 13px; font-weight: 600; color: #fff; }
+        .song-artist-s { font-size: 10px; color: var(--text-sub); }
+
+        /* File Upload */
+        .upload-box { display: flex; gap: 8px; align-items: center; }
+        .file-label { flex: 1; padding: 10px; text-align: center; background: rgba(255,255,255,0.08); border: 1px dashed var(--border-color); border-radius: 12px; font-size: 12px; cursor: pointer; color: var(--accent-purple); }
+        
+        /* Navigation Dock */
+        .dsn-dock { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); background: rgba(5, 12, 24, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--border-color); display: flex; gap: 12px; padding: 10px 20px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000; }
+        .dock-item { color: #fff; font-size: 18px; text-decoration: none; transition: 0.2s; }
+        .dock-item:hover { transform: translateY(-3px); }
+    </style>
+</head>
+<body>
+
+    <div class="fixed-bg"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🎵 DSN Music Center</h1>
+            <span style="font-size: 11px; color: var(--accent-pink);">Online / Offline</span>
+        </header>
+
+        <!-- Player Card -->
+        <div class="card player-screen">
+            <img id="albumArt" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300" class="album-art" alt="Cover">
+            <div>
+                <div id="songTitle" class="song-title">ជ្រើសរើសបទចម្រៀង</div>
+                <div id="songArtist" class="song-artist">San Sideth - DSN OS</div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <input type="range" id="progressBar" class="progress-bar" value="0" min="0" max="100">
+                <div class="time-info">
+                    <span id="currentTime">00:00</span>
+                    <span id="duration">00:00</span>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button class="ctrl-btn" id="prevBtn">⏮️</button>
+                <button class="ctrl-btn main" id="playBtn">▶️</button>
+                <button class="ctrl-btn" id="nextBtn">⏭️</button>
+            </div>
+            
+            <audio id="audioPlayer"></audio>
+        </div>
+
+        <!-- Local Upload Card -->
+        <div class="card">
+            <div class="section-title">📂 Upload Local Media</div>
+            <div class="upload-box">
+                <label class="file-label" for="localFileInput">➕ ជ្រើសរើស MP3 / MP4 ពីទូរសព្ទ</label>
+                <input type="file" id="localFileInput" accept="audio/*,video/*" style="display: none;" multiple>
+            </div>
+        </div>
+
+        <!-- Playlist Library -->
+        <div class="card">
+            <div class="section-title">📜 បញ្ជីបទចម្រៀង (Playlist)</div>
+            <div class="song-list" id="songList">
+                <!-- Songs will be injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- DSN OS Navigation Dock -->
+    <nav class="dsn-dock">
+        <a href="index.html" class="dock-item" title="Home">🏠</a>
+        <a href="dsn-os.html" class="dock-item" title="DSN-OS">💻</a>
+        <a href="library.html" class="dock-item" title="Library">📚</a>
+        <a href="musicdsn.html" class="dock-item" title="Music">🎵</a>
+        <a href="setting.html" class="dock-item" title="Settings">⚙️</a>
+    </nav>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const songTitle = document.getElementById('songTitle');
+        const songArtist = document.getElementById('songArtist');
+        const albumArt = document.getElementById('albumArt');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const songListEl = document.getElementById('songList');
+        const localFileInput = document.getElementById('localFileInput');
+
+        // Initial Default Songs (អាចបន្ថែម ឬដាក់ local file ផ្ទាល់ខ្លួន)
+        let playlist = [
+            {
+                title: "ទាហានមុំបី ភ្នំ750",
+                artist: "San Sideth",
+                src: "media/music/song1.mp3", // ជំនួសដោយ link ឬ file របស់អ្នក
+                cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300"
+            },
+            {
+                title: "Blaming All Men",
+                artist: "DSN Creator",
+                src: "media/music/song2.mp3",
+                cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300"
+            }
+        ];
+
+        let currentSongIndex = 0;
+
+        function loadSong(index) {
+            const song = playlist[index];
+            songTitle.textContent = song.title;
+            songArtist.textContent = song.artist;
+            albumArt.src = song.cover;
+            audioPlayer.src = song.src;
+            highlightActiveSong();
+        }
+
+        function togglePlay() {
+            if (audioPlayer.paused) {
+                audioPlayer.play().catch(e => alert("សូមដាក់ហ្វាល MP3 ឱ្យចំ Path ឬ Upload ហ្វាលផ្ទាល់ខ្លួន!"));
+                playBtn.textContent = "⏸️";
+                albumArt.classList.add("playing");
+            } else {
+                audioPlayer.pause();
+                playBtn.textContent = "▶️";
+                albumArt.classList.remove("playing");
+            }
+        }
+
+        playBtn.addEventListener('click', togglePlay);
+
+        nextBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            loadSong(currentSongIndex);
+            audioPlayer.play();
+            playBtn.textContent = "⏸️";
+            albumArt.classList.add("playing");
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+            loadSong(currentSongIndex);
+            audioPlayer.play();
+            playBtn.textContent = "⏸️";
+            albumArt.classList.add("playing");
+        });
+
+        audioPlayer.addEventListener('timeupdate', () => {
+            if(audioPlayer.duration) {
+                const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressBar.value = progress;
+                currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+                durationEl.textContent = formatTime(audioPlayer.duration);
+            }
+        });
+
+        progressBar.addEventListener('input', () => {
+            const time = (progressBar.value / 100) * audioPlayer.duration;
+            audioPlayer.currentTime = time;
+        });
+
+        function formatTime(seconds) {
+            let mins = Math.floor(seconds / 60);
+            let secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function renderPlaylist() {
+            songListEl.innerHTML = "";
+            playlist.forEach((song, index) => {
+                const div = document.createElement('div');
+                div.className = `song-item ${index === currentSongIndex ? 'active' : ''}`;
+                div.innerHTML = `
+                    <div class="song-info-small">
+                        <span class="song-name-s">${song.title}</span>
+                        <span class="song-artist-s">${song.artist}</span>
+                    </div>
+                    <span>▶️</span>
+                `;
+                div.addEventListener('click', () => {
+                    currentSongIndex = index;
+                    loadSong(currentSongIndex);
+                    audioPlayer.play();
+                    playBtn.textContent = "⏸️";
+                    albumArt.classList.add("playing");
+                });
+                songListEl.appendChild(div);
+            });
+        }
+
+        function highlightActiveSong() {
+            document.querySelectorAll('.song-item').forEach((item, index) => {
+                if(index === currentSongIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Handle Local File Upload from Mobile
+        localFileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            for(let file of files) {
+                const fileURL = URL.createObjectURL(file);
+                playlist.push({
+                    title: file.name.replace(/\.[^/.]+$/, ""),
+                    artist: "Local Storage 📱",
+                    src: fileURL,
+                    cover: "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=300"
+                });
+            }
+            renderPlaylist();
+            if(playlist.length === files.length) {
+                loadSong(0);
+            }
+        });
+
+        // Init
+        renderPlaylist();
+        loadSong(0);
+    </script>
+</body>
+</html>
