@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>DSN 2FA Authenticator - San Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030712;
+            --card-bg: rgba(15, 23, 42, 0.85);
+            --border-color: rgba(56, 189, 248, 0.3);
+            --accent: #38bdf8;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; padding-bottom: 80px; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 15px; }
+        
+        header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        header h1 { font-size: 18px; color: var(--accent); text-shadow: 0 0 10px rgba(56,189,248,0.5); }
+
+        .search-box { width: 100%; padding: 12px 15px; background: #000; border: 1px solid var(--accent); color: #fff; border-radius: 12px; outline: none; font-size: 14px; }
+
+        .account-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(12px); box-shadow: 0 10px 25px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .account-info { display: flex; flex-direction: column; gap: 4px; }
+        .issuer { font-size: 12px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.5px; }
+        .account-name { font-size: 14px; font-weight: 600; color: #fff; }
+        .otp-code { font-size: 26px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-shadow: 0 0 12px rgba(56,189,248,0.4); margin-top: 4px; }
+
+        .otp-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+        .timer-ring { font-size: 13px; font-weight: bold; color: #f43f5e; }
+        .copy-btn { background: rgba(56,189,248,0.15); border: 1px solid var(--accent); color: var(--accent); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; }
+        .copy-btn:active { transform: scale(0.92); }
+
+        .action-btns { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-main { flex: 1; padding: 12px; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #030712; text-align: center; border-radius: 12px; font-weight: bold; text-decoration: none; border: none; cursor: pointer; font-size: 14px; box-shadow: 0 4px 15px rgba(56,189,248,0.3); }
+
+        .dsn-dock { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); background: rgba(5, 12, 24, 0.9); backdrop-filter: blur(15px); border: 1px solid var(--border-color); display: flex; gap: 15px; padding: 10px 22px; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.6); z-index: 1000; }
+        .dock-item { color: #fff; font-size: 18px; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🔐 DSN 2FA Authenticator</h1>
+            <span style="font-size: 11px; color: #10b981;">Secure / Offline</span>
+        </header>
+
+        <input type="text" class="search-box" placeholder="🔎 ស្វែងរក Account...">
+
+        <div id="accountsList" style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Dummy Account for preview -->
+            <div class="account-card">
+                <div class="account-info">
+                    <span class="issuer">GitHub</span>
+                    <span class="account-name">san.sideth@dsn.os</span>
+                    <div class="otp-code">482 731</div>
+                </div>
+                <div class="otp-meta">
+                    <span class="timer-ring" id="timer">27s</span>
+                    <button class="copy-btn" onclick="navigator.clipboard.writeText('482731'); alert('Copied OTP!');">Copy 📋</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-btns">
+            <a href="scanner.html" class="btn-main">📷 Scan QR</a>
+            <a href="add-account.html" class="btn-main">➕ Add Manual</a>
+        </div>
+    </div>
+
+    <nav class="dsn-dock">
+        <a href="index.html" class="dock-item">🏠</a>
+        <a href="scanner.html" class="dock-item">📷</a>
+        <a href="settings.html" class="dock-item">⚙️</a>
+    </nav>
+
+    <script>
+        // Simple countdown simulation for UI
+        let timeLeft = 30;
+        setInterval(() => {
+            timeLeft--;
+            if(timeLeft < 0) timeLeft = 30;
+            document.getElementById('timer').textContent = timeLeft + 's';
+        }, 1000);
+    </script>
+</body>
+</html>
