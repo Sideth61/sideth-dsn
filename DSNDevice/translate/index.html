@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🌐 DSN Translator (EN ↔ KH) - Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 15px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+        header h1 { font-size: 18px; color: var(--accent); text-shadow: 0 0 10px rgba(56,189,248,0.4); }
+        
+        .box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-direction: column; gap: 10px; backdrop-filter: blur(12px); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .box-header { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-sub); font-weight: bold; }
+        textarea { width: 100%; height: 110px; background: #000; border: 1px solid var(--border-color); color: #fff; border-radius: 12px; padding: 12px; font-size: 14px; outline: none; resize: none; }
+        textarea:focus { border-color: var(--accent); }
+        
+        .toolbar { display: flex; justify-content: space-between; align-items: center; }
+        .tools-left, .tools-right { display: flex; gap: 8px; }
+        .btn-tool { background: rgba(56,189,248,0.15); border: 1px solid var(--border-color); color: var(--accent); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .btn-tool:active { transform: scale(0.92); }
+
+        .btn-translate { width: 100%; padding: 14px; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #030712; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; font-size: 15px; box-shadow: 0 4px 15px rgba(56,189,248,0.3); }
+        .back-link { display: block; text-align: center; color: var(--text-sub); text-decoration: none; font-size: 13px; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌐 DSN Translator</h1>
+            <span style="font-size: 12px; color: #10b981;">EN ➔ KH</span>
+        </header>
+
+        <!-- Input Box (English) -->
+        <div class="box">
+            <div class="box-header">
+                <span>🇬🇧 English (Input)</span>
+                <span id="charCount">0 characters</span>
+            </div>
+            <textarea id="inputText" placeholder="វាយបញ្ចូលអត្ថបទភាសាអង់គ្លេស..." oninput="updateCharCount()"></textarea>
+            <div class="toolbar">
+                <div class="tools-left">
+                    <button class="btn-tool" onclick="clearText()">🗑️ លុប</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-translate" onclick="translateText()">🔄 បកប្រែ (Translate)</button>
+
+        <!-- Output Box (Khmer) -->
+        <div class="box">
+            <div class="box-header">
+                <span>🇰🇭 Khmer (Output)</span>
+            </div>
+            <textarea id="outputText" placeholder="លទ្ធផលបកប្រែជាភាសាខ្មែរ..." readonly style="color: #38bdf8;"></textarea>
+            <div class="toolbar">
+                <div class="tools-left">
+                    <button class="btn-tool" onclick="speakText()">🔊 ស្តាប់</button>
+                </div>
+                <div class="tools-right">
+                    <button class="btn-tool" onclick="copyResult()">📋 Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">⬅️ ត្រឡប់ទៅទំព័រដើម DSN OS</a>
+    </div>
+
+    <script>
+        function updateCharCount() {
+            let text = document.getElementById('inputText').value;
+            document.getElementById('charCount').textContent = text.length + ' characters';
+        }
+
+        function clearText() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('outputText').value = '';
+            updateCharCount();
+        }
+
+        async function translateText() {
+            let text = document.getElementById('inputText').value.trim();
+            let outputBox = document.getElementById('outputText');
+            if(!text) {
+                alert('⚠️ សូមបញ្ចូលអត្ថបទភាសាអង់គ្លេសជាមុនសិន!');
+                return;
+            }
+
+            outputBox.value = "កំពុងបកប្រែជូនបង Sideth... ⏳";
+
+            try {
+                // ភ្ជាប់ទៅកាន់ Server API តាមគំរូសុវត្ថិភាព DSN OS
+                let res = await fetch('/api/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text, source: 'en', target: 'km' })
+                });
+                let data = await res.json();
+                outputBox.value = data.translatedText || "⚠️ មានបញ្ហាក្នុងការតភ្ជាប់ Server!";
+            } catch (err) {
+                // Fallback ពេលតេស្ត Offline ឬគ្មាន Server
+                outputBox.value = "🇰🇭 [Mock Translation] លទ្ធផលបកប្រែសម្រាប់៖ " + text;
+            }
+        }
+
+        function copyResult() {
+            let output = document.getElementById('outputText');
+            if(!output.value) return;
+            navigator.clipboard.writeText(output.value);
+            alert('✅ បាន Copy លទ្ធផលរួចរាល់!');
+        }
+
+        function speakText() {
+            let text = document.getElementById('outputText').value;
+            if(!text) return;
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'km-KH';
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>
