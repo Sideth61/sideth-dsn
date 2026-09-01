@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>⭐ DSN Bookmarks - Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding: 15px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 15px; }
+        header h1 { font-size: 16px; color: var(--accent); }
+        .bookmark-list { display: flex; flex-direction: column; gap: 10px; }
+        .bookmark-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: var(--text-main); }
+        .bookmark-info { display: flex; flex-direction: column; gap: 2px; }
+        .bookmark-title { font-size: 14px; font-weight: bold; color: var(--accent); }
+        .bookmark-url { font-size: 11px; color: var(--text-sub); }
+        .back-link { display: block; text-align: center; color: var(--text-sub); text-decoration: none; font-size: 13px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>⭐ DSN Bookmarks</h1>
+    </header>
+
+    <div class="bookmark-list">
+        <a href="https://google.com" target="_blank" class="bookmark-item">
+            <div class="bookmark-info">
+                <span class="bookmark-title">Google Search</span>
+                <span class="bookmark-url">https://www.google.com</span>
+            </div>
+            <span>🔗</span>
+        </a>
+        <a href="https://github.com" target="_blank" class="bookmark-item">
+            <div class="bookmark-info">
+                <span class="bookmark-title">GitHub Repository</span>
+                <span class="bookmark-url">https://github.com</span>
+            </div>
+            <span>🔗</span>
+        </a>
+    </div>
+
+    <a href="index.html" class="back-link">⬅️ ត្រឡប់ទៅទំព័រដើម Browser</a>
+</body>
+</html>
