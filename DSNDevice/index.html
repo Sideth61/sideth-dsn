@@ -3,13 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Sideth's DSN Device Center 📱</title>
+    <title>Sideth's DSN OS Hub 📱🤖</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 30px; }
+        h1 { font-size: 18px; color: var(--accent); text-align: center; text-shadow: 0 0 10px rgba(56,189,248,0.4); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 4px; backdrop-filter: blur(10px); }
+        .card span { font-size: 11px; color: var(--text-sub); }
+        .card strong { font-size: 13px; color: #fff; }
+        
+        /* AI Chat Section inside Hub */
+        .ai-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        .chat-box { height: 220px; background: #000; border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .message { padding: 8px 12px; border-radius: 10px; font-size: 13px; max-width: 85%; line-height: 1.4; }
+        .user { background: #0284c7; color: #fff; align-self: flex-end; }
+        .ai { background: #1e293b; color: var(--text-main); align-self: flex-start; border: 1px solid var(--border-color); }
+        .input-group { display: flex; gap: 6px; }
+        input { flex: 1; padding: 10px 12px; background: #000; border: 1px solid var(--border-color); color: #fff; border-radius: 10px; outline: none; font-size: 13px; }
+        input:focus { border-color: var(--accent); }
+        button { padding: 0 14px; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #030712; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; font-size: 13px; }
+        .btn-link { display: block; text-align: center; background: linear-gradient(135deg, #38bdf8, #0284c7); color: #030712; padding: 12px; border-radius: 12px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4); }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>⚙️ DSN DEVICE CENTER V1.0</h1>
+        <h1>⚙️ DSN OS HUB & DEVICE CENTER</h1>
+        
+        <!-- Device Info Grid (ពី file ចាស់) -->
         <div class="grid" id="device-info">
             <div class="card">
                 <span>📱 Browser / OS</span>
@@ -29,20 +55,48 @@
             </div>
         </div>
 
-        <!-- ប៊ូតុងតភ្ជាប់ទៅកាន់ Game Center -->
-        <div style="margin-top: 20px; text-align: center;">
-            <a href="https://sideth.site/game" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #38bdf8, #0284c7); color: #030712; padding: 12px 24px; border-radius: 12px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4); width: 100%;">
-                🎮 ចូលទៅកាន់ DSN Game Center
-            </a>
-        </div>
+        <!-- ប៊ូតុងតភ្ជាប់ផ្សេងៗ -->
+        <a href="https://sideth.site/game" target="_blank" class="btn-link">🎮 ចូលទៅកាន់ DSN Game Center</a>
 
-        <!-- ប៊ូតុងតភ្ជាប់ទៅកាន់ New AI -->
-        <div style="margin-top: 12px; text-align: center;">
-            <a href="https://sideth.site/google/new_ai.html" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #10b981, #059669); color: #030712; padding: 12px 24px; border-radius: 12px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); width: 100%;">
-                ✨ ចូលទៅកាន់ New AI
-            </a>
+        <!-- AI Chat Section (បន្ថែមថ្មីដោយសុវត្ថិភាព) -->
+        <div class="ai-section">
+            <h3 style="font-size: 14px; color: var(--accent);">🤖 DSN Google AI Chat</h3>
+            <div class="chat-box" id="chatBox">
+                <div class="message ai">សួស្តីបង Sideth❤️️! តើអូន NiTa❤️️ អាចជួយអ្វីដល់ប្រព័ន្ធ AI របស់បងថ្ងៃនេះ? 😘</div>
+            </div>
+            <div class="input-group">
+                <input type="text" id="promptInput" placeholder="សួរអ្វីក៏ได้..." onkeypress="if(event.key === 'Enter') sendPrompt()">
+                <button onclick="sendPrompt()">បញ្ជូន</button>
+            </div>
         </div>
     </div>
+
     <script src="device.js"></script>
+    <script>
+        async function sendPrompt() {
+            let input = document.getElementById('promptInput');
+            let chatBox = document.getElementById('chatBox');
+            let text = input.value.trim();
+            if(!text) return;
+
+            chatBox.innerHTML += `<div class="message user">${text}</div>`;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                let res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: text })
+                });
+                let data = await res.json();
+                let aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "មានបញ្ហាបន្តិចបន្តួចជាមួយ Server!";
+                chatBox.innerHTML += `<div class="message ai">${aiReply}</div>`;
+            } catch (err) {
+                chatBox.innerHTML += `<div class="message ai">⚠️ មិនអាចតភ្ជាប់ទៅកាន់ Server បានទេ!</div>`;
+            }
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
 </body>
 </html>
