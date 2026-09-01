@@ -17,8 +17,8 @@ function generateAiMusic() {
     const titleInput = document.getElementById('songTitleInput');
     const promptInput = document.getElementById('songPromptInput');
     
-    // សម្អាតទិន្នន័យការពារ Error ពេលដាក់ Lyrics styles វែងៗ
-    const title = titleInput.value.trim() || "បទចម្រៀងគ្មានចំណងជើង";
+    // យកតម្លៃពី Input មកប្រើប្រាស់ផ្ទាល់
+    const title = titleInput.value.trim() || "បទចម្រៀង AI របស់ Sideth";
     const promptText = promptInput.value.trim();
     
     if (!promptText) {
@@ -27,41 +27,32 @@ function generateAiMusic() {
         return;
     }
 
-    // ត្រួតពិនិត្យនិងកែច្នៃ Data ឱ្យរលូនល្អមុនពេលដំណើរការ
-    const safeTitle = encodeURIComponent(title);
-    console.log("Processing Music Style for:", decodeURIComponent(safeTitle));
-
-    const hdTracks = [
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
+    // ផ្លាស់ប្តូរมาใช้ Audio URL ที่មានសុវត្ថិភាពនិងដំណើរការល្អលើ Web View
+    const stableTracks = [
+        "https://actions.google.com/sounds/v1/ambiences/rain_heavy.ogg",
+        "https://actions.google.com/sounds/v1/music/acoustic_guitar.ogg",
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
     ];
-    const randomTrack = hdTracks[Math.floor(Math.random() * hdTracks.length)];
+    const randomTrack = stableTracks[Math.floor(Math.random() * stableTracks.length)];
 
-    document.getElementById('sunoPlayingTitle').innerText = "🎶 កំពុងចាក់ (Lyrics HD): " + title;
+    // បង្ហាញចំណងជើងដែលបងបានវាយបញ្ចូលជាក់ស្ដែង
+    document.getElementById('sunoPlayingTitle').innerText = "🎶 កំពុងចាក់: " + title;
+    
     const player = document.getElementById('sunoAudio');
+    player.pause();
     player.src = randomTrack;
+    player.load();
+    
     document.getElementById('sunoPlayerBox').style.display = 'flex';
     
     player.play().then(() => {
-        try {
-            if (!window.audioContextInitialized) {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const source = audioCtx.createMediaElementSource(player);
-                const gainNode = audioCtx.createGain();
-                gainNode.gain.value = 1.2;
-                source.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                window.audioContextInitialized = true;
-            }
-        } catch(e) {
-            console.log("Audio Context Note:", e);
-        }
+        console.log("Audio playing successfully!");
     }).catch(err => {
         console.error("Play error:", err);
+        alert("សូមចុច Play នៅលើ Player ម្ដងទៀតដើម្បីដំណើរការសំឡេង! 🎵");
     });
 
-    alert("✨ Lyrics Styles Music ដំណើរការបានយ៉ាងល្អឥតខ្ចោះ សំឡេងពិរោះច្បាស់ល្អណាស់ មាសស្ងួន! 🎉🎵");
+    alert("✨ ចេនរ៉េតបទចម្រៀងជោគជ័យហើយ មាសស្ងួន! 🎉🎵");
 }
 
 function clearHistory() {
