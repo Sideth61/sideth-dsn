@@ -1,8 +1,19 @@
 async function initDeviceCenter() {
-    // OS / Browser
-    document.getElementById('os-info').innerText = navigator.platform || 'Mobile OS';
+    // OS / Browser Detection
+    const ua = navigator.userAgent;
+    let osName = "Mobile OS";
+    if (/iphone|ipad|ipod/i.test(ua)) {
+        osName = "iOS (iPhone)";
+    } else if (/android/i.test(ua)) {
+        osName = "Android";
+    } else if (/mac/i.test(ua)) {
+        osName = "macOS";
+    } else if (/win/i.test(ua)) {
+        osName = "Windows";
+    }
+    document.getElementById('os-info').innerText = osName;
 
-    // Battery
+    // Battery (Fallback for iOS/Unsupported browsers)
     if ('getBattery' in navigator) {
         try {
             const battery = await navigator.getBattery();
@@ -15,10 +26,10 @@ async function initDeviceCenter() {
             battery.addEventListener('levelchange', updateBattery);
             battery.addEventListener('chargingchange', updateBattery);
         } catch (e) {
-            document.getElementById('battery-info').innerText = 'Not Supported';
+            document.getElementById('battery-info').innerText = 'iOS Restricted 🍏';
         }
     } else {
-        document.getElementById('battery-info').innerText = 'Not Supported';
+        document.getElementById('battery-info').innerText = 'iOS Restricted 🍏';
     }
 
     // Storage Quota
@@ -29,8 +40,10 @@ async function initDeviceCenter() {
             const totalGB = (estimate.quota / (1024 * 1024 * 1024)).toFixed(1);
             document.getElementById('storage-info').innerText = `${usedMB} MB / ${totalGB} GB`;
         } catch (e) {
-            document.getElementById('storage-info').innerText = 'Available';
+            document.getElementById('storage-info').innerText = 'Active Storage';
         }
+    } else {
+        document.getElementById('storage-info').innerText = 'Not Available';
     }
 
     // Network Status
