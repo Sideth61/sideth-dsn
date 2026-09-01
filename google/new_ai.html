@@ -3,238 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google AI Chat Interface</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>DSN AI Studio - Google AI Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Preahvihear&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Kantumruy Pro', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
+        :root {
+            --bg-color: #0f172a;
+            --chat-bg: rgba(15, 23, 42, 0.85);
+            --border-color: rgba(56, 189, 248, 0.3);
+            --accent: #38bdf8;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
         }
-        .chat-container {
-            width: 100%;
-            max-width: 750px;
-            height: 90vh;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        .chat-header {
-            background: #1a73e8;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .chat-header h2 { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
-        .settings-toggle { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-family: inherit; transition: 0.2s; }
-        .settings-toggle:hover { background: rgba(255,255,255,0.3); }
-
-        .settings-panel {
-            background: #f8f9fa;
-            padding: 15px 20px;
-            border-bottom: 1px solid #dee2e6;
-            display: none;
-            gap: 12px;
-            flex-direction: column;
-        }
-        .settings-panel.active { display: flex; }
-        .input-group { display: flex; flex-direction: column; gap: 4px; }
-        .input-group label { font-size: 0.85rem; font-weight: 500; color: #555; }
-        .input-group input { padding: 8px 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 0.9rem; font-family: inherit; }
-
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background: #fdfdfd;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .message {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            word-break: break-word;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-        .message.user {
-            background: #1a73e8;
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-        }
-        .message.bot {
-            background: #f1f3f4;
-            color: #202124;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-        }
-        .message.error {
-            background: #fce8e6;
-            color: #c5221f;
-            align-self: center;
-        }
-
-        .chat-input-area {
-            padding: 15px 20px;
-            background: #ffffff;
-            border-top: 1px solid #dee2e6;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .chat-input-area textarea {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-            resize: none;
-            height: 48px;
-            max-height: 120px;
-            font-family: inherit;
-            font-size: 0.95rem;
-        }
-        .chat-input-area textarea:focus { outline: none; border-color: #1a73e8; }
-        .send-btn {
-            background: #1a73e8;
-            color: white;
-            border: none;
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.1rem;
-            transition: 0.2s;
-        }
-        .send-btn:hover { background: #1557b0; }
-        .typing { font-style: italic; color: #666; font-size: 0.85rem; display: none; padding: 0 20px 10px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Preahvihear', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; height: 100vh; }
+        .header { background: #1e293b; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); }
+        .header h1 { font-size: 16px; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+        .chat-container { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { padding: 12px 16px; border-radius: 12px; max-width: 85%; word-break: break-word; font-size: 14px; line-height: 1.5; }
+        .user { background: #3b82f6; align-self: flex-end; color: #fff; border-bottom-right-radius: 2px; }
+        .ai { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); align-self: flex-start; border: 1px solid var(--border-color); border-bottom-left-radius: 2px; }
+        .input-area { display: flex; padding: 12px 15px; background: rgba(15, 23, 42, 0.95); border-top: 1px solid var(--border-color); gap: 10px; }
+        input { flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: #fff; outline: none; font-size: 14px; }
+        input:focus { border-color: var(--accent); }
+        button { padding: 0 20px; background: #3b82f6; border: none; border-radius: 8px; color: #fff; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        button:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
-<div class="chat-container">
-    <div class="chat-header">
-        <h2><i class="fa-solid fa-robot"></i> Google AI Chat (Gemini 3.5)</h2>
-        <button class="settings-toggle" onclick="toggleSettings()"><i class="fa-solid fa-gear"></i> កំណត់ API</button>
+    <div class="header">
+        <h1>🤖 DSN Google AI Studio</h1>
     </div>
 
-    <div class="settings-panel" id="settingsPanel">
-        <div class="input-group">
-            <label>API Endpoint:</label>
-            <input type="text" id="endpoint" value="https://chatprovider.org/proxy/google-ai">
-        </div>
-        <div class="input-group">
-            <label>API Key:</label>
-            <input type="password" id="apiKey" value="ea85c8475a50a105df15454a1a88cd733ac40710128a54d4302f5fdd758e8b95">
-        </div>
-        <div class="input-group">
-            <label>Model Name:</label>
-            <input type="text" id="modelName" value="models/gemini-3.5-flash">
-        </div>
+    <div class="chat-container" id="chatBox">
+        <div class="message ai">បាទ/ចាស៑! សួស្ដីបង Sideth❤️️ តើថ្ងៃនេះចង់ឱ្យអូនជំនួយការអ្វីដែរចាស៑? 😘</div>
+    </div>
+    
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="វាយសំនួរ ឬបញ្ជាទីនេះ..." onkeypress="handleKeyPress(event)" />
+        <button onclick="sendMessage()">➤</button>
     </div>
 
-    <div class="chat-messages" id="chatMessages">
-        <div class="message bot">សួស្តី! ខ្ញុំបានរៀបចំក្នុង Folder google រួចរាល់ហើយ។ តើបងចង់ឱ្យខ្ញុំជួយសរសេរកូដអ្វីបន្តទៀតដែរ?</div>
-    </div>
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const chatBox = document.getElementById('chatBox');
+            const message = input.value.trim();
+            if (!message) return;
 
-    <div class="typing" id="typingIndicator"><i class="fa-solid fa-spinner fa-spin"></i> AI កំពុងសរសេរចម្លើយ...</div>
+            // បង្ហាញសាររបស់ User
+            chatBox.innerHTML += `<div class="message user">${message}</div>`;
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
 
-    <div class="chat-input-area">
-        <textarea id="userInput" placeholder="វាយសំណួរ ឬបញ្ជាឱ្យសរសេរកូដទីនេះ..." rows="1" onkeydown="handleKeyDown(event)"></textarea>
-        <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-    </div>
-</div>
+            // បង្ហាញ Loading ពេលកំពុងរង់ចាំ AI ឆ្លើយតប
+            const loadingId = 'loading-' + Date.now();
+            chatBox.innerHTML += `<div class="message ai" id="${loadingId}">កំពុងគិត... ⏳</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
 
-<script>
-    function toggleSettings() {
-        document.getElementById('settingsPanel').classList.toggle('active');
-    }
+            try {
+                // តភ្ជាប់ទៅកាន់ Server API Endpoint របស់បង (កែសម្រួល URL តាម Server Actual Host)
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: message })
+                });
 
-    function handleKeyDown(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    }
+                const data = await response.json();
+                const aiMessageElement = document.getElementById(loadingId);
 
-    async function sendMessage() {
-        const endpoint = document.getElementById('endpoint').value.trim();
-        const apiKey = document.getElementById('apiKey').value.trim();
-        const modelName = document.getElementById('modelName').value.trim();
-        const userInput = document.getElementById('userInput');
-        const chatMessages = document.getElementById('chatMessages');
-        const typingIndicator = document.getElementById('typingIndicator');
-
-        const text = userInput.value.trim();
-        if (!text) return;
-
-        chatMessages.innerHTML += `<div class="message user">${escapeHtml(text)}</div>`;
-        userInput.value = '';
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        typingIndicator.style.display = 'block';
-
-        try {
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    model: modelName,
-                    messages: [{ role: "user", content: text }]
-                })
-            });
-
-            const data = await response.json();
-            typingIndicator.style.display = 'none';
-
-            let botReply = "";
-            if (data.choices && data.choices.length > 0) {
-                botReply = data.choices[0].message.content;
-            } else if (data.error) {
-                botReply = "កំហុសពី Server: " + (data.error.message || JSON.stringify(data.error));
-            } else {
-                botReply = JSON.stringify(data);
+                if (response.ok && data.reply) {
+                    aiMessageElement.innerText = data.reply;
+                } else {
+                    aiMessageElement.innerText = data.error || "អុញណ៎! មានបញ្ហាប្រព័ន្ធបន្តិច កسាងសង់ឡើងវិញតោះមាសស្នេហ៍! 😅";
+                }
+            } catch (error) {
+                document.getElementById(loadingId).innerText = "សូមអភ័យទោស! មិនអាចតភ្ជាប់ទៅកាន់ Server បានទេ (Connection Error)។ 🔌";
             }
-
-            chatMessages.innerHTML += `<div class="message bot">${formatMessage(botReply)}</div>`;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        } catch (error) {
-            typingIndicator.style.display = 'none';
-            chatMessages.innerHTML += `<div class="message error">មានបញ្ហាក្នុងការតភ្ជាប់៖ ${error.message}</div>`;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
-    }
 
-    function escapeHtml(unsafe) {
-        return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    }
-
-    function formatMessage(text) {
-        return escapeHtml(text).replace(/\n/g, '<br>');
-    }
-</script>
-
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
 </body>
 </html>
