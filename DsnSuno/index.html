@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSN Suno AI Studio Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Preahvihear&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <h1>🎵 DSN Suno AI Studio Pro</h1>
+        <div style="display: flex; gap: 6px;">
+            <button onclick="setApiKey()" class="btn-action" style="background: #3b82f6;">🔑 API</button>
+            <button onclick="clearHistory()" class="btn-action" style="background: #ef4444;">🗑️ សម្អាត</button>
+        </div>
+    </div>
+
+    <!-- 🎶 Suno Style Music Generator Panel -->
+    <div class="creator-box">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 13px; font-weight: bold; color: #ec4899;">🎸 AI Music Creator (HD Sound)</span>
+            <span style="font-size: 11px; color: #38bdf8;">v2.0 Mobile HD</span>
+        </div>
+        
+        <input type="text" id="songTitleInput" placeholder="ចំណងជើងបទចម្រៀង (ឧ. ទាហានមុំបី ភ្នំ750)..." />
+        
+        <textarea id="songPromptInput" placeholder="រៀបរាប់ពីរចនាប័ទ្មតន្ត្រី និងទំនុកច្រៀង (ឧ. Modern Pop, HD Acoustic, ហ្គាតាកាក់ស្ដាប់ជ្រាលជ្រៅ)..."></textarea>
+
+        <button class="btn-gen" onclick="generateAiMusic()">✨ ចេនរ៉េតបទចម្រៀង HD (Generate Track)</button>
+
+        <!-- Player for Generated Song with HD Equalizer Effect -->
+        <div id="sunoPlayerBox" class="player-box">
+            <span id="sunoPlayingTitle" style="font-size: 11px; color: #34d399; font-weight: bold;">🎶 កំពុងចាក់: -</span>
+            <audio id="sunoAudio" crossorigin="anonymous" controls style="width: 100%; height: 36px; border-radius: 6px;"></audio>
+            <span style="font-size: 10px; color: #a78bfa;">🎧 HD Audio Enhancer: Active (ច្បាស់ល្អឥតខ្ចោះ)</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
