@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🌐 DSN Browser - Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.85); --border-color: rgba(56, 189, 248, 0.3); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; justify-content: space-between; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 20px; align-items: center; margin-top: 40px; }
+        h1 { font-size: 24px; color: var(--accent); text-shadow: 0 0 15px rgba(56,189,248,0.4); text-align: center; }
+        
+        /* Search Bar Style */
+        .search-box { width: 100%; display: flex; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 30px; padding: 8px 15px; gap: 10px; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .search-box input { flex: 1; background: transparent; border: none; color: #fff; font-size: 15px; outline: none; }
+        .search-box button { background: linear-gradient(135deg, #0284c7, #38bdf8); color: #030712; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; }
+
+        /* Quick Links Grid */
+        .quick-links { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 10px; }
+        .shortcut { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 12px 5px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-decoration: none; color: var(--text-main); font-size: 12px; }
+        .shortcut span { font-size: 20px; }
+
+        /* Bottom Navigation Bar */
+        .nav-bar { width: 100%; max-width: 480px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(10px); margin-bottom: 10px; }
+        .nav-item { color: var(--text-sub); text-decoration: none; font-size: 18px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        .nav-item span { font-size: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 DSN Browser</h1>
+        
+        <!-- Address / Search Bar -->
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="urlInput" placeholder="ស្វែងរកតាម Google ឬបញ្ចូល URL..." onkeypress="if(event.key === 'Enter') performSearch()">
+            <button onclick="performSearch()">Go</button>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <a href="https://google.com" target="_blank" class="shortcut"><span>🌍</span>Google</a>
+            <a href="history.html" class="shortcut"><span>🕘</span>History</a>
+            <a href="bookmarks.html" class="shortcut"><span>⭐</span>Bookmarks</a>
+            <a href="downloads.html" class="shortcut"><span>📥</span>Downloads</a>
+        </div>
+    </div>
+
+    <!-- Bottom Menu Bar -->
+    <div class="nav-bar">
+        <a href="index.html" class="nav-item">🏠<span>Home</span></a>
+        <a href="browser.html" class="nav-item">📑<span>Tabs</span></a>
+        <a href="bookmarks.html" class="nav-item">⭐<span>Saved</span></a>
+        <a href="settings.html" class="nav-item">⚙️<span>Settings</span></a>
+    </div>
+
+    <script>
+        function performSearch() {
+            let query = document.getElementById('urlInput').value.trim();
+            if(!query) return;
+            
+            // បើជា URL ឱ្យបើកផ្ទាល់ បើជាអត្ថបទឱ្យ Search Google
+            if(query.startsWith('http://') || query.startsWith('https://')) {
+                window.location.href = query;
+            } else {
+                window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            }
+        }
+    </script>
+</body>
+</html>
