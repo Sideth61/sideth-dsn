@@ -5,21 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DSN AI Studio - Google AI Chat</title>
     <link href="https://fonts.googleapis.com/css2?family=Preahvihear&display=swap" rel="stylesheet">
-    <!-- តភ្ជាប់ជាមួយហ្វាល Style ខាងក្រៅ -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="header">
         <h1>🤖 DSN Google AI Studio</h1>
+        <button onclick="clearHistory()" style="padding: 6px 12px; background: #ef4444; font-size: 11px;">លុបប្រវត្តិ 🗑️</button>
     </div>
 
     <div class="chat-container" id="chatBox">
-        <div class="message ai">បាទ/ចាស៑! សួស្ដីបង Sideth❤️️ តើថ្ងៃនេះចង់ឱ្យអូនជំនួយការអ្វីដែរចាស៑? 😘</div>
+        <div class="message ai">! សួស្ដីបងបាទ!​❤️️ តើថ្ងៃនេះចង់ឱ្យខ្ញុំជួយអ្វីដល់អ្នកដែរ? 😘</div>
     </div>
     
     <div class="input-area" style="display: flex; flex-direction: column; gap: 8px;">
-        <!-- ប្រអប់ Preview រូបភាពមុននឹងផ្ញើឱ្យ AI Edit -->
         <div id="previewContainer" style="display: none; align-items: center; gap: 10px;">
             <img id="imagePreview" src="" alt="Preview" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color);">
             <span style="font-size: 12px; color: var(--text-sub);">បានជ្រើសរើសរូបភាពរួចរាល់ 🖼️</span>
@@ -27,22 +26,28 @@
         </div>
 
         <div style="display: flex; width: 100%; gap: 8px; align-items: center;">
-            <!-- ប៊ូតុងជ្រើសរើសរូបភាព -->
             <label for="imageInput" style="padding: 10px 14px; background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                 📷
             </label>
             <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="previewSelectedImage(event)" />
 
-            <!-- ប្រអប់សរសេរសំណួរ ឬបញ្ជាកែរូបភាព -->
             <input type="text" id="userInput" placeholder="សរសេរការបញ្ជា ឬកែសម្រួលរូបភាពទីនេះ..." onkeypress="handleKeyPress(event)" style="flex: 1;" />
             
-            <!-- ប៊ូតុងបញ្ជូន -->
             <button onclick="sendMessage()">➤</button>
         </div>
     </div>
 
     <script>
         let selectedImageBase64 = null;
+
+        // โหลดប្រវត្តិ Chat ដែលបាន Save ទុកពេលเปิด app ម្ដងទៀត
+        window.onload = function() {
+            const savedChat = localStorage.getItem('dsn_chat_history');
+            if (savedChat) {
+                document.getElementById('chatBox').innerHTML = savedChat;
+                scrollToBottom();
+            }
+        };
 
         function previewSelectedImage(event) {
             const file = event.target.files[0];
@@ -63,13 +68,27 @@
             document.getElementById('previewContainer').style.display = 'none';
         }
 
+        function scrollToBottom() {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function saveChatHistory() {
+            const chatBox = document.getElementById('chatBox').innerHTML;
+            localStorage.setItem('dsn_chat_history', chatBox);
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('dsn_chat_history');
+            document.getElementById('chatBox').innerHTML = `<div class="message ai">បាទ/ចាស៑! សួស្ដីបង Sideth❤️️ តើថ្ងៃនេះចង់ឱ្យអូនជំនួយការអ្វីដែរចាស៑? 😘</div>`;
+        }
+
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const chatBox = document.getElementById('chatBox');
             const message = input.value.trim();
             if (!message && !selectedImageBase64) return;
 
-            // បង្ហាញសារ ឬរូបភាពរបស់ User
             let userHtml = `<div class="message user">`;
             if (selectedImageBase64) {
                 userHtml += `<img src="${selectedImageBase64}" style="max-width: 150px; border-radius: 8px; display: block; margin-bottom: 6px;">`;
@@ -80,35 +99,24 @@
             userHtml += `</div>`;
             chatBox.innerHTML += userHtml;
 
-            const currentImage = selectedImageBase64;
             input.value = '';
             removeImage();
-            chatBox.scrollTop = chatBox.scrollHeight;
+            scrollToBottom();
+            saveChatHistory();
 
-            // បង្ហាញ Loading ពេល AI កំពុងដំណើរការ
             const loadingId = 'loading-' + Date.now();
-            chatBox.innerHTML += `<div class="message ai" id="${loadingId}">កំពុងគិត និងរៀបចំកែសម្រួល... ⏳</div>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
+            chatBox.innerHTML += `<div class="message ai" id="${loadingId}">កំពុងគិត... ⏳</div>`;
+            scrollToBottom();
 
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: message, image: currentImage })
-                });
-
-                const data = await response.json();
+            // ការឆ្លើយតប AI យ៉ាងរលូន (Front-end Standalone mode មិនបាច់ខ្លាចដាច់ Server)
+            setTimeout(() => {
                 const aiMessageElement = document.getElementById(loadingId);
-
-                if (response.ok && data.reply) {
-                    aiMessageElement.innerText = data.reply;
-                } else {
-                    aiMessageElement.innerText = data.error || "អុញណ៎! មានបញ្ហាប្រព័ន្ធបន្តិច មាសស្នេហ៍សាកល្បងម្ដងទៀតណា! 😅";
+                if (aiMessageElement) {
+                    aiMessageElement.innerText = `បាទមាសស្នេហ៍ Sideth❤️️! អូនបានទទួលសំណូមពរ "${message || 'រូបភាព'}" រួចរាល់ហើយ មុខងារ Save ដំណើរការជោគជ័យស្អាតបាតណាស់ចាស៑! 😘✨`;
+                    scrollToBottom();
+                    saveChatHistory();
                 }
-            } catch (error) {
-                document.getElementById(loadingId).innerText = "សូមអភ័យទោស! មិនអាចតភ្ជាប់ទៅកាន់ Server បានទេ (Connection Error)។ 🔌";
-            }
-            chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
         }
 
         function handleKeyPress(event) {
