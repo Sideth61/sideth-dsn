@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>🎵 DSN Music Center Pro - Sideth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #030712; --card-bg: rgba(15, 23, 42, 0.75); --border-color: rgba(56, 189, 248, 0.25); --accent: #38bdf8; --text-main: #f8fafc; --text-sub: #94a3b8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 15px; justify-content: center; }
+        .player-container { width: 100%; max-width: 400px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); backdrop-filter: blur(16px); }
+        .header-title { font-size: 15px; color: var(--accent); text-align: center; font-weight: bold; }
+        .album-art-box { width: 180px; height: 180px; margin: 0 auto; border-radius: 50%; border: 2px solid var(--accent); overflow: hidden; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); display: flex; align-items: center; justify-content: center; background: #000; }
+        .album-art-box img { width: 100%; height: 100%; object-fit: cover; }
+        .song-info { text-align: center; }
+        .song-title { font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 4px; }
+        .artist-name { font-size: 12px; color: var(--text-sub); }
+        .progress-container { display: flex; flex-direction: column; gap: 5px; }
+        input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+        .time-info { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub); }
+        .controls { display: flex; justify-content: center; align-items: center; gap: 20px; }
+        .btn-control { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); transition: 0.2s; }
+        .btn-control.main { width: 60px; height: 60px; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #030712; font-size: 24px; }
+        .playlist-section { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto; }
+        .playlist-item { background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; cursor: pointer; }
+        .playlist-item:hover { border-color: var(--accent); }
+        .back-link { display: block; text-align: center; color: var(--text-sub); text-decoration: none; font-size: 12px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <div class="header-title">🎵 DSN Music Center</div>
+        
+        <div class="album-art-box">
+            <img id="albumArt" src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300" alt="Album Art">
+        </div>
+
+        <div class="song-info">
+            <div class="song-title" id="songTitleDisplay">ទាហ៊ានមុំបី ភ្នំ750</div>
+            <div class="artist-name" id="artistDisplay">San Sideth</div>
+        </div>
+
+        <div class="progress-container">
+            <input type="range" id="progressBar" value="0" min="0" max="100">
+            <div class="time-info">
+                <span id="currentTime">00:00</span>
+                <span id="durationTime">00:00</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn-control" onclick="prevSong()">⏮️</button>
+            <button class="btn-control main" id="playPauseBtn" onclick="togglePlay()">▶️</button>
+            <button class="btn-control" onclick="nextSong()">⏭️</button>
+        </div>
+
+        <div class="playlist-section" id="playlist">
+            <div class="playlist-item" onclick="selectSong(0)">
+                <span>🎵 ទាហ៊ានមុំបី ភ្នំ750</span>
+                <span>▶️</span>
+            </div>
+            <div class="playlist-item" onclick="selectSong(1)">
+                <span>🎵 Blaming All Men</span>
+                <span>▶️</span>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">⬅️ ត្រឡប់ទៅ Device Center</a>
+    </div>
+
+    <audio id="audioElement"></audio>
+
+    <script>
+        const songs = [
+            { title: "ទាហ៊ានមុំបី ភ្នំ750", artist: "San Sideth", src: "#" },
+            { title: "Blaming All Men", artist: "DSN Creator", src: "#" }
+        ];
+
+        let currentSongIndex = 0;
+        const audio = document.getElementById('audioElement');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const songTitleDisplay = document.getElementById('songTitleDisplay');
+        const artistDisplay = document.getElementById('artistDisplay');
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play().catch(() => alert('សូមជ្រើសរើសហ្វាលអូឌីយ៉ូពិតប្រាកដ ឬ Upload ពីទូរសព្ទ!'));
+                playPauseBtn.textContent = "⏸️";
+            } else {
+                audio.pause();
+                playPauseBtn.textContent = "▶️";
+            }
+        }
+
+        function selectSong(index) {
+            currentSongIndex = index;
+            songTitleDisplay.textContent = songs[index].title;
+            artistDisplay.textContent = songs[index].artist;
+            playPauseBtn.textContent = "⏸️";
+            // audio.src = songs[index].src;
+            // audio.play();
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            selectSong(currentSongIndex);
+        }
+
+        function prevSong() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            selectSong(currentSongIndex);
+        }
+    </script>
+</body>
+</html>
