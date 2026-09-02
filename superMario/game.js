@@ -1,538 +1,115 @@
-"use strict";
-
-const VERSION = "3.0";
-let audioCtx = null;
-let soundEnabled = localStorage.getItem("sideth_sound") !== "off";
-
-function initAudio() {
-    try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === "suspended") audioCtx.resume();
-    } catch (_) {}
+:root {
+    --glass-bg: rgba(15,15,25,.86);
+    --border-color: rgba(255,255,255,.16);
 }
-
-function playSound(type) {
-    if (!soundEnabled) return;
-    initAudio();
-    if (!audioCtx) return;
-
-    const osc = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    osc.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    const now = audioCtx.currentTime;
-
-    if (type === "jump") {
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(450, now + 0.15);
-        gainNode.gain.setValueAtTime(0.1, now);
-        gainNode.gain.linearRampToValueAtTime(0.01, now + 0.15);
-        osc.start(now); osc.stop(now + 0.15);
-    } else if (type === "coin") {
-        osc.frequency.setValueAtTime(987.77, now);
-        osc.frequency.setValueAtTime(1318.51, now + 0.08);
-        gainNode.gain.setValueAtTime(0.1, now);
-        gainNode.gain.linearRampToValueAtTime(0.01, now + 0.25);
-        osc.start(now); osc.stop(now + 0.25);
-    } else if (type === "stomp") {
-        osc.frequency.setValueAtTime(120, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.12);
-        gainNode.gain.setValueAtTime(0.15, now);
-        gainNode.gain.linearRampToValueAtTime(0.01, now + 0.12);
-        osc.start(now); osc.stop(now + 0.12);
-    } else if (type === "win") {
-        osc.frequency.setValueAtTime(523, now);
-        osc.frequency.setValueAtTime(659, now + 0.12);
-        osc.frequency.setValueAtTime(784, now + 0.24);
-        gainNode.gain.setValueAtTime(0.12, now);
-        gainNode.gain.linearRampToValueAtTime(0.01, now + 0.5);
-        osc.start(now); osc.stop(now + 0.5);
-    }
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body {
+    margin:0; width:100%; height:100%; overflow:hidden;
+    background:#050508; color:white;
+    font-family:Poppins,system-ui,sans-serif; touch-action:none;
 }
-
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-const W = canvas.width, H = canvas.height;
-
-let score = 0;
-let highScore = Number(localStorage.getItem("sideth_highscore") || 0);
-let coins = 0;
-let level = 1, maxLevel = 10, lives = 3, gravity = 0.65;
-let paused = false, gameOver = false, gameWon = false;
-let screenShake = 0;
-let floatingTexts = [];
-let lastTime = 0;
-let gamepadConnected = false;
-
-const input = { left: false, right: false, jump: false };
-
-const skins = [
-    { id: "classic", name: "Classic ❤️", color: "#e74c3c", cost: 0 },
-    { id: "blue", name: "Blue 💙", color: "#3498db", cost: 50 },
-    { id: "green", name: "Green 💚", color: "#2ecc71", cost: 100 },
-    { id: "gold", name: "Gold 💛", color: "#f1c40f", cost: 200 },
-    { id: "purple", name: "Purple 💜", color: "#9b59b6", cost: 300 }
-];
-
-let unlockedSkins = JSON.parse(localStorage.getItem("sideth_skins") || '["classic"]');
-let selectedSkin = localStorage.getItem("sideth_skin") || "classic";
-
-const player = {
-    x: 70, y: 350, width: 34, height: 46, vx: 0, vy: 0,
-    speed: 5.2, jumpPower: -13.2, grounded: false,
-    invincible: 0, color: "#e74c3c"
-};
-
-let platforms = [], coinList = [], enemies = [];
-let flagPole = { x: 820, y: 150, reached: false };
-
-function $(id) { return document.getElementById(id); }
-
-function addFloatingText(text, x, y, color = "#f1c40f") {
-    floatingTexts.push({ text, x, y, vy: -1.5, alpha: 1, color });
+#gameWrap {
+    width:100%; height:100%; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    background:radial-gradient(circle at center,#1b1b3a 0%,#050508 100%);
 }
-
-function applySkin() {
-    const skin = skins.find(s => s.id === selectedSkin) || skins[0];
-    player.color = skin.color;
-    localStorage.setItem("sideth_skin", selectedSkin);
+#hud {
+    width:min(100%,900px); padding:9px 14px; display:flex;
+    justify-content:space-between; gap:8px;
+    background:var(--glass-bg); backdrop-filter:blur(12px);
+    font-size:13px; font-weight:700;
+    border:1px solid var(--border-color); border-bottom:none;
+    border-top-left-radius:14px; border-top-right-radius:14px;
 }
-
-function createLevel() {
-    flagPole.reached = false;
-    platforms = [{ x: 0, y: 430, width: 900, height: 70 }];
-
-    for (let i = 1; i <= 4; i++) {
-        platforms.push({
-            x: i * 180 - 40,
-            y: 350 - (i % 2) * 85 - (Math.sin(level * i) * 25),
-            width: 105, height: 18
-        });
-    }
-
-    coinList = [];
-    for (let i = 0; i < 5 + Math.floor(level * 1.2); i++) {
-        coinList.push({
-            x: 100 + Math.random() * 700,
-            y: 140 + Math.random() * 220,
-            size: 16,
-            collected: false
-        });
-    }
-
-    enemies = [];
-    for (let i = 0; i < Math.min(1 + Math.floor(level * 0.6), 5); i++) {
-        enemies.push({
-            x: 200 + Math.random() * 550,
-            y: 395,
-            width: 35, height: 35,
-            vx: 1 + level * 0.22,
-            alive: true
-        });
-    }
+#gameCanvas {
+    width:min(100vw,900px); height:auto; max-height:70vh;
+    border:1px solid var(--border-color); display:block;
+    background:#5c94fc; box-shadow:0 15px 35px rgba(0,0,0,.8);
 }
-
-function collision(a, b) {
-    return a.x < b.x + b.width &&
-           a.x + a.width > b.x &&
-           a.y < b.y + b.height &&
-           a.y + a.height > b.y;
+.top-btns {
+    position:fixed; top:12px; right:15px; display:flex;
+    gap:8px; z-index:40;
 }
-
-function resetPlayer() {
-    player.x = 70;
-    player.y = 350;
-    player.vx = 0;
-    player.vy = 0;
-    player.invincible = 120;
+.ctrl-top-btn {
+    width:42px; height:42px; border:1px solid var(--border-color);
+    border-radius:50%; background:var(--glass-bg);
+    backdrop-filter:blur(8px); color:white; font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
 }
-
-function loseLife() {
-    lives--;
-    screenShake = 20;
-    playSound("stomp");
-    particles.add(player.x + player.width / 2, player.y + player.height / 2, "#e74c3c", 12);
-    resetPlayer();
-    if (lives <= 0) {
-        gameOver = true;
-        paused = false;
-        showMessage("💀 Game Over<br><small>ចុច R ឬប៊ូតុង Restart ដើម្បីលេងម្ដងទៀត</small>");
-    }
+#gamepadStatus {
+    position:fixed; top:12px; left:12px; z-index:40;
+    padding:8px 11px; border-radius:12px;
+    background:var(--glass-bg); border:1px solid var(--border-color);
+    font-size:11px; opacity:.9;
 }
-
-function update() {
-    if (paused || gameOver || gameWon) return;
-
-    if (input.left) player.vx = -player.speed;
-    else if (input.right) player.vx = player.speed;
-    else player.vx *= 0.75;
-
-    player.x += player.vx;
-
-    if (input.jump && player.grounded) {
-        player.vy = player.jumpPower;
-        player.grounded = false;
-        input.jump = false;
-        playSound("jump");
-        particles.add(player.x + 17, player.y + 45, player.color, 5);
-    }
-
-    player.vy += gravity;
-    player.y += player.vy;
-    player.grounded = false;
-
-    for (const p of platforms) {
-        if (player.x + player.width > p.x &&
-            player.x < p.x + p.width &&
-            player.y + player.height >= p.y &&
-            player.y + player.height <= p.y + 25 &&
-            player.vy >= 0) {
-            player.y = p.y - player.height;
-            player.vy = 0;
-            player.grounded = true;
-        }
-    }
-
-    if (player.x < 0) player.x = 0;
-    if (player.x + player.width > W) player.x = W - player.width;
-
-    if (player.y > H + 50) loseLife();
-
-    for (const coin of coinList) {
-        if (!coin.collected && collision(player, {
-            x: coin.x, y: coin.y, width: coin.size, height: coin.size
-        })) {
-            coin.collected = true;
-            coins++;
-            score += 10;
-            addFloatingText("+10", coin.x, coin.y);
-            particles.add(coin.x + 8, coin.y + 8, "#f1c40f", 8);
-            playSound("coin");
-        }
-    }
-
-    for (const enemy of enemies) {
-        if (!enemy.alive) continue;
-
-        enemy.x += enemy.vx;
-        if (enemy.x < 50 || enemy.x > W - 50) enemy.vx *= -1;
-
-        if (collision(player, enemy)) {
-            if (player.vy > 0 &&
-                player.y + player.height - 10 < enemy.y + 15) {
-                enemy.alive = false;
-                player.vy = -9.5;
-                score += 50;
-                addFloatingText("+50", enemy.x, enemy.y, "#9b59b6");
-                particles.add(enemy.x + 17, enemy.y + 17, "#9b59b6", 12);
-                playSound("stomp");
-            } else if (player.invincible === 0) {
-                loseLife();
-            }
-        }
-    }
-
-    if (player.invincible > 0) player.invincible--;
-    if (screenShake > 0) screenShake--;
-
-    for (let i = floatingTexts.length - 1; i >= 0; i--) {
-        const ft = floatingTexts[i];
-        ft.y += ft.vy;
-        ft.alpha -= 0.03;
-        if (ft.alpha <= 0) floatingTexts.splice(i, 1);
-    }
-
-    if (!flagPole.reached &&
-        collision(player, { x: flagPole.x, y: flagPole.y, width: 20, height: 180 })) {
-        flagPole.reached = true;
-        score += 150 * level;
-        particles.add(flagPole.x, flagPole.y + 100, "#f1c40f", 25);
-        playSound("win");
-
-        if (level >= maxLevel) {
-            gameWon = true;
-            showMessage("🏆 YOU WIN! 🎊<br><small>Score: " + score + "</small><br><button class='restart-btn' onclick='restartGame()'>🔄 Restart</button>");
-        } else {
-            level++;
-            createLevel();
-            resetPlayer();
-            showMessage("🏁 Level " + level + "!", 900);
-        }
-    }
-
-    if (score > highScore) {
-        highScore = score;
-        localStorage.setItem("sideth_highscore", String(highScore));
-    }
-
-    updateHUD();
-    particles.update();
+#controls {
+    position:fixed; bottom:max(16px,env(safe-area-inset-bottom));
+    left:0; width:100%; padding:0 20px;
+    display:flex; justify-content:space-between;
+    pointer-events:none; z-index:35;
 }
-
-function updateHUD() {
-    $("score").textContent = score;
-    $("coins").textContent = coins;
-    $("level").textContent = level;
-    $("lives").textContent = lives;
-    $("highScore").textContent = highScore;
+.group { display:flex; gap:14px; pointer-events:auto; }
+.btn {
+    width:72px; height:72px; border-radius:50%;
+    border:2px solid rgba(255,255,255,.25);
+    background:linear-gradient(135deg,rgba(40,40,65,.85),rgba(15,15,25,.95));
+    color:white; font-size:26px; font-weight:bold;
+    display:flex; align-items:center; justify-content:center;
+    touch-action:none; user-select:none;
 }
-
-function drawBackground() {
-    const gradient = ctx.createLinearGradient(0, 0, 0, H);
-    gradient.addColorStop(0, "#5c94fc");
-    gradient.addColorStop(1, "#87ceeb");
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.fillStyle = "rgba(255,255,255,.28)";
-    for (let i = 0; i < 7; i++) {
-        const x = ((i * 170 + 40) % W);
-        const y = 55 + (i % 3) * 45;
-        ctx.beginPath();
-        ctx.arc(x, y, 22, 0, Math.PI * 2);
-        ctx.arc(x + 25, y + 4, 28, 0, Math.PI * 2);
-        ctx.arc(x + 52, y, 20, 0, Math.PI * 2);
-        ctx.fill();
-    }
+.btn:active,.ctrl-top-btn:active { transform:scale(.94); }
+#message {
+    position:fixed; top:45%; left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center; font-size:22px; font-weight:800; z-index:50;
+    pointer-events:none; background:rgba(10,10,20,.88);
+    padding:22px 35px; border-radius:18px;
+    border:1px solid var(--border-color);
+    backdrop-filter:blur(15px); display:none;
 }
-
-function draw() {
-    ctx.save();
-
-    if (screenShake > 0) {
-        ctx.translate((Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8);
-    }
-
-    drawBackground();
-
-    for (const p of platforms) {
-        ctx.fillStyle = "#4a3525";
-        ctx.fillRect(p.x, p.y, p.width, p.height);
-        ctx.fillStyle = "#2ecc71";
-        ctx.fillRect(p.x, p.y, p.width, 6);
-    }
-
-    // Flag
-    ctx.fillStyle = "#eee";
-    ctx.fillRect(flagPole.x, flagPole.y, 5, 260);
-    ctx.fillStyle = "#e74c3c";
-    ctx.beginPath();
-    ctx.moveTo(flagPole.x + 5, flagPole.y);
-    ctx.lineTo(flagPole.x + 65, flagPole.y + 25);
-    ctx.lineTo(flagPole.x + 5, flagPole.y + 45);
-    ctx.fill();
-
-    for (const coin of coinList) {
-        if (coin.collected) continue;
-        ctx.fillStyle = "#f1c40f";
-        ctx.beginPath();
-        ctx.arc(coin.x + 8, coin.y + 8, 8, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = "#fff2a8";
-        ctx.stroke();
-    }
-
-    for (const enemy of enemies) {
-        if (!enemy.alive) continue;
-        ctx.fillStyle = "#8e44ad";
-        ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(enemy.x + 7, enemy.y + 8, 6, 6);
-        ctx.fillRect(enemy.x + 22, enemy.y + 8, 6, 6);
-    }
-
-    // Player blink while invincible
-    if (player.invincible === 0 || Math.floor(player.invincible / 6) % 2 === 0) {
-        ctx.fillStyle = player.color;
-        ctx.fillRect(player.x + 4, player.y, 27, 40);
-        ctx.fillStyle = "#ffd7b5";
-        ctx.fillRect(player.x + 9, player.y + 7, 17, 15);
-    }
-
-    particles.draw(ctx);
-
-    for (const ft of floatingTexts) {
-        ctx.fillStyle = ft.color;
-        ctx.globalAlpha = ft.alpha;
-        ctx.font = "bold 16px Poppins, sans-serif";
-        ctx.fillText(ft.text, ft.x, ft.y);
-        ctx.globalAlpha = 1;
-    }
-
-    ctx.restore();
+#message.show { display:block; }
+#message small { font-size:12px; font-weight:500; }
+.restart-btn {
+    margin-top:12px; padding:10px 18px; border:0; border-radius:10px;
+    background:#fff; color:#111; font-weight:800; cursor:pointer;
 }
-
-function showMessage(html, duration = 0) {
-    const el = $("message");
-    el.innerHTML = html;
-    el.classList.add("show");
-    if (duration) setTimeout(() => {
-        if (!gameOver && !gameWon) el.classList.remove("show");
-    }, duration);
+.modal {
+    position:fixed; inset:0; background:rgba(0,0,0,.62);
+    display:none; align-items:center; justify-content:center;
+    z-index:100; padding:20px;
 }
-
-function hideMessage() {
-    $("message").classList.remove("show");
+.modal.open { display:flex; }
+.modal-card {
+    width:min(360px,94vw); max-height:80vh; overflow:auto;
+    padding:22px; border-radius:18px;
+    background:rgba(20,20,35,.97);
+    border:1px solid var(--border-color);
+    box-shadow:0 20px 60px rgba(0,0,0,.6);
 }
-
-function restartGame() {
-    score = 0;
-    coins = 0;
-    level = 1;
-    lives = 3;
-    paused = false;
-    gameOver = false;
-    gameWon = false;
-    floatingTexts = [];
-    screenShake = 0;
-    applySkin();
-    createLevel();
-    resetPlayer();
-    hideMessage();
-    $("pauseBtn").textContent = "⏸️";
-    updateHUD();
+.modal-card h3 { margin:0 0 15px; text-align:center; }
+.skin-item {
+    width:100%; display:flex; align-items:center; gap:10px;
+    margin:8px 0; padding:10px; border-radius:12px;
+    color:white; background:rgba(255,255,255,.07);
+    border:1px solid transparent; cursor:pointer; text-align:left;
 }
-
-function togglePause() {
-    if (gameOver || gameWon) return;
-    paused = !paused;
-    $("pauseBtn").textContent = paused ? "▶️" : "⏸️";
-    if (paused) showMessage("⏸️ PAUSED<br><small>ចុច ▶️ ដើម្បីបន្ត</small>");
-    else hideMessage();
+.skin-item.selected { border-color:#fff; background:rgba(255,255,255,.13); }
+.skin-item span:nth-child(2) { flex:1; }
+.skin-item small { opacity:.8; }
+.skin-preview {
+    width:28px; height:28px; border-radius:8px;
+    border:2px solid rgba(255,255,255,.5);
 }
-
-function renderSkins() {
-    const list = $("skinList");
-    list.innerHTML = "";
-
-    skins.forEach(skin => {
-        const unlocked = unlockedSkins.includes(skin.id);
-        const selected = selectedSkin === skin.id;
-        const item = document.createElement("button");
-        item.className = "skin-item" + (selected ? " selected" : "");
-        item.innerHTML =
-            `<span class="skin-preview" style="background:${skin.color}"></span>
-             <span>${skin.name}</span>
-             <small>${selected ? "✓ កំពុងប្រើ" : unlocked ? "ជ្រើសរើស" : "🪙 " + skin.cost}</small>`;
-
-        item.onclick = () => {
-            if (!unlocked) {
-                if (coins >= skin.cost) {
-                    coins -= skin.cost;
-                    unlockedSkins.push(skin.id);
-                    localStorage.setItem("sideth_skins", JSON.stringify(unlockedSkins));
-                    playSound("coin");
-                } else {
-                    showMessage("🪙 មិនទាន់មាន Coin គ្រប់ទេ!", 1200);
-                    return;
-                }
-            }
-            selectedSkin = skin.id;
-            applySkin();
-            renderSkins();
-            updateHUD();
-        };
-        list.appendChild(item);
-    });
+.btn-close {
+    width:100%; padding:11px; margin-top:8px; border:0;
+    border-radius:10px; cursor:pointer; font-weight:800;
 }
-
-function holdButton(element, property) {
-    const down = e => {
-        e.preventDefault();
-        initAudio();
-        input[property] = true;
-    };
-    const up = e => {
-        e.preventDefault();
-        input[property] = false;
-    };
-
-    element.addEventListener("touchstart", down, { passive: false });
-    element.addEventListener("touchend", up, { passive: false });
-    element.addEventListener("touchcancel", up, { passive: false });
-    element.addEventListener("mousedown", down);
-    element.addEventListener("mouseup", up);
-    element.addEventListener("mouseleave", up);
+@media (max-width:600px) {
+    #hud { font-size:11px; padding:8px 9px; }
+    #gameCanvas { max-height:62vh; }
+    .btn { width:64px; height:64px; }
+    #gamepadStatus { display:none; }
+    .top-btns { top:8px; right:8px; }
+    .ctrl-top-btn { width:38px; height:38px; }
 }
-
-holdButton($("leftBtn"), "left");
-holdButton($("rightBtn"), "right");
-
-function jumpPress(e) {
-    if (e) e.preventDefault();
-    initAudio();
-    input.jump = true;
-}
-$("jumpBtn").addEventListener("touchstart", jumpPress, { passive: false });
-$("jumpBtn").addEventListener("mousedown", jumpPress);
-
-$("soundBtn").onclick = () => {
-    soundEnabled = !soundEnabled;
-    localStorage.setItem("sideth_sound", soundEnabled ? "on" : "off");
-    $("soundBtn").textContent = soundEnabled ? "🔊" : "🔇";
-    if (soundEnabled) initAudio();
-};
-
-$("pauseBtn").onclick = togglePause;
-
-$("skinBtn").onclick = () => {
-    renderSkins();
-    $("skinModal").classList.add("open");
-};
-
-$("closeSkinModal").onclick = () => $("skinModal").classList.remove("open");
-
-$("skinModal").addEventListener("click", e => {
-    if (e.target === $("skinModal")) $("skinModal").classList.remove("open");
-});
-
-window.addEventListener("keydown", e => {
-    if (["ArrowLeft", "ArrowRight", "ArrowUp", " ", "Escape"].includes(e.key)) e.preventDefault();
-    if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") input.left = true;
-    if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") input.right = true;
-    if (e.key === "ArrowUp" || e.key === " " || e.key.toLowerCase() === "w") input.jump = true;
-    if (e.key.toLowerCase() === "p" || e.key === "Escape") togglePause();
-    if (e.key.toLowerCase() === "r" && (gameOver || gameWon)) restartGame();
-});
-
-window.addEventListener("keyup", e => {
-    if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") input.left = false;
-    if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") input.right = false;
-});
-
-window.addEventListener("gamepadconnected", e => {
-    gamepadConnected = true;
-    $("gamepadStatus").textContent = "🎮 Gamepad: Connected";
-});
-
-window.addEventListener("gamepaddisconnected", () => {
-    gamepadConnected = false;
-    $("gamepadStatus").textContent = "🎮 Gamepad: រង់ចាំ...";
-});
-
-function pollGamepad() {
-    if (gamepadConnected && navigator.getGamepads) {
-        const gp = navigator.getGamepads()[0];
-        if (gp) {
-            input.left = gp.axes[0] < -0.35 || gp.buttons[14]?.pressed;
-            input.right = gp.axes[0] > 0.35 || gp.buttons[15]?.pressed;
-            if (gp.buttons[0]?.pressed || gp.buttons[12]?.pressed) input.jump = true;
-        }
-    }
-}
-
-function loop(time = 0) {
-    pollGamepad();
-    update();
-    draw();
-    requestAnimationFrame(loop);
-}
-
-window.restartGame = restartGame;
-
-applySkin();
-$("soundBtn").textContent = soundEnabled ? "🔊" : "🔇";
-createLevel();
-resetPlayer();
-updateHUD();
-loop();
