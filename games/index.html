@@ -140,154 +140,12 @@ p{
   opacity:.72;
   transform:none;
 }
-.btn.is-loading{
-  cursor:wait;
-}
-.btn-spinner{
-  width:18px;
-  height:18px;
-  flex:0 0 18px;
-  border:2px solid rgba(255,255,255,.4);
-  border-top-color:#fff;
-  border-radius:50%;
-  animation:spin .8s linear infinite;
-}
-@keyframes spin{
-  to{transform:rotate(360deg);}
-}
 .status{
   min-height:22px;
   margin:10px 0 0;
   color:#fef3c7;
   font-size:12px;
   line-height:1.5;
-}
-.storage-summary{
-  display:grid;
-  gap:12px;
-  margin-top:12px;
-}
-.storage-stat{
-  padding:13px;
-  border:1px solid rgba(255,255,255,.2);
-  border-radius:16px;
-  background:rgba(0,0,0,.2);
-}
-.storage-stat-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  color:#fff;
-  font-size:12px;
-  line-height:1.5;
-}
-.storage-stat-row strong{
-  color:#fde68a;
-  font-size:13px;
-  text-align:right;
-}
-.storage-progress{
-  width:100%;
-  height:9px;
-  margin-top:9px;
-  overflow:hidden;
-  border-radius:999px;
-  background:rgba(255,255,255,.14);
-}
-.storage-progress-bar{
-  width:0;
-  height:100%;
-  border-radius:inherit;
-  background:linear-gradient(90deg,#22c55e,#eab308,#ef4444);
-  transition:width .3s ease;
-}
-.library-toolbar{
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-  margin-top:12px;
-}
-.library-toolbar .btn{
-  flex:1 1 180px;
-  margin-top:0;
-}
-.library-list{
-  display:grid;
-  gap:10px;
-  margin-top:14px;
-}
-.library-empty{
-  padding:18px 12px;
-  border:1px dashed rgba(255,255,255,.3);
-  border-radius:16px;
-  color:rgba(255,255,255,.78);
-  font-size:13px;
-  line-height:1.7;
-  text-align:center;
-}
-.game-item{
-  display:grid;
-  gap:10px;
-  padding:13px;
-  border:1px solid rgba(255,255,255,.2);
-  border-radius:18px;
-  background:rgba(0,0,0,.22);
-}
-.game-item-header{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:10px;
-}
-.game-item-title{
-  min-width:0;
-  color:#fff;
-  font-size:14px;
-  font-weight:700;
-  line-height:1.5;
-  overflow-wrap:anywhere;
-}
-.game-item-badge{
-  flex:0 0 auto;
-  padding:4px 8px;
-  border:1px solid rgba(255,255,255,.25);
-  border-radius:999px;
-  background:rgba(255,255,255,.1);
-  color:#fde68a;
-  font-size:10px;
-  font-weight:700;
-}
-.game-item-meta{
-  display:grid;
-  gap:4px;
-  color:rgba(255,255,255,.72);
-  font-size:11px;
-  line-height:1.5;
-}
-.game-item-actions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.game-item-actions .btn{
-  flex:1 1 130px;
-  min-height:42px;
-  margin-top:0;
-  padding:9px 10px;
-  font-size:12px;
-}
-.btn-open{
-  background:linear-gradient(135deg,var(--blue-start),var(--blue-end));
-}
-.btn-delete{
-  background:linear-gradient(135deg,var(--danger-start),var(--danger-end));
-}
-.btn-clear{
-  background:linear-gradient(135deg,var(--danger-start),var(--danger-end));
-}
-.btn-refresh{
-  background:linear-gradient(135deg,rgba(124,58,237,.82),rgba(91,33,182,.9));
 }
 .toast{
   position:fixed;
@@ -341,30 +199,6 @@ p{
   opacity:1;
   transform:translateY(0);
 }
-@media (prefers-reduced-motion:reduce){
-  *,
-  *::before,
-  *::after{
-    animation-duration:.01ms!important;
-    animation-iteration-count:1!important;
-    scroll-behavior:auto!important;
-    transition-duration:.01ms!important;
-  }
-}
-@media (max-width:380px){
-  .card{
-    border-radius:22px;
-  }
-  .btn{
-    font-size:13px;
-  }
-  .game-item-header{
-    display:grid;
-  }
-  .game-item-badge{
-    width:max-content;
-  }
-}
 </style>
 </head>
 <body>
@@ -381,7 +215,7 @@ p{
       Welcome back, San Sidet ❤️️🌺 😘<br>
       លេងហ្គេម PS2 ផ្ទាល់ពីក្នុងទូរស័ព្ទ លឿនរហ័ស មិនបាច់ពឹង Server ក្រៅ 🔥
     </p>
-    <button id="localPs2Btn" class="btn" type="button" aria-label="ជ្រើសរើសឯកសារហ្គេម PS2 ពីទូរស័ព្ទ" style="background:linear-gradient(135deg,var(--success-start),var(--success-end));">
+    <button id="localPs2Btn" class="btn" type="button" style="background:linear-gradient(135deg,var(--success-start),var(--success-end));">
       <span class="btn-label">📂 បើកហ្គេម PS2 ផ្ទាល់ពីទូរស័ព្ទ (ISO, ZIP, CHD)</span>
     </button>
     <input id="localPs2Input" type="file" accept=".iso,.bin,.cue,.chd,.cso,.zip" hidden>
@@ -392,39 +226,29 @@ p{
     <img src="psp.jpg" alt="រូបភាពបណ្ណាល័យហ្គេម PSP" class="banner-img" decoding="async">
     <h2 id="pspTitle" class="section-title">🎯 DSN PSP Local File Player</h2>
     <p id="pspDescription">
-      លេងហ្គេម PSP ផ្ទាល់ពីក្នុងទូរស័ព្ទ អត់មានរឿង Error 1016 ទៀតទេ 🚀
+      លេងហ្គេម PSP ផ្ទាល់ពីក្នុងទូរស័ព្ទ អត់មានរឿង Error ទៀតទេ 🚀
     </p>
-    <button id="localPspBtn" class="btn" type="button" aria-label="ជ្រើសរើសឯកសារហ្គេម PSP ពីទូរស័ព្ទ" style="background:linear-gradient(135deg,var(--pink-start),var(--pink-end));">
+    <button id="localPspBtn" class="btn" type="button" style="background:linear-gradient(135deg,var(--pink-start),var(--pink-end));">
       <span class="btn-label">📂 បើកហ្គេម PSP ផ្ទាល់ពីទូរស័ព្ទ (ISO, CSO, ZIP)</span>
     </button>
     <input id="localPspInput" type="file" accept=".iso,.cso,.zip" hidden>
     <p id="pspStatus" class="status" role="status" aria-live="polite"></p>
   </section>
 
-  <section class="card" aria-labelledby="libraryTitle">
-    <h2 id="libraryTitle" class="section-title">🗂️ បណ្ណាល័យហ្គេមដែលបានរក្សាទុក</h2>
-    <p>គ្រប់គ្រងហ្គេមដែលបានជ្រើសរើសរួចរាល់សម្រាប់លេងយ៉ាងរលូន។</p>
-    <div class="library-toolbar">
-      <button id="refreshLibraryBtn" class="btn btn-refresh" type="button">🔄 Refresh បញ្ជី</button>
-      <button id="clearLibraryBtn" class="btn btn-clear" type="button">🗑️ លុបឯកសារទាំងអស់</button>
-    </div>
-    <div id="libraryStatus" class="status" role="status" aria-live="polite"></div>
-    <div id="libraryList" class="library-list" aria-live="polite"></div>
-  </section>
   <div class="version">DSN PS2PSP Local • Version 1.6 Offline</div>
 </main>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script src="vendor/jszip.min.js"></script>
 <script>
 "use strict";
 const CONFIG = {
   systems: {
-    ps2: { button: "localPs2Btn", input: "localPs2Input", status: "ps2Status", extensions: [".iso", ".bin", ".cue", ".chd", ".cso", ".zip"] },
-    psp: { button: "localPspBtn", input: "localPspInput", status: "pspStatus", extensions: [".iso", ".cso", ".zip"] }
+    ps2: { button: "localPs2Btn", input: "localPs2Input", status: "ps2Status" },
+    psp: { button: "localPspBtn", input: "localPspInput", status: "pspStatus" }
   }
 };
 const $ = id => document.getElementById(id);
+
 function showToast(msg) {
   const t = $("toast");
   if (!t) return;
@@ -433,7 +257,6 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove("show"), 3000);
 }
 
-// មុខងារបើកនិងបង្កើត Streaming Blob URL ដោយផ្ទាល់មិនបាច់ពឹង Storage
 async function handleLocalFile(file, system) {
   if (!file) return;
   showToast(`⏳ កំពុងរៀបចំ File: ${file.name}...`);
