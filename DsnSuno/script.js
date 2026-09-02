@@ -1,89 +1,90 @@
 window.onload = function() {
-    if (!localStorage.getItem('suno_api_key')) {
-        setSunoApiKey();
-    }
+    loadSavedSongs();
 };
 
-function setSunoApiKey() {
-    let currentKey = localStorage.getItem('suno_api_key') || '';
-    let userKey = prompt("🔑 សូមបញ្ចូល Suno AI API Key / Token របស់បងទីនេះ:", currentKey);
-    if (userKey !== null && userKey.trim() !== "") {
-        localStorage.setItem('suno_api_key', userKey.trim());
-        alert("រក្សាទុក Suno API Key សុវត្ថិភាពរួចរាល់ហើយ មាសស្នេហ៍! 😘✨");
-    }
-}
-
-async function generateAiMusic() {
-    const sunoKey = localStorage.getItem('suno_api_key');
-    if (!sunoKey) {
-        alert("សូមបញ្ចូល Suno API Key ជាមុនសិន មាសស្នេហ៍! 🔑");
-        setSunoApiKey();
-        return;
-    }
-
-    const title = document.getElementById('songTitleInput').value.trim() || "បទចម្រៀង Original របស់ Sideth";
-    const artist = document.getElementById('artistInput').value.trim() || "Sideth";
-    const promptStyle = document.getElementById('songPromptInput').value.trim();
+function saveSongProject() {
+    const title = document.getElementById('songTitleInput').value.trim();
+    const artist = document.getElementById('artistInput').value.trim();
+    const style = document.getElementById('styleInput').value.trim();
     const lyrics = document.getElementById('lyricsInput').value.trim();
-    
-    if (!promptStyle && !lyrics) {
-        alert("សូមសរសេររចនាប័ទ្មតន្ត្រី ឬ ទំនុកច្រៀង (Lyrics) ជាមុនសិន! ⚠️");
+
+    if (!title || !lyrics) {
+        alert("សូមបំពេញចំណងជើង និង ទំនុកច្រៀង (Lyrics) ជាមុនសិន មាសស្នេហ៍! ⚠️");
         return;
     }
 
-    alert("✨ Suno AI កំពុងចាប់ផ្តើមផលិតបទចម្រៀងនិងសំឡេងច្រៀងឱ្យបងហើយ រង់ចាំបន្តិចណា៎ មាសស្ងួន... ⏳🎵");
+    let songs = JSON.parse(localStorage.getItem('dsn_songs') || '[]');
+    
+    const newSong = {
+        id: Date.now(),
+        title: title,
+        artist: artist || "Sideth",
+        style: style || "Khmer Pop",
+        lyrics: lyrics
+    };
 
-    try {
-        // ភ្ជាប់ទៅកាន់ Suno AI API Endpoint សម្រាប់ Gen Music
-        const response = await fetch("https://api.suno.ai/v1/generate", { // (បញ្ជាក់៖ URL អាចប្រែប្រួលតាម API Provider ផ្លូវការរបស់ Suno)
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${sunoKey}`
-            },
-            body: JSON.stringify({
-                prompt: promptStyle,
-                lyrics: lyrics,
-                title: title,
-                tags: promptStyle,
-                make_instrumental: false
-            })
-        });
+    songs.unshift(newSong);
+    localStorage.setItem('dsn_songs', JSON.stringify(songs));
+    
+    alert("💾 រក្សាទុកគម្រោងចម្រៀងបានដោយជោគជ័យហើយ មាសស្ងួន! 🎉");
+    loadSavedSongs();
+    clearInputs();
+}
 
-        const data = await response.json();
-        
-        if (response.ok) {
-            alert("🎉 Gen បទចម្រៀងជាមួយ Suno AI ជោគជ័យហើយ! ត្រៀមយកទៅ DistroKid បាន! 🚀");
-            console.log("Suno Response:", data);
-        } else {
-            throw new Error(data.message || "មិនអាចតភ្ជាប់ជាមួយ Suno API បានទេ");
-        }
+function loadSavedSongs() {
+    const listContainer = document.getElementById('savedSongsList');
+    let songs = JSON.parse(localStorage.getItem('dsn_songs') || '[]');
+    
+    if (songs.length === 0) {
+        listContainer.innerHTML = '<span style="font-size: 11px; color: #888; text-align: center; padding: 10px;">ពុំទាន់មានគម្រោងចម្រៀងបានរក្សាទុកនៅឡើយទេ...</span>';
+        return;
+    }
 
-    } catch (err) {
-        console.log("API Connection Note:", err);
-        // បើក fallback ឱ្យដំណើរការ Player លើទូរសព្ទបងមិនឱ្យរអាក់រអួល
-        const stableTracks = [
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
-        ];
-        let activeAudioUrl = stableTracks[Math.floor(Math.random() * stableTracks.length)];
+    listContainer.innerHTML = '';
+    songs.forEach(song => {
+        const card = document.createElement('div');
+        card.className = 'song-card';
+        card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; font-weight: bold; color: #38bdf8;">🎵 ${song.title}</span>
+                <span style="font-size: 10px; color: #ec4899;">${song.artist}</span>
+            </div>
+            <span style="font-size: 10px; color: #aaa;">ស្ទីល: ${song.style}</span>
+            <div style="display: flex; gap: 6px; margin-top: 4px;">
+                <button onclick="loadSongToEdit(${song.id})" style="flex: 1; padding: 4px; background: #3b82f6; border: none; border-radius: 4px; color: #fff; font-size: 10px; cursor: pointer;">✏️ កែប្រែ</button>
+                <button onclick="deleteSong(${song.id})" style="padding: 4px 8px; background: #ef4444; border: none; border-radius: 4px; color: #fff; font-size: 10px; cursor: pointer;">🗑️ លុប</button>
+            </div>
+        `;
+        listContainer.appendChild(card);
+    });
+}
 
-        document.getElementById('sunoPlayingTitle').innerText = `🎶 ${title} - ${artist} (Suno Mode)`;
-        const player = document.getElementById('sunoAudio');
-        player.src = activeAudioUrl;
-        document.getElementById('sunoPlayerBox').style.display = 'flex';
-        player.play().catch(e => console.log("Play action needed"));
-        
-        alert("⚠️ Suno API Key ត្រូវការ Token ផ្លូវការ ប៉ុន្តែអូនបានเปิด Player สำรองឱ្យបងតេស្តស្តាប់សិនហ្គា! 😘");
+function loadSongToEdit(id) {
+    let songs = JSON.parse(localStorage.getItem('dsn_songs') || '[]');
+    const song = songs.find(s => s.id === id);
+    if (song) {
+        document.getElementById('songTitleInput').value = song.title;
+        document.getElementById('artistInput').value = song.artist;
+        document.getElementById('styleInput').value = song.style;
+        document.getElementById('lyricsInput').value = song.lyrics;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
 
-function exportMetadata() {
-    const title = document.getElementById('songTitleInput').value.trim() || "Untitled Song";
-    const artist = document.getElementById('artistInput').value.trim() || "Sideth";
-    const lyrics = document.getElementById('lyricsInput').value.trim() || "No lyrics provided.";
+function deleteSong(id) {
+    let songs = JSON.parse(localStorage.getItem('dsn_songs') || '[]');
+    songs = songs.filter(s => s.id !== id);
+    localStorage.setItem('dsn_songs', JSON.stringify(songs));
+    loadSavedSongs();
+}
 
-    const metaText = `=== DISTROKID METADATA ===\nSong Title: ${title}\nArtist: ${artist}\n\n--- LYRICS ---\n${lyrics}`;
+function exportDistroKidMeta() {
+    const title = document.getElementById('songTitleInput').value.trim() || "Untitled";
+    const artist = document.getElementById('artistInput').value.trim() || "Sideth";
+    const style = document.getElementById('styleInput').value.trim() || "Pop";
+    const lyrics = document.getElementById('lyricsInput').value.trim() || "No lyrics.";
+
+    const metaText = `=== DISTROKID METADATA & SUNO PROMPT ===\nSong Title: ${title}\nArtist: ${artist}\nMusic Style/Prompt: ${style}\n\n--- LYRICS ---\n${lyrics}`;
     
     let blob = new Blob([metaText], { type: "text/plain;charset=utf-8" });
     let link = document.createElement("a");
@@ -94,28 +95,18 @@ function exportMetadata() {
     alert("📦 ទាញយក File Metadata សម្រាប់ DistroKid สำเร็จរួចរាល់! 🚀");
 }
 
-function downloadTrack() {
-    const title = document.getElementById('songTitleInput').value.trim() || "Sideth_Song";
-    const player = document.getElementById('sunoAudio');
-    if (!player.src) {
-        alert("សូម Gen បទចម្រៀងជាមុនសិន!");
-        return;
-    }
-    let link = document.createElement("a");
-    link.href = player.src;
-    link.download = `${title}.mp3`;
-    link.target = "_blank";
-    link.click();
-    alert("📥 កំពុងទាញយក File MP3 របស់បង...");
-}
-
-function clearHistory() {
+function clearInputs() {
     document.getElementById('songTitleInput').value = '';
     document.getElementById('artistInput').value = '';
-    document.getElementById('songPromptInput').value = '';
+    document.getElementById('styleInput').value = '';
     document.getElementById('lyricsInput').value = '';
-    document.getElementById('sunoPlayerBox').style.display = 'none';
-    const player = document.getElementById('sunoAudio');
-    player.pause();
-    player.src = '';
+}
+
+function clearAllData() {
+    if (confirm("តើបងពិតជាចង់លុបទិន្នន័យទាំងអស់មែនទេ?")) {
+        localStorage.removeItem('dsn_songs');
+        loadSavedSongs();
+        clearInputs();
+        alert("សម្អាតទិន្នន័យរួចរាល់!");
+    }
 }
