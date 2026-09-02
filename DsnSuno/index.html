@@ -3,38 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DsnSuno Pro - Lyrics & DistroKid Manager</title>
+    <title>DsnSuno Pro - Cloud & Suno Exporter</title>
     <link href="https://fonts.googleapis.com/css2?family=Preahvihear&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="header">
-        <h1>🎵 DsnSuno Pro Manager</h1>
-        <button onclick="clearAllData()" class="btn-action" style="background: #ef4444;">🗑️ សម្អាតទិន្នន័យ</button>
+        <h1>🎵 DsnSuno Cloud Pro</h1>
+        <button onclick="cloudSyncData()" class="btn-action" style="background: #10b981;">☁️ Sync Cloud</button>
     </div>
 
     <div class="creator-box">
-        <span style="font-size: 13px; font-weight: bold; color: #ec4899;">📝 កត់ត្រាទំនុកច្រៀង និង DistroKid Planner</span>
+        <span style="font-size: 13px; font-weight: bold; color: #ec4899;">🎸 Suno AI Prompt & Lyrics Builder</span>
         
         <input type="text" id="songTitleInput" placeholder="ចំណងជើងបទចម្រៀង (ឧ. បងស្រឡាញ់តែអូន)..." />
         
-        <input type="text" id="artistInput" placeholder="ឈ្មោះសិល្បករ/Artist (ឧ. Sideth / Deth DSN)..." />
+        <input type="text" id="artistInput" placeholder="ឈ្មោះសិល្បករ (ឧ. Sideth)..." />
         
-        <input type="text" id="styleInput" placeholder="រចនាប័ទ្មតន្ត្រី/Music Style (ឧ. Khmer Romantic Pop)..." />
+        <input type="text" id="styleInput" placeholder="Music Styles / Prompt (ឧ. Khmer Romantic Pop, 90 BPM)..." />
 
-        <textarea id="lyricsInput" placeholder="សរសេរ ឬរក្សាទុក Lyrics ទំនុកច្រៀងរបស់អ្នកទីនេះ..."></textarea>
+        <textarea id="lyricsInput" placeholder="សរសេរ ឬកែសម្រួល Lyrics ទំនុកច្រៀងទីនេះ..."></textarea>
 
-        <div style="display: flex; gap: 8px;">
-            <button class="btn-gen" onclick="saveSongProject()" style="flex: 1; background: linear-gradient(135deg, #3b82f6, #1d4ed8);">💾 រក្សាទុកទុក</button>
-            <button class="btn-gen" onclick="exportDistroKidMeta()" style="flex: 1; background: linear-gradient(135deg, #ec4899, #8b5cf6);">📦 ထုတ် DistroKid File</button>
+        <div style="display: flex; gap: 6px;">
+            <button class="btn-gen" onclick="copyForSuno()" style="flex: 1; background: linear-gradient(135deg, #f59e0b, #d97706);">📋 Copy ទៅ Suno</button>
+            <button class="btn-gen" onclick="saveSongProject()" style="flex: 1; background: linear-gradient(135deg, #3b82f6, #1d4ed8);">☁️ រក្សាទុក Cloud</button>
         </div>
+        
+        <button class="btn-gen" onclick="exportDistroKidMeta()" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">📦 ထုတ် DistroKid Meta File</button>
     </div>
 
     <div class="creator-box" style="margin-top: 10px;">
-        <span style="font-size: 13px; font-weight: bold; color: #34d399;">📂 បញ្ជីបទចម្រៀងដែលបានរក្សាទុក (Saved Projects)</span>
+        <span style="font-size: 13px; font-weight: bold; color: #34d399;">📂 បញ្ជីបទចម្រៀងក្នុង Cloud (Saved Projects)</span>
         <div id="savedSongsList" style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px; max-height: 250px; overflow-y: auto;">
-            <!-- បញ្ជីនឹងបង្ហាញទីនេះដោយស្វ័យប្រវត្តិ -->
+            <!-- បញ្ជីទិន្នន័យ Cloud -->
         </div>
     </div>
 
