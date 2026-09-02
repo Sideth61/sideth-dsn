@@ -3,46 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSN Suno AI Studio - DistroKid Edition</title>
+    <title>DsnSuno Pro - Lyrics & DistroKid Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Preahvihear&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="header">
-        <h1>🎵 DSN Suno AI Studio (DistroKid Ready)</h1>
-        <div style="display: flex; gap: 6px;">
-            <button onclick="setApiKey()" class="btn-action" style="background: #3b82f6;">🔑 API</button>
-            <button onclick="clearHistory()" class="btn-action" style="background: #ef4444;">🗑️ សម្អាត</button>
+        <h1>🎵 DsnSuno Pro Manager</h1>
+        <button onclick="clearAllData()" class="btn-action" style="background: #ef4444;">🗑️ សម្អាតទិន្នន័យ</button>
+    </div>
+
+    <div class="creator-box">
+        <span style="font-size: 13px; font-weight: bold; color: #ec4899;">📝 កត់ត្រាទំនុកច្រៀង និង DistroKid Planner</span>
+        
+        <input type="text" id="songTitleInput" placeholder="ចំណងជើងបទចម្រៀង (ឧ. បងស្រឡាញ់តែអូន)..." />
+        
+        <input type="text" id="artistInput" placeholder="ឈ្មោះសិល្បករ/Artist (ឧ. Sideth / Deth DSN)..." />
+        
+        <input type="text" id="styleInput" placeholder="រចនាប័ទ្មតន្ត្រី/Music Style (ឧ. Khmer Romantic Pop)..." />
+
+        <textarea id="lyricsInput" placeholder="សរសេរ ឬរក្សាទុក Lyrics ទំនុកច្រៀងរបស់អ្នកទីនេះ..."></textarea>
+
+        <div style="display: flex; gap: 8px;">
+            <button class="btn-gen" onclick="saveSongProject()" style="flex: 1; background: linear-gradient(135deg, #3b82f6, #1d4ed8);">💾 រក្សាទុកទុក</button>
+            <button class="btn-gen" onclick="exportDistroKidMeta()" style="flex: 1; background: linear-gradient(135deg, #ec4899, #8b5cf6);">📦 ထုတ် DistroKid File</button>
         </div>
     </div>
 
-    <!-- 🎶 Suno Style Music Generator Panel with Custom Lyrics -->
-    <div class="creator-box">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 13px; font-weight: bold; color: #ec4899;">🎸 AI Vocal & Original Lyrics Studio</span>
-            <span style="font-size: 11px; color: #38bdf8;">DistroKid Exporter</span>
-        </div>
-        
-        <input type="text" id="songTitleInput" placeholder="ចំណងជើងបទចម្រៀង (ឧ. ទាហានមុំបី ភ្នំ750)..." />
-        
-        <input type="text" id="artistInput" placeholder="ឈ្មោះសិល្បករ/Artist (ឧ. Sideth)..." />
-        
-        <textarea id="songPromptInput" placeholder="រៀបរាប់ពីរចនាប័ទ្មតន្ត្រី (ឧ. Modern Pop, Emotional, Acoustic Guitar)..."></textarea>
-
-        <textarea id="lyricsInput" placeholder="សរសេរ Lyrics (ទំនុកច្រៀង) ផ្ទាល់ខ្លួនរបស់បងទីនេះ..."></textarea>
-
-        <button class="btn-gen" onclick="generateAiMusic()">✨ ចេនរ៉េតបទចម្រៀង Original AI (Generate)</button>
-
-        <!-- Player & DistroKid Export Box -->
-        <div id="sunoPlayerBox" class="player-box">
-            <span id="sunoPlayingTitle" style="font-size: 11px; color: #34d399; font-weight: bold;">🎶 កំពុងចាក់: -</span>
-            <audio id="sunoAudio" controls style="width: 100%; height: 36px; border-radius: 6px;"></audio>
-            
-            <div style="display: flex; gap: 6px; margin-top: 6px;">
-                <button onclick="exportMetadata()" style="flex: 1; padding: 8px; background: #8b5cf6; border: none; border-radius: 6px; color: #fff; font-size: 11px; font-weight: bold; cursor: pointer;">📦 ត្រៀមទិន្នន័យ DistroKid</button>
-                <button onclick="downloadTrack()" style="flex: 1; padding: 8px; background: #238636; border: none; border-radius: 6px; color: #fff; font-size: 11px; font-weight: bold; cursor: pointer;">📥 ទាញយក MP3</button>
-            </div>
+    <div class="creator-box" style="margin-top: 10px;">
+        <span style="font-size: 13px; font-weight: bold; color: #34d399;">📂 បញ្ជីបទចម្រៀងដែលបានរក្សាទុក (Saved Projects)</span>
+        <div id="savedSongsList" style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px; max-height: 250px; overflow-y: auto;">
+            <!-- បញ្ជីនឹងបង្ហាញទីនេះដោយស្វ័យប្រវត្តិ -->
         </div>
     </div>
 
