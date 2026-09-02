@@ -433,18 +433,16 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove("show"), 3000);
 }
 
-// មុខងារបើកនិងបង្កើត Streaming Blob URL ដោយផ្ទាល់ដើម្បីការពារ Error ពេញ Storage
+// មុខងារបើកនិងបង្កើត Streaming Blob URL ដោយផ្ទាល់មិនបាច់ពឹង Storage
 async function handleLocalFile(file, system) {
   if (!file) return;
   showToast(`⏳ កំពុងរៀបចំ File: ${file.name}...`);
   try {
-    let gameFile = file;
-    // បើជា File ZIP អាចបន្ថែមការ Extract តាម JSZip ទីនេះបាន
-    const blobUrl = URL.createObjectURL(gameFile);
+    const blobUrl = URL.createObjectURL(file);
     showToast("🔥 ត្រៀមលក្ខណៈរួចរាល់! កំពុងបើក Emulator...");
     setTimeout(() => {
       window.location.href = `emulator.html?title=${encodeURIComponent(file.name)}&system=${system}&rom=${encodeURIComponent(blobUrl)}`;
-    }, 1000);
+    }, 800);
   } catch (err) {
     showToast(`❌ កំហុសឆ្គង: ${err.message}`);
   }
