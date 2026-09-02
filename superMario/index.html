@@ -2,54 +2,52 @@
 <html lang="km">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Sideth Mini Game V2.5 🎮 Modern Edition</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#050508">
+<meta name="dsn-game-version" content="3.0">
+<title>Sideth Mini Game V3.0 🎮 Ultimate Edition</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div id="gameWrap">
     <div id="hud">
         <span>⭐ <b id="score">0</b></span>
         <span>🪙 <b id="coins">0</b></span>
         <span>🏁 Lv.<b id="level">1</b>/10</span>
         <span>❤️ <b id="lives">3</b></span>
+        <span>🏆 <b id="highScore">0</b></span>
     </div>
 
-    <div id="gamepadStatus">
-        🎮 Gamepad: រង់ចាំ...
-    </div>
+    <div id="gamepadStatus">🎮 Gamepad: រង់ចាំ...</div>
 
     <div class="top-btns">
         <button class="ctrl-top-btn" id="soundBtn" title="Sound On/Off">🔊</button>
-        <button class="ctrl-top-btn" id="pauseBtn">⏸️</button>
+        <button class="ctrl-top-btn" id="pauseBtn" title="Pause">⏸️</button>
+        <button class="ctrl-top-btn" id="skinBtn" title="Character Skins">🎨</button>
     </div>
 
     <canvas id="gameCanvas" width="900" height="500"></canvas>
     <div id="message"></div>
 
-    <!-- TOUCH CONTROLLER -->
+    <div id="skinModal" class="modal">
+        <div class="modal-card">
+            <h3>🎨 ជ្រើសរើសពណ៌តួអង្គ</h3>
+            <div id="skinList"></div>
+            <button id="closeSkinModal" class="btn-close">បិទ</button>
+        </div>
+    </div>
+
     <div id="controls">
         <div class="group">
-            <button class="btn" id="leftBtn">◀</button>
-            <button class="btn" id="rightBtn">▶</button>
+            <button class="btn" id="leftBtn" aria-label="Left">◀</button>
+            <button class="btn" id="rightBtn" aria-label="Right">▶</button>
         </div>
         <div class="group">
-            <button class="btn" id="jumpBtn">▲</button>
-            <!-- បន្ថែមប៊ូតុងរូបក្ដារពណ៌ នៅកន្លែងប៊ូតុងខាងលើ -->
-​            <button class="ctrl-top-btn" id="skinBtn" title="Character Skins">🎨</button>
-
-​            <!-- ផ្ទាំង Shop សម្រាប់ជ្រើសរើសពណ៌តួអង្គ -->
-​    <div id="skinModal">
-    <h3>🎨 ជ្រើសរើសពណ៌តួអង្គ</h3>
-    <div id="skinList" style="max-height: 200px; overflow-y: auto; margin: 15px 0;"></div>
-    <button id="closeSkinModal" class="btn-close">បិទ</button>
-</div>
-
+            <button class="btn" id="jumpBtn" aria-label="Jump">▲</button>
         </div>
     </div>
 </div>
-
+<script src="particles.js"></script>
 <script src="game.js"></script>
 </body>
 </html>
