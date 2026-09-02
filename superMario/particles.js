@@ -1,43 +1,39 @@
 "use strict";
 
 class ParticleSystem {
-    constructor() {
-        this.particles = [];
-    }
+    constructor() { this.particles = []; }
 
-    add(x, y, color) {
-        for (let i = 0; i < 6; i++) {
+    add(x, y, color = "#fff", count = 8) {
+        for (let i = 0; i < count; i++) {
             this.particles.push({
-                x: x,
-                y: y,
-                vx: (Math.random() - 0.5) * 6,
-                vy: (Math.random() - 0.5) * 6,
+                x, y,
+                vx: (Math.random() - 0.5) * 7,
+                vy: (Math.random() - 0.5) * 7,
                 size: Math.random() * 4 + 2,
-                color: color,
-                life: 30
+                color,
+                life: 32 + Math.random() * 18
             });
         }
     }
 
     update() {
         for (let i = this.particles.length - 1; i >= 0; i--) {
-            let p = this.particles[i];
+            const p = this.particles[i];
             p.x += p.vx;
             p.y += p.vy;
+            p.vy += 0.08;
             p.life--;
-            if (p.life <= 0) {
-                this.particles.splice(i, 1);
-            }
+            if (p.life <= 0) this.particles.splice(i, 1);
         }
     }
 
     draw(ctx) {
         for (const p of this.particles) {
+            ctx.globalAlpha = Math.max(0, p.life / 45);
             ctx.fillStyle = p.color;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.fillRect(p.x, p.y, p.size, p.size);
         }
+        ctx.globalAlpha = 1;
     }
 }
 const particles = new ParticleSystem();
