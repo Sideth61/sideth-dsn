@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#030007">
-<title>DSN Local ISO Player • Sideth Version</title>
+<title>DSN Game Loader • Sideth Version</title>
 <style>
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
 html,body{
@@ -25,60 +25,84 @@ html,body{
   border-radius:10px; background:rgba(255,255,255,0.1); color:#fff;
   font-size:12px; text-decoration:none; cursor:pointer;
 }
-.player-container{
+.container{
   flex:1; width:100%; height:100%;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  position:relative; background:#000;
+  position:relative; background:#000; padding:20px; text-align:center;
 }
-.center-box{
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:16px; padding:20px; text-align:center; z-index:5; width:100%; max-width:400px;
+.box{
+  width:100%; max-width:360px; background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.15); border-radius:20px;
+  padding:24px; display:flex; flex-direction:column; gap:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
 }
-.btn-action{
-  background:linear-gradient(135deg, #db2777, #9d174d);
-  color:#fff; padding:14px 24px; border-radius:16px;
-  font-size:15px; font-weight:700; cursor:pointer;
-  box-shadow:0 6px 20px rgba(219,39,119,0.4);
-  border:1px solid rgba(255,255,255,0.3); text-decoration:none; display:block; width:100%;
+.progress-bar-bg{
+  width:100%; height:10px; background:rgba(255,255,255,0.1);
+  border-radius:5px; overflow:hidden;
 }
-.info-text{font-size:13px; color:#fef3c7; line-height:1.6;}
+.progress-bar-fill{
+  width:0%; height:100%; background:linear-gradient(90deg, #ec4899, #8b5cf6);
+  transition:width 0.2s;
+}
+.btn-play{
+  background:linear-gradient(135deg, #10b981, #059669);
+  color:#fff; padding:12px; border-radius:12px; font-weight:700;
+  border:none; cursor:pointer; font-size:14px; display:none;
+  text-decoration:none; box-shadow:0 4px 15px rgba(16,185,129,0.4);
+}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div id="gameTitle" class="title">🎮 DSN ISO Player</div>
+  <div id="gameTitle" class="title">🎮 Metal Slug Loader</div>
   <a href="index.html" class="back-btn">⬅️ ត្រឡប់ក្រោយ</a>
 </div>
 
-<div class="player-container">
-  <div id="centerBox" class="center-box">
-    <div style="font-size:45px;">🎯</div>
-    <div id="statusText" class="info-text">កំពុងត្រៀមរៀបចំ File ហ្គេមសម្រាប់ B Sideth❤️️...</div>
-    <div id="actionArea" style="width:100%;"></div>
+<div class="container">
+  <div class="box">
+    <div style="font-size:35px;">🕹️</div>
+    <div id="statusMsg" style="font-size:14px; color:#fef3c7; font-weight:700;">កំពុងរៀបចំទាញយក File ចូលប្រព័ន្ធ...</div>
+    
+    <div class="progress-bar-bg">
+      <div id="progressBar" class="progress-bar-fill"></div>
+    </div>
+    <div id="percentText" style="font-size:12px; color:#9ca3af;">0%</div>
+
+    <a id="playBtn" href="#" class="btn-play">🚀 ចុចទីនេះដើម្បីចាប់ផ្តើមលេង</a>
   </div>
 </div>
 
 <script>
 "use strict";
 const params = new URLSearchParams(window.location.search);
-const title = params.get("title") || "Game ISO";
 const romUrl = params.get("rom");
+const gameName = params.get("title") || "Metal Slug Anthology";
 
-document.getElementById("gameTitle",).textContent = `🎮 ${title}`;
-const statusText = document.getElementById("statusText");
-const actionArea = document.getElementById("actionArea");
+document.getElementById("gameTitle").textContent = `🎮 ${gameName}`;
+const statusMsg = document.getElementById("statusMsg");
+const progressBar = document.getElementById("progressBar");
+const percentText = document.getElementById("percentText");
+const playBtn = document.getElementById("playBtn");
 
 if (!romUrl) {
-  statusText.textContent = "❌ រកមិនឃើញ File ហ្គេមទេ!";
-  actionArea.innerHTML = `<a href="index.html" class="btn-action">ត្រឡប់ទៅទំព័រដើម</a>`;
+  statusMsg.textContent = "❌ រកមិនឃើញតំណរភ្ជាប់ File ហ្គេមទេ!";
 } else {
-  // បង្ហាញប៊ូតុងផ្ដល់ជម្រើសឱ្យបង Download រួចបើកចូល App Emulator ក្នុងទូរសព្ទផ្ទាល់ ឬលេងកម្សាន្ត
-  statusText.innerHTML = `✅ File ហ្គេមត្រូវបានអានរួចរាល់!<br><b style="color:#38bdf8;">${title}</b>`;
-  actionArea.innerHTML = `
-    <a href="${romUrl}" download="${title}" class="btn-action" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">📥 ទាញយក File ទុកក្នុងទូរសព្ទ</a>
-    <a href="index.html" class="btn-action" style="margin-top:10px; background:rgba(255,255,255,0.1);">⬅️ រើសហ្គេមផ្សេងទៀត</a>
-  `;
+  // จำลองការດោន ឬ Fetch File ចូល Memory ជាមួយ Progress
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += 5;
+    if (progress <= 100) {
+      progressBar.style.width = progress + "%";
+      percentText.textContent = progress + "%";
+    }
+    if (progress >= 100) {
+      clearInterval(interval);
+      statusMsg.textContent = "✅ File ហ្គេមត្រូវបានផ្ទុកទុករួចរាល់!";
+      playBtn.href = romUrl;
+      playBtn.style.display = "block";
+    }
+  }, 150);
 }
 </script>
 
