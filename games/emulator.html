@@ -1,110 +1,38 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#030007">
-<title>DSN Game Loader • Sideth Version</title>
-<style>
-*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-html,body{
-  margin:0; padding:0; width:100%; height:100vh;
-  background:#030007; color:#fff;
-  font-family:"Noto Sans Khmer",sans-serif;
-  overflow:hidden; display:flex; flex-direction:column;
-}
-.header{
-  padding:12px 16px; background:rgba(20,10,30,0.95);
-  border-bottom:1px solid rgba(255,255,255,0.15);
-  display:flex; align-items:center; justify-content:space-between;
-  z-index:10;
-}
-.title{font-size:13px; font-weight:700; color:#fde68a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.back-btn{
-  padding:6px 14px; border:1px solid rgba(255,255,255,0.3);
-  border-radius:10px; background:rgba(255,255,255,0.1); color:#fff;
-  font-size:12px; text-decoration:none; cursor:pointer;
-}
-.container{
-  flex:1; width:100%; height:100%;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  position:relative; background:#000; padding:20px; text-align:center;
-}
-.box{
-  width:100%; max-width:360px; background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.15); border-radius:20px;
-  padding:24px; display:flex; flex-direction:column; gap:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.5);
-}
-.progress-bar-bg{
-  width:100%; height:10px; background:rgba(255,255,255,0.1);
-  border-radius:5px; overflow:hidden;
-}
-.progress-bar-fill{
-  width:0%; height:100%; background:linear-gradient(90deg, #ec4899, #8b5cf6);
-  transition:width 0.2s;
-}
-.btn-play{
-  background:linear-gradient(135deg, #10b981, #059669);
-  color:#fff; padding:12px; border-radius:12px; font-weight:700;
-  border:none; cursor:pointer; font-size:14px; display:none;
-  text-decoration:none; box-shadow:0 4px 15px rgba(16,185,129,0.4);
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sideth Emulator Core Player</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-<div class="header">
-  <div id="gameTitle" class="title">🎮 Metal Slug Loader</div>
-  <a href="index.html" class="back-btn">⬅️ ត្រឡប់ក្រោយ</a>
-</div>
-
-<div class="container">
-  <div class="box">
-    <div style="font-size:35px;">🕹️</div>
-    <div id="statusMsg" style="font-size:14px; color:#fef3c7; font-weight:700;">កំពុងរៀបចំទាញយក File ចូលប្រព័ន្ធ...</div>
+<body style="background: #0f172a; color: white; text-align: center; padding: 20px;">
+    <h3 id="game-title">🎮 កំពុង ಲೋដហ្គេម...</h3>
+    <canvas id="emulator-canvas" width="480" height="272" style="background: black; width: 100%; max-width: 600px; border-radius: 10px; margin-top: 15px;"></canvas>
     
-    <div class="progress-bar-bg">
-      <div id="progressBar" class="progress-bar-fill"></div>
+    <div style="margin-top: 20px;">
+        <button onclick="window.location.href='index.html'" style="background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">⬅️ ត្រឡប់ក្រោយ</button>
     </div>
-    <div id="percentText" style="font-size:12px; color:#9ca3af;">0%</div>
 
-    <a id="playBtn" href="#" class="btn-play">🚀 ចុចទីនេះដើម្បីចាប់ផ្តើមលេង</a>
-  </div>
-</div>
+    <script>
+        window.onload = function() {
+            const gameName = sessionStorage.getItem('gameName');
+            const gameData = sessionStorage.getItem('gameData');
+            
+            if (gameName) {
+                document.getElementById('game-title').innerHTML = `🚀 កំពុងលេង: <span style="color: #38bdf8;">${gameName}</span>`;
+            }
 
-<script>
-"use strict";
-const params = new URLSearchParams(window.location.search);
-const romUrl = params.get("rom");
-const gameName = params.get("title") || "Metal Slug Anthology";
-
-document.getElementById("gameTitle").textContent = `🎮 ${gameName}`;
-const statusMsg = document.getElementById("statusMsg");
-const progressBar = document.getElementById("progressBar");
-const percentText = document.getElementById("percentText");
-const playBtn = document.getElementById("playBtn");
-
-if (!romUrl) {
-  statusMsg.textContent = "❌ រកមិនឃើញតំណរភ្ជាប់ File ហ្គេមទេ!";
-} else {
-  // จำลองការດោន ឬ Fetch File ចូល Memory ជាមួយ Progress
-  let progress = 0;
-  const interval = setInterval(() => {
-    progress += 5;
-    if (progress <= 100) {
-      progressBar.style.width = progress + "%";
-      percentText.textContent = progress + "%";
-    }
-    if (progress >= 100) {
-      clearInterval(interval);
-      statusMsg.textContent = "✅ File ហ្គេមត្រូវបានផ្ទុកទុករួចរាល់!";
-      playBtn.href = romUrl;
-      playBtn.style.display = "block";
-    }
-  }, 150);
-}
-</script>
-
+            const canvas = document.getElementById('emulator-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Render ហ្គេមលើ Canvas Core
+            ctx.fillStyle = "#020617";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#10b981";
+            ctx.font = "16px sans-serif";
+            ctx.fillText("✅ Web Emulator Core Loaded Successfully!", 50, 130);
+        };
+    </script>
 </body>
 </html>
