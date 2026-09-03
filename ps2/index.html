@@ -23,7 +23,12 @@
         </div>
         
         <div id="emulator-screen">
-            <p>ជ្រើសរើសប្រព័ន្ធហ្គេមខាងលើដើម្បីចាប់ផ្ដើម... ❤️️</p>
+            <h3>🎮 កំពុងបើកប្រព័ន្ធ Emulator...</h3>
+            <p>ໂຫຼດ File ISO ហ្គេមរបស់អ្នកចូលទីនេះបានយ៉ាងរលូន! 💚</p>
+            
+            <!-- ប៊ូតុងជ្រើសរើស File ហ្គេម -->
+            <input type="file" id="gameFile" accept=".iso,.bin,.img" onchange="handleGameFile(event)" style="margin-top: 15px; color: #38bdf8;">
+            <div id="file-info" style="margin-top: 10px; font-size: 13px; color: #94a3b8;"></div>
         </div>
     </div>
     <script src="game.js"></script>
