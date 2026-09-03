@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sideth Game Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Sideth's Retro & PS2 Web Hub</h1>
+        <p class="subtitle">លេងហ្គេមតាមទូរសព្ទដោយមិនបាច់ប្រើ Computer ឬ Sideload! 😘</p>
+        
+        <div class="game-grid">
+            <div class="game-card" onclick="loadGame('PS2')">
+                <h3>PlayStation 2 Web</h3>
+                <p>จำลองระบบเล่นเกม PS2 ISO</p>
+            </div>
+            <div class="game-card" onclick="loadGame('PPSSPP')">
+                <h3>PSP Emulator Web</h3>
+                <p>เล่นเกม Metal Slug & Retro Games</p>
+            </div>
+        </div>
+        
+        <div id="emulator-screen">
+            <p>ជ្រើសរើសប្រព័ន្ធហ្គេមខាងលើដើម្បីចាប់ផ្ដើម... ❤️️</p>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
