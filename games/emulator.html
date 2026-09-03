@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body style="background: #0f172a; color: white; text-align: center; padding: 20px;">
-    <h3 id="game-title">🎮 កំពុង ಲೋដហ្គេម...</h3>
+    <h3 id="game-title">🎮 កំពុងໂຫຼດហ្គេម...</h3>
     <canvas id="emulator-canvas" width="480" height="272" style="background: black; width: 100%; max-width: 600px; border-radius: 10px; margin-top: 15px;"></canvas>
     
+    <div id="loading-status" style="margin-top: 15px; font-size: 14px; color: #38bdf8;">កំពុងរៀបចំទិន្នន័យហ្គេមចូល RAM...</div>
+
     <div style="margin-top: 20px;">
         <button onclick="window.location.href='index.html'" style="background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">⬅️ ត្រឡប់ក្រោយ</button>
     </div>
@@ -26,12 +28,28 @@
             const canvas = document.getElementById('emulator-canvas');
             const ctx = canvas.getContext('2d');
             
-            // Render ហ្គេមលើ Canvas Core
-            ctx.fillStyle = "#020617";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#10b981";
-            ctx.font = "16px sans-serif";
-            ctx.fillText("✅ Web Emulator Core Loaded Successfully!", 50, 130);
+            if (gameData) {
+                // បំលែង Data URL មកជា Blob ដើម្បីត្រៀមបញ្ជូនចូល Emulator WASM Core
+                fetch(gameData)
+                    .then(res => res.blob())
+                    .then(blob => {
+                        document.getElementById('loading-status').innerHTML = `✅ ໂຫຼດ File ចូល RAM បានสำเร็จ! ទំហំ: ${(blob.size / (1024*1024)).toFixed(2)} MB`;
+                        
+                        // Render ដំណាក់កាលត្រៀមលេងលើ Canvas
+                        ctx.fillStyle = "#020617";
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.fillStyle = "#10b981";
+                        ctx.font = "14px sans-serif";
+                        ctx.fillText("🎮 ត្រៀមខ្លួនរួចរាល់សម្រាប់ Emulator Engine!", 30, 120);
+                        ctx.fillStyle = "#38bdf8";
+                        ctx.fillText("ទិន្នន័យហ្គេមស្ថិតក្នុង Memory ស្រេច!", 55, 150);
+                    })
+                    .catch(err => {
+                        document.getElementById('loading-status').innerHTML = `<span style="color: #ef4444;">❌ កំហុសក្នុងការអាន File ហ្គេម!</span>`;
+                    });
+            } else {
+                document.getElementById('loading-status').innerHTML = `<span style="color: #ef4444;">⚠️ រកមិនឃើញ File ហ្គេមទេ សូមជ្រើសរើសម្តងទៀត!</span>`;
+            }
         };
     </script>
 </body>
