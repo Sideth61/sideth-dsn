@@ -1,27 +1,28 @@
-/* 🔤 នាំចូលហ្វុនខ្មែរស្តង់ដារពី Google Fonts ជាមួយ Unicode-Range ត្រឹមត្រូវ */
+/* 🔤 នាំចូលហ្វុនខ្មែរស្តង់ដារពី Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Preahvihear&family=Siemreap&display=swap');
 
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-}
-
 body {
-    /* 🔤 បង្ខំឱ្យប្រើហ្វុនខ្មែរ Kantumruy Pro និង Battambang ជាចម្បងដើម្បីកុំឱ្យខុសស្តង់ដារលើ iPhone */
-    font-family: 'Kantumruy Pro', 'Battambang', 'Siemreap', 'Preahvihear', -apple-system, BlinkMacSystemFont, sans-serif;
+    /* 🔤 បង្ខំស្តង់ដារអក្សរខ្មែរនៅលើ iOS/Safari ឱ្យត្រូវល្អឥតខ្ចោះ */
+    font-family: 'Kantumruy Pro', 'Battambang', 'Siemreap', sans-serif;
+    font-feature-settings: "liga" on, "calt" on;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     
-    /* 🖼️ ដាក់រូប screen.jpg ជាផ្ទៃខាងក្រោយ ពេញអេក្រង់ និងមិនរត់បាត់ */
-    background: url('screen.jpg') no-repeat center center fixed;
+    /* 🖼️ រូបភាពផ្ទៃខាងក្រោយ screen.jpg បង្ហាញពេញអេក្រង់ និងមិនបាត់ */
+    background-image: url('screen.jpg');
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    
     color: #f8fafc;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .header {
@@ -29,8 +30,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
-    /* 🪞 កញ្ចក់ថ្លាខ្លាំង ធ្លុះឃើញរូប screen.jpg ខាងក្រោយយ៉ាងច្បាស់ */
-    background: rgba(15, 23, 42, 0.25);
+    /* 🪞 កញ្ចក់ថ្លាធ្លុះឃើញរូប screen.jpg ខាងក្រោយយ៉ាងច្បាស់ */
+    background: rgba(15, 23, 42, 0.30);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
@@ -58,15 +59,16 @@ body {
     padding: 10px 14px;
     border-radius: 12px;
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.7;
     word-wrap: break-word;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     font-family: 'Kantumruy Pro', 'Battambang', sans-serif;
+    font-feature-settings: "liga" on, "calt" on;
 }
 
 .message.ai {
     /* 🪞 ប្រអប់សារ AI ថ្លាដូចកញ្ចក់ មើលឃើញរូបខាងក្រោយច្បាស់ល្អ */
-    background: rgba(30, 41, 59, 0.30);
+    background: rgba(30, 41, 59, 0.35);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     align-self: flex-start;
@@ -75,7 +77,7 @@ body {
 
 .message.user {
     /* 🪞 ប្រអប់សារ User ថ្លាស្អាតបែបកញ្ចក់ខៀវ */
-    background: rgba(59, 130, 246, 0.45);
+    background: rgba(59, 130, 246, 0.50);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     color: #fff;
@@ -86,7 +88,7 @@ body {
 .input-area {
     padding: 12px;
     /* 🪞 ប្រអប់พิมพ์ខាងក្រោម ថ្លាដូចកញ្ចក់ឆ្លុះឃើញរូប screen.jpg */
-    background: rgba(15, 23, 42, 0.35);
+    background: rgba(15, 23, 42, 0.40);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-top: 1px solid rgba(255, 255, 255, 0.25);
@@ -94,7 +96,7 @@ body {
 
 input[type="text"] {
     flex: 1;
-    background: rgba(15, 23, 42, 0.2);
+    background: rgba(15, 23, 42, 0.25);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
     padding: 10px 14px;
@@ -106,7 +108,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
     border-color: #38bdf8;
-    background: rgba(15, 23, 42, 0.4);
+    background: rgba(15, 23, 42, 0.5);
 }
 
 button {
@@ -117,7 +119,7 @@ button {
     color: #fff;
     padding: 10px 16px;
     font-weight: bold;
-    font-family: 'Kantumruy Pro', sans-serif;
+    font-family: 'Kantumruy Pro', 'Battambang', sans-serif;
     transition: background 0.2s;
     box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
 }
