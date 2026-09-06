@@ -19,12 +19,15 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Sideth AI">
 
-    <!-- 🔤 Google Fonts សម្រាប់ហ្វុនខ្មែរស្អាតៗ -->
-    <link href="https://fonts.googleapis.com/css2?family=Preahvihear&family=Kantumruy+Pro:wght@300;400;500;700&family=Battambang:wght@400;700&family=Siemreap&display=swap" rel="stylesheet">
+    <!-- 🔤 Google Fonts សម្រាប់ហ្វុនខ្មែរស្អាតៗ និងត្រូវតួអក្សរ -->
+    <link href="https://fonts.googleapis.com/css2?family=Preahvihear&family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Battambang:wght@400;700&family=Siemreap&display=swap" rel="stylesheet">
     
     <style>
         body {
-            font-family: 'Kantumruy Pro', 'Battambang', 'Preahvihear', 'Siemreap', sans-serif;
+            /* 🔤 កែតម្រូវហ្វុនខ្មែរឱ្យត្រូវតួអក្សរ និងរត់បានស្រួលគ្រប់ទូរសព្ទ */
+            font-family: 'Kantumruy Pro', 'Battambang', 'Siemreap', 'Preahvihear', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
             /* 🖼️ ដាក់រូប screen.jpg ជាផ្ទៃខាងក្រោយ ពេញអេក្រង់ និងមិនរត់បាត់ */
             background-image: url('screen.jpg');
             background-size: cover;
@@ -52,7 +55,7 @@
         .header h1 {
             font-size: 15px;
             margin: 0;
-            font-family: 'Preahvihear', sans-serif;
+            font-family: 'Preahvihear', 'Kantumruy Pro', sans-serif;
             color: #38bdf8;
             text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
@@ -69,9 +72,10 @@
             padding: 10px 14px;
             border-radius: 12px;
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
             word-wrap: break-word;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-family: 'Kantumruy Pro', 'Battambang', sans-serif;
         }
         .message.ai {
             /* 🪞 ប្រអប់សារ AI ថ្លាដូចកញ្ចក់ */
@@ -104,7 +108,7 @@
             border-radius: 8px;
             padding: 10px 14px;
             color: #fff;
-            font-family: 'Kantumruy Pro', sans-serif;
+            font-family: 'Kantumruy Pro', 'Battambang', sans-serif;
             font-size: 14px;
             outline: none;
         }
@@ -120,6 +124,7 @@
             color: #fff;
             padding: 10px 16px;
             font-weight: bold;
+            font-family: 'Kantumruy Pro', sans-serif;
             transition: background 0.2s;
             box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
         }
@@ -139,13 +144,13 @@
     </div>
 
     <div class="chat-container" id="chatBox">
-        <div class="message ai">សួស្ដីបាទ!ខ្ញុំឈ្មោះ  សាន​ ស៊ីដេត❤️️ថ្ងៃនេះអ្នកមានអ្វី​ ចង់អោយខ្ញុំជួយ​! 😘💚</div>
+        <div class="message ai">សួស្ដីបាទ!ខ្ញុំឈ្មោះ សាន​ ស៊ីដេត❤️️ថ្ងៃនេះអ្នកមានអ្វី​ ចង់អោយខ្ញុំជួយ​! 😘💚</div>
     </div>
     
     <div class="input-area" style="display: flex; flex-direction: column; gap: 8px;">
         <div id="previewContainer" style="display: none; align-items: center; gap: 10px;">
             <img id="imagePreview" src="" alt="Preview" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
-            <span style="font-size: 12px; color: #94a3b8;">បានជ្រើសរើសរូបភាពរួចរាល់ 🖼️</span>
+            <span style="font-size: 12px; color: #94a3b8; font-family: 'Kantumruy Pro', sans-serif;">បានជ្រើសរើសរូបភាពរួចរាល់ 🖼️</span>
             <button onclick="removeImage()" style="padding: 4px 8px; background: #ef4444; font-size: 12px;">លុបចេញ</button>
         </div>
 
