@@ -1,4 +1,4 @@
-/* 🔤 នាំចូលហ្វុនខ្មែរស្តង់ដារពី Google Fonts */
+/* 🔤 នាំចូលហ្វុនខ្មែរស្តង់ដារពី Google Fonts សម្រាប់បង្ហាញលើ iOS/Android */
 @import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Preahvihear&family=Siemreap&display=swap');
 
 body {
@@ -6,6 +6,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* 🖼️ ដាក់រូប screen.jpg ជាផ្ទៃខាងក្រោយ ពេញអេក្រង់ និងមិនរត់បាត់ */
     background-image: url('screen.jpg');
     background-size: cover;
     background-position: center;
@@ -24,10 +25,11 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
-    background: rgba(15, 23, 42, 0.55);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    /* 🪞 កញ្ចក់ថ្លាខ្លាំង ធ្លុះឃើញរូប screen.jpg ខាងក្រោយយ៉ាងច្បាស់ */
+    background: rgba(15, 23, 42, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .header h1 {
@@ -35,7 +37,7 @@ body {
     margin: 0;
     font-family: 'Preahvihear', 'Kantumruy Pro', sans-serif;
     color: #38bdf8;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
 }
 
 .chat-container {
@@ -54,39 +56,42 @@ body {
     font-size: 14px;
     line-height: 1.6;
     word-wrap: break-word;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     font-family: 'Kantumruy Pro', 'Battambang', sans-serif;
 }
 
 .message.ai {
-    background: rgba(30, 41, 59, 0.65);
+    /* 🪞 ប្រអប់សារ AI ថ្លាដូចកញ្ចក់ មើលឃើញរូបខាងក្រោយច្បាស់ល្អ */
+    background: rgba(30, 41, 59, 0.40);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     align-self: flex-start;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .message.user {
-    background: rgba(59, 130, 246, 0.85);
+    /* 🪞 ប្រអប់សារ User ថ្លាស្អាតបែបកញ្ចក់ខៀវ */
+    background: rgba(59, 130, 246, 0.55);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     color: #fff;
     align-self: flex-end;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .input-area {
     padding: 12px;
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    /* 🪞 ប្រអប់พิมพ์ខាងក្រោម ថ្លាដូចកញ្ចក់ឆ្លុះឃើញរូប screen.jpg */
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 input[type="text"] {
     flex: 1;
-    background: rgba(15, 23, 42, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(15, 23, 42, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
     padding: 10px 14px;
     color: #fff;
@@ -97,7 +102,7 @@ input[type="text"] {
 
 input[type="text"]:focus {
     border-color: #38bdf8;
-    background: rgba(15, 23, 42, 0.7);
+    background: rgba(15, 23, 42, 0.5);
 }
 
 button {
