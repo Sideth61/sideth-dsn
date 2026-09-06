@@ -1,4 +1,4 @@
-/* 🔤 នាំចូលហ្វុនខ្មែរស្តង់ដារពី Google Fonts សម្រាប់បង្ហាញលើ iOS/Android */
+/* 🔤 នាំចូលហ្វុនខ្មែរស្តង់ដារពី Google Fonts ជាមួយ Unicode-Range ត្រឹមត្រូវ */
 @import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Preahvihear&family=Siemreap&display=swap');
 
 html, body {
@@ -10,11 +10,13 @@ html, body {
 }
 
 body {
-    font-family: 'Kantumruy Pro', 'Battambang', 'Siemreap', 'Preahvihear', sans-serif;
+    /* 🔤 បង្ខំឱ្យប្រើហ្វុនខ្មែរ Kantumruy Pro និង Battambang ជាចម្បងដើម្បីកុំឱ្យខុសស្តង់ដារលើ iPhone */
+    font-family: 'Kantumruy Pro', 'Battambang', 'Siemreap', 'Preahvihear', -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    /* 🖼️ កែតម្រូវទម្រង់ទាញយករូប screen.jpg ឱ្យចេញមកពេញអេក្រង់ច្បាស់ល្អ */
+    
+    /* 🖼️ ដាក់រូប screen.jpg ជាផ្ទៃខាងក្រោយ ពេញអេក្រង់ និងមិនរត់បាត់ */
     background: url('screen.jpg') no-repeat center center fixed;
     background-size: cover;
     color: #f8fafc;
