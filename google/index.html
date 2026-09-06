@@ -156,10 +156,10 @@
 
         function setApiKey() {
             let currentKey = localStorage.getItem('gemini_user_key') || '';
-            let userKey = prompt("🔑 សូមបញ្ចូល Google Gemini API Key របស់បងទីនេះ:", currentKey);
+            let userKey = prompt("🔑 សូមបញ្ចូល DSN Google​ API​ Key របស់DSNទីនេះ:", currentKey);
             if (userKey !== null && userKey.trim() !== "") {
                 localStorage.setItem('gemini_user_key', userKey.trim());
-                alert("រក្សាទុក API Key សុវត្ថិភាពរួចរាល់ហើយ មាសស្នេហ៍! 😘✨");
+                alert("បានបញ្ចូល​ API Key រួចរាល់ហើយ! 😘✨");
             }
         }
 
