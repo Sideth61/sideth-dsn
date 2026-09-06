@@ -21,119 +21,6 @@
 
     <!-- 🔗 តភ្ជាប់ជាមួយហ្វាល style.css ខាងក្រៅ -->
     <link rel="stylesheet" href="style.css">
-
-    <!-- 🖼️ ផ្ទៃខាងក្រោយ screen.jpg និងរចនាប័ទ្មបែបកញ្ចក់ថ្លា -->
-    <style>
-        body {
-            background-image: url('screen.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            color: #f8fafc;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: rgba(15, 23, 42, 0.30);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-        }
-
-        .header h1 {
-            font-size: 15px;
-            margin: 0;
-            font-family: 'Preahvihear', 'Kantumruy Pro', sans-serif;
-            color: #38bdf8;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .message {
-            max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 1.7;
-            word-wrap: break-word;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .message.ai {
-            background: rgba(30, 41, 59, 0.35);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            align-self: flex-start;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .message.user {
-            background: rgba(59, 130, 246, 0.50);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            color: #fff;
-            align-self: flex-end;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .input-area {
-            padding: 12px;
-            background: rgba(15, 23, 42, 0.40);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.25);
-        }
-
-        input[type="text"] {
-            flex: 1;
-            background: rgba(15, 23, 42, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            padding: 10px 14px;
-            color: #fff;
-            font-size: 14px;
-            outline: none;
-        }
-
-        input[type="text"]:focus {
-            border-color: #38bdf8;
-            background: rgba(15, 23, 42, 0.5);
-        }
-
-        button {
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-            background: #3b82f6;
-            color: #fff;
-            padding: 10px 16px;
-            font-weight: bold;
-            transition: background 0.2s;
-            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
-        }
-
-        button:hover {
-            background: #2563eb;
-        }
-    </style>
 </head>
 <body>
 
@@ -152,7 +39,7 @@
     <div class="input-area" style="display: flex; flex-direction: column; gap: 8px;">
         <div id="previewContainer" style="display: none; align-items: center; gap: 10px;">
             <img id="imagePreview" src="" alt="Preview" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
-            <span style="font-size: 12px; color: #94a3b8;">បានជ្រើសរើសរូបភាពរួចរាល់ 🖼️</span>
+            <span style="font-size: 12px; color: #94a3b8; font-family: 'Kantumruy Pro', sans-serif;">បានជ្រើសរើសរូបភាពរួចរាល់ 🖼️</span>
             <button onclick="removeImage()" style="padding: 4px 8px; background: #ef4444; font-size: 12px;">លុបចេញ</button>
         </div>
 
@@ -222,7 +109,7 @@
 
         function clearHistory() {
             localStorage.removeItem('dsn_chat_history_v3_6');
-            document.getElementById('chatBox').innerHTML = `<div class="message ai">សួស្ដីបង Sideth❤️️ អូន NiNa❤️️ បានសម្អាតប្រវត្តិជជែករួចរាល់ហើយ! 😘</div>`;
+            document.getElementById('chatBox').innerHTML = `<div class="message ai">សួស្ដីបង Sideth❤️️ អូន NiTa❤️️ បានសម្អាតប្រវត្តិជជែករួចរាល់ហើយ! 😘</div>`;
         }
 
         async function sendMessage() {
@@ -297,7 +184,7 @@
                 scrollToBottom();
                 saveChatHistory();
             } catch (error) {
-                document.getElementById(loadingId).innerText = "សូមអភ័យទោស! មិនអាចតភ្ជាប់ទៅកាន់ Google API ได้ទេ (Connection Error)។ 🔌";
+                document.getElementById(loadingId).innerText = "សូមអភ័យទោស! មិនអាចតភ្ជាប់ទៅកាន់ Google API បានទេ (Connection Error)។ 🔌";
                 scrollToBottom();
             }
         }
