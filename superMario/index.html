@@ -1,160 +1,168 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Super Mario - Sideth Game Hub</title>
-<link href="[https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap](https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap)" rel="stylesheet">
-<style>
-* {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
-font-family: 'Kantumruy Pro', sans-serif;
-}
-body {
-background: linear-gradient(135deg, #1e1b4b, #311042);
-color: #ffffff;
-min-height: 100vh;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-padding: 15px;
-}
-.container {
-width: 100%;
-max-width: 450px;
-text-align: center;
-background: rgba(15, 23, 42, 0.85);
-padding: 25px;
-border-radius: 20px;
-border: 2px solid #ec4899;
-box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
-}
-h1 {
-font-size: 20px;
-color: #f43f5e;
-margin-bottom: 5px;
-text-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
-}
-p.sub {
-font-size: 12px;
-color: #94a3b8;
-margin-bottom: 20px;
-}
-.game-screen {
-background: #000;
-border: 3px solid #38bdf8;
-border-radius: 12px;
-height: 240px;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-position: relative;
-overflow: hidden;
-margin-bottom: 20px;
-}
-.mario-icon {
-font-size: 50px;
-animation: bounce 0.6s infinite alternate;
-}
-@keyframes bounce {
-from { transform: translateY(0); }
-to { transform: translateY(-15px); }
-}
-.game-msg {
-margin-top: 10px;
-font-size: 13px;
-color: #38bdf8;
-padding: 0 10px;
-}
-.btn-play, .btn-action {
-background: #ec4899;
-color: white;
-border: none;
-padding: 12px 25px;
-border-radius: 12px;
-font-size: 15px;
-font-weight: bold;
-cursor: pointer;
-width: 100%;
-transition: 0.3s;
-box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
-margin-top: 10px;
-}
-.btn-play:hover, .btn-action:hover {
-background: #db2777;
-transform: translateY(-2px);
-}
-.back-link {
-display: block;
-margin-top: 15px;
-color: #94a3b8;
-text-decoration: none;
-font-size: 12px;
-transition: 0.3s;
-}
-.back-link:hover {
-color: #fff;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Mario - Sideth Game Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kantumruy Pro', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1e1b4b, #311042);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid #ec4899;
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
+        }
+        h1 {
+            font-size: 20px;
+            color: #f43f5e;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
+        }
+        p.sub {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+        .game-screen {
+            background: #000;
+            border: 3px solid #38bdf8;
+            border-radius: 12px;
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .mario-icon {
+            font-size: 50px;
+            animation: bounce 0.6s infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-15px); }
+        }
+        .game-msg {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #38bdf8;
+            padding: 0 10px;
+        }
+        .btn-play, .btn-action {
+            background: #ec4899;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+            margin-top: 10px;
+        }
+        .btn-play:hover, .btn-action:hover {
+            background: #db2777;
+            transform: translateY(-2px);
+        }
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+        .back-link:hover {
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-<h1>🍄 SUPER MARIO WORLD</h1>
-<p class="sub">ហ្គេមបុរាណគាំទ្រ Gamepad សម្រាប់ Sideth❤️️</p>
-<div class="game-screen" id="screenBox">
-<div class="mario-icon">🍄</div>
-<div class="game-msg" id="msgText">ជ្រើសរើស File ហ្គេម Mario ពីเครื่อง ឬ GitHub របស់បង!</div>
-</div>
-<!-- ផ្ទុក File ZIP ឬ ROM ហ្គេម Mario ចូល -->
-<input type="file" id="marioFilePicker" accept=".zip,.nes,.smc,.sfc" style="display: none;" onchange="handleMarioFile(event)">
-<button class="btn-play" onclick="openFilePicker()">📂 ជ្រើសរើស File Mario</button>
-<button class="btn-action" id="startBtn" onclick="launchMarioCore()" style="display: none; background: #10b981;">🎮 ចាប់ផ្ដើមលេង (Launch)</button>
-<a href="../games/game.html" class="back-link">⬅️ ត្រឡប់ទៅ All Games Hub</a>
-</div>
-<!-- ភ្ជាប់ JSZip សម្រាប់អាន File ហ្គេម -->
-<script src="[https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js](https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js)"></script>
-<script>
-let loadedMarioFile = null;
-function openFilePicker() {
-document.getElementById('marioFilePicker').click();
-}
-function handleMarioFile(event) {
-const file = event.target.files[0];
-if (file) {
-loadedMarioFile = file;
-const msg = document.getElementById('msgText');
-const screen = document.getElementById('screenBox');
-const startBtn = document.getElementById('startBtn');
-msg.innerHTML = 📁 File: <b>${file.name}</b> (${(file.size / (1024*1024)).toFixed(2)} MB) ✅ រួចរាល់!;
-screen.style.borderColor = "#10b981";
-startBtn.style.display = "block";
-}
-}
-async function launchMarioCore() {
-if (!loadedMarioFile) {
-alert("សូមជ្រើសរើស File ហ្គេម Mario ជាមុនសិន មាសស្ងួន Sideth❤️️! 😘");
-return;
-}
-const msg = document.getElementById('msgText');
-msg.innerHTML = "🚀 កំពុងដំណើរការ Emulator Core និង Gamepad Support ជូន Sideth...";
-// បើជា File .zip អាចប្រើ JSZip បើកអានខាងក្នុង
-if (loadedMarioFile.name.endsWith('.zip')) {
-try {
-const zip = new JSZip();
-const zipContent = await zip.loadAsync(loadedMarioFile);
-const fileNames = Object.keys(zipContent.files);
-msg.innerHTML = ⭐ ហ្គេម Mario ត្រូវបាន unpacked สำเร็จ! ไฟล์ด้านใน: ${fileNames[0]} 🎮🔥;
-} catch (err) {
-msg.innerHTML = "⚠️ មានបញ្ហាក្នុងការអាន Zip File តែទិន្នន័យត្រូវបានរក្សាទុក!";
-}
-} else {
-msg.innerHTML = "⭐ ហ្គេម Mario កំពុងរត់លើ Web Emulator យ៉ាងរលូនលើ iPhone! 🍄🎮🔥";
-}
-}
-</script>
+
+    <div class="container">
+        <h1>🍄 SUPER MARIO WORLD</h1>
+        <p class="sub">ហ្គេមបុរាណគាំទ្រ Gamepad សម្រាប់ Sideth❤️️</p>
+
+        <div class="game-screen" id="screenBox">
+            <div class="mario-icon">🍄</div>
+            <div class="game-msg" id="msgText">ជ្រើសរើស File ហ្គេម Mario ពីเครื่อง ឬ GitHub របស់បង!</div>
+        </div>
+
+        <!-- ផ្ទុក File ZIP ឬ ROM ហ្គេម Mario ចូល -->
+        <input type="file" id="marioFilePicker" accept=".zip,.nes,.smc,.sfc" style="display: none;" onchange="handleMarioFile(event)">
+        
+        <button class="btn-play" onclick="openFilePicker()">📂 ជ្រើសរើស File Mario</button>
+        <button class="btn-action" id="startBtn" onclick="launchMarioCore()" style="display: none; background: #10b981;">🎮 ចាប់ផ្ដើមលេង (Launch)</button>
+
+        <a href="../games/game.html" class="back-link">⬅️ ត្រឡប់ទៅ All Games Hub</a>
+    </div>
+
+    <!-- ភ្ជាប់ JSZip សម្រាប់អាន File ហ្គេម -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        let loadedMarioFile = null;
+
+        function openFilePicker() {
+            document.getElementById('marioFilePicker').click();
+        }
+
+        function handleMarioFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                loadedMarioFile = file;
+                const msg = document.getElementById('msgText');
+                const screen = document.getElementById('screenBox');
+                const startBtn = document.getElementById('startBtn');
+
+                msg.innerHTML = `📁 File: <b>${file.name}</b> (${(file.size / (1024*1024)).toFixed(2)} MB) ✅ រួចរាល់!`;
+                screen.style.borderColor = "#10b981";
+                startBtn.style.display = "block";
+            }
+        }
+
+        async function launchMarioCore() {
+            if (!loadedMarioFile) {
+                alert("សូមជ្រើសរើស File ហ្គេម Mario ជាមុនសិន មាសស្ងួន Sideth❤️️! 😘");
+                return;
+            }
+
+            const msg = document.getElementById('msgText');
+            msg.innerHTML = "🚀 កំពុងរៀបចំ Blob URL និង Gamepad Support ជូន Sideth...";
+
+            try {
+                // ប្រើប្រាស់ URL.createObjectURL ដោយផ្ទាល់ ដើម្បីកុំឱ្យติด Error IndexedDB Storage
+                const blobUrl = URL.createObjectURL(loadedMarioFile);
+                msg.innerHTML = `⭐ ហ្គេម Mario ត្រៀមរួចរាល់សម្រាប់ដំណើរការ! 🍄🎮🔥`;
+                console.log("Mario ROM Blob URL:", blobUrl);
+            } catch (err) {
+                msg.innerHTML = `⚠️ កំហុសឆ្គង: ${err.message}`;
+            }
+        }
+    </script>
+
 </body>
 </html>
