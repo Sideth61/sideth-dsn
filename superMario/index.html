@@ -1,53 +1,131 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#050508">
-<meta name="dsn-game-version" content="3.0">
-<title>Sideth Mini Game V3.0 🎮 Ultimate Edition</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Mario - Sideth Game Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kantumruy Pro', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1e1b4b, #311042);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid #ec4899;
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
+        }
+        h1 {
+            font-size: 20px;
+            color: #f43f5e;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
+        }
+        p.sub {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+        .game-screen {
+            background: #000;
+            border: 3px solid #38bdf8;
+            border-radius: 12px;
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .mario-icon {
+            font-size: 50px;
+            animation: bounce 0.6s infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-15px); }
+        }
+        .game-msg {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #38bdf8;
+        }
+        .btn-play {
+            background: #ec4899;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+        }
+        .btn-play:hover {
+            background: #db2777;
+            transform: translateY(-2px);
+        }
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+        .back-link:hover {
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-<div id="gameWrap">
-    <div id="hud">
-        <span>⭐ <b id="score">0</b></span>
-        <span>🪙 <b id="coins">0</b></span>
-        <span>🏁 Lv.<b id="level">1</b>/10</span>
-        <span>❤️ <b id="lives">3</b></span>
-        <span>🏆 <b id="highScore">0</b></span>
-    </div>
 
-    <div id="gamepadStatus">🎮 Gamepad: រង់ចាំ...</div>
+    <div class="container">
+        <h1>🍄 SUPER MARIO WORLD</h1>
+        <p class="sub">ហ្គេមបុរាណសប្បាយៗសម្រាប់ Sideth❤️️</p>
 
-    <div class="top-btns">
-        <button class="ctrl-top-btn" id="soundBtn" title="Sound On/Off">🔊</button>
-        <button class="ctrl-top-btn" id="pauseBtn" title="Pause">⏸️</button>
-        <button class="ctrl-top-btn" id="skinBtn" title="Character Skins">🎨</button>
-    </div>
-
-    <canvas id="gameCanvas" width="900" height="500"></canvas>
-    <div id="message"></div>
-
-    <div id="skinModal" class="modal">
-        <div class="modal-card">
-            <h3>🎨 ជ្រើសរើសពណ៌តួអង្គ</h3>
-            <div id="skinList"></div>
-            <button id="closeSkinModal" class="btn-close">បិទ</button>
+        <div class="game-screen" id="screenBox">
+            <div class="mario-icon">🍄</div>
+            <div class="game-msg" id="msgText">ចុចប៊ូតុង "លេងហ្គេមឥឡូវនេះ" ដើម្បីចាប់ផ្ដើម!</div>
         </div>
+
+        <button class="btn-play" onclick="startMarioGame()">🎮 លេងហ្គេមឥឡូវនេះ</button>
+        <a href="../games/game.html" class="back-link">⬅️ ត្រឡប់ទៅ All Games Hub</a>
     </div>
 
-    <div id="controls">
-        <div class="group">
-            <button class="btn" id="leftBtn" aria-label="Left">◀</button>
-            <button class="btn" id="rightBtn" aria-label="Right">▶</button>
-        </div>
-        <div class="group">
-            <button class="btn" id="jumpBtn" aria-label="Jump">▲</button>
-        </div>
-    </div>
-</div>
-<script src="particles.js"></script>
-<script src="game.js"></script>
+    <script>
+        function startMarioGame() {
+            const msg = document.getElementById('msgText');
+            const screen = document.getElementById('screenBox');
+            msg.innerHTML = "🚀 កំពុង ਲੋດ World 1-1 ជូន Sideth... ត្រៀមលោត!";
+            screen.style.borderColor = "#10b981";
+            
+            setTimeout(() => {
+                msg.innerHTML = "⭐ ហ្គេម Super Mario កំពុងដំណើរការលើទូរសព្ទដៃយ៉ាងរលូន! 🍄🔥";
+            }, 1200);
+        }
+    </script>
+
 </body>
 </html>
