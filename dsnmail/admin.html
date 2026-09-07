@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel — DSN Mail</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="app-body">
+  <div class="admin-container">
+    <h2>🛡️ Admin Management Panel</h2>
+    <div class="card">
+      <h3>បង្កើតអ៊ីមែលថ្មី (Create Account)</h3>
+      <form id="createUserForm">
+        <input type="text" id="newUsername" placeholder="Username (เช่น sideth61)">
+        <input type="text" id="newDisplayName" placeholder="Display Name">
+        <input type="password" id="newPassword" placeholder="Password">
+        <button type="submit" class="btn-primary">បង្កើតគណនី @sideth.site</button>
+      </form>
+    </div>
+    <div class="card">
+      <h3>បញ្ជីអ្នកប្រើប្រាស់ (User List)</h3>
+      <div id="userList"></div>
+    </div>
+  </div>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
