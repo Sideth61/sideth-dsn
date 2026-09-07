@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Super Mario NES - Sideth Game Hub</title>
+    <title>Super Mario - Sideth Game Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
@@ -34,7 +34,7 @@
             border: 3px solid #38bdf8;
             border-radius: 12px;
             width: 100%;
-            height: 260px;
+            height: 280px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -63,69 +63,23 @@
 
     <div class="container">
         <h1>🍄 SUPER MARIO NES</h1>
-        <p class="sub">លេងហ្គេម Mario ផ្ទាល់ពី GitHub សម្រាប់ Sideth❤️️</p>
+        <p class="sub">លេងហ្គេម Mario ផ្ទាល់សម្រាប់ Sideth❤️️</p>
 
         <div class="game-screen" id="screenBox">
             <div class="game-msg" id="msgText">ចុចប៊ូតុងខាងក្រោមដើម្បីចាប់ផ្តើមលេង!</div>
         </div>
 
-        <button class="btn-play" onclick="loadMarioGame()">🚀 ចាប់ផ្តើមលេង Mario</button>
+        <button class="btn-play" onclick="launchMarioDirect()">🎮 ចាប់ផ្តើមលេង Mario</button>
         <a href="../../pages/game.html" class="back-link">⬅️ ត្រឡប់ទៅ All Games Hub</a>
     </div>
 
-    <!-- JSZip Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
-        async function loadMarioGame() {
-            const msg = document.getElementById('msgText');
+        function launchMarioDirect() {
             const screen = document.getElementById('screenBox');
+            // ប្រើប្រាស់ EmulatorJS ភ្ជាប់ត្រង់ទៅកាន់ ROM ហ្គេម Mario លើ GitHub របស់បងផ្ទាល់
+            const romUrl = encodeURIComponent('https://raw.githubusercontent.com/Sideth61/sideth-dsn/7bfdd886c681166cb9f5424f94fbb5a68e9e1bd6/superMario/Mario_NES_Gamepad_Supported.zip');
             
-            const githubRawUrl = 'https://raw.githubusercontent.com/Sideth61/sideth-dsn/7bfdd886c681166cb9f5424f94fbb5a68e9e1bd6/superMario/Mario_NES_Gamepad_Supported.zip';
-
-            msg.innerHTML = "⏳ កំពុងទាញយកនិងទម្លាក់ File ហ្គេម...";
-            
-            try {
-                const response = await fetch(githubRawUrl);
-                if (!response.ok) throw new Error("រកមិនឃើញ File លើ GitHub ទេ");
-                
-                const blob = await response.blob();
-                const zip = new JSZip();
-                const zipContent = await zip.loadAsync(blob);
-                
-                // រកមើល File ដែលមានទម្រង់ .nes (ROM ហ្គេម Mario)
-                let romFileKey = null;
-                for (let filename of Object.keys(zipContent.files)) {
-                    if (filename.endsWith('.nes') || filename.toLowerCase().includes('mario')) {
-                        // យក file ដែលមិនមែនជា folder ធំ
-                        if (!zipContent.files[filename].dir && (filename.endsWith('.nes') || filename.endsWith('.bin'))) {
-                            romFileKey = filename;
-                            break;
-                        }
-                    }
-                }
-                
-                // បើរកមិនเจอ .nes ច្បាស់លាស់ យក file ដំបូងដែលមិនមែន dll/txt
-                if (!romFileKey) {
-                    for (let filename of Object.keys(zipContent.files)) {
-                        if (!filename.endsWith('.dll') && !filename.endsWith('/') && !filename.includes('__MACOSX')) {
-                            romFileKey = filename;
-                            break;
-                        }
-                    }
-                }
-
-                if (!romFileKey) throw new Error("រកមិនឃើញ ROM ហ្គេមក្នុង ZIP ទេ!");
-
-                const fileData = await zipContent.files[romFileKey].async("blob");
-                const romUrl = URL.createObjectURL(fileData);
-
-                // បញ្ចូល Emulator Player មកជំនួសកន្លែងបង្ហាញអក្សរ
-                screen.innerHTML = `<iframe src="https://emulatorjs.com/play?system=nes&rom=${encodeURIComponent(romUrl)}" allowfullscreen></iframe>`;
-                
-            } catch (error) {
-                msg.innerHTML = `⚠️ កំហុស: ${error.message}`;
-                screen.style.borderColor = "#f43f5e";
-            }
+            screen.innerHTML = `<iframe src="https://play.emulatorjs.com/nested?system=nes&rom=${romUrl}" allowfullscreen></iframe>`;
         }
     </script>
 
