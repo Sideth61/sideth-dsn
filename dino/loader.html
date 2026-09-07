@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSN Dino ZIP Extractor & Player</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        body { background: #0f172a; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
+        input, button { padding: 10px 20px; font-size: 16px; margin: 10px; border-radius: 8px; border: none; }
+        button { background: #00ff66; color: #0f172a; font-weight: bold; cursor: pointer; }
+        #gameFrame { width: 100%; max-width: 600px; height: 250px; border: 2px solid #38bdf8; border-radius: 12px; margin-top: 20px; background: #000; }
+    </style>
+</head>
+<body>
+    <h1>🦖 DSN Dino ZIP Loader</h1>
+    <p>ជ្រើសរើស File <b>dino.zip</b> របស់សម្លាញ់ដើម្បីបើកលេង៖</p>
+    <input type="file" id="zipFile" accept=".zip"><br>
+    <button onclick="loadZip()">🚀 បើកលេងហ្គេម</button>
+    
+    <br>
+    <iframe id="gameFrame"></iframe>
+
+    <script>
+        async function loadZip() {
+            const fileInput = document.getElementById('zipFile');
+            if (fileInput.files.length === 0) {
+                alert('សម្លាញ់អើយ! សូមជ្រើសរើស File dino.zip សិនណា៎ ❤️️');
+                return;
+            }
+            try {
+                const zip = new JSZip();
+                const content = await zip.loadAsync(fileInput.files[0]);
+                
+                // ค้นหาไฟล์ index.html ภายใน zip
+                let htmlFile = content.file("dino/index.html") || content.file("index.html");
+                if (!htmlFile) {
+                    alert('រកមិនឃើញ File index.html ក្នុង zip ទេមាសស្ងួន!');
+                    return;
+                }
+                
+                const htmlText = await htmlFile.async("text");
+                const blob = new Blob([htmlText], { type: 'text/html' });
+                const blobUrl = URL.createObjectURL(blob);
+                
+                document.getElementById('gameFrame').src = blobUrl;
+            } catch (err) {
+                alert('មានបញ្ហាក្នុងការអាន File: ' + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
+
