@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <title>Compose — DSN Mail</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="app-body">
+  <div class="compose-container">
+    <h2>✨ សរសេរអ៊ីមែលថ្មី (New Message)</h2>
+    <form id="composeForm">
+      <input type="email" id="to" placeholder="To: recipient@sideth.site" required>
+      <input type="text" id="subject" placeholder="Subject" required>
+      <textarea id="body" rows="10" placeholder="Write your message here..."></textarea>
+      <div class="compose-actions">
+        <input type="file" id="attachment">
+        <button type="submit" class="btn-primary">📤 ផ្ញើ (Send)</button>
+        <button type="button" id="saveDraft" class="btn-secondary">📝 រក្សាទុកព្រាង (Draft)</button>
+      </div>
+    </form>
+  </div>
+  <script type="module" src="js/compose.js"></script>
+</body>
+</html>
