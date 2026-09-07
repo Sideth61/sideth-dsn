@@ -6,12 +6,7 @@
     <title>Super Mario - Sideth Game Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Kantumruy Pro', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
         body {
             background: linear-gradient(135deg, #1e1b4b, #311042);
             color: #ffffff;
@@ -32,17 +27,8 @@
             border: 2px solid #ec4899;
             box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
         }
-        h1 {
-            font-size: 20px;
-            color: #f43f5e;
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
-        }
-        p.sub {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-bottom: 20px;
-        }
+        h1 { font-size: 20px; color: #f43f5e; margin-bottom: 5px; text-shadow: 0 0 10px rgba(244, 63, 94, 0.5); }
+        p.sub { font-size: 12px; color: #94a3b8; margin-bottom: 20px; }
         .game-screen {
             background: #000;
             border: 3px solid #38bdf8;
@@ -56,21 +42,10 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
-        .mario-icon {
-            font-size: 50px;
-            animation: bounce 0.6s infinite alternate;
-        }
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-15px); }
-        }
-        .game-msg {
-            margin-top: 10px;
-            font-size: 13px;
-            color: #38bdf8;
-            padding: 0 10px;
-        }
-        .btn-play, .btn-action {
+        .mario-icon { font-size: 50px; animation: bounce 0.6s infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+        .game-msg { margin-top: 10px; font-size: 13px; color: #38bdf8; padding: 0 10px; }
+        .btn-play {
             background: #ec4899;
             color: white;
             border: none;
@@ -84,82 +59,53 @@
             box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
             margin-top: 10px;
         }
-        .btn-play:hover, .btn-action:hover {
-            background: #db2777;
-            transform: translateY(-2px);
-        }
-        .back-link {
-            display: block;
-            margin-top: 15px;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 12px;
-            transition: 0.3s;
-        }
-        .back-link:hover {
-            color: #fff;
-        }
+        .btn-play:hover { background: #db2777; transform: translateY(-2px); }
+        .back-link { display: block; margin-top: 15px; color: #94a3b8; text-decoration: none; font-size: 12px; transition: 0.3s; }
+        .back-link:hover { color: #fff; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>🍄 SUPER MARIO WORLD</h1>
-        <p class="sub">ហ្គេមបុរាណគាំទ្រ Gamepad សម្រាប់ Sideth❤️️</p>
+        <p class="sub">ហ្គេមបុរាណទាញយកពី GitHub សម្រាប់ Sideth❤️️</p>
 
         <div class="game-screen" id="screenBox">
             <div class="mario-icon">🍄</div>
-            <div class="game-msg" id="msgText">ជ្រើសរើស File ហ្គេម Mario ពីเครื่อง ឬ GitHub របស់បង!</div>
+            <div class="game-msg" id="msgText">ត្រៀមខ្លួនទាញយកហ្គេម Mario ពី GitHub ហើយឬยัง?</div>
         </div>
 
-        <!-- ផ្ទុក File ZIP ឬ ROM ហ្គេម Mario ចូល -->
-        <input type="file" id="marioFilePicker" accept=".zip,.nes,.smc,.sfc" style="display: none;" onchange="handleMarioFile(event)">
-        
-        <button class="btn-play" onclick="openFilePicker()">📂 ជ្រើសរើស File Mario</button>
-        <button class="btn-action" id="startBtn" onclick="launchMarioCore()" style="display: none; background: #10b981;">🎮 ចាប់ផ្ដើមលេង (Launch)</button>
-
-        <a href="../games/game.html" class="back-link">⬅️ ត្រឡប់ទៅ All Games Hub</a>
+        <button class="btn-play" onclick="downloadAndPlayMario()">🚀 ទាញយកនិងលេងពី GitHub</button>
+        <a href="../../pages/game.html" class="back-link">⬅️ ត្រឡប់ទៅ All Games Hub</a>
     </div>
 
-    <!-- ភ្ជាប់ JSZip សម្រាប់អាន File ហ្គេម -->
+    <!-- JSZip Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
-        let loadedMarioFile = null;
-
-        function openFilePicker() {
-            document.getElementById('marioFilePicker').click();
-        }
-
-        function handleMarioFile(event) {
-            const file = event.target.files[0];
-            if (file) {
-                loadedMarioFile = file;
-                const msg = document.getElementById('msgText');
-                const screen = document.getElementById('screenBox');
-                const startBtn = document.getElementById('startBtn');
-
-                msg.innerHTML = `📁 File: <b>${file.name}</b> (${(file.size / (1024*1024)).toFixed(2)} MB) ✅ រួចរាល់!`;
-                screen.style.borderColor = "#10b981";
-                startBtn.style.display = "block";
-            }
-        }
-
-        async function launchMarioCore() {
-            if (!loadedMarioFile) {
-                alert("សូមជ្រើសរើស File ហ្គេម Mario ជាមុនសិន មាសស្ងួន Sideth❤️️! 😘");
-                return;
-            }
-
+        async function downloadAndPlayMario() {
             const msg = document.getElementById('msgText');
-            msg.innerHTML = "🚀 កំពុងរៀបចំ Blob URL និង Gamepad Support ជូន Sideth...";
+            const screen = document.getElementById('screenBox');
+            
+            // ផ្លាស់ប្ដូរ URL ខាងក្រោមទៅជា Raw Link របស់ file ក្នុង GitHub របស់បង
+            const githubZipUrl = 'https://raw.githubusercontent.com/ឈ្មោះគណនីបង/ชื่อ Repository/main/superMario/Mario_NES_Gamepad_Supported.zip';
 
+            msg.innerHTML = "⏳ កំពុងទាញយក File ពី GitHub ជូន Sideth...";
+            
             try {
-                // ប្រើប្រាស់ URL.createObjectURL ដោយផ្ទាល់ ដើម្បីកុំឱ្យติด Error IndexedDB Storage
-                const blobUrl = URL.createObjectURL(loadedMarioFile);
-                msg.innerHTML = `⭐ ហ្គេម Mario ត្រៀមរួចរាល់សម្រាប់ដំណើរការ! 🍄🎮🔥`;
-                console.log("Mario ROM Blob URL:", blobUrl);
-            } catch (err) {
-                msg.innerHTML = `⚠️ កំហុសឆ្គង: ${err.message}`;
+                const response = await fetch(githubZipUrl);
+                if (!response.ok) throw new Error("រកមិនឃើញ File លើ GitHub ទេ!");
+                
+                const blob = await response.blob();
+                const zip = new JSZip();
+                const zipContent = await zip.loadAsync(blob);
+                
+                const fileNames = Object.keys(zipContent.files);
+                msg.innerHTML = `⭐ ជោគជ័យ! File ក្នុង GitHub Zip: <b>${fileNames[0]}</b> 🎮🔥`;
+                screen.style.borderColor = "#10b981";
+                
+            } catch (error) {
+                msg.innerHTML = `⚠️ កំហុស: ${error.message}. សូមពិនិត្យ Link GitHub ឡើងវិញ!`;
+                screen.style.borderColor = "#f43f5e";
             }
         }
     </script>
