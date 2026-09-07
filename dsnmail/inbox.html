@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inbox — DSN Mail</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="app-body">
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-brand">📧 DSN Mail</div>
+      <a href="compose.html" class="btn-compose">✏️ Compose</a>
+      <nav class="nav-menu">
+        <a href="inbox.html" class="active">📥 Inbox</a>
+        <a href="inbox.html?box=starred">⭐ Starred</a>
+        <a href="inbox.html?box=sent">📤 Sent</a>
+        <a href="inbox.html?box=drafts">📝 Drafts</a>
+        <a href="inbox.html?box=archive">📦 Archive</a>
+        <a href="inbox.html?box=spam">🚫 Spam</a>
+        <a href="inbox.html?box=trash">🗑️ Trash</a>
+        <a href="contacts.html">👥 Contacts</a>
+        <a href="settings.html">⚙️ Settings</a>
+        <a href="admin.html" id="adminLink" style="display:none;">🛡️ Admin Panel</a>
+      </nav>
+    </aside>
+    <main class="main-content">
+      <header class="top-bar">
+        <input type="text" id="searchMail" placeholder="🔍 Search mail...">
+        <div class="user-profile">
+          <span id="userDisplayName">User</span>
+          <button id="logoutBtn" class="btn-sm">🚪 ចេញ</button>
+        </div>
+      </header>
+      <section class="mail-list-container">
+        <div class="mail-toolbar">
+          <button id="selectAll">selectAll</button>
+          <button id="deleteSelected">🗑️ Delete</button>
+          <button id="markRead">📖 Mark Read</button>
+        </div>
+        <div id="mailList" class="mail-list">
+          <!-- Mail items loaded dynamically -->
+        </div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="js/inbox.js"></script>
+</body>
+</html>
