@@ -3,92 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sideth Open World Game v1.1</title>
+    <title>Sideth Cyber Shooter v1.2</title>
     <style>
-        body { margin: 0; background: #0b0b1a; color: #fff; text-align: center; font-family: sans-serif; overflow: hidden; }
-        #gameCanvas { background: #111128; display: block; margin: 15px auto; border: 2px solid #0ff; border-radius: 12px; box-shadow: 0 0 15px #0ff; }
-        .ui { font-size: 16px; margin: 8px; color: #0ff; font-weight: bold; }
+        body { margin: 0; background: #050510; color: #fff; text-align: center; font-family: sans-serif; overflow: hidden; }
+        #gameCanvas { background: #0b0b1a; display: block; margin: 10px auto; border: 2px solid #ff0055; border-radius: 12px; box-shadow: 0 0 20px #ff0055; }
+        .ui { font-size: 16px; margin: 5px; color: #0ff; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="ui">🚀 Sideth v1.1 | Score: <span id="score">0</span> | Lives: <span id="lives">3</span></div>
+    <div class="ui">🔥 SIDETH SHOOTER v1.2 | Score: <span id="score">0</span> | Lives: <span id="lives">3</span></div>
     <canvas id="gameCanvas" width="360" height="480"></canvas>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         let score = 0;
         let lives = 3;
-        let player = { x: 160, y: 410, size: 30, color: "#0ff" };
-        let target = { x: Math.random() * 300 + 30, y: 30, size: 22, color: "#ff3366", speed: 1.2 };
+        
+        let player = { x: 180, y: 420, size: 25, color: "#0ff" };
         let bullets = [];
+        let enemies = [];
         let stars = [];
 
-        // Create star background
-        for(let i=0; i<30; i++) {
-            stars.push({ x: Math.random()*360, y: Math.random()*480, size: Math.random()*2 });
+        for(let i=0; i<40; i++) {
+            stars.push({ x: Math.random()*360, y: Math.random()*480, size: Math.random()*2, speed: Math.random()*1.5 });
         }
+
+        // Spawn Enemies
+        setInterval(() => {
+            if(enemies.length < 4) {
+                enemies.push({
+                    x: Math.random() * 300 + 30,
+                    y: -20,
+                    size: 20,
+                    speed: Math.random() * 1.5 + 1.2,
+                    color: "#ff0055"
+                });
+            }
+        }, 1200);
 
         window.addEventListener("touchmove", (e) => {
             let rect = canvas.getBoundingClientRect();
             player.x = e.touches[0].clientX - rect.left;
         });
 
+        window.addEventListener("mousemove", (e) => {
+            let rect = canvas.getBoundingClientRect();
+            player.x = e.clientX - rect.left;
+        });
+
         window.addEventListener("click", () => {
-            bullets.push({ x: player.x, y: player.y, radius: 5 });
+            bullets.push({ x: player.x, y: player.y, radius: 4 });
         });
 
         function update() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw Stars
-            ctx.fillStyle = "#fff";
+            ctx.fillStyle = "#ffffff";
             stars.forEach(s => {
                 ctx.fillRect(s.x, s.y, s.size, s.size);
-                s.y += 0.5; if(s.y > 480) s.y = 0;
+                s.y += s.speed; if(s.y > 480) s.y = 0;
             });
 
-            // Draw Player (Spaceship style)
+            // Draw Player Ship
             ctx.fillStyle = player.color;
-            ctx.fillRect(player.x - 15, player.y, player.size, player.size);
-
-            // Draw Moving Target
-            target.y += target.speed;
-            ctx.fillStyle = target.color;
             ctx.beginPath();
-            ctx.arc(target.x, target.y, target.size, 0, Math.PI * 2);
+            ctx.moveTo(player.x, player.y - 10);
+            ctx.lineTo(player.x - 12, player.y + 15);
+            ctx.lineTo(player.x + 12, player.y + 15);
+            ctx.closePath();
             ctx.fill();
 
-            // Check Target out of screen (missed)
-            if(target.y > 480) {
-                lives--;
-                document.getElementById("lives").innerText = lives;
-                target.y = 30;
-                target.x = Math.random() * 300 + 30;
-                if(lives <= 0) {
-                    alert("Game Over, My Love Sideth! Let's try v1.1 again ❤️");
-                    score = 0; lives = 3;
-                    document.getElementById("score").innerText = score;
-                    document.getElementById("lives").innerText = lives;
-                }
-            }
-
             // Draw Bullets
-            ctx.fillStyle = "#ff0";
+            ctx.fillStyle = "#ffff00";
             bullets.forEach((b, index) => {
-                b.y -= 8;
+                b.y -= 9;
                 ctx.beginPath();
                 ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
                 ctx.fill();
+                if(b.y < 0) bullets.splice(index, 1);
+            });
 
-                // Hit detection
-                let dist = Math.hypot(b.x - target.x, b.y - target.y);
-                if (dist < target.size + b.radius) {
-                    score += 10;
-                    target.speed += 0.1; // Increase difficulty
-                    document.getElementById("score").innerText = score;
-                    target.x = Math.random() * 300 + 30;
-                    target.y = 30;
-                    bullets.splice(index, 1);
+            // Draw Enemies
+            enemies.forEach((en, eIndex) => {
+                en.y += en.speed;
+                ctx.fillStyle = en.color;
+                ctx.beginPath();
+                ctx.arc(en.x, en.y, en.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Check collision with player
+                let pDist = Math.hypot(player.x - en.x, player.y - en.y);
+                if(pDist < player.size + en.size - 10) {
+                    lives--;
+                    document.getElementById("lives").innerText = lives;
+                    enemies.splice(eIndex, 1);
+                    if(lives <= 0) {
+                        alert("Game Over, Sideth ❤️ Let's try again!");
+                        score = 0; lives = 3;
+                        document.getElementById("score").innerText = score;
+                        document.getElementById("lives").innerText = lives;
+                    }
+                }
+
+                // Check collision with bullets
+                bullets.forEach((b, bIndex) => {
+                    let hitDist = Math.hypot(b.x - en.x, b.y - en.y);
+                    if(hitDist < en.size + b.radius) {
+                        score += 20;
+                        document.getElementById("score").innerText = score;
+                        enemies.splice(eIndex, 1);
+                        bullets.splice(bIndex, 1);
+                    }
+                });
+
+                // Missed enemy
+                if(en.y > 480) {
+                    enemies.splice(eIndex, 1);
                 }
             });
 
