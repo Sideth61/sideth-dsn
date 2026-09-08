@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sideth Open World Game</title>
+    <style>
+        body { margin: 0; background: #111; color: #fff; text-align: center; font-family: sans-serif; overflow: hidden; }
+        #gameCanvas { background: #222; display: block; margin: 20px auto; border: 2px solid #0ff; border-radius: 10px; }
+        .ui { font-size: 18px; margin: 10px; color: #0ff; }
+    </style>
+</head>
+<body>
+    <div class="ui">🎮 Sideth Game Zone | Score: <span id="score">0</span></div>
+    <canvas id="gameCanvas" width="360" height="480"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        let score = 0;
+        let player = { x: 160, y: 400, size: 30, color: "#0ff" };
+        let target = { x: Math.random() * 320, y: 50, size: 25, color: "#f00" };
+        let bullets = [];
+
+        window.addEventListener("touchmove", (e) => {
+            let rect = canvas.getBoundingClientRect();
+            player.x = e.touches[0].clientX - rect.left;
+        });
+
+        window.addEventListener("click", () => {
+            bullets.push({ x: player.x, y: player.y, radius: 5 });
+        });
+
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Player
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x - 15, player.y, player.size, player.size);
+
+            // Draw Target
+            ctx.fillStyle = target.color;
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.size, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw Bullets
+            ctx.fillStyle = "#ff0";
+            bullets.forEach((b, index) => {
+                b.y -= 7;
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Hit detection
+                let dist = Math.hypot(b.x - target.x, b.y - target.y);
+                if (dist < target.size + b.radius) {
+                    score += 10;
+                    document.getElementById("score").innerText = score;
+                    target.x = Math.random() * 300 + 20;
+                    target.y = Math.random() * 100 + 20;
+                    bullets.splice(index, 1);
+                }
+            });
+
+            requestAnimationFrame(update);
+        }
+        update();
+    </script>
+</body>
+</html>
