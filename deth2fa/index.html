@@ -6,7 +6,7 @@
     <title>2FA Authenticator - Security Tool</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- OTPAuth Library (Handles Base32 and TOTP Perfectly) -->
+    <!-- OTPAuth Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/otpauth/9.1.4/otpauth.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -97,7 +97,7 @@
         <span id="toastMsg">Copied successfully!</span>
     </div>
 
-    <!-- JavaScript Implementation using OTPAuth -->
+    <!-- JavaScript Implementation fixed for OTPAuth v9+ -->
     <script>
         let intervalId = null;
 
@@ -105,24 +105,26 @@
             const rawSecret = document.getElementById('secretInput').value;
             const output = document.getElementById('codeOutput');
 
-            // សម្អាតដកឃ្លា និងប្តូរជាអក្សរធំ
-            const secret = rawSecret.replace(/\s+/g, '').trim().toUpperCase();
+            // សម្អាតចន្លោះ និងសញ្ញាខុសប្លែកពី Base32
+            const cleanSecret = rawSecret.replace(/[\s\-\_\.]+/g, '').trim().toUpperCase();
 
-            if (!secret) {
+            if (!cleanSecret) {
                 showToast("សូមបញ្ចូល 2FA Secret Key!");
                 output.value = "";
                 return;
             }
 
             try {
-                // ប្រើប្រាស់ OTPAuth ក្នុងការបង្កើតលេខកូដ TOTP យ៉ាងត្រឹមត្រូវ
+                // កំណត់ Secret ដោយប្រើ OTPAuth.Secret ផ្ទាល់ដើម្បីការពារ Error ពេលអាន Key វែងៗ
+                let secretObj = OTPAuth.Secret.fromBase32(cleanSecret);
+                
                 let totp = new OTPAuth.TOTP({
-                    issuer: "2FA Tool",
-                    label: "Account",
+                    issuer: "2FA",
+                    label: "User",
                     algorithm: "SHA1",
                     digits: 6,
                     period: 30,
-                    secret: secret 
+                    secret: secretObj
                 });
 
                 let code = totp.generate();
