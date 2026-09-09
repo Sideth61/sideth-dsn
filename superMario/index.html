@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Super Mario - Sideth Hub</title>
+    <title>Super Mario Deluxe - Sideth Hub</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body {
-            background: #111827;
+            background: #090d16;
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -18,24 +18,25 @@
         }
         .wrap {
             width: 100%;
-            max-width: 400px;
-            background: #1f2937;
-            border: 2px solid #ec4899;
+            max-width: 420px;
+            background: #1e293b;
+            border: 2px solid #38bdf8;
             border-radius: 16px;
             padding: 15px;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.3);
         }
-        h1 { font-size: 16px; color: #f43f5e; margin-bottom: 10px; }
+        h1 { font-size: 16px; color: #f43f5e; margin-bottom: 8px; }
+        .score-board { font-size: 13px; color: #38bdf8; margin-bottom: 8px; font-weight: bold; display: flex; justify-content: space-around; }
         canvas {
-            background: #5c94fc;
+            background: linear-gradient(to bottom, #5c94fc, #b8c6ff);
             width: 100%;
-            max-width: 360px;
-            height: 240px;
-            border-radius: 8px;
+            max-width: 390px;
+            height: 250px;
+            border-radius: 10px;
             border: 2px solid #fff;
             display: block;
-            margin: 0 auto 15px auto;
+            margin: 0 auto 12px auto;
         }
         .controls {
             display: grid;
@@ -47,107 +48,140 @@
             background: #3b82f6;
             color: white;
             border: none;
-            padding: 12px;
+            padding: 14px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        button:active { background: #1d4ed8; }
+        button:active { background: #1d4ed8; transform: scale(0.96); }
         .btn-jump { background: #ec4899; grid-column: span 3; }
-        .back { display: block; margin-top: 10px; color: #94a3b8; text-decoration: none; font-size: 12px; }
+        .back { display: block; margin-top: 8px; color: #94a3b8; text-decoration: none; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div class="wrap">
-        <h1>🍄 Super Mario Mini</h1>
+        <h1>🍄 Super Mario Deluxe</h1>
+        <div class="score-board">
+            <span id="scoreText">🪙 Coins: 0</span>
+            <span id="levelText">🌍 World: 1-1</span>
+        </div>
         
-        <canvas id="gameCanvas" width="360" height="240"></canvas>
+        <canvas id="gameCanvas" width="390" height="250"></canvas>
 
         <div class="controls">
-            <button onclick="moveLeft()">⬅️</button>
-            <button onclick="jump()">⬆️ លោត</button>
-            <button onclick="moveRight()">➡️</button>
+            <button onclick="mario.dx = -3">⬅️ ថយក្រោយ</button>
+            <button onclick="marioJump()" class="btn-jump">⬆️ លោត (Jump)</button>
+            <button onclick="mario.dx = 3">➡️ ដើរមុខ</button>
         </div>
 
-        <a href="../../pages/game.html" class="back">⬅️ ត្រឡប់ទៅ All Games Hub</a>
+        <a href="../../" class="back">⬅️ ត្រឡប់ក្រោយ</a>
     </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        let mario = { x: 50, y: 160, width: 20, height: 28, dx: 0, dy: 0, grounded: true };
-        let obstacle = { x: 360, y: 170, width: 20, height: 20, speed: 3 };
+        let mario = { x: 40, y: 170, w: 22, h: 30, dx: 0, dy: 0, grounded: true };
+        let coins = [{x: 180, y: 140, collected: false}, {x: 280, y: 110, collected: false}];
+        let enemy = { x: 350, y: 180, w: 20, h: 20, speed: 1.5 };
         let score = 0;
 
-        function jump() {
+        function marioJump() {
             if (mario.grounded) {
-                mario.dy = -9;
+                mario.dy = -9.5;
                 mario.grounded = false;
             }
         }
 
-        function moveLeft() { mario.x -= 10; if(mario.x < 0) mario.x = 0; }
-        function moveRight() { mario.x += 10; if(mario.x > 340) mario.x = 340; }
-
         function update() {
+            // Mario movement
+            mario.x += mario.dx;
+            if(mario.x < 10) mario.x = 10;
+            if(mario.x > 360) mario.x = 360;
+
             // Gravity
-            mario.dy += 0.5;
+            mario.dy += 0.45;
             mario.y += mario.dy;
 
-            if (mario.y > 160) {
-                mario.y = 160;
+            if (mario.y > 170) {
+                mario.y = 170;
                 mario.dy = 0;
                 mario.grounded = true;
             }
 
-            // Obstacle movement
-            obstacle.x -= obstacle.speed;
-            if (obstacle.x < -20) {
-                obstacle.x = 380;
-                score++;
-                obstacle.speed += 0.2; // លឿនជាងមុនបន្តិចពេលបានពិន្ទុច្រើន
+            // Enemy movement
+            enemy.x -= enemy.speed;
+            if (enemy.x < -20) {
+                enemy.x = 400;
             }
 
-            // Collision detection
-            if (
-                mario.x < obstacle.x + obstacle.width &&
-                mario.x + mario.width > obstacle.x &&
-                mario.y < obstacle.y + obstacle.height &&
-                mario.y + mario.height > obstacle.y
-            ) {
-                // Reset game on collision
+            // Coin collection
+            coins.forEach(c => {
+                if (!c.collected && Math.abs(mario.x - c.x) < 20 && Math.abs(mario.y - c.y) < 20) {
+                    c.collected = true;
+                    score += 100;
+                    document.getElementById('scoreText').innerText = "🪙 Coins: " + score;
+                }
+            });
+
+            // Enemy collision check
+            if (Math.abs(mario.x - enemy.x) < 18 && Math.abs(mario.y - enemy.y) < 18) {
+                // Game reset on hit
                 score = 0;
-                obstacle.x = 360;
-                obstacle.speed = 3;
+                mario.x = 40;
+                enemy.x = 350;
+                coins.forEach(c => c.collected = false);
+                document.getElementById('scoreText').innerText = "🪙 Coins: 0";
             }
         }
 
         function draw() {
-            // Sky background
+            // Background Sky & Clouds
             ctx.fillStyle = "#5c94fc";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Ground
+            // Clouds
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(60, 40, 50, 16);
+            ctx.fillRect(240, 60, 60, 18);
+
+            // Ground (Brick & Grass pattern)
             ctx.fillStyle = "#c84c0c";
-            ctx.fillRect(0, 188, canvas.width, 52);
+            ctx.fillRect(0, 200, canvas.width, 50);
             ctx.fillStyle = "#00a800";
-            ctx.fillRect(0, 188, canvas.width, 8);
+            ctx.fillRect(0, 200, canvas.width, 8);
 
-            // Mario (Red box character)
-            ctx.fillStyle = "#e52521";
-            ctx.fillRect(mario.x, mario.y, mario.width, mario.height);
+            // Draw Coins
+            coins.forEach(c => {
+                if (!c.collected) {
+                    ctx.fillStyle = "#facc15";
+                    ctx.beginPath();
+                    ctx.arc(c.x + 6, c.y + 6, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = "#ca8a04";
+                    ctx.stroke();
+                }
+            });
 
-            // Obstacle (Green Pipe / Enemy)
-            ctx.fillStyle = "#00a800";
-            ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            // Draw Enemy (Goomba style)
+            ctx.fillStyle = "#78350f";
+            ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
+            ctx.fillStyle = "#fef08a";
+            ctx.fillRect(enemy.x + 3, enemy.y + 4, 14, 6);
 
-            // Score text
-            ctx.fillStyle = "#fff";
-            ctx.font = "bold 14px sans-serif";
-            ctx.fillText("Score: " + score, 15, 25);
+            // Draw Mario (Classic Red & Blue outfit)
+            // Hat/Cap
+            ctx.fillStyle = "#dc2626";
+            ctx.fillRect(mario.x + 2, mario.y, 18, 8);
+            // Face/Body
+            ctx.fillStyle = "#fde047";
+            ctx.fillRect(mario.x + 3, mario.y + 8, 16, 10);
+            // Overalls
+            ctx.fillStyle = "#2563eb";
+            ctx.fillRect(mario.x + 2, mario.y + 18, 18, 12);
         }
 
         function loop() {
