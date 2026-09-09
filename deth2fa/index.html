@@ -6,8 +6,8 @@
     <title>2FA Authenticator - Security Tool</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- TOTP Library (jsSHA / base32) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/3.3.1/sha.js" integrity="sha512-H974hU0i1gC6k7o5A+xPZ5fW3kY+kL3Vv5gX0sBvQxJ2rK9L6v9z0Yv6J9Z0K9L6v9z0Yv6J9Z0K9L6v9w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- OTPAuth Library (Handles Base32 and TOTP Perfectly) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/otpauth/9.1.4/otpauth.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
@@ -55,7 +55,7 @@
             <!-- Submit Button -->
             <div class="mb-6">
                 <button onclick="generateOTP()" class="w-full py-3.5 px-6 bg-blue-700 hover:bg-blue-800 active:scale-[0.99] text-white font-semibold rounded-2xl shadow-lg shadow-blue-700/20 transition flex items-center justify-center space-x-2">
-                    <svg class="w-5 h-5 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     <span>Submit</span>
                 </button>
             </div>
@@ -80,7 +80,7 @@
                 </button>
             </div>
 
-            <!-- Footer Note with 2fa.cn link -->
+            <!-- Footer Note -->
             <div class="text-center text-xs text-slate-500 leading-relaxed border-t border-slate-100 pt-6">
                 <p class="mb-4">
                     Use <a href="https://2fa.cn/" target="_blank" class="font-semibold text-blue-600 hover:underline">2fa.cn</a> online two-factor authentication (2FA) tools to enhance account security. For more information on two-factor authentication, visit authoritative resources or search "2fa.cn 2FA tools".
@@ -97,93 +97,46 @@
         <span id="toastMsg">Copied successfully!</span>
     </div>
 
-    <!-- JavaScript Base32 & TOTP Implementation -->
+    <!-- JavaScript Implementation using OTPAuth -->
     <script>
-        function base32tohex(base32) {
-            let base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-            let bits = "";
-            let hex = "";
-
-            base32 = base32.replace(/\s+/g, "").replace(/=+$/, "").toUpperCase();
-
-            for (let i = 0; i < base32.length; i++) {
-                let val = base32chars.indexOf(base32.charAt(i));
-                if (val === -1) continue;
-                bits += leftpad(val.toString(2), 5, '0');
-            }
-
-            for (let i = 0; i + 4 <= bits.length; i += 4) {
-                let chunk = bits.substr(i, 4);
-                hex += parseInt(chunk, 2).toString(16);
-            }
-            return hex;
-        }
-
-        function leftpad(str, len, pad) {
-            while (str.length < len) {
-                str = pad + str;
-            }
-            return str;
-        }
-
-        function hexHMACSHA1(keyHex, messageHex) {
-            try {
-                let shaObj = new jsSHA("SHA-1", "HEX");
-                shaObj.setHMACKey(keyHex, "HEX");
-                shaObj.update(messageHex);
-                return shaObj.getHMAC("HEX");
-            } catch (e) {
-                return null;
-            }
-        }
-
-        function generateTOTP(secret) {
-            try {
-                let cleanSecret = secret.replace(/\s+/g, '').toUpperCase();
-                if (!cleanSecret) return "------";
-
-                let keyHex = base32tohex(cleanSecret);
-                if (!keyHex) return "Error";
-
-                let epoch = Math.round(new Date().getTime() / 1000.0);
-                let time = leftpad(Math.floor(epoch / 30).toString(16), 16, '0');
-
-                let hmacHex = hexHMACSHA1(keyHex, time);
-                if (!hmacHex) return "Error";
-
-                let offset = parseInt(hmacHex.substring(hmacHex.length - 1), 16);
-                let part = hmacHex.substr(offset * 2, 8);
-                let otp = (parseInt(part, 16) & 0x7fffffff) % 1000000;
-
-                return leftpad(otp.toString(), 6, '0');
-            } catch (err) {
-                return "Error";
-            }
-        }
-
         let intervalId = null;
 
         function generateOTP() {
-            const secret = document.getElementById('secretInput').value.trim();
+            const rawSecret = document.getElementById('secretInput').value;
             const output = document.getElementById('codeOutput');
+
+            // សម្អាតដកឃ្លា និងប្តូរជាអក្សរធំ
+            const secret = rawSecret.replace(/\s+/g, '').trim().toUpperCase();
 
             if (!secret) {
                 showToast("សូមបញ្ចូល 2FA Secret Key!");
+                output.value = "";
                 return;
             }
 
-            const code = generateTOTP(secret);
-            output.value = code;
-            
-            if(code === "Error") {
-                showToast("Key មិនត្រឹមត្រូវ សូមពិនិត្យម្ដងទៀត!");
-            } else {
-                showToast("បង្កើតលេខកូដជោគជ័យ!");
-            }
+            try {
+                // ប្រើប្រាស់ OTPAuth ក្នុងការបង្កើតលេខកូដ TOTP យ៉ាងត្រឹមត្រូវ
+                let totp = new OTPAuth.TOTP({
+                    issuer: "2FA Tool",
+                    label: "Account",
+                    algorithm: "SHA1",
+                    digits: 6,
+                    period: 30,
+                    secret: secret 
+                });
 
-            if (intervalId) clearInterval(intervalId);
-            updateTimer();
-            intervalId = setInterval(updateTimer, 1000);
+                let code = totp.generate();
+                output.value = code;
+                showToast("បង្កើតលេខកូដជោគជ័យ!");
+
+                if (intervalId) clearInterval(intervalId);
+                updateTimer();
+                intervalId = setInterval(updateTimer, 1000);
+
+            } catch (err) {
+                output.value = "Error";
+                showToast("Key មិនត្រឹមត្រូវ សូមពិនិត្យម្ដងទៀត!");
+            }
         }
 
         function updateTimer() {
@@ -199,14 +152,14 @@
             if (secondsRemaining === 30) {
                 const secret = document.getElementById('secretInput').value.trim();
                 if (secret) {
-                    document.getElementById('codeOutput').value = generateTOTP(secret);
+                    generateOTP();
                 }
             }
         }
 
         function copyCode() {
             const codeOutput = document.getElementById('codeOutput');
-            if (!codeOutput.value || codeOutput.value === "------" || codeOutput.value === "Error") {
+            if (!codeOutput.value || codeOutput.value === "Error" || codeOutput.value === "") {
                 showToast("គ្មានលេខកូដសម្រាប់ចម្លងទេ!");
                 return;
             }
