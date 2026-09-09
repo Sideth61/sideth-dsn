@@ -3,82 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Super Mario - Sideth Game Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Super Mario NES - Sideth Hub</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body {
-            background: linear-gradient(135deg, #1e1b4b, #311042);
-            color: #ffffff;
+            background: #0f172a;
+            color: #fff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 10px;
+        }
+        .wrap {
+            width: 100%;
+            max-width: 420px;
+            background: #1e293b;
+            border: 2px solid #38bdf8;
+            border-radius: 16px;
             padding: 15px;
-        }
-        .container {
-            width: 100%;
-            max-width: 450px;
             text-align: center;
-            background: rgba(15, 23, 42, 0.85);
-            padding: 20px;
-            border-radius: 20px;
-            border: 2px solid #ec4899;
-            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
-        h1 { font-size: 18px; color: #f43f5e; margin-bottom: 5px; }
-        p.sub { font-size: 11px; color: #94a3b8; margin-bottom: 15px; }
-        .game-screen {
-            background: #000;
-            border: 3px solid #38bdf8;
-            border-radius: 12px;
+        h1 { font-size: 16px; color: #f43f5e; margin-bottom: 10px; }
+        .game-box {
             width: 100%;
-            height: 280px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+            height: 300px;
+            background: #000;
+            border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 15px;
+            border: 1px solid #475569;
+            margin-bottom: 12px;
         }
         iframe { width: 100%; height: 100%; border: none; }
-        .game-msg { font-size: 13px; color: #38bdf8; padding: 0 10px; }
-        .btn-play {
+        .btn {
             background: #ec4899;
-            color: white;
+            color: #fff;
             border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
+            padding: 12px;
+            width: 100%;
+            border-radius: 10px;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
-            width: 100%;
-            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
         }
-        .back-link { display: block; margin-top: 12px; color: #94a3b8; text-decoration: none; font-size: 12px; }
+        .back { display: block; margin-top: 10px; color: #94a3b8; text-decoration: none; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>🍄 SUPER MARIO NES</h1>
-        <p class="sub">លេងហ្គេម Mario ផ្ទាល់សម្រាប់ Sideth❤️️</p>
-
-        <div class="game-screen" id="screenBox">
-            <div class="game-msg" id="msgText">ចុចប៊ូតុងខាងក្រោមដើម្បីចាប់ផ្តើមលេង!</div>
+    <div class="wrap">
+        <h1>🍄 Super Mario NES Emulator</h1>
+        
+        <div class="game-box" id="screen">
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-size: 13px;">
+                ចុចប៊ូតុងខាងក្រោមដើម្បីចាប់ផ្ដើមលេង!
+            </div>
         </div>
 
-        <button class="btn-play" onclick="launchMarioDirect()">🎮 ចាប់ផ្តើមលេង Mario</button>
-        <a href="../../pages/game.html" class="back-link">⬅️ ត្រឡប់ទៅ All Games Hub</a>
+        <button class="btn" onclick="playMario()">🎮 ចាប់ផ្តើមលេង Mario</button>
+        <a href="../../" class="back">⬅️ ត្រឡប់ក្រោយ</a>
     </div>
 
     <script>
-        function launchMarioDirect() {
-            const screen = document.getElementById('screenBox');
-            // ប្រើប្រាស់ EmulatorJS ភ្ជាប់ត្រង់ទៅកាន់ ROM ហ្គេម Mario លើ GitHub របស់បងផ្ទាល់
-            const romUrl = encodeURIComponent('https://raw.githubusercontent.com/Sideth61/sideth-dsn/7bfdd886c681166cb9f5424f94fbb5a68e9e1bd6/superMario/Mario_NES_Gamepad_Supported.zip');
+        function playMario() {
+            const screen = document.getElementById('screen');
+            // Link ទៅកាន់ File ហ្គេម NES ផ្ទាល់នៅលើ GitHub របស់បង
+            const romUrl = encodeURIComponent('https://raw.githubusercontent.com/Sideth61/sideth-dsn/main/superMario/Mario_NES_Gamepad/Mario.nes');
             
+            // ប្រើ EmulatorJS ដើម្បីរត់ហ្គេមលើ iPhone យ៉ាងរលូន
             screen.innerHTML = `<iframe src="https://play.emulatorjs.com/nested?system=nes&rom=${romUrl}" allowfullscreen></iframe>`;
         }
     </script>
