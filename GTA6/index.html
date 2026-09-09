@@ -1,1 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grand Theft Auto VI | PlayStation</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+psBlue: '#00439c',
+psDark: '#090a0f',
+neonPink: '#ff2a85',
+neonPurple: '#9d00ff',
+sunsetOrange: '#ff7b00'
+},
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+}
+}
+}
+}
+</script>
+<!-- FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+.hero-gradient {
+background: linear-gradient(180deg, rgba(9,10,15,0.2) 0%, rgba(9,10,15,0.8) 70%, #090a0f 100%);
+}
+.neon-glow {
+text-shadow: 0 0 10px rgba(255, 42, 133, 0.6), 0 0 20px rgba(255, 42, 133, 0.4);
+}
+.btn-ps {
+background-color: #00439c;
+transition: all 0.3s ease;
+}
+.btn-ps:hover {
+background-color: #003073;
+transform: translateY(-2px);
+box-shadow: 0 10px 20px -10px rgba(0, 67, 156, 0.5);
+}
+.custom-scrollbar::-webkit-scrollbar {
+width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+background: #090a0f;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+background: #27272a;
+border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+background: #3f3f46;
+}
+</style>
+</head>
+<body class="bg-psDark text-white font-sans antialiased custom-scrollbar selection:bg-neonPink selection:text-white">
+<!-- PlayStation Navigation Bar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-psDark/90 backdrop-blur-md border-b border-zinc-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<div class="flex items-center space-x-8">
+<a href="#" class="flex items-center space-x-2 text-white">
+<i class="fa-brands fa-playstation text-3xl text-psBlue"></i>
+<span class="font-bold tracking-widest text-sm uppercase hidden sm:inline">PlayStation</span>
+</a>
+<nav class="hidden md:flex space-x-6 text-sm font-medium text-zinc-300">
+<a href="#overview" class="hover:text-white transition-colors">Overview</a>
+<a href="#features" class="hover:text-white transition-colors">Features</a>
+<a href="#media" class="hover:text-white transition-colors">Media</a>
+<a href="#edition" class="hover:text-white transition-colors">Editions</a>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<a href="#edition" class="btn-ps text-white px-5 py-2 rounded-full text-sm font-semibold tracking-wide">
+Pre-order Now
+</a>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-end justify-center pb-16 pt-24 overflow-hidden">
+<!-- Background Image with Overlay -->
+<div class="absolute inset-0 z-0">
+<img src="watermarked_img_11674785732509812829.png" alt="GTA VI Logo & Background" class="w-full h-full object-cover object-center filter brightness-90 scale-105 animate-pulse duration-1000">
+<div class="absolute inset-0 hero-gradient"></div>
+</div>
+<div class="relative z-10 max-w-5xl mx-auto px-4 text-center space-y-6">
+<div class="inline-flex items-center space-x-2 bg-zinc-900/80 border border-zinc-700/50 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider text-neonPink">
+<span class="w-2 h-2 rounded-full bg-neonPink animate-ping"></span>
+<span>Coming to PlayStation 5</span>
+</div>
+<h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white uppercase drop-shadow-2xl">
+Grand Theft <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonPink via-purple-400 to-sunsetOrange">Auto VI</span>
+</h1>
+<p class="max-w-2xl mx-auto text-base md:text-lg text-zinc-300 font-light">
+Head to the state of Leonida, home to the neon-soaked streets of Vice City and beyond in the biggest, most immersive evolution of the Grand Theft Auto series yet.
+</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+<a href="#edition" class="w-full sm:w-auto btn-ps text-white px-8 py-4 rounded-full font-bold text-base tracking-wider uppercase shadow-lg flex items-center justify-center space-x-2">
+<i class="fa-solid fa-cart-shopping"></i>
+<span>Pre-order on PS5</span>
+</a>
+<a href="#media" class="w-full sm:w-auto bg-zinc-800/80 hover:bg-zinc-700 text-white border border-zinc-700 px-8 py-4 rounded-full font-bold text-base tracking-wider uppercase transition-all backdrop-blur-md flex items-center justify-center space-x-2">
+<i class="fa-solid fa-play text-neonPink"></i>
+<span>Watch Trailer</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Overview Section -->
+<section id="overview" class="py-24 bg-psDark relative border-t border-zinc-900">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div class="space-y-6">
+<h2 class="text-xs uppercase tracking-widest text-psBlue font-bold">Welcome to Leonida</h2>
+<h3 class="text-3xl md:text-5xl font-black tracking-tight uppercase">
+Experience the Next Era of Open-World Gaming
+</h3>
+<p class="text-zinc-400 leading-relaxed">
+Grand Theft Auto VI heads to the state of Leonida, home to the neon-drenched streets of Vice City and beyond in the largest, most immersive evolution of the Grand Theft Auto series yet. Powered by the full performance capabilities of the PlayStation 5, experience hyper-realistic graphics, lightning-fast loading speeds, and DualSense haptic feedback.
+</p>
+<div class="grid grid-cols-2 gap-6 pt-4">
+<div class="border-l-2 border-neonPink pl-4">
+<h4 class="text-2xl font-bold text-white">PS5 Enhanced</h4>
+<p class="text-sm text-zinc-400">Ray tracing & 4K visuals</p>
+</div>
+<div class="border-l-2 border-psBlue pl-4">
+<h4 class="text-2xl font-bold text-white">DualSense™</h4>
+<p class="text-sm text-zinc-400">Immersive adaptive triggers</p>
+</div>
+</div>
+</div>
+<div class="relative rounded-2xl overflow-hidden shadow-2xl border border-zinc-800 group">
+<img src="watermarked_img_11674785732509812829.png" alt="Vice City Skyline" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+<div class="absolute inset-0 bg-gradient-to-t from-psDark via-transparent to-transparent opacity-80"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section id="features" class="py-24 bg-zinc-950">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+<h2 class="text-xs uppercase tracking-widest text-neonPink font-bold">Game Features</h2>
+<h3 class="text-3xl md:text-4xl font-black tracking-tight uppercase">Built for PlayStation 5</h3>
+<p class="text-zinc-400">Discover how GTA VI utilizes next-generation hardware to deliver ultimate immersion.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Feature 1 -->
+<div class="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-8 hover:border-zinc-700 transition-colors space-y-4">
+<div class="w-12 h-12 rounded-xl bg-psBlue/20 text-psBlue flex items-center justify-center text-xl font-bold">
+<i class="fa-solid fa-bolt"></i>
+</div>
+<h4 class="text-xl font-bold uppercase">Lightning Fast</h4>
+<p class="text-zinc-400 text-sm leading-relaxed">
+Jump back into action instantly with ultra-high speed SSD loading times across the sprawling landscape of Leonida.
+</p>
+</div>
+<!-- Feature 2 -->
+<div class="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-8 hover:border-zinc-700 transition-colors space-y-4">
+<div class="w-12 h-12 rounded-xl bg-neonPink/20 text-neonPink flex items-center justify-center text-xl font-bold">
+<i class="fa-solid fa-gamepad"></i>
+</div>
+<h4 class="text-xl font-bold uppercase">DualSense Support</h4>
+<p class="text-zinc-400 text-sm leading-relaxed">
+Feel every engine roar, weapon kick, and weather phenomenon through bespoke haptic feedback and dynamic triggers.
+</p>
+</div>
+<!-- Feature 3 -->
+<div class="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-8 hover:border-zinc-700 transition-colors space-y-4">
+<div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl font-bold">
+<i class="fa-solid fa-vr-cardboard"></i>
+</div>
+<h4 class="text-xl font-bold uppercase">Tempest 3D Audio</h4>
+<p class="text-zinc-400 text-sm leading-relaxed">
+Immerse yourself in the vibrant sounds of Vice City streets, from distant sirens to echoing gunfire with 3D spatial audio.
+</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Editions Section / Pre-order -->
+<section id="edition" class="py-24 bg-psDark border-t border-zinc-900">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+<h2 class="text-xs uppercase tracking-widest text-psBlue font-bold">Select Edition</h2>
+<h3 class="text-3xl md:text-4xl font-black tracking-tight uppercase">Choose Your Version</h3>
+<p class="text-zinc-400">Pre-order now on PlayStation Store to receive exclusive digital content.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+<!-- Standard Edition -->
+<div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between space-y-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 bg-zinc-800 text-zinc-300 px-4 py-1 rounded-bl-xl text-xs font-bold uppercase">PS5 Digital / Disc</div>
+<div class="space-y-4">
+<h4 class="text-2xl font-black uppercase">Standard Edition</h4>
+<p class="text-zinc-400 text-sm">Includes the full Grand Theft Auto VI game for PlayStation 5.</p>
+<ul class="space-y-2 text-sm text-zinc-300 pt-4 border-t border-zinc-800">
+<li><i class="fa-solid fa-check text-psBlue mr-2"></i> Base Game for PS5</li>
+<li><i class="fa-solid fa-check text-psBlue mr-2"></i> Pre-order Bonus: Story Mode Pack</li>
+</ul>
+</div>
+<div class="space-y-4">
+<div class="text-3xl font-black">$69.99</div>
+<button onclick="alert('Redirecting to PlayStation Store checkout...')" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3.5 rounded-xl uppercase tracking-wider transition-colors">
+Pre-order Standard
+</button>
+</div>
+</div>
+<!-- Collector / Ultimate Edition -->
+<div class="bg-gradient-to-b from-zinc-900 to-zinc-950 border-2 border-neonPink/50 rounded-3xl p-8 flex flex-col justify-between space-y-8 relative overflow-hidden shadow-xl shadow-neonPink/10">
+<div class="absolute top-0 right-0 bg-neonPink text-white px-4 py-1 rounded-bl-xl text-xs font-bold uppercase">Most Popular</div>
+<div class="space-y-4">
+<h4 class="text-2xl font-black uppercase text-transparent bg-clip-text bg-gradient-to-r from-neonPink to-purple-400">Ultimate Edition</h4>
+<p class="text-zinc-400 text-sm">The definitive Vice City experience with comprehensive in-game bonuses.</p>
+<ul class="space-y-2 text-sm text-zinc-300 pt-4 border-t border-zinc-800">
+<li><i class="fa-solid fa-check text-neonPink mr-2"></i> Full PS5 Game</li>
+<li><i class="fa-solid fa-check text-neonPink mr-2"></i> Vice City Outfit & Weapon Pack</li>
+<li><i class="fa-solid fa-check text-neonPink mr-2"></i> GTA Online Bonus Cash & Vehicles</li>
+<li><i class="fa-solid fa-check text-neonPink mr-2"></i> 3 Days Early Access</li>
+</ul>
+</div>
+<div class="space-y-4">
+<div class="text-3xl font-black">$99.99</div>
+<button onclick="alert('Redirecting to PlayStation Store checkout...')" class="w-full btn-ps text-white font-bold py-3.5 rounded-xl uppercase tracking-wider shadow-lg">
+Pre-order Ultimate
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-zinc-950 border-t border-zinc-900 py-12 text-zinc-500 text-xs">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+<div class="flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center space-x-2 text-white">
+<i class="fa-brands fa-playstation text-2xl text-psBlue"></i>
+<span class="font-bold tracking-widest uppercase">Sony Interactive Entertainment</span>
+</div>
+<div class="flex space-x-6 text-zinc-400">
+<a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+<a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+<a href="#" class="hover:text-white transition-colors">Support</a>
+</div>
+</div>
+<p class="text-center md:text-left leading-relaxed">
+© 2026 Rockstar Games, Inc. Grand Theft Auto, GTA, and Vice City are marks of Take-Two Interactive. "PlayStation", "PS5", and "DualSense" are registered trademarks of Sony Interactive Entertainment Inc. All rights reserved.
+</p>
+</div>
+</footer>
+</body>
+</html>
 
