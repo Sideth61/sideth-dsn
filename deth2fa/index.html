@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2FA Authenticator - Security Tool</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- TOTP Library (jsOTP / base32) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/3.3.1/sha.js" integrity="sha512-H974hU0i1gC6k7o5A+xPZ5fW3kY+kL3Vv5gX0sBvQxJ2rK9L6v9z0Yv6J9Z0K9L6v9z0Yv6J9Z0K9L6v9w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+
+    <!-- Top Header -->
+    <header class="w-full py-4 px-6 flex justify-between items-center bg-white border-b border-slate-100 shadow-sm">
+        <button onclick="toggleMenu()" class="p-2 text-slate-600 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+        <div class="flex items-center space-x-2">
+            <button onclick="toggleSettings()" class="p-2 text-slate-600 hover:text-slate-900 rounded-xl bg-slate-50 hover:bg-slate-100 transition border border-slate-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            </button>
+            <button onclick="toggleLanguage()" class="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl border border-slate-200 transition flex items-center space-x-1">
+                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+                <span id="langText">中文版</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-md w-full mx-auto px-4 py-8 flex-grow flex flex-col justify-center">
+        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-100 relative">
+            
+            <!-- Progress / Countdown Timer Bar -->
+            <div class="w-full bg-slate-100 h-1.5 rounded-full mb-6 overflow-hidden">
+                <div id="progressBar" class="bg-blue-600 h-full w-full transition-all duration-1000 linear"></div>
+            </div>
+
+            <!-- 2FA Secret Input Group -->
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-slate-800 mb-2 flex items-center space-x-1.5">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                    <span>* 2FA Secret</span>
+                </label>
+                <textarea id="secretInput" rows="3" placeholder="BK5V TVQ7 D2RB..."
+                    class="w-full p-4 rounded-2xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-slate-700 font-mono text-sm uppercase resize-none transition outline-none bg-slate-50/50"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mb-6">
+                <button onclick="generateOTP()" class="w-full py-3.5 px-6 bg-blue-700 hover:bg-blue-800 active:scale-[0.99] text-white font-semibold rounded-2xl shadow-lg shadow-blue-700/20 transition flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    <span>Submit</span>
+                </button>
+            </div>
+
+            <!-- 2FA Code Output Group -->
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-slate-800 mb-2 flex items-center space-x-1.5">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    <span>* 2FA Code</span>
+                </label>
+                <div class="relative">
+                    <input type="text" id="codeOutput" readonly placeholder="ABC | 2FA Code"
+                        class="w-full p-4 rounded-2xl border border-slate-200 bg-slate-50 text-slate-700 font-mono text-xl font-bold tracking-widest text-center outline-none select-all">
+                </div>
+            </div>
+
+            <!-- Copy Button -->
+            <div class="mb-8">
+                <button onclick="copyCode()" class="w-full py-3.5 px-6 bg-blue-700 hover:bg-blue-800 active:scale-[0.99] text-white font-semibold rounded-2xl shadow-lg shadow-blue-700/20 transition flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                    <span id="copyBtnText">Copy</span>
+                </button>
+            </div>
+
+            <!-- Footer Note -->
+            <div class="text-center text-xs text-slate-500 leading-relaxed border-t border-slate-100 pt-6">
+                <p class="mb-4">
+                    Use <span class="font-semibold text-slate-700">2fa.cn</span> online two-factor authentication (2FA) tools to enhance account security. For more information on two-factor authentication, visit authoritative resources or search "2fa.cn 2FA tools".
+                </p>
+                <p class="font-medium text-slate-400">2FA Copyright &copy; 2026 All rights reserved</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-50 text-sm font-medium flex items-center space-x-2">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="toastMsg">Copied successfully!</span>
+    </div>
+
+    <!-- JavaScript Base32 & TOTP Implementation -->
+    <script>
+        // Base32 Decoder
+        function base32tohex(base32) {
+            let base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+            let bits = "";
+            let hex = "";
+
+            base32 = base32.replace(/=+$/, "").toUpperCase();
+
+            for (let i = 0; i < base32.length; i++) {
+                let val = base32chars.indexOf(base32.charAt(i));
+                if (val === -1) continue;
+                bits += leftpad(val.toString(2), 5, '0');
+            }
+
+            for (let i = 0; i + 4 <= bits.length; i += 4) {
+                let chunk = bits.substr(i, 4);
+                hex += parseInt(chunk, 2).toString(16);
+            }
+            return hex;
+        }
+
+        function leftpad(str, len, pad) {
+            while (str.length < len) {
+                str = pad + str;
+            }
+            return str;
+        }
+
+        // HMAC-SHA1 Calculation using jsSHA
+        function hexHMACSHA1(keyHex, messageHex) {
+            try {
+                let shaObj = new jsSHA("SHA-1", "HEX");
+                shaObj.setHMACKey(keyHex, "HEX");
+                shaObj.update(messageHex);
+                return shaObj.getHMAC("HEX");
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function generateTOTP(secret) {
+            try {
+                let cleanSecret = secret.replace(/\s+/g, '').toUpperCase();
+                if (!cleanSecret) return "------";
+
+                let keyHex = base32tohex(cleanSecret);
+                let epoch = Math.round(new Date().getTime() / 1000.0);
+                let time = leftpad(Math.floor(epoch / 30).toString(16), 16, '0');
+
+                let hmacHex = hexHMACSHA1(keyHex, time);
+                if (!hmacHex) return "Error";
+
+                let offset = parseInt(hmacHex.substring(hmacHex.length - 1), 16);
+                let part = hmacHex.substr(offset * 2, 8);
+                let otp = (parseInt(part, 16) & 0x7fffffff) % 1000000;
+
+                return leftpad(otp.toString(), 6, '0');
+            } catch (err) {
+                return "------";
+            }
+        }
+
+        let intervalId = null;
+
+        function generateOTP() {
+            const secret = document.getElementById('secretInput').value.trim();
+            const output = document.getElementById('codeOutput');
+
+            if (!secret) {
+                showToast("Please enter 2FA secret key!");
+                return;
+            }
+
+            const code = generateTOTP(secret);
+            output.value = code;
+            showToast("Code generated successfully!");
+
+            // Start live countdown & ticker timer
+            if (intervalId) clearInterval(intervalId);
+            updateTimer();
+            intervalId = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const epoch = Math.floor(new Date().getTime() / 1000.0);
+            const secondsRemaining = 30 - (epoch % 30);
+            const percentage = (secondsRemaining / 30) * 100;
+
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+                progressBar.style.width = percentage + '%';
+            }
+
+            // Auto update code every 30 seconds if secret is present
+            if (secondsRemaining === 30) {
+                const secret = document.getElementById('secretInput').value.trim();
+                if (secret) {
+                    document.getElementById('codeOutput').value = generateTOTP(secret);
+                }
+            }
+        }
+
+        function copyCode() {
+            const codeOutput = document.getElementById('codeOutput');
+            if (!codeOutput.value || codeOutput.value === "------") {
+                showToast("No code to copy!");
+                return;
+            }
+
+            codeOutput.select();
+            document.execCommand('copy');
+            
+            showToast("Copied to clipboard!");
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2000);
+        }
+
+        function toggleMenu() {
+            showToast("Menu clicked");
+        }
+
+        function toggleSettings() {
+            showToast("Settings opened");
+        }
+
+        let currentLang = 'km';
+        function toggleLanguage() {
+            const langText = document.getElementById('langText');
+            if (currentLang === 'km') {
+                currentLang = 'zh';
+                langText.innerText = 'English';
+                showToast("Switched to Chinese UI mode");
+            } else if (currentLang === 'zh') {
+                currentLang = 'en';
+                langText.innerText = 'ភាសាខ្មែរ';
+                showToast("Switched to English UI mode");
+            } else {
+                currentLang = 'km';
+                langText.innerText = '中文版';
+                showToast("Switched to Khmer UI mode");
+            }
+        }
+
+        // Auto trigger generation on load if example present or input typed
+        window.onload = function() {
+            const input = document.getElementById('secretInput');
+            input.value = "BK5VTVQ7D2RB";
+            generateOTP();
+        };
+    </script>
+</body>
+</html>
