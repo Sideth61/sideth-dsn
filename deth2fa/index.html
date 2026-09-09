@@ -6,7 +6,7 @@
     <title>2FA Authenticator - Security Tool</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- TOTP Library (jsOTP / base32) -->
+    <!-- TOTP Library (jsSHA / base32) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/3.3.1/sha.js" integrity="sha512-H974hU0i1gC6k7o5A+xPZ5fW3kY+kL3Vv5gX0sBvQxJ2rK9L6v9z0Yv6J9Z0K9L6v9z0Yv6J9Z0K9L6v9w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -99,13 +99,13 @@
 
     <!-- JavaScript Base32 & TOTP Implementation -->
     <script>
-        // Base32 Decoder
         function base32tohex(base32) {
             let base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
             let bits = "";
             let hex = "";
 
-            base32 = base32.replace(/=+$/, "").toUpperCase();
+            // សម្អាតដកឃ្លា និងតួអក្សរពិសេសចេញពី Secret Key
+            base32 = base32.replace(/\s+/g, "").replace(/=+$/, "").toUpperCase();
 
             for (let i = 0; i < base32.length; i++) {
                 let val = base32chars.indexOf(base32.charAt(i));
@@ -127,7 +127,6 @@
             return str;
         }
 
-        // HMAC-SHA1 Calculation using jsSHA
         function hexHMACSHA1(keyHex, messageHex) {
             try {
                 let shaObj = new jsSHA("SHA-1", "HEX");
@@ -145,6 +144,8 @@
                 if (!cleanSecret) return "------";
 
                 let keyHex = base32tohex(cleanSecret);
+                if (!keyHex) return "Error";
+
                 let epoch = Math.round(new Date().getTime() / 1000.0);
                 let time = leftpad(Math.floor(epoch / 30).toString(16), 16, '0');
 
@@ -157,7 +158,7 @@
 
                 return leftpad(otp.toString(), 6, '0');
             } catch (err) {
-                return "------";
+                return "Error";
             }
         }
 
@@ -168,15 +169,19 @@
             const output = document.getElementById('codeOutput');
 
             if (!secret) {
-                showToast("Please enter 2FA secret key!");
+                showToast("សូមបញ្ចូល 2FA Secret Key!");
                 return;
             }
 
             const code = generateTOTP(secret);
             output.value = code;
-            showToast("Code generated successfully!");
+            
+            if(code === "Error") {
+                showToast("Key មិនត្រឹមត្រូវ សូមពិនិត្យម្ដងទៀត!");
+            } else {
+                showToast("បង្កើតលេខកូដជោគជ័យ!");
+            }
 
-            // Start live countdown & ticker timer
             if (intervalId) clearInterval(intervalId);
             updateTimer();
             intervalId = setInterval(updateTimer, 1000);
@@ -192,7 +197,6 @@
                 progressBar.style.width = percentage + '%';
             }
 
-            // Auto update code every 30 seconds if secret is present
             if (secondsRemaining === 30) {
                 const secret = document.getElementById('secretInput').value.trim();
                 if (secret) {
@@ -203,15 +207,14 @@
 
         function copyCode() {
             const codeOutput = document.getElementById('codeOutput');
-            if (!codeOutput.value || codeOutput.value === "------") {
-                showToast("No code to copy!");
+            if (!codeOutput.value || codeOutput.value === "------" || codeOutput.value === "Error") {
+                showToast("គ្មានលេខកូដសម្រាប់ចម្លងទេ!");
                 return;
             }
 
             codeOutput.select();
             document.execCommand('copy');
-            
-            showToast("Copied to clipboard!");
+            showToast("បានចម្លងរួចរាល់!");
         }
 
         function showToast(message) {
@@ -227,11 +230,11 @@
         }
 
         function toggleMenu() {
-            showToast("Menu clicked");
+            showToast("មុខងារ Menu");
         }
 
         function toggleSettings() {
-            showToast("Settings opened");
+            showToast("ការកំណត់ត្រូវបានបើក");
         }
 
         let currentLang = 'km';
@@ -240,24 +243,17 @@
             if (currentLang === 'km') {
                 currentLang = 'zh';
                 langText.innerText = 'English';
-                showToast("Switched to Chinese UI mode");
+                showToast("ប្តូរទៅភាសាចិន");
             } else if (currentLang === 'zh') {
                 currentLang = 'en';
                 langText.innerText = 'ភាសាខ្មែរ';
-                showToast("Switched to English UI mode");
+                showToast("ប្តូរទៅភាសាអង់គ្លេស");
             } else {
                 currentLang = 'km';
                 langText.innerText = '中文版';
-                showToast("Switched to Khmer UI mode");
+                showToast("ប្តូរទៅភាសាខ្មែរ");
             }
         }
-
-        // Auto trigger generation on load if example present or input typed
-        window.onload = function() {
-            const input = document.getElementById('secretInput');
-            input.value = "BK5VTVQ7D2RB";
-            generateOTP();
-        };
     </script>
 </body>
 </html>
