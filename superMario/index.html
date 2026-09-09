@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Super Mario NES - Sideth Hub</title>
+    <title>Super Mario - Sideth Hub</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body {
-            background: #0f172a;
+            background: #111827;
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -18,63 +18,145 @@
         }
         .wrap {
             width: 100%;
-            max-width: 420px;
-            background: #1e293b;
-            border: 2px solid #38bdf8;
+            max-width: 400px;
+            background: #1f2937;
+            border: 2px solid #ec4899;
             border-radius: 16px;
             padding: 15px;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
         }
         h1 { font-size: 16px; color: #f43f5e; margin-bottom: 10px; }
-        .game-box {
+        canvas {
+            background: #5c94fc;
             width: 100%;
-            height: 300px;
-            background: #000;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid #475569;
-            margin-bottom: 12px;
+            max-width: 360px;
+            height: 240px;
+            border-radius: 8px;
+            border: 2px solid #fff;
+            display: block;
+            margin: 0 auto 15px auto;
         }
-        iframe { width: 100%; height: 100%; border: none; }
-        .btn {
-            background: #ec4899;
-            color: #fff;
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
             border: none;
             padding: 12px;
-            width: 100%;
-            border-radius: 10px;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
+            border-radius: 8px;
             cursor: pointer;
         }
+        button:active { background: #1d4ed8; }
+        .btn-jump { background: #ec4899; grid-column: span 3; }
         .back { display: block; margin-top: 10px; color: #94a3b8; text-decoration: none; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div class="wrap">
-        <h1>🍄 Super Mario NES Emulator</h1>
+        <h1>🍄 Super Mario Mini</h1>
         
-        <div class="game-box" id="screen">
-            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #94a3b8; font-size: 13px;">
-                ចុចប៊ូតុងខាងក្រោមដើម្បីចាប់ផ្ដើមលេង!
-            </div>
+        <canvas id="gameCanvas" width="360" height="240"></canvas>
+
+        <div class="controls">
+            <button onclick="moveLeft()">⬅️</button>
+            <button onclick="jump()">⬆️ លោត</button>
+            <button onclick="moveRight()">➡️</button>
         </div>
 
-        <button class="btn" onclick="playMario()">🎮 ចាប់ផ្តើមលេង Mario</button>
-        <a href="../../" class="back">⬅️ ត្រឡប់ក្រោយ</a>
+        <a href="../../pages/game.html" class="back">⬅️ ត្រឡប់ទៅ All Games Hub</a>
     </div>
 
     <script>
-        function playMario() {
-            const screen = document.getElementById('screen');
-            // Link ទៅកាន់ File ហ្គេម NES ផ្ទាល់នៅលើ GitHub របស់បង
-            const romUrl = encodeURIComponent('https://raw.githubusercontent.com/Sideth61/sideth-dsn/main/superMario/Mario_NES_Gamepad/Mario.nes');
-            
-            // ប្រើ EmulatorJS ដើម្បីរត់ហ្គេមលើ iPhone យ៉ាងរលូន
-            screen.innerHTML = `<iframe src="https://play.emulatorjs.com/nested?system=nes&rom=${romUrl}" allowfullscreen></iframe>`;
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let mario = { x: 50, y: 160, width: 20, height: 28, dx: 0, dy: 0, grounded: true };
+        let obstacle = { x: 360, y: 170, width: 20, height: 20, speed: 3 };
+        let score = 0;
+
+        function jump() {
+            if (mario.grounded) {
+                mario.dy = -9;
+                mario.grounded = false;
+            }
         }
+
+        function moveLeft() { mario.x -= 10; if(mario.x < 0) mario.x = 0; }
+        function moveRight() { mario.x += 10; if(mario.x > 340) mario.x = 340; }
+
+        function update() {
+            // Gravity
+            mario.dy += 0.5;
+            mario.y += mario.dy;
+
+            if (mario.y > 160) {
+                mario.y = 160;
+                mario.dy = 0;
+                mario.grounded = true;
+            }
+
+            // Obstacle movement
+            obstacle.x -= obstacle.speed;
+            if (obstacle.x < -20) {
+                obstacle.x = 380;
+                score++;
+                obstacle.speed += 0.2; // លឿនជាងមុនបន្តិចពេលបានពិន្ទុច្រើន
+            }
+
+            // Collision detection
+            if (
+                mario.x < obstacle.x + obstacle.width &&
+                mario.x + mario.width > obstacle.x &&
+                mario.y < obstacle.y + obstacle.height &&
+                mario.y + mario.height > obstacle.y
+            ) {
+                // Reset game on collision
+                score = 0;
+                obstacle.x = 360;
+                obstacle.speed = 3;
+            }
+        }
+
+        function draw() {
+            // Sky background
+            ctx.fillStyle = "#5c94fc";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Ground
+            ctx.fillStyle = "#c84c0c";
+            ctx.fillRect(0, 188, canvas.width, 52);
+            ctx.fillStyle = "#00a800";
+            ctx.fillRect(0, 188, canvas.width, 8);
+
+            // Mario (Red box character)
+            ctx.fillStyle = "#e52521";
+            ctx.fillRect(mario.x, mario.y, mario.width, mario.height);
+
+            // Obstacle (Green Pipe / Enemy)
+            ctx.fillStyle = "#00a800";
+            ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+
+            // Score text
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 14px sans-serif";
+            ctx.fillText("Score: " + score, 15, 25);
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
     </script>
 
 </body>
