@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RemoveSong - វេទិកាដកសំលេងច្រៀង និងទុករក្សាភ្លេងសុទ្ធ</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&display=swap');
+body {
+font-family: 'Kantumruy Pro', sans-serif;
+}
+</style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 text-white min-h-screen flex flex-col justify-between">
+<!-- Header Section -->
+<header class="w-full py-6 px-8 flex justify-between items-center border-b border-white/10 backdrop-blur-md">
+<div class="flex items-center space-x-3">
+<div class="bg-gradient-to-r from-pink-500 to-violet-500 p-2.5 rounded-xl shadow-lg">
+<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+</svg>
+</div>
+<h1 class="text-2xl font-bold bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent">RemoveSong</h1>
+</div>
+<span class="text-xs px-3 py-1 bg-white/10 rounded-full text-purple-200 border border-white/10">AI Audio Extractor</span>
+</header>
+<!-- Main Content -->
+<main class="max-w-2xl mx-auto px-6 py-12 text-center flex-grow flex flex-col justify-center">
+<div class="bg-white/5 backdrop-blur-xl border border-white/10 p-8 sm:p-10 rounded-3xl shadow-2xl relative overflow-hidden">
+<!-- Decorative Glow -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-pink-500/20 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-24 -left-24 w-48 h-48 bg-violet-500/20 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<h2 class="text-3xl sm:text-4xl font-bold mb-4 tracking-tight">ដកសំលេងមនុស្សចេញ ទុកតែភ្លេងសុទ្ធ</h2>
+<p class="text-gray-300 text-sm sm:text-base mb-8 leading-relaxed">
+ប្រសិនបើកម្មវិធីកាត់តរបស់អ្នកមិនមានមុខងារដកសំលេងច្រៀងទេ អ្នកអាចប្រើប្រាស់ប្រព័ន្ធ AI ដ៏មានឥទ្ធិពលដើម្បីបំបែកសំលេង និងភ្លេងចេញពីគ្នាបានយ៉ាងងាយស្រួល និងរហ័សបំផុត។
+</p>
+<!-- Action Button -->
+<a href="https://vocalremover.org" target="_blank" rel="noopener noreferrer" 
+class="inline-flex items-center justify-center space-x-3 w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-pink-500 to-violet-600 hover:from-pink-600 hover:to-violet-700 text-white font-semibold rounded-2xl shadow-lg shadow-pink-500/25 transition-all duration-300 transform hover:-translate-y-0.5">
+<span>ចូលទៅកាន់វេបសាយ VocalRemover</span>
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+</svg>
+</a>
+<!-- Quick Guide -->
+<div class="mt-10 text-left bg-black/30 p-5 rounded-2xl border border-white/5">
+<h3 class="text-sm font-semibold text-pink-400 mb-3 uppercase tracking-wider">របៀបប្រើប្រាស់៖</h3>
+<ol class="text-xs sm:text-sm text-gray-300 space-y-2 list-decimal list-inside">
+<li>ចុចលើប៊ូតុងខាងលើដើម្បីបើកវេបសាយដកសំលេង។</li>
+<li>អូសទម្លាក់ ឬជ្រើសរើសឯកសារអូឌីយ៉ូ/វីដេអូរបស់អ្នក។</li>
+<li>រង់ចាំបន្តិចឱ្យ AI បំបែកសំលេងច្រៀង និងភ្លេងដាច់ពីគ្នា។</li>
+<li>ទាញយក (Download) យកតែផ្នែកភ្លេងសុទ្ធ (Instrumental) មកប្រើប្រាស់ជាការស្រេច!</li>
+</ol>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full text-center py-6 text-xs text-gray-400 border-t border-white/5">
+<p>© 2026 RemoveSong. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+</footer>
+</body>
+</html>
