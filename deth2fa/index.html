@@ -80,10 +80,10 @@
                 </button>
             </div>
 
-            <!-- Footer Note -->
+            <!-- Footer Note with 2fa.cn link -->
             <div class="text-center text-xs text-slate-500 leading-relaxed border-t border-slate-100 pt-6">
                 <p class="mb-4">
-                    Use <span class="font-semibold text-slate-700">2fa.cn</span> online two-factor authentication (2FA) tools to enhance account security. For more information on two-factor authentication, visit authoritative resources or search "2fa.cn 2FA tools".
+                    Use <a href="https://2fa.cn/" target="_blank" class="font-semibold text-blue-600 hover:underline">2fa.cn</a> online two-factor authentication (2FA) tools to enhance account security. For more information on two-factor authentication, visit authoritative resources or search "2fa.cn 2FA tools".
                 </p>
                 <p class="font-medium text-slate-400">2FA Copyright &copy; 2026 All rights reserved</p>
             </div>
@@ -104,7 +104,6 @@
             let bits = "";
             let hex = "";
 
-            // សម្អាតដកឃ្លា និងតួអក្សរពិសេសចេញពី Secret Key
             base32 = base32.replace(/\s+/g, "").replace(/=+$/, "").toUpperCase();
 
             for (let i = 0; i < base32.length; i++) {
