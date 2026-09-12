@@ -228,10 +228,13 @@ p{
     <p id="pspDescription">
       លេងហ្គេម PSP ផ្ទាល់ពីក្នុងទូរស័ព្ទ អត់មានរឿង Error ទៀតទេ 🚀
     </p>
-    <button id="localPspBtn" class="btn" type="button" style="background:linear-gradient(135deg,var(--pink-start),var(--pink-end));">
-      <span class="btn-label">📂 បើកហ្គេម PSP ផ្ទាល់ពីទូរស័ព្ទ (ISO, CSO, ZIP)</span>
-    </button>
-    <input id="localPspInput" type="file" accept=".iso,.cso,.zip" hidden>
+    <div class="btn-group">
+      <button id="localPspBtn" class="btn" type="button" style="background:linear-gradient(135deg,var(--pink-start),var(--pink-end)); margin-top:0;">
+        <span class="btn-label">📂 ជ្រើសរើស Folder PSP</span>
+      </button>
+      <a href="https://t.me/dethdsn" target="_blank" class="btn" style="background: rgba(219,39,119,0.3); margin-top:0;">📥 ទាញយកហ្គេម Telegram</a>
+    </div>
+    <input id="localPspInput" type="file" accept=".iso,.cso,.zip" webkitdirectory directory multiple hidden>
     <p id="pspStatus" class="status" role="status" aria-live="polite"></p>
   </section>
 
@@ -290,7 +293,20 @@ function init() {
   ["ps2", "psp"].forEach(sys => {
     const cfg = CONFIG.systems[sys];
     $(cfg.button)?.addEventListener("click", () => $(cfg.input)?.click());
-    $(cfg.input)?.addEventListener("change", e => handleLocalFile(e.target.files[0], sys));
+    $(cfg.input)?.addEventListener("change", e => {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+      
+      let targetFile = files[0];
+      for (let i = 0; i < files.length; i++) {
+        const ext = files[i].name.split('.').pop().toLowerCase();
+        if (['iso', 'cso', 'zip', 'chd', 'bin'].includes(ext)) {
+          targetFile = files[i];
+          break;
+        }
+      }
+      handleLocalFile(targetFile, sys);
+    });
   });
 }
 document.addEventListener("DOMContentLoaded", init);
