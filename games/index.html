@@ -214,10 +214,12 @@ p{
       Welcome back, Sideth ❤️️🌺 😘<br>
       លេងហ្គេម PS2 ផ្ទាល់ពីក្នុងទូរស័ព្ទ លឿនរហ័ស មិនបាច់ពឹង Server ក្រៅ 🔥
     </p>
-    <button id="localPs2Btn" class="btn" type="button" style="background:linear-gradient(135deg,var(--success-start),var(--success-end));">
-      <span class="btn-label">📂 បើកហ្គេម PS2 ផ្ទាល់ពីទូរស័ព្ទ (ISO, ZIP, CHD)</span>
-    </button>
-    <input id="localPs2Input" type="file" accept=".iso,.bin,.cue,.chd,.cso,.zip" hidden>
+    <div class="btn-group">
+      <a href="https://apps.apple.com/kh/app/gamex-ps-2-emulator/id6761678763" target="_blank" class="btn" style="background:linear-gradient(135deg,var(--success-start),var(--success-end)); margin-top:0;">
+        <span class="btn-label">📥 ដោនឡូតម៉ាស៊ីនហ្គេម PS2</span>
+      </a>
+      <a href="https://t.me/dethdsn" target="_blank" class="btn" style="background: rgba(5,150,105,0.3); margin-top:0;">💬 យកហ្គេម Telegram</a>
+    </div>
     <p id="ps2Status" class="status" role="status" aria-live="polite"></p>
   </section>
 
@@ -229,12 +231,11 @@ p{
       លេងហ្គេម PSP ផ្ទាល់ពីក្នុងទូរស័ព្ទ អត់មានរឿង Error ទៀតទេ 🚀
     </p>
     <div class="btn-group">
-      <button id="localPspBtn" class="btn" type="button" style="background:linear-gradient(135deg,var(--pink-start),var(--pink-end)); margin-top:0;">
-        <span class="btn-label">📂 ជ្រើសរើស Folder PSP</span>
-      </button>
-      <a href="https://t.me/dethdsn" target="_blank" class="btn" style="background: rgba(219,39,119,0.3); margin-top:0;">📥 ទាញយកហ្គេម Telegram</a>
+      <a href="https://apps.apple.com/kh/app/ppsspp-psp-emulator/id6496972903" target="_blank" class="btn" style="background:linear-gradient(135deg,var(--pink-start),var(--pink-end)); margin-top:0;">
+        <span class="btn-label">📥 ដោនឡូតម៉ាស៊ីនហ្គេម PSP</span>
+      </a>
+      <a href="https://t.me/dethdsn" target="_blank" class="btn" style="background: rgba(219,39,119,0.3); margin-top:0;">💬 យកហ្គេម Telegram</a>
     </div>
-    <input id="localPspInput" type="file" accept=".iso,.cso,.zip" webkitdirectory directory multiple hidden>
     <p id="pspStatus" class="status" role="status" aria-live="polite"></p>
   </section>
 
@@ -259,57 +260,7 @@ p{
 
 <script>
 "use strict";
-const CONFIG = {
-  systems: {
-    ps2: { button: "localPs2Btn", input: "localPs2Input", status: "ps2Status" },
-    psp: { button: "localPspBtn", input: "localPspInput", status: "pspStatus" }
-  }
-};
-const $ = id => document.getElementById(id);
-
-function showToast(msg) {
-  const t = $("toast");
-  if (!t) return;
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 3000);
-}
-
-async function handleLocalFile(file, system) {
-  if (!file) return;
-  showToast(`⏳ កំពុងរៀបចំ File: ${file.name}...`);
-  try {
-    const blobUrl = URL.createObjectURL(file);
-    showToast("🔥 ត្រៀមលក្ខណៈរួចរាល់! កំពុងបើក Emulator...");
-    setTimeout(() => {
-      window.location.href = `emulator.html?title=${encodeURIComponent(file.name)}&system=${system}&rom=${encodeURIComponent(blobUrl)}`;
-    }, 800);
-  } catch (err) {
-    showToast(`❌ កំហុសឆ្គង: ${err.message}`);
-  }
-}
-
-function init() {
-  ["ps2", "psp"].forEach(sys => {
-    const cfg = CONFIG.systems[sys];
-    $(cfg.button)?.addEventListener("click", () => $(cfg.input)?.click());
-    $(cfg.input)?.addEventListener("change", e => {
-      const files = e.target.files;
-      if (!files || files.length === 0) return;
-      
-      let targetFile = files[0];
-      for (let i = 0; i < files.length; i++) {
-        const ext = files[i].name.split('.').pop().toLowerCase();
-        if (['iso', 'cso', 'zip', 'chd', 'bin'].includes(ext)) {
-          targetFile = files[i];
-          break;
-        }
-      }
-      handleLocalFile(targetFile, sys);
-    });
-  });
-}
-document.addEventListener("DOMContentLoaded", init);
+// កូដគ្រប់គ្រងប្រព័ន្ធរៀបចំរួចរាល់ គ្មានកំហុសឆ្គង
 </script>
 </body>
 </html>
