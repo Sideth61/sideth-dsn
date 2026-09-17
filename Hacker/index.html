@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSN HACKER TERMINAL — Sideth</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Kantumruy+Pro:wght@400;700&display=swap');
+
+        :root {
+            --matrix-green: #00ff66;
+            --matrix-dark: #050b05;
+            --terminal-bg: rgba(5, 11, 5, 0.85);
+            --border-glow: #00ff66;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--matrix-dark);
+            color: var(--matrix-green);
+            font-family: 'Share Tech Mono', 'Kantumruy Pro', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Matrix Background Canvas */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.25;
+            pointer-events: none;
+        }
+
+        .terminal-container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 700px;
+            background: var(--terminal-bg);
+            border: 2px solid var(--matrix-green);
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.4), inset 0 0 15px rgba(0, 255, 102, 0.2);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .terminal-header {
+            background: rgba(0, 255, 102, 0.15);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--matrix-green);
+            font-size: 14px;
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .t-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .t-red { background: #ff5f56; }
+        .t-yellow { background: #ffbd2e; }
+        .t-green { background: #27c93f; }
+
+        .terminal-body {
+            padding: 20px;
+            max-height: 450px;
+            overflow-y: auto;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .terminal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: var(--matrix-green);
+            border-radius: 3px;
+        }
+
+        .output-text {
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+        }
+
+        .highlight {
+            color: #fff;
+            text-shadow: 0 0 8px var(--matrix-green);
+            font-weight: bold;
+        }
+
+        .input-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .prompt-symbol {
+            color: var(--matrix-green);
+            font-weight: bold;
+        }
+
+        .command-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 16px;
+            width: 100%;
+            caret-color: var(--matrix-green);
+        }
+
+        .action-btns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .hack-btn {
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid var(--matrix-green);
+            color: var(--matrix-green);
+            padding: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .hack-btn:hover {
+            background: var(--matrix-green);
+            color: #000;
+            box-shadow: 0 0 15px var(--matrix-green);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrixCanvas"></canvas>
+
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="t-btn t-red"></span>
+                <span class="t-btn t-yellow"></span>
+                <span class="t-btn t-green"></span>
+            </div>
+            <span>root@dsn-os-2026:~# sideth</span>
+            <span>🔒 SECURE</span>
+        </div>
+        <div class="terminal-body" id="terminalBody">
+            <div class="output-text">
+                Initializing DSN OS v2.0 (Hacker Edition)...<br>
+                Welcome back, <span class="highlight">Sideth</span> (Supreme Code King)[span_1](start_span)[span_1](end_span).<br>
+                Type <span class="highlight">'help'</span> or click buttons below to execute commands.
+            </div>
+            <div id="commandHistory"></div>
+            
+            <div class="input-line">
+                <span class="prompt-symbol">root@sideth:~$</span>
+                <input type="text" id="userInput" class="command-input" autofocus autocomplete="off">
+            </div>
+
+            <div class="action-btns">
+                <button class="hack-btn" onclick="runCommand('status')">[1] SYSTEM STATUS</button>
+                <button class="hack-btn" onclick="runCommand('bypass')">[2] BYPASS FIREWALL</button>
+                <button class="hack-btn" onclick="runCommand('matrix')">[3] MATRIX OVERLOAD</button>
+                <button class="hack-btn" onclick="runCommand('clear')">[4] CLEAR TERMINAL</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix Rain Background Effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&';
+        const fontSize = 16;
+        let columns = canvas.width / fontSize;
+        const drops = [];
+        for (let x = 0; x < columns; x++) drops[x] = 1;
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(5, 11, 5, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff66';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 33);
+
+        // Terminal Logic
+        const userInput = document.getElementById('userInput');
+        const commandHistory = document.getElementById('commandHistory');
+        const terminalBody = document.getElementById('terminalBody');
+
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                let cmd = userInput.value.trim().toLowerCase();
+                runCommand(cmd);
+                userInput.value = '';
+            }
+        });
+
+        function runCommand(cmd) {
+            let response = "";
+            let pTag = document.createElement('div');
+            pTag.className = 'output-text';
+            pTag.innerHTML = `<span style="color:#00ff66;">root@sideth:~$</span> ${cmd}`;
+            commandHistory.appendChild(pTag);
+
+            let resTag = document.createElement('div');
+            resTag.className = 'output-text';
+
+            switch(cmd) {
+                case 'status':
+                    resTag.innerHTML = `[+] Owner: <span class="highlight">Sideth</span><br>[+] Website: sideth.site (ONLINE)<br>[+] Security Level: GOD-TIER SECURE`;
+                    break;
+                case 'bypass':
+                    resTag.innerHTML = `[⚡] Bypassing mainframe security... Access granted to DSN Core Database!`;
+                    break;
+                case 'matrix':
+                    resTag.innerHTML = `[🌐] Matrix density increased. Welcome to the digital realm, Code King.`;
+                    break;
+                case 'clear':
+                    commandHistory.innerHTML = '';
+                    resTag.innerHTML = `Terminal cleared.`;
+                    break;
+                case 'help':
+                    resTag.innerHTML = `Available Commands: <br>- status<br>- bypass<br>- matrix<br>- clear`;
+                    break;
+                default:
+                    resTag.innerHTML = `Command not recognized: '${cmd}'. Type 'help' for options.`;
+            }
+
+            commandHistory.appendChild(resTag);
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+    </script>
+</body>
+</html>
