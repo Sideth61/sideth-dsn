@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSN HACKER TERMINAL — Sideth</title>
+    <title>DSN HACKER TERMINAL & AUDIO — Sideth</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Kantumruy+Pro:wght@400;700&display=swap');
 
         :root {
             --matrix-green: #00ff66;
             --matrix-dark: #050b05;
-            --terminal-bg: rgba(5, 11, 5, 0.85);
-            --border-glow: #00ff66;
+            --terminal-bg: rgba(5, 11, 5, 0.9);
         }
 
         * {
@@ -32,7 +31,6 @@
             position: relative;
         }
 
-        /* Matrix Background Canvas */
         canvas {
             position: fixed;
             top: 0;
@@ -177,9 +175,9 @@
         </div>
         <div class="terminal-body" id="terminalBody">
             <div class="output-text">
-                Initializing DSN OS v2.0 (Hacker Edition)...<br>
+                Initializing DSN OS v2026 (Hacker Edition)...<br>
                 Welcome back, <span class="highlight">Sideth</span> (Supreme Code King)[span_1](start_span)[span_1](end_span).<br>
-                Type <span class="highlight">'help'</span> or click buttons below to execute commands.
+                Type <span class="highlight">'help'</span> or use buttons below to execute commands.
             </div>
             <div id="commandHistory"></div>
             
@@ -192,7 +190,8 @@
                 <button class="hack-btn" onclick="runCommand('status')">[1] SYSTEM STATUS</button>
                 <button class="hack-btn" onclick="runCommand('bypass')">[2] BYPASS FIREWALL</button>
                 <button class="hack-btn" onclick="runCommand('matrix')">[3] MATRIX OVERLOAD</button>
-                <button class="hack-btn" onclick="runCommand('clear')">[4] CLEAR TERMINAL</button>
+                <button class="hack-btn" onclick="runCommand('audio')">[4] HACKER AUDIO</button>
+                <button class="hack-btn" onclick="runCommand('clear')" style="grid-column: span 2;">[5] CLEAR TERMINAL</button>
             </div>
         </div>
     </div>
@@ -230,6 +229,35 @@
         }
         setInterval(drawMatrix, 33);
 
+        // Hacker Sound Generator
+        function playHackerSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                setTimeout(() => { playTone(audioCtx, 1200, 0.08); }, 0);
+                setTimeout(() => { playTone(audioCtx, 800, 0.08); }, 100);
+                setTimeout(() => { playTone(audioCtx, 2400, 0.25); }, 250);
+            } catch(e) {
+                console.log("Audio not supported");
+            }
+        }
+
+        function playTone(ctx, freq, duration) {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            
+            osc.type = 'sawtooth';
+            osc.frequency.value = freq;
+            
+            gain.gain.setValueAtTime(0.15, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            osc.start();
+            osc.stop(ctx.currentTime + duration);
+        }
+
         // Terminal Logic
         const userInput = document.getElementById('userInput');
         const commandHistory = document.getElementById('commandHistory');
@@ -244,7 +272,7 @@
         });
 
         function runCommand(cmd) {
-            let response = "";
+            playHackerSound();
             let pTag = document.createElement('div');
             pTag.className = 'output-text';
             pTag.innerHTML = `<span style="color:#00ff66;">root@sideth:~$</span> ${cmd}`;
@@ -255,7 +283,7 @@
 
             switch(cmd) {
                 case 'status':
-                    resTag.innerHTML = `[+] Owner: <span class="highlight">Sideth</span><br>[+] Website: sideth.site (ONLINE)<br>[+] Security Level: GOD-TIER SECURE`;
+                    resTag.innerHTML = `[+] Owner: <span class="highlight">Sideth</span><br>[+] Website: sideth.site (ONLINE)[span_2](start_span)[span_2](end_span)<br>[+] Security Level: GOD-TIER SECURE`;
                     break;
                 case 'bypass':
                     resTag.innerHTML = `[⚡] Bypassing mainframe security... Access granted to DSN Core Database!`;
@@ -263,12 +291,15 @@
                 case 'matrix':
                     resTag.innerHTML = `[🌐] Matrix density increased. Welcome to the digital realm, Code King.`;
                     break;
+                case 'audio':
+                    resTag.innerHTML = `[🔊] Hacker audio sound effect played successfully!`;
+                    break;
                 case 'clear':
                     commandHistory.innerHTML = '';
                     resTag.innerHTML = `Terminal cleared.`;
                     break;
                 case 'help':
-                    resTag.innerHTML = `Available Commands: <br>- status<br>- bypass<br>- matrix<br>- clear`;
+                    resTag.innerHTML = `Available Commands: <br>- status<br>- bypass<br>- matrix<br>- audio<br>- clear`;
                     break;
                 default:
                     resTag.innerHTML = `Command not recognized: '${cmd}'. Type 'help' for options.`;
