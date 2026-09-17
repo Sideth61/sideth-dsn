@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSN EARTHQUAKE DESTRUCTION — Sideth</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Kantumruy+Pro:wght@400;700&display=swap');
+
+        :root {
+            --red-alert: #ff0033;
+            --orange-fire: #ff6600;
+            --dark-bg: #0a0102;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--red-alert);
+            font-family: 'Share Tech Mono', 'Kantumruy Pro', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .quake-container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 650px;
+            background: rgba(10, 1, 2, 0.9);
+            border: 3px solid var(--red-alert);
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(255, 0, 51, 0.6), inset 0 0 20px rgba(255, 102, 0, 0.4);
+            padding: 30px;
+            text-align: center;
+            animation: none;
+        }
+
+        .shaking {
+            animation: earthquake 0.15s infinite ease-in-out;
+        }
+
+        @keyframes earthquake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            20% { transform: translate(-8px, 6px) rotate(-1deg); }
+            40% { transform: translate(8px, -6px) rotate(1deg); }
+            60% { transform: translate(-6px, -4px) rotate(0deg); }
+            80% { transform: translate(6px, 4px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        h1 {
+            font-size: 26px;
+            color: var(--orange-fire);
+            text-shadow: 0 0 15px var(--red-alert);
+            margin-bottom: 15px;
+        }
+
+        .alert-box {
+            font-size: 15px;
+            color: #fff;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .btn-destruct {
+            background: linear-gradient(135deg, #990000, #ff0033);
+            color: #fff;
+            border: 2px solid var(--orange-fire);
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: 'Share Tech Mono', monospace;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 51, 0.8);
+            transition: 0.2s;
+        }
+
+        .btn-destruct:hover {
+            background: var(--orange-fire);
+            color: #000;
+            box-shadow: 0 0 35px var(--orange-fire);
+            transform: scale(1.05);
+        }
+
+        .explosion-flash {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.1s ease-in-out;
+        }
+
+        .flash-active {
+            opacity: 0.9;
+        }
+
+        .log-output {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #00ff66;
+            min-height: 50px;
+            text-align: left;
+            border-left: 2px solid #00ff66;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="explosion-flash" id="flashScreen"></div>
+
+    <div class="quake-container" id="mainContainer">
+        <h1>⚠️ DSN DESTRUCTION SYSTEM ⚠️</h1>
+        <div class="alert-box">
+            ម្ចាស់ប្រព័ន្ធ: <span style="color:#ffd700;">Sideth</span> (Supreme Code King)[span_0](start_span)[span_0](end_span)<br>
+            ស្ថានភាព:ត្រៀមខ្លួនបំផ្ទុះកម្ទេចសត្រូវ និងបង្ករំជួយផែនដីកម្រិតទី ១០។
+        </div>
+        <button class="btn-destruct" onclick="triggerApocalypse()">[ 💥 ផ្ដើមរំជួយ & បំផ្ទុះសត្រូវ ]</button>
+        <div class="log-output" id="logOutput">System Status: IDLE. Waiting for command...</div>
+    </div>
+
+    <script>
+        function playExplosionSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Earthquake Rumble (Low Frequency Oscillator)
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(80, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(10, ctx.currentTime + 2.5);
+
+                gain.gain.setValueAtTime(0.5, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.5);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 2.5);
+            } catch(e) {
+                console.log("Audio error");
+            }
+        }
+
+        function triggerApocalypse() {
+            const container = document.getElementById('mainContainer');
+            const flash = document.getElementById('flashScreen');
+            const log = document.getElementById('logOutput');
+
+            // 1. Trigger Earthquake Shaking
+            container.classList.add('shaking');
+            playExplosionSound();
+
+            log.innerHTML = "[!] កំពុងបង្កភាពរំជួយផែនដីកម្រិត 10.0 រ៉ិចទ័រ...<br>";
+
+            // 2. Flash Explosion after 1 second
+            setTimeout(() => {
+                flash.classList.add('flash-active');
+                log.innerHTML += "[💥] ផ្ទុះកម្ទេចកាកសំណល់សត្រូវទាំងស្រុង!<br>";
+            }, 1200);
+
+            // 3. Reset after explosion
+            setTimeout(() => {
+                flash.classList.remove('flash-active');
+            }, 1400);
+
+            // 4. Stop shaking after 3 seconds
+            setTimeout(() => {
+                container.classList.remove('shaking');
+                log.innerHTML += "[✔] បេសកកម្មជោគជ័យ។ សត្រូវត្រូវបានបំផ្លាញខ្ទេចខ្ទីរ!";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
