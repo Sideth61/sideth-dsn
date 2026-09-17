@@ -84,7 +84,7 @@
 
         .terminal-body {
             padding: 20px;
-            max-height: 450px;
+            max-height: 480px;
             overflow-y: auto;
             font-size: 15px;
             line-height: 1.6;
@@ -108,6 +108,38 @@
             color: #fff;
             text-shadow: 0 0 8px var(--matrix-green);
             font-weight: bold;
+        }
+
+        /* Progress Bar Styles */
+        .progress-container {
+            width: 100%;
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid var(--matrix-green);
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+            height: 22px;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--matrix-green);
+            box-shadow: 0 0 10px var(--matrix-green);
+            transition: width 0.1s linear;
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            color: #000;
+            mix-blend-mode: difference;
         }
 
         .input-line {
@@ -258,7 +290,7 @@
             osc.stop(ctx.currentTime + duration);
         }
 
-        // Terminal Logic
+        // Terminal Logic & Progress Bar Handler
         const userInput = document.getElementById('userInput');
         const commandHistory = document.getElementById('commandHistory');
         const terminalBody = document.getElementById('terminalBody');
@@ -281,32 +313,63 @@
             let resTag = document.createElement('div');
             resTag.className = 'output-text';
 
-            switch(cmd) {
-                case 'status':
-                    resTag.innerHTML = `[+] Owner: <span class="highlight">Sideth</span><br>[+] Website: sideth.site (ONLINE)[span_2](start_span)[span_2](end_span)<br>[+] Security Level: GOD-TIER SECURE`;
-                    break;
-                case 'bypass':
-                    resTag.innerHTML = `[⚡] Bypassing mainframe security... Access granted to DSN Core Database!`;
-                    break;
-                case 'matrix':
-                    resTag.innerHTML = `[🌐] Matrix density increased. Welcome to the digital realm, Code King.`;
-                    break;
-                case 'audio':
-                    resTag.innerHTML = `[🔊] Hacker audio sound effect played successfully!`;
-                    break;
-                case 'clear':
-                    commandHistory.innerHTML = '';
-                    resTag.innerHTML = `Terminal cleared.`;
-                    break;
-                case 'help':
-                    resTag.innerHTML = `Available Commands: <br>- status<br>- bypass<br>- matrix<br>- audio<br>- clear`;
-                    break;
-                default:
-                    resTag.innerHTML = `Command not recognized: '${cmd}'. Type 'help' for options.`;
-            }
+            if (cmd === 'status') {
+                resTag.innerHTML = `[+] Owner: <span class="highlight">Sideth</span><br>[+] Website: sideth.site (ONLINE)[span_2](start_span)[span_2](end_span)<br>[+] Security Level: GOD-TIER SECURE`;
+                commandHistory.appendChild(resTag);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            } else if (cmd === 'bypass') {
+                resTag.innerHTML = `[⚡] Bypassing mainframe security...`;
+                commandHistory.appendChild(resTag);
+                
+                // Add Progress Bar
+                let pbWrapper = document.createElement('div');
+                pbWrapper.innerHTML = `
+                    <div class="progress-container">
+                        <div class="progress-bar" id="pBar"></div>
+                        <div class="progress-text" id="pText">0%</div>
+                    </div>
+                `;
+                commandHistory.appendChild(pbWrapper);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
 
-            commandHistory.appendChild(resTag);
-            terminalBody.scrollTop = terminalBody.scrollHeight;
+                let progress = 0;
+                let bar = pbWrapper.querySelector('#pBar');
+                let text = pbWrapper.querySelector('#pText');
+                
+                let interval = setInterval(() => {
+                    progress += 2;
+                    if (progress <= 100) {
+                        bar.style.width = progress + '%';
+                        text.innerText = progress + '%';
+                    } else {
+                        clearInterval(interval);
+                        let successTag = document.createElement('div');
+                        successTag.className = 'output-text';
+                        successTag.innerHTML = `<span class="highlight">[✔] Access granted to DSN Core Database successfully!</span>`;
+                        commandHistory.appendChild(successTag);
+                        terminalBody.scrollTop = terminalBody.scrollHeight;
+                    }
+                }, 30);
+
+            } else if (cmd === 'matrix') {
+                resTag.innerHTML = `[🌐] Matrix density increased. Welcome to the digital realm, Code King.`;
+                commandHistory.appendChild(resTag);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            } else if (cmd === 'audio') {
+                resTag.innerHTML = `[🔊] Hacker audio sound effect played successfully!`;
+                commandHistory.appendChild(resTag);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            } else if (cmd === 'clear') {
+                commandHistory.innerHTML = '';
+            } else if (cmd === 'help') {
+                resTag.innerHTML = `Available Commands: <br>- status<br>- bypass (Loads Progress Bar)<br>- matrix<br>- audio<br>- clear`;
+                commandHistory.appendChild(resTag);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            } else {
+                resTag.innerHTML = `Command not recognized: '${cmd}'. Type 'help' for options.`;
+                commandHistory.appendChild(resTag);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            }
         }
     </script>
 </body>
