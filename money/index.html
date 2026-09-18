@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sideth OS | Money Making Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dsn: {
+                            bg: '#0a0f1d',
+                            card: 'rgba(20, 27, 45, 0.7)',
+                            border: 'rgba(255, 255, 255, 0.1)',
+                            accent: '#3b82f6',
+                            accentGlow: 'rgba(59, 130, 246, 0.5)',
+                            success: '#10b981',
+                            warning: '#f59e0b',
+                            purple: '#8b5cf6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #0a0f1d 60%, #05070c 100%);
+            color: #f3f4f6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        /* Glassmorphism Effect */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0f1d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-500 selection:text-white">
+
+    <header class="sticky top-0 z-50 glass-panel border-b border-white/10 px-4 lg:px-8 py-3.5 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <i class="fa-solid fa-terminal text-white text-lg"></i>
+            </div>
+            <div>
+                <div class="flex items-center space-x-2">
+                    <h1 class="font-bold text-lg tracking-wide bg-gradient-to-r from-white via-blue-200 to-blue-400 bg-clip-text text-transparent">Sideth OS</h1>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-medium">v2.6 Pro</span>
+                </div>
+                <p class="text-xs text-gray-400">Target: <a href="https://sideth.site" target="_blank" class="text-blue-400 hover:underline">sideth.site</a></p>
+            </div>
+        </div>
+
+        <!-- Quick Stats & Actions Header -->
+        <div class="flex items-center space-x-4">
+            <div class="hidden md:flex items-center space-x-6 px-4 py-1.5 rounded-full bg-white/5 border border-white/5 text-xs">
+                <span class="text-gray-400">Total Net Worth: <strong id="header-total-balance" class="text-emerald-400 font-semibold">$0.00</strong></span>
+                <span class="text-gray-300">|</span>
+                <span class="text-gray-400">Active Streams: <strong class="text-blue-400 font-semibold">4 Models</strong></span>
+            </div>
+            <button onclick="openExportModal()" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-gray-200 text-xs font-medium transition flex items-center space-x-2 border border-white/10">
+                <i class="fa-solid fa-download"></i>
+                <span class="hidden sm:inline">Backup Data</span>
+            </button>
+            <button onclick="resetAllData()" class="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs transition border border-red-500/20" title="Reset Data">
+                <i class="fa-solid fa-rotate-right"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 space-y-6">
+
+        <!-- Top Overview Banner -->
+        <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition"></div>
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-400 uppercase tracking-wider font-medium">Total Earnings</span>
+                    <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                </div>
+                <div class="text-2xl lg:text-3xl font-bold text-white mb-1" id="stat-total-earnings">$0.00</div>
+                <div class="text-xs text-emerald-400 flex items-center space-x-1">
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                    <span>Real-time local tracking active</span>
+                </div>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition"></div>
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-400 uppercase tracking-wider font-medium">Affiliate Income</span>
+                    <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
+                        <i class="fa-solid fa-handshake"></i>
+                    </div>
+                </div>
+                <div class="text-2xl lg:text-3xl font-bold text-white mb-1" id="stat-affiliate-total">$0.00</div>
+                <div class="text-xs text-blue-400 flex items-center space-x-1">
+                    <span id="stat-affiliate-count">0 active links</span>
+                </div>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl group-hover:bg-purple-500/20 transition"></div>
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-400 uppercase tracking-wider font-medium">Freelance Completed</span>
+                    <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
+                        <i class="fa-solid fa-laptop-code"></i>
+                    </div>
+                </div>
+                <div class="text-2xl lg:text-3xl font-bold text-white mb-1" id="stat-freelance-total">$0.00</div>
+                <div class="text-xs text-purple-400 flex items-center space-x-1">
+                    <span id="stat-freelance-count">0 tasks finished</span>
+                </div>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-500/10 rounded-full blur-xl group-hover:bg-amber-500/20 transition"></div>
+                <div class="flex justify-between items-start mb-3">
+                    <span class="text-xs text-gray-400 uppercase tracking-wider font-medium">Crypto & Ads Value</span>
+                    <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                </div>
+                <div class="text-2xl lg:text-3xl font-bold text-white mb-1" id="stat-crypto-total">$0.00</div>
+                <div class="text-xs text-amber-400 flex items-center space-x-1">
+                    <span id="stat-ad-monthly">Est. Ad/mo: $0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Tabs -->
+        <div class="flex overflow-x-auto space-x-2 pb-2 border-b border-white/10 scrollbar-none">
+            <button onclick="switchTab('affiliate')" id="tab-btn-affiliate" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 bg-blue-600 text-white shadow-lg shadow-blue-600/30 whitespace-nowrap">
+                <i class="fa-solid fa-link"></i>
+                <span>Affiliate Dashboard</span>
+            </button>
+            <button onclick="switchTab('freelance')" id="tab-btn-freelance" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 bg-white/5 hover:bg-white/10 text-gray-300 whitespace-nowrap">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Freelance Task Tracker</span>
+            </button>
+            <button onclick="switchTab('crypto')" id="tab-btn-crypto" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 bg-white/5 hover:bg-white/10 text-gray-300 whitespace-nowrap">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Crypto & Stock Portfolio</span>
+            </button>
+            <button onclick="switchTab('ads')" id="tab-btn-ads" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 bg-white/5 hover:bg-white/10 text-gray-300 whitespace-nowrap">
+                <i class="fa-solid fa-rectangle-ad"></i>
+                <span>Ad Revenue Simulator</span>
+            </button>
+            <button onclick="switchTab('calculator')" id="tab-btn-calculator" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 bg-white/5 hover:bg-white/10 text-gray-300 whitespace-nowrap">
+                <i class="fa-solid fa-calculator"></i>
+                <span>Earnings Calculator</span>
+            </button>
+        </div>
+
+        <div id="tab-affiliate" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Add Affiliate Link Form -->
+                <div class="glass-card p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="font-bold text-base text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-plus-circle text-blue-400"></i>
+                            <span>Add Affiliate Program</span>
+                        </h2>
+                    </div>
+                    <form id="form-affiliate" onsubmit="addAffiliate(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Program / Product Name</label>
+                            <input type="text" id="aff-name" required placeholder="e.g. Hostinger / Amazon" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Affiliate Link / URL</label>
+                            <input type="url" id="aff-url" required placeholder="https://sideth.site/ref/..." class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1">Clicks</label>
+                                <input type="number" id="aff-clicks" value="0" min="0" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1">Commission ($)</label>
+                                <input type="number" step="0.01" id="aff-earnings" value="0.00" min="0" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs tracking-wide shadow-lg shadow-blue-600/30 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Save Affiliate Link</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Affiliate Links List & Table -->
+                <div class="glass-card p-6 rounded-2xl lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="font-bold text-base text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-bullhorn text-blue-400"></i>
+                            <span>Active Affiliate Programs</span>
+                        </h2>
+                        <span class="text-xs text-gray-400" id="aff-count-label">0 programs</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="border-b border-white/10 text-xs text-gray-400 uppercase tracking-wider">
+                                    <th class="py-3 px-2">Program</th>
+                                    <th class="py-3 px-2">Clicks</th>
+                                    <th class="py-3 px-2">Earnings</th>
+                                    <th class="py-3 px-2 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="affiliate-table-body" class="divide-y divide-white/5">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-freelance" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Add Freelance Task Form -->
+                <div class="glass-card p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="font-bold text-base text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-square-plus text-purple-400"></i>
+                            <span>New Freelance Task</span>
+                        </h2>
+                    </div>
+                    <form id="form-freelance" onsubmit="addFreelanceTask(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Project / Client Name</label>
+                            <input type="text" id="free-client" required placeholder="e.g. Web Dev for Client A" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Task Description</label>
+                            <input type="text" id="free-desc" required placeholder="e.g. Landing page build on sideth.site" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500 transition">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1">Payout ($)</label>
+                                <input type="number" step="0.01" id="free-amount" required placeholder="150.00" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1">Status</label>
+                                <select id="free-status" class="w-full bg-[#111827] border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-purple-500 transition">
+                                    <option value="Pending">Pending</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs tracking-wide shadow-lg shadow-purple-600/30 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Add Task</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Freelance Tasks List -->
+                <div class="glass-card p-6 rounded-2xl lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="font-bold text-base text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-list-check text-purple-400"></i>
+                            <span>Freelance Pipeline</span>
+                        </h2>
+                        <span class="text-xs text-gray-400" id="free-count-label">0 tasks</span>
+                    </div>
+                    <div class="space-y-3 max-h-[420px] overflow-y-auto pr-1" id="freelance-list-container">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-crypto" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Add Asset Form -->
+                <div class="glass-card p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="font-bold text-base text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-coins text-amber-400"></i>
+                            <span>Add Crypto / Stock</span>
+                        </h2>
+                    </div>
+                    <form id="form-crypto" onsubmit="addCryptoAsset(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Asset Symbol / Name</label>
+                            <input type="text" id="crypto-symbol" required placeholder="e.g. BTC, ETH, AAPL" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition uppercase">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1">Quantity</label>
+                                <input type="number" step="any" id="crypto-qty" required placeholder="0.5" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-gray-400 mb-1">Buy Price ($)</label>
+                                <input type="number" step="0.01" id="crypto-buy-price" required placeholder="50000" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Current Price ($)</label>
+                            <input type="number" step="0.01" id="crypto-cur-price" required placeholder="65000" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition">
+                        </div>
+                        <button type="submit" class="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs tracking-wide shadow-lg shadow-amber-600/30 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Add to Portfolio</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Portfolio Assets Table -->
+                <div class="glass-card p-6 rounded-2xl lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="font-bold text-base text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-chart-pie text-amber-400"></i>
+                            <span>Asset Holdings</span>
+                        </h2>
+                        <span class="text-xs text-amber-400 font-medium" id="portfolio-total-profit">$0.00 Profit</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="border-b border-white/10 text-xs text-gray-400 uppercase tracking-wider">
+                                    <th class="py-3 px-2">Asset</th>
+                                    <th class="py-3 px-2">Holdings</th>
+                                    <th class="py-3 px-2">Current Value</th>
+                                    <th class="py-3 px-2">Profit / Loss</th>
+                                    <th class="py-3 px-2 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="crypto-table-body" class="divide-y divide-white/5">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-ads" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Ad Revenue Calculator Controls -->
+                <div class="glass-card p-6 rounded-2xl space-y-4">
+                    <h2 class="font-bold text-base text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-sliders text-emerald-400"></i>
+                        <span>Traffic & RPM Simulator</span>
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs text-gray-400 mb-1">
+                                <span>Monthly Visitors (sideth.site)</span>
+                                <strong id="sim-visitors-val" class="text-white">25,000</strong>
+                            </div>
+                            <input type="range" id="sim-visitors" min="1000" max="500000" step="1000" value="25000" oninput="updateAdSimulation()" class="w-full accent-emerald-500 bg-white/10 rounded-lg h-2 cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs text-gray-400 mb-1">
+                                <span>Pageviews per Visitor</span>
+                                <strong id="sim-pageviews-val" class="text-white">2.5</strong>
+                            </div>
+                            <input type="range" id="sim-pageviews" min="1" max="10" step="0.5" value="2.5" oninput="updateAdSimulation()" class="w-full accent-emerald-500 bg-white/10 rounded-lg h-2 cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs text-gray-400 mb-1">
+                                <span>Average RPM ($ per 1,000 impressions)</span>
+                                <strong id="sim-rpm-val" class="text-white">$8.50</strong>
+                            </div>
+                            <input type="range" id="sim-rpm" min="1" max="50" step="0.5" value="8.5" oninput="updateAdSimulation()" class="w-full accent-emerald-500 bg-white/10 rounded-lg h-2 cursor-pointer">
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-white/10 text-xs text-gray-400">
+                        <p>Simulate passive monetization revenue for sideth.site based on programmatic banner ads and sponsored placements.</p>
+                    </div>
+                </div>
+
+                <!-- Ad Simulation Results Box -->
+                <div class="glass-card p-6 rounded-2xl lg:col-span-2 flex flex-col justify-between space-y-6">
+                    <div>
+                        <h2 class="font-bold text-base text-white flex items-center space-x-2 mb-4">
+                            <i class="fa-solid fa-chart-area text-emerald-400"></i>
+                            <span>Projected Earnings Output</span>
+                        </h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                                <span class="text-xs text-gray-400 block mb-1">Monthly Impressions</span>
+                                <span class="text-xl font-bold text-white" id="sim-res-impressions">62,500</span>
+                            </div>
+                            <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                                <span class="text-xs text-gray-400 block mb-1">Estimated Monthly</span>
+                                <span class="text-xl font-bold text-emerald-400" id="sim-res-monthly">$531.25</span>
+                            </div>
+                            <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                                <span class="text-xs text-gray-400 block mb-1">Estimated Yearly</span>
+                                <span class="text-xl font-bold text-emerald-400" id="sim-res-yearly">$6,375.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-emerald-900/30 to-blue-900/30 border border-emerald-500/20 p-5 rounded-2xl flex items-center justify-between">
+                        <div>
+                            <h4 class="font-semibold text-white text-sm">Add Ad Revenue to Total Net Worth?</h4>
+                            <p class="text-xs text-gray-300 mt-0.5">Sync monthly estimated ad earnings directly to your Sideth OS balance.</p>
+                        </div>
+                        <button onclick="syncAdRevenue()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-emerald-600/30 transition flex items-center space-x-2 whitespace-nowrap">
+                            <i class="fa-solid fa-sync"></i>
+                            <span>Sync Monthly</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-calculator" class="tab-content hidden space-y-6">
+            <div class="glass-card p-6 lg:p-8 rounded-2xl space-y-6">
+                <div>
+                    <h2 class="font-bold text-lg text-white flex items-center space-x-2">
+                        <i class="fa-solid fa-calculator text-blue-400"></i>
+                        <span>Sideth Income Goal & Milestone Calculator</span>
+                    </h2>
+                    <p class="text-xs text-gray-400 mt-1">Plan your pathway to financial freedom with multi-stream compounding.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Target Monthly Income ($)</label>
+                            <input type="number" id="calc-target" value="5000" oninput="runEarningsCalculator()" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Current Monthly Baseline ($)</label>
+                            <input type="number" id="calc-current" value="850" oninput="runEarningsCalculator()" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Expected Monthly Growth (%)</label>
+                            <input type="number" id="calc-growth" value="15" oninput="runEarningsCalculator()" class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition">
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl bg-black/20 border border-white/5">
+                                <span class="text-xs text-gray-400 block mb-1">Months to Goal</span>
+                                <span class="text-2xl font-bold text-blue-400" id="calc-res-months">13 Months</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-black/20 border border-white/5">
+                                <span class="text-xs text-gray-400 block mb-1">1-Year Projected Net Worth</span>
+                                <span class="text-2xl font-bold text-emerald-400" id="calc-res-yearly">$24,650</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-xs text-gray-300">
+                            <div class="flex justify-between py-1 border-b border-white/5">
+                                <span>Milestone (50% Target):</span>
+                                <strong id="calc-m50" class="text-white">$2,500/mo</strong>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-white/5">
+                                <span>Milestone (100% Target):</span>
+                                <strong id="calc-m100" class="text-white">$5,000/mo</strong>
+                            </div>
+                            <div class="flex justify-between py-1">
+                                <span>Milestone (Freedom Scale 2x):</span>
+                                <strong id="calc-m200" class="text-white">$10,000/mo</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Export / Backup Modal -->
+    <div id="export-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden">
+        <div class="glass-panel w-full max-w-lg p-6 rounded-2xl space-y-4 mx-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-base text-white">Sideth OS Data Backup</h3>
+                <button onclick="closeExportModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-gray-300">Export your local storage earnings data or import a backup JSON file.</p>
+            <textarea id="export-json-area" readonly class="w-full h-36 bg-black/40 border border-white/10 rounded-xl p-3 text-xs font-mono text-blue-300 focus:outline-none"></textarea>
+            <div class="flex space-x-3">
+                <button onclick="copyBackupData()" class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold transition">Copy to Clipboard</button>
+                <button onclick="closeExportModal()" class="px-4 py-2.5 bg-white/10 hover:bg-white/15 text-white rounded-xl text-xs font-semibold transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 glass-panel px-4 py-3 rounded-xl border border-emerald-500/30 flex items-center space-x-3 shadow-2xl">
+        <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <i class="fa-solid fa-check text-xs"></i>
+        </div>
+        <span id="toast-message" class="text-xs font-medium text-white">Action completed successfully!</span>
+    </div>
+
+    <script>
+        // Initial LocalStorage Data structure for Sideth OS
+        const STORAGE_KEY = 'sideth_os_money_data_v1';
+
+        let appData = {
+            affiliates: [
+                { id: 1, name: 'Hostinger Hosting', url: 'https://sideth.site/hostinger', clicks: 342, earnings: 145.50 },
+                { id: 2, name: 'Gumroad Digital Product', url: 'https://sideth.site/gumroad', clicks: 128, earnings: 89.00 }
+            ],
+            freelance: [
+                { id: 1, client: 'Tech Startup X', desc: 'Landing Page Optimization', amount: 350.00, status: 'Completed' },
+                { id: 2, client: 'SaaS Founder', desc: 'API Integration Consulting', amount: 200.00, status: 'In Progress' }
+            ],
+            crypto: [
+                { id: 1, symbol: 'BTC', qty: 0.12, buyPrice: 42000, curPrice: 67000 },
+                { id: 2, symbol: 'ETH', qty: 1.5, buyPrice: 2200, curPrice: 3500 }
+            ],
+            syncedAdEarnings: 531.25
+        };
+
+        // Load from LocalStorage if available
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    appData = JSON.parse(saved);
+                } catch(e) {
+                    console.error('Failed to parse saved data', e);
+                }
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            updateDashboard();
+        }
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 bg-white/5 hover:bg-white/10 text-gray-300 whitespace-nowrap';
+            });
+
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('tab-btn-' + tabId);
+            activeBtn.className = 'tab-btn px-4 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-2 bg-blue-600 text-white shadow-lg shadow-blue-600/30 whitespace-nowrap';
+        }
+
+        // Calculations & UI Updates
+        function updateDashboard() {
+            // 1. Affiliate Totals
+            let affTotal = 0;
+            let affTableHtml = '';
+            appData.affiliates.forEach(item => {
+                affTotal += Number(item.earnings);
+                affTableHtml += `
+                    <tr class="hover:bg-white/5 transition">
+                        <td class="py-3 px-2 font-medium text-white">
+                            <div>${item.name}</div>
+                            <a href="${item.url}" target="_blank" class="text-[11px] text-blue-400 hover:underline truncate block max-w-xs">${item.url}</a>
+                        </td>
+                        <td class="py-3 px-2 text-gray-300">${item.clicks}</td>
+                        <td class="py-3 px-2 text-emerald-400 font-semibold">$${Number(item.earnings).toFixed(2)}</td>
+                        <td class="py-3 px-2 text-right">
+                            <button onclick="deleteAffiliate(${item.id})" class="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            if(appData.affiliates.length === 0) {
+                affTableHtml = `<tr><td colspan="4" class="text-center py-6 text-gray-400 text-xs">No affiliate programs added yet.</td></tr>`;
+            }
+            document.getElementById('affiliate-table-body').innerHTML = affTableHtml;
+            document.getElementById('aff-count-label').innerText = appData.affiliates.length + ' programs';
+            document.getElementById('stat-affiliate-total').innerText = '$' + affTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('stat-affiliate-count').innerText = appData.affiliates.length + ' active links';
+
+            // 2. Freelance Totals
+            let freeTotal = 0;
+            let freeHtml = '';
+            let freeCompletedCount = 0;
+            appData.freelance.forEach(task => {
+                if(task.status === 'Completed') {
+                    freeTotal += Number(task.amount);
+                    freeCompletedCount++;
+                }
+                let badgeColor = task.status === 'Completed' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : (task.status === 'In Progress' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' : 'bg-amber-500/20 text-amber-400 border-amber-500/30');
+                freeHtml += `
+                    <div class="bg-white/5 border border-white/5 p-4 rounded-xl flex items-center justify-between hover:border-white/15 transition">
+                        <div class="space-y-1">
+                            <div class="flex items-center space-x-2">
+                                <span class="font-semibold text-white text-sm">${task.client}</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full border ${badgeColor}">${task.status}</span>
+                            </div>
+                            <p class="text-xs text-gray-400">${task.desc}</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="font-bold text-purple-400 text-sm">$${Number(task.amount).toFixed(2)}</span>
+                            <button onclick="deleteFreelance(${task.id})" class="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            if(appData.freelance.length === 0) {
+                freeHtml = `<div class="text-center py-6 text-gray-400 text-xs">No freelance tasks logged.</div>`;
+            }
+            document.getElementById('freelance-list-container').innerHTML = freeHtml;
+            document.getElementById('free-count-label').innerText = appData.freelance.length + ' tasks';
+            document.getElementById('stat-freelance-total').innerText = '$' + freeTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('stat-freelance-count').innerText = freeCompletedCount + ' tasks finished';
+
+            // 3. Crypto & Stock Totals
+            let cryptoTotalValue = 0;
+            let cryptoTotalProfit = 0;
+            let cryptoHtml = '';
+            appData.crypto.forEach(asset => {
+                let curVal = asset.qty * asset.curPrice;
+                let buyVal = asset.qty * asset.buyPrice;
+                let profit = curVal - buyVal;
+                cryptoTotalValue += curVal;
+                cryptoTotalProfit += profit;
+                let profitClass = profit >= 0 ? 'text-emerald-400' : 'text-red-400';
+                cryptoHtml += `
+                    <tr class="hover:bg-white/5 transition">
+                        <td class="py-3 px-2 font-bold text-white uppercase">${asset.symbol}</td>
+                        <td class="py-3 px-2 text-gray-300">${asset.qty} @ $${asset.buyPrice}</td>
+                        <td class="py-3 px-2 text-white font-semibold">$${curVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td class="py-3 px-2 ${profitClass} font-semibold">${profit >= 0 ? '+' : ''}$${profit.toFixed(2)}</td>
+                        <td class="py-3 px-2 text-right">
+                            <button onclick="deleteCrypto(${asset.id})" class="p-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition"><i class="fa-solid fa-trash text-xs"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            if(appData.crypto.length === 0) {
+                cryptoHtml = `<tr><td colspan="5" class="text-center py-6 text-gray-400 text-xs">No crypto/stock assets added.</td></tr>`;
+            }
+            document.getElementById('crypto-table-body').innerHTML = cryptoHtml;
+            document.getElementById('portfolio-total-profit').innerText = (cryptoTotalProfit >= 0 ? '+' : '') + '$' + cryptoTotalProfit.toFixed(2) + ' Profit';
+            document.getElementById('stat-crypto-total').innerText = '$' + cryptoTotalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('stat-ad-monthly').innerText = 'Est. Ad/mo: $' + appData.syncedAdEarnings.toFixed(0);
+
+            // Grand Total Net Worth
+            let grandTotal = affTotal + freeTotal + cryptoTotalValue + appData.syncedAdEarnings;
+            document.getElementById('stat-total-earnings').innerText = '$' + grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('header-total-balance').innerText = '$' + grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        // Form Handlers
+        function addAffiliate(e) {
+            e.preventDefault();
+            const name = document.getElementById('aff-name').value;
+            const url = document.getElementById('aff-url').value;
+            const clicks = parseInt(document.getElementById('aff-clicks').value) || 0;
+            const earnings = parseFloat(document.getElementById('aff-earnings').value) || 0;
+
+            appData.affiliates.push({ id: Date.now(), name, url, clicks, earnings });
+            saveData();
+            document.getElementById('form-affiliate').reset();
+            showToast('Affiliate program added successfully!');
+        }
+
+        function deleteAffiliate(id) {
+            appData.affiliates = appData.affiliates.filter(x => x.id !== id);
+            saveData();
+            showToast('Affiliate link removed.');
+        }
+
+        function addFreelanceTask(e) {
+            e.preventDefault();
+            const client = document.getElementById('free-client').value;
+            const desc = document.getElementById('free-desc').value;
+            const amount = parseFloat(document.getElementById('free-amount').value) || 0;
+            const status = document.getElementById('free-status').value;
+
+            appData.freelance.push({ id: Date.now(), client, desc, amount, status });
+            saveData();
+            document.getElementById('form-freelance').reset();
+            showToast('Freelance task added to pipeline!');
+        }
+
+        function deleteFreelance(id) {
+            appData.freelance = appData.freelance.filter(x => x.id !== id);
+            saveData();
+            showToast('Freelance task removed.');
+        }
+
+        function addCryptoAsset(e) {
+            e.preventDefault();
+            const symbol = document.getElementById('crypto-symbol').value.toUpperCase();
+            const qty = parseFloat(document.getElementById('crypto-qty').value) || 0;
+            const buyPrice = parseFloat(document.getElementById('crypto-buy-price').value) || 0;
+            const curPrice = parseFloat(document.getElementById('crypto-cur-price').value) || 0;
+
+            appData.crypto.push({ id: Date.now(), symbol, qty, buyPrice, curPrice });
+            saveData();
+            document.getElementById('form-crypto').reset();
+            showToast('Asset added to portfolio!');
+        }
+
+        function deleteCrypto(id) {
+            appData.crypto = appData.crypto.filter(x => x.id !== id);
+            saveData();
+            showToast('Asset removed.');
+        }
+
+        // Ad Simulator Calculation
+        function updateAdSimulation() {
+            const visitors = parseInt(document.getElementById('sim-visitors').value);
+            const pageviewsPerVis = parseFloat(document.getElementById('sim-pageviews').value);
+            const rpm = parseFloat(document.getElementById('sim-rpm').value);
+
+            document.getElementById('sim-visitors-val').innerText = visitors.toLocaleString();
+            document.getElementById('sim-pageviews-val').innerText = pageviewsPerVis;
+            document.getElementById('sim-rpm-val').innerText = '$' + rpm.toFixed(2);
+
+            const totalImpressions = visitors * pageviewsPerVis;
+            const monthlyRevenue = (totalImpressions / 1000) * rpm;
+            const yearlyRevenue = monthlyRevenue * 12;
+
+            document.getElementById('sim-res-impressions').innerText = Math.round(totalImpressions).toLocaleString();
+            document.getElementById('sim-res-monthly').innerText = '$' + monthlyRevenue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('sim-res-yearly').innerText = '$' + yearlyRevenue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            // Temporarily store simulated monthly for sync
+            window.currentSimMonthly = monthlyRevenue;
+        }
+
+        function syncAdRevenue() {
+            appData.syncedAdEarnings = window.currentSimMonthly || 531.25;
+            saveData();
+            showToast('Monthly Ad Revenue synced to Net Worth!');
+        }
+
+        // Earnings Calculator Logic
+        function runEarningsCalculator() {
+            const target = parseFloat(document.getElementById('calc-target').value) || 5000;
+            const current = parseFloat(document.getElementById('calc-current').value) || 850;
+            const growth = (parseFloat(document.getElementById('calc-growth').value) || 15) / 100;
+
+            let months = 0;
+            let accumulated = current;
+            let oneYearVal = current;
+
+            if (growth > 0 && current < target) {
+                let tempCur = current;
+                while (tempCur < target && months < 120) {
+                    tempCur += tempCur * growth;
+                    months++;
+                }
+            } else if (current >= target) {
+                months = 0;
+            } else {
+                months = 'Infinite';
+            }
+
+            // 1 Year projection
+            let projYear = current;
+            for(let i=1; i<=12; i++) {
+                projYear += projYear * growth;
+            }
+
+            document.getElementById('calc-res-months').innerText = typeof months === 'number' ? months + ' Months' : months;
+            document.getElementById('calc-res-yearly').innerText = '$' + Math.round(projYear).toLocaleString();
+            document.getElementById('calc-m50').innerText = '$' + (target * 0.5).toLocaleString() + '/mo';
+            document.getElementById('calc-m100').innerText = '$' + target.toLocaleString() + '/mo';
+            document.getElementById('calc-m200').innerText = '$' + (target * 2).toLocaleString() + '/mo';
+        }
+
+        // Backup & Reset modals
+        function openExportModal() {
+            document.getElementById('export-json-area').value = JSON.stringify(appData, null, 2);
+            document.getElementById('export-modal').classList.remove('hidden');
+        }
+
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.add('hidden');
+        }
+
+        function copyBackupData() {
+            const area = document.getElementById('export-json-area');
+            area.select();
+            document.execCommand('copy');
+            showToast('Backup JSON copied to clipboard!');
+            closeExportModal();
+        }
+
+        function resetAllData() {
+            if(confirm('Are you sure you want to reset all Sideth OS earnings data?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // Toast notification helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            loadData();
+            updateAdSimulation();
+            runEarningsCalculator();
+        };
+    </script>
+</body>
+</html>
