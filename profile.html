@@ -224,6 +224,29 @@
             font-size: 12px;
         }
 
+        .service-box {
+            margin-top: 15px;
+            padding: 16px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 215, 0, 0.1));
+            border: 1px solid var(--cyan);
+            text-align: left;
+        }
+
+        .service-box h5 {
+            margin: 0 0 8px 0;
+            color: var(--cyan);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .service-box p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
         .btn, .back-btn {
             width: 100%;
             min-height: 48px;
@@ -239,48 +262,15 @@
             background: linear-gradient(135deg, #b45309, var(--gold));
             color: #000;
             box-shadow: 0 5px 17px rgba(255, 215, 0, 0.3);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn:hover, .back-btn:hover {
             transform: translateY(-2px);
             filter: brightness(1.15);
-        }
-
-        .input-group {
-            margin-bottom: 14px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 6px;
-            color: var(--muted);
-            font-size: 12px;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px 14px;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 215, 0, 0.35);
-            border-radius: 12px;
-            color: #fff;
-            outline: none;
-            font-family: 'Kantumruy Pro', sans-serif;
-            font-size: 13px;
-            backdrop-filter: blur(6px);
-        }
-
-        .input-field:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.35);
-        }
-
-        .save-status {
-            min-height: 18px;
-            margin-top: 8px;
-            color: #34d399;
-            font-size: 12px;
         }
 
         .setting-btn {
@@ -449,7 +439,7 @@
         </div>
         <div class="stats-row">
             <div class="stat-box">
-                <h4 id="viewCount">47,749</h4>
+                <h4 id="viewCount">75,589</h4>
                 <span>Total Views</span>
             </div>
             <div class="stat-box">
@@ -466,7 +456,7 @@
     <!-- VISITOR & OWNER BADGE -->
     <section class="card">
         <div class="section-title" style="justify-content:center;">👁️ ចំនួនអ្នកទស្សនា / Visitors</div>
-        <div class="visitor-number" id="liveVisitorCount">0</div>
+        <div class="visitor-number" id="liveVisitorCount">75,589</div>
         <div class="visitor-status">🌏 DSN OS 2026 Glassmorphic Counter 🌍</div>
         
         <script>
@@ -490,30 +480,16 @@
         </script>
     </section>
 
-    <!-- PROFILE EDIT -->
+    <!-- ថ្មី៖ សេវាកម្មសរសេរកូដ Website & Web App -->
     <section class="card">
-        <div class="section-title">✏️ កែប្រែអត្តសញ្ញាណ / Edit Profile</div>
-        <div class="input-group">
-            <label>ឈ្មោះបង្ហាញ / Display Name</label>
-            <input type="text" id="nameInput" class="input-field" value="Sideth (Deth DSN)" maxlength="60">
+        <div class="section-title">💻 ទទួលសរសេរកូដ Website & Web App</div>
+        <div class="service-box">
+            <h5>🚀 ទទួលការម៉ៅការសរសេរកូដតាមតម្រូវការ</h5>
+            <p>បង Sideth ទទួលទទួលរៀបចំ និងសរសេរកូដ Website ព្រមទាំង Web App គ្រប់ប្រភេទប្រកបដោយគុណភាពខ្ពស់ លឿន និងមានសុវត្ថិភាពល្អបំផុត!</p>
         </div>
-        <div class="input-group">
-            <label>តំណររូបភាព Avatar / Avatar Image URL</label>
-            <input type="text" id="avatarInput" class="input-field" value="icon1.jpg">
+        <div style="margin-top: 15px;">
+            <a href="https://t.me/sideth61" target="_blank" class="btn">💬 ទាក់ទងសរសេរកូដ / Contact for Coding</a>
         </div>
-        <button class="btn" onclick="updateProfile()">💾 រក្សាទុក Profile / Save Profile</button>
-        <div id="profileSaveStatus" class="save-status"></div>
-    </section>
-
-    <!-- NOTE -->
-    <section class="card">
-        <div class="section-title">📓 បញ្ជាការ & កំណត់ត្រា / Commands & Notes</div>
-        <div class="input-group">
-            <textarea id="noteInput" class="input-field" rows="4" placeholder="សរសេរកំណត់ត្រារបស់បងទីនេះ... / Type your notes here..."></textarea>
-        </div>
-        <button class="btn" onclick="saveNote()">📌 រក្សាទុក Note / Save Note</button>
-        <div id="savedNoteDisplay" style="font-size:12px;color:var(--gold);margin-top:12px;text-align:left;white-space:pre-wrap;"></div>
-        <div id="noteSaveStatus" class="save-status"></div>
     </section>
 
     <a href="setting.html" class="back-btn" style="display:block;padding:14px;background:rgba(51,65,85,0.6);backdrop-filter:blur(10px);border:1px solid rgba(255,215,0,0.3);color:#fff;text-decoration:none;text-align:center;border-radius:14px;">⚙️ ទៅ Settings / Go to Settings</a>
@@ -526,9 +502,9 @@
     <a href="index.html" class="dock-item" title="Home">🏠</a>
     <a href="owner_sideth.html" class="dock-item dock-active" title="Owner Profile">👤</a>
     <a href="appstore.html" class="dock-item" title="App Store">🛒</a>
-    <a href="game.html" class="dock-item" title="Games">🎮</a>
-    <a href="setting.html" class="dock-item" title="Settings">⚙️</a>
-    <a href="library.html" class="dock-item" title="Library">💻</a>
+    <a href="games/index.html" class="dock-item" title="Games">🎮</a>
+    <a href="money/index.html" class="dock-item" title="Settings">💵</a>
+    <a href="DSNDevice/index.html" class="dock-item" title="Library">💻</a>
 </nav>
 
 <div id="toast" class="toast"></div>
@@ -558,32 +534,6 @@ function toggleBgm() {
     }
 }
 
-function updateProfile() {
-    const name = document.getElementById('nameInput').value.trim();
-    const avatar = document.getElementById('avatarInput').value.trim();
-    if (!name) { showToast('⚠️ សូមបញ្ចូលឈ្មោះសិន / Please enter a name'); return; }
-    document.getElementById('displayName').innerText = name;
-    document.getElementById('userAvatar').src = avatar || 'icon1.jpg';
-    localStorage.setItem('dsn_username', name);
-    localStorage.setItem('dsn_avatar', avatar || 'icon1.jpg');
-    document.getElementById('profileSaveStatus').innerText = '✅ Profile saved successfully (2026)';
-    showToast('💾 Profile របស់បងបានរក្សាទុកទម្រង់ឆ្នាំ ២០២៦ ហើយ ❤️️');
-}
-
-function saveNote() {
-    const note = document.getElementById('noteInput').value;
-    localStorage.setItem('dsn_note', note);
-    renderSavedNote();
-    document.getElementById('noteSaveStatus').innerText = '✅ Note saved successfully';
-    showToast('📌 Note បានរក្សាទុកជោគជ័យ ❤️️');
-}
-
-function renderSavedNote() {
-    const note = localStorage.getItem('dsn_note');
-    const display = document.getElementById('savedNoteDisplay');
-    display.innerText = note ? '📌 បញ្ជាការចុងក្រោយ (2026):\n' + note : '';
-}
-
 let toastTimer;
 function showToast(message) {
     const toast = document.getElementById('toast');
@@ -594,22 +544,7 @@ function showToast(message) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    const savedName = localStorage.getItem('dsn_username');
-    if (savedName) {
-        document.getElementById('displayName').innerText = savedName;
-        document.getElementById('nameInput').value = savedName;
-    }
-    const savedAvatar = localStorage.getItem('dsn_avatar');
-    if (savedAvatar) {
-        document.getElementById('userAvatar').src = savedAvatar;
-        document.getElementById('avatarInput').value = savedAvatar;
-    }
-    const savedNote = localStorage.getItem('dsn_note');
-    if (savedNote !== null) {
-        document.getElementById('noteInput').value = savedNote;
-        renderSavedNote();
-    }
-    let views = localStorage.getItem('dsn_page_views') || 2026;
+    let views = '75589';
     document.getElementById('viewCount').innerText = Number(views).toLocaleString();
     document.getElementById('liveVisitorCount').innerText = '🌍 ' + Number(views).toLocaleString();
 });
