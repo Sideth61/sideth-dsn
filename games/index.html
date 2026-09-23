@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#030007">
 <meta name="description" content="DSN PS2 និង PSP Local File Player">
-<title>PS2PSP Local - Sideth Version 1.7 Offline</title>
+<title>PS2PSP Local - Sideth Version 2.0 Offline</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="logo_psp.jpg">
 <link rel="icon" type="image/jpeg" href="logo_psp.jpg">
@@ -19,12 +19,12 @@
   --bg-deep:#030007;
   --text:#fff;
   --focus:#fde68a;
-  --success-start:rgba(5,150,105,.85);
-  --success-end:rgba(4,120,87,.95);
-  --pink-start:rgba(219,39,119,.85);
-  --pink-end:rgba(157,23,77,.95);
+  --success-start:rgba(5,150,105,.9);
+  --success-end:rgba(4,120,87,1);
+  --pink-start:rgba(219,39,119,.9);
+  --pink-end:rgba(157,23,77,1);
   --primary-color:#38bdf8;
-  --primary-glow:rgba(56,189,248,.4);
+  --primary-glow:rgba(56,189,248,.35);
 }
 html,
 body{
@@ -36,10 +36,10 @@ body{
   color:var(--text);
   overflow-x:hidden;
   background:var(--bg-deep);
-  font-display: swap;
+  font-display:swap;
 }
 body{
-  padding-bottom:env(safe-area-inset-bottom);
+  padding-bottom:calc(16px + env(safe-area-inset-bottom));
 }
 .fixed-bg{
   position:fixed;
@@ -47,32 +47,31 @@ body{
   z-index:-999;
   background:url("icon4.jpg") center/cover no-repeat;
 }
-/* Background Glow & Flashing Animation Effect */
 .fixed-bg::after{
   content:"";
   position:absolute;
   inset:0;
-  background: radial-gradient(circle at 50% 30%, rgba(56, 189, 248, 0.18) 0%, rgba(219, 39, 119, 0.12) 50%, rgba(3, 0, 7, 0.75) 100%);
-  animation: bgGlow 4s ease-in-out infinite alternate;
+  background:radial-gradient(circle at 50% 25%, rgba(56, 189, 248, 0.22) 0%, rgba(219, 39, 119, 0.15) 45%, rgba(3, 0, 7, 0.85) 100%);
+  animation:bgGlow 6s ease-in-out infinite alternate;
 }
 @keyframes bgGlow{
   0%{
-    opacity: 0.6;
-    transform: scale(1);
+    opacity:0.7;
+    transform:scale(1);
   }
   100%{
-    opacity: 1;
-    transform: scale(1.05);
+    opacity:1;
+    transform:scale(1.04);
   }
 }
 .container{
   width:100%;
   max-width:650px;
   margin:auto;
-  padding:clamp(16px,4vw,24px) 12px;
+  padding:clamp(16px,4vw,24px) 14px;
   display:flex;
   flex-direction:column;
-  gap:18px;
+  gap:16px;
   position:relative;
   z-index:1;
 }
@@ -80,149 +79,154 @@ body{
   padding:clamp(16px,4vw,20px);
   overflow:hidden;
   position:relative;
-  border:1px solid rgba(255,255,255,.3);
-  border-radius:28px;
-  background:rgba(255,255,255,.07);
-  box-shadow:0 15px 35px rgba(0,0,0,.3), 0 0 20px rgba(56,189,248,0.15);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  transition: all 0.3s ease;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:24px;
+  background:rgba(255,255,255,.06);
+  box-shadow:0 15px 35px rgba(0,0,0,.4), 0 0 20px var(--primary-glow);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  transition:border-color .3s ease, transform .25s ease, box-shadow .3s ease;
 }
 .card:hover{
-  border-color: rgba(56,189,248,0.6);
-  box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 25px rgba(56,189,248,0.3);
+  transform:translateY(-2px);
+  border-color:rgba(56,189,248,0.5);
+  box-shadow:0 20px 40px rgba(0,0,0,.5), 0 0 28px rgba(56,189,248,0.25);
 }
 .banner-img{
   display:block;
   width:100%;
-  height:clamp(150px,35vw,180px);
+  height:clamp(140px,34vw,175px);
   object-fit:cover;
-  margin-bottom:15px;
-  border:1px solid rgba(255,255,255,.35);
-  border-radius:18px;
+  margin-bottom:14px;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:16px;
   background:#12091b;
 }
 .section-title{
   display:flex;
   align-items:center;
   gap:8px;
-  margin:0 0 12px;
+  margin:0 0 10px;
   padding-bottom:10px;
-  border-bottom:1px solid rgba(255,255,255,0.25);
+  border-bottom:1px solid rgba(255,255,255,0.15);
   color:#fff;
-  font-size:clamp(17px,4.5vw,18px);
+  font-size:clamp(16px,4.2vw,18px);
   font-weight:700;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  text-shadow:0 2px 4px rgba(0,0,0,0.6);
 }
 p{
   margin:0 0 12px;
-  color:#f8fafc;
-  font-size:14px;
-  line-height:1.7;
+  color:#f1f5f9;
+  font-size:13.5px;
+  line-height:1.65;
+}
+.btn-group{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 .btn{
+  flex:1 1 calc(50% - 5px);
+  min-width:140px;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:9px;
-  width:100%;
-  min-height:52px;
-  margin-top:9px;
-  padding:13px 14px;
-  border:1px solid rgba(255,255,255,.4);
-  border-radius:16px;
+  gap:8px;
+  min-height:48px;
+  padding:11px 14px;
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:14px;
   color:#fff;
   text-align:center;
   text-decoration:none;
-  font:700 14px/1.45 inherit;
+  font:700 13.5px/1.4 inherit;
   cursor:pointer;
-  transition:transform .2s ease,background .2s ease,opacity .2s ease,box-shadow .2s ease;
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
+  transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
   touch-action:manipulation;
 }
 .btn:hover{
-  transform:translateY(-3px);
-  background:rgba(255,255,255,.25);
-  box-shadow: 0 5px 15px rgba(56,189,248,0.3);
+  transform:translateY(-2px);
+  box-shadow:0 6px 16px rgba(0,0,0,0.3);
 }
 .btn:active{
   transform:scale(.98);
 }
 .btn:focus-visible{
   outline:3px solid var(--focus);
-  outline-offset:3px;
-  box-shadow:0 0 0 5px rgba(253,230,138,.22);
+  outline-offset:2px;
 }
 .status{
-  min-height:22px;
-  margin:10px 0 0;
+  min-height:18px;
+  margin:8px 0 0;
   color:#fef3c7;
   font-size:12px;
-  line-height:1.5;
+  line-height:1.4;
 }
 .toast{
   position:fixed;
   z-index:2000;
   left:50%;
-  bottom:calc(24px + env(safe-area-inset-bottom));
+  bottom:calc(20px + env(safe-area-inset-bottom));
   width:max-content;
-  max-width:min(90vw,520px);
-  padding:12px 18px;
-  border:1px solid rgba(255,255,255,.4);
-  border-radius:16px;
-  background:rgba(20,10,30,.92);
+  max-width:min(90vw,480px);
+  padding:10px 18px;
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:14px;
+  background:rgba(18,10,26,.94);
   color:#fff;
-  font-size:13px;
-  line-height:1.5;
+  font-size:12.5px;
+  line-height:1.45;
   text-align:center;
   opacity:0;
   pointer-events:none;
-  transform:translate(-50%,20px);
-  transition:opacity .3s ease,transform .3s ease;
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
+  transform:translate(-50%,16px);
+  transition:opacity .3s ease, transform .3s ease;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
 }
 .toast.show{
   opacity:1;
   transform:translate(-50%,0);
 }
 .version{
-  margin-top:-2px;
-  color:rgba(255,255,255,.75);
+  margin-top:4px;
+  color:rgba(255,255,255,.65);
   font-size:11px;
   text-align:center;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  letter-spacing:0.3px;
 }
 .offline-badge{
   position:fixed;
-  top:10px;
-  right:10px;
+  top:12px;
+  right:12px;
   z-index:1500;
-  padding:6px 10px;
-  border:1px solid rgba(255,255,255,.35);
+  padding:5px 12px;
+  border:1px solid rgba(255,255,255,.3);
   border-radius:999px;
-  background:rgba(5,150,105,.82);
+  background:rgba(5,150,105,.9);
   color:#fff;
   font-size:11px;
+  font-weight:600;
   opacity:0;
   pointer-events:none;
   transform:translateY(-8px);
-  transition:opacity .25s ease,transform .25s ease;
+  transition:opacity .25s ease, transform .25s ease;
 }
 .offline-badge.show{
   opacity:1;
   transform:translateY(0);
 }
-.btn-group{
-  display:flex;
-  gap:10px;
+.offline-badge.offline{
+  background:rgba(220,38,38,.9);
 }
 </style>
 </head>
 <body>
 <div class="fixed-bg" aria-hidden="true"></div>
 <div id="offlineBadge" class="offline-badge" role="status" aria-live="polite"></div>
+
 <main class="container" aria-labelledby="pageTitle">
   <h1 id="pageTitle" class="section-title" hidden>
     DSN PS2 និង PSP Local File Player
@@ -237,10 +241,12 @@ p{
       លេងហ្គេម PS2 ផ្ទាល់ពីក្នុងទូរស័ព្ទ លឿនរហ័ស មិនបាច់ពឹង Server ក្រៅ 🔥
     </p>
     <div class="btn-group">
-      <a href="https://apps.apple.com/kh/app/gamex-ps-2-emulator/id6761678763" target="_blank" class="btn" style="background:linear-gradient(135deg,var(--success-start),var(--success-end)); margin-top:0;">
-        <span class="btn-label">📥 ដោនឡូតម៉ាស៊ីនហ្គេម PS2</span>
+      <a href="https://apps.apple.com/kh/app/gamex-ps-2-emulator/id6761678763" target="_blank" rel="noopener noreferrer" class="btn" style="background:linear-gradient(135deg,var(--success-start),var(--success-end));">
+        <span>📥 ដោនឡូត Emulator</span>
       </a>
-      <a href="https://t.me/dethdsn" target="_blank" class="btn" style="background: rgba(5,150,105,0.35); margin-top:0;">💬 យកហ្គេម Telegram</a>
+      <a href="https://t.me/dethdsn" target="_blank" rel="noopener noreferrer" class="btn" style="background:rgba(5,150,105,0.35);">
+        <span>💬 យកហ្គេម Telegram</span>
+      </a>
     </div>
     <p id="ps2Status" class="status" role="status" aria-live="polite"></p>
   </section>
@@ -253,36 +259,74 @@ p{
       លេងហ្គេម PSP ផ្ទាល់ពីក្នុងទូរស័ព្ទ អត់មានរឿង Error ទៀតទេ 🚀
     </p>
     <div class="btn-group">
-      <a href="https://apps.apple.com/kh/app/ppsspp-psp-emulator/id6496972903" target="_blank" class="btn" style="background:linear-gradient(135deg,var(--pink-start),var(--pink-end)); margin-top:0;">
-        <span class="btn-label">📥 ដោនឡូតម៉ាស៊ីនហ្គេម PSP</span>
+      <a href="https://apps.apple.com/kh/app/ppsspp-psp-emulator/id6496972903" target="_blank" rel="noopener noreferrer" class="btn" style="background:linear-gradient(135deg,var(--pink-start),var(--pink-end));">
+        <span>📥 ដោនឡូត Emulator</span>
       </a>
-      <a href="https://t.me/dethdsn" target="_blank" class="btn" style="background: rgba(219,39,119,0.35); margin-top:0;">💬 យកហ្គេម Telegram</a>
+      <a href="https://t.me/dethdsn" target="_blank" rel="noopener noreferrer" class="btn" style="background:rgba(219,39,119,0.35);">
+        <span>💬 យកហ្គេម Telegram</span>
+      </a>
     </div>
     <p id="pspStatus" class="status" role="status" aria-live="polite"></p>
   </section>
 
-  <!-- OverClock Store Sponsored Controller Card -->
-  <section class="card" aria-labelledby="sponsorTitle" style="border: 1px solid var(--primary-color); background: rgba(56, 189, 248, 0.08);">
-    <h2 id="sponsorTitle" class="section-title" style="font-size: 15px;">
+  <!-- Sponsored Card -->
+  <section class="card" aria-labelledby="sponsorTitle" style="border:1px solid var(--primary-color); background:rgba(56,189,248,0.07);">
+    <h2 id="sponsorTitle" class="section-title" style="font-size:15px;">
       🛒 OverClock Store 
-      <span style="font-size: 10px; background: var(--primary-color); color: #000; padding: 2px 6px; border-radius: 6px; font-weight: bold; margin-left: auto;">SPONSORED</span>
+      <span style="font-size:10px; background:var(--primary-color); color:#000; padding:2px 8px; border-radius:6px; font-weight:700; margin-left:auto;">SPONSORED</span>
     </h2>
-    <p style="margin-bottom: 10px; font-size: 13px;">
+    <p style="margin-bottom:12px; font-size:13px;">
       ដៃហ្គេមទំនើប BSP-G7 & CM-619 Wireless Controller ហ្គេមអែមៗសម្រាប់បង Sideth ❤️️!
     </p>
     <div class="btn-group">
-      <a href="https://t.me/overlockstorekh" target="_blank" class="btn" style="background: rgba(56,189,248,0.25); margin-top:0;">💬 ឆាត Telegram</a>
-      <a href="https://www.facebook.com/share/1C6yHDqPUd/?mibextid=wwXIfr" target="_blank" class="btn" style="background: rgba(56,189,248,0.35); margin-top:0;">📘 ចូលមើល Page</a>
+      <a href="https://t.me/overlockstorekh" target="_blank" rel="noopener noreferrer" class="btn" style="background:rgba(56,189,248,0.25);">
+        <span>💬 ឆាត Telegram</span>
+      </a>
+      <a href="https://www.facebook.com/share/1C6yHDqPUd/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="btn" style="background:rgba(56,189,248,0.35);">
+        <span>📘 ចូលមើល Page</span>
+      </a>
     </div>
   </section>
 
-  <div class="version">DSN PS2PSP Local • Version 1.7 Glow Edition</div>
+  <div class="version">DSN PS2PSP Local • Version 2.0 Pro Edition</div>
 </main>
+
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
 "use strict";
-// កូដគ្រប់គ្រងប្រព័ន្ធរៀបចំរួចរាល់ គ្មានកំហុសឆ្គង
+
+const badge = document.getElementById("offlineBadge");
+const toast = document.getElementById("toast");
+let toastTimeout;
+
+function showToast(message) {
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2500);
+}
+
+function updateNetworkStatus() {
+  if (!badge) return;
+  if (navigator.onLine) {
+    badge.textContent = "● Online";
+    badge.classList.remove("offline");
+    badge.classList.add("show");
+    setTimeout(() => badge.classList.remove("show"), 2000);
+  } else {
+    badge.textContent = "● Offline Mode";
+    badge.classList.add("offline", "show");
+    showToast("កំពុងប្រើប្រាស់ក្នុងទម្រង់ Offline");
+  }
+}
+
+window.addEventListener("online", updateNetworkStatus);
+window.addEventListener("offline", updateNetworkStatus);
+document.addEventListener("DOMContentLoaded", updateNetworkStatus);
 </script>
 </body>
 </html>
