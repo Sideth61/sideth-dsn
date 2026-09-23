@@ -1,0 +1,12 @@
+{
+  "name": "psp-web-emulator",
+  "version": "1.0.0",
+  "description": "PSP Web Emulator using PPSSPP Core",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
