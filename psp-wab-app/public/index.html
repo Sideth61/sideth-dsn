@@ -2,26 +2,105 @@
 <html lang="km">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PSP Web Emulator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PSP PRO STATION</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="cyber-grid"></div>
+  <div class="ambient-glow"></div>
 
-  <header>
-    <h1>PSP Web Emulator</h1>
-    <div class="controls">
-      <label for="isoPicker" class="btn-upload">ជ្រើសរើសឯកសារ PSP (.iso / .cso)</label>
-      <input type="file" id="isoPicker" accept=".iso,.cso">
-    </div>
-    <p id="status">សូមជ្រើសរើសឯកសារ ISO ពីក្នុងម៉ាស៊ីនរបស់អ្នក...</p>
-  </header>
+  <div class="main-wrapper">
+    <!-- Header Bar -->
+    <header class="top-nav">
+      <div class="brand">
+        <div class="power-indicator"></div>
+        <span class="brand-title">PSP <span>CYBER</span> PRO</span>
+      </div>
+      <div class="system-stats">
+        <span class="tag">WASM 64-BIT</span>
+        <span class="tag">DUAL-SHOCK READY</span>
+      </div>
+    </header>
 
-  <main>
-    <div id="game-container">
-      <div id="game"></div>
-    </div>
-  </main>
+    <!-- Virtual PSP Console Frame -->
+    <section class="console-chassis">
+      <!-- Left Controls Wing (PSP Style) -->
+      <aside class="side-wing left-wing">
+        <div class="dpad">
+          <div class="dpad-btn up">▲</div>
+          <div class="dpad-btn right">►</div>
+          <div class="dpad-btn down">▼</div>
+          <div class="dpad-btn left">◄</div>
+          <div class="dpad-center"></div>
+        </div>
+        <div class="analog-stick">
+          <div class="analog-cap"></div>
+        </div>
+      </aside>
+
+      <!-- Center Screen Bezel -->
+      <div class="screen-viewport">
+        <div class="screen-glare"></div>
+        
+        <div id="game-container">
+          <div id="game"></div>
+
+          <!-- Futuristic Placeholder / Upload Overlay -->
+          <div id="upload-screen" class="upload-screen">
+            <div class="hologram-disc">
+              <div class="disc-ring outer"></div>
+              <div class="disc-ring inner"></div>
+              <svg class="disc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </div>
+
+            <h2>INSERT PSP UMD / ISO</h2>
+            <p id="status">រង់ចាំការបញ្ចូលឯកសារហ្គេម (.iso / .cso)...</p>
+
+            <label for="isoPicker" class="cyber-btn">
+              <span class="btn-glitch"></span>
+              <span class="btn-text">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                LOAD ROM ARCHIVE
+              </span>
+            </label>
+            <input type="file" id="isoPicker" accept=".iso,.cso">
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Controls Wing (PSP Style) -->
+      <aside class="side-wing right-wing">
+        <div class="action-pad">
+          <div class="act-btn triangle">△</div>
+          <div class="act-btn circle">◯</div>
+          <div class="act-btn cross">✕</div>
+          <div class="act-btn square">□</div>
+        </div>
+        <div class="branding-sony">PORTABLE</div>
+      </aside>
+    </section>
+
+    <!-- Bottom Dashboard Specs -->
+    <footer class="bottom-bar">
+      <div class="chip-status">
+        <span class="chip-dot"></span> ENGINE: <span>PPSSPP Core v1.17+</span>
+      </div>
+      <div class="chip-status">
+        <span class="chip-dot"></span> DISPLAY: <span>Full Canvas 60FPS</span>
+      </div>
+    </footer>
+  </div>
 
   <script src="app.js"></script>
 </body>
