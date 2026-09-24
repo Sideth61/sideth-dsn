@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // កំណត់ Headers ចាំបាច់សម្រាប់ WebAssembly & SharedArrayBuffer
 app.use((req, res, next) => {
@@ -14,5 +14,5 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
-  console.log(`Server កំពុងដំណើរការលើ: http://localhost:${PORT}`);
+  console.log(`Server កំពុងដំណើរការលើ Port: ${PORT}`);
 });
